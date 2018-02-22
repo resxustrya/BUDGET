@@ -1,0 +1,79 @@
+﻿@using BUDGET.Models
+@model LoginViewModel
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Pin Code</title>
+    <!-- Bootstrap Core CSS -->
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/sb-admin-css")
+    @Styles.Render("~/font-awesome")
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Please Sign In</h3>
+                    </div>
+                    <div class="panel-body">
+                        @using (Html.BeginForm("PinCode", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <hr />
+                            if(TempData["err"] != null)
+                            {
+                                <div class="form-group">
+                                    <center>@TempData["err"]</center>
+                                </div>
+                            }
+                            <div class="form-group">
+                               
+                                <label for="passcode" class="col-md-2 control-label">Passcode</label>
+                                <div class="col-md-10">
+                                    <input type="password" name="passcode" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Enter" class="btn btn-default" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <!-- SB ADMIN SCRIPTS -->
+    @Scripts.Render("~/sb-admin-js")
+</body>
+
+</html>

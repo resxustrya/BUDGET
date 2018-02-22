@@ -1,0 +1,14 @@
+﻿@model User
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+<form action="@Url.Action("Edit","Home")" method="post">
+    @Html.AntiForgeryToken()
+    <p><input type="text" name="firstname" value="@Model.FirstName" class="form-control" /></p>
+    <p><input type="text" name="middlename" value="@Model.MiddleName" class="form-control" /></p>
+    <p><input type="text" name="lastname" value="@Model.LastName" class="form-control" /></p>
+    <p><button type="submit" class="btn btn-success">Submit</button></p>
+</form>

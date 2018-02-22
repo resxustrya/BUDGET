@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Budget System</title>
+
+    <!-- Bootstrap Core CSS -->
+    @Styles.Render("~/Content/css")
+  
+    @Styles.Render("~/font-awesome")
+    @Scripts.Render("~/sb-admin-js")
+    <script>
+        function numberWithCommas(x) {
+            if (x == 0 || x == null) {
+                return null;
+            }
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    </script>
+</head>
+<body style="background-color:white;">
+    <div id="wrapper">
+        @Html.Partial("nav_header")
+        @RenderBody()
+    </div>
+
+    @Html.Partial("modals")
+    <!-- Begin page content -->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <!-- SB ADMIN SCRIPTS -->
+    
+    <script src="~/Scripts/page/scripts.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

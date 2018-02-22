@@ -1,0 +1,39 @@
+﻿
+@model BUDGET.Models.ProductListViewModel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="page-header">
+    <h1>Sticky footer with fixed navbar</h1>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Names</th>
+            <th>MiddleName</th>
+            <th>LastName</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var p in Model.userslist)
+        {
+            <tr>
+                <td>@p.FirstName</td>
+                <td>@p.MiddleName</td>
+                <td>@p.LastName</td>
+                <td>
+                    <a href="@Url.Action("Edit","Home",new { id = p.ID })">Edit</a>
+                    <a href="@Url.Action("Delete","Home", new { id = p.ID })">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="pager">
+    @Html.PageLinks(Model.PagingInfo, x => Url.Action("Index", new { page = x }))
+</div>
+    
