@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity
-<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0;background-color:white;">
+<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0;background-color:white;min-height: 20px;">
     <div class="navbar-header" style="background-color:white;">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="sr-only">Toggle navigation</span>
@@ -10,22 +10,34 @@
         <a class="navbar-brand" href="/" style="background-color:#2ECC71;color:white;">Budget Sys.</a>
     </div>
     <!-- /.navbar-header -->
-    <ul class="nav navbar-top-links navbar-left" style="background-color:white;">
-        <li class="dropdown">
-            <!-- /.dropdown-messages -->
-        </li>
-        <!-- /.dropdown -->
+    <ul class="nav navbar-top-links navbar-left" style="background-color:white;color:#000;">
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <i class="fa fa-tasks fa-fw"></i> <i class="fa fa-caret-down"></i>
+                <b>Master Data <i class="fa fa-caret-down"> </i> </b>
+            </a>
+            <ul class="dropdown-menu dropdown-tasks">
+                <li><a href="@Url.Action("ExpenseCodes","ExpenseCodes")">UACS Expense Codes</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <b>Budget Allotments <i class="fa fa-caret-down"> </i> </b>
             </a>
             <ul class="dropdown-menu dropdown-tasks">
                 <li><a href="@Url.RouteUrl("GAA_Personnel_Services")">GAA (Personnel Services)</a></li>
                 <li><a href="@Url.Action("MOOE","Home")">MOOE</a></li>
             </ul>
-            <!-- /.dropdown-tasks -->
         </li>
-        <!-- /.dropdown -->
+        
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <b>ORS <i class="fa fa-caret-down"></i></b>
+            </a>
+            <ul class="dropdown-menu dropdown-tasks">
+                <li><a href="@Url.RouteUrl("ors_ps")">ORS - Personnel Services</a></li>
+                <li><a href="@Url.RouteUrl("ors_mooe")">ORS - MOOE</a></li>
+            </ul>
+        </li>
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 <i class="glyphicon glyphicon-arrow-up"></i> <i class="fa fa-caret-down"></i>
@@ -39,6 +51,14 @@
                 <li class="divider"></li>
             </ul>
             <!-- /.dropdown-alerts -->
+        </li>
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="glyphicon glyphicon-arrow-down"></i> <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+                <li><a href="@Url.Action("Report","Home")">Budget Reports</a></li>
+            </ul>
         </li>
         <!-- /.dropdown -->
         <li class="dropdown">
@@ -54,11 +74,12 @@
                 </li>
                 <li class="divider"></li>
                 <li>
-                    <a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                    <a href="@Url.Action("Logoff","Account")"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                 </li>
             </ul>
             <!-- /.dropdown-user -->
         </li>
+        <li><strong style="font-size:18px;font-family:sans-serif;">@ViewBag.Menu</strong></li>
         <!-- /.dropdown -->
     </ul>
   </nav>

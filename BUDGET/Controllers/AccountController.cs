@@ -12,7 +12,7 @@ using BUDGET.Models;
 
 namespace BUDGET.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="Administrator,Admin")]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;

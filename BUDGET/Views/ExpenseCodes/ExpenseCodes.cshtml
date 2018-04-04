@@ -1,0 +1,125 @@
+﻿
+@{
+    ViewBag.Title = "ExpenseCodes";
+}
+
+
+<div id="table" data-get="@Url.RouteUrl("get_expense_codes")" data-save="@Url.RouteUrl("save_expense_codes")" data-delete="@Url.RouteUrl("delete_expense_codes")"></div>
+
+@section scripts {
+    <script>
+
+       var container = document.getElementById("table");
+       var table;
+       var valid = true;
+        //35 cols
+       table = new Handsontable(container, {
+           startRows: 50,
+           startCols: 4,
+           manualColumnResize: true,
+           rowHeaders: true,
+           colWidths: [100,200, 400,200],
+           colHeaders: true,
+           contextMenu: ['row_above','row_below','remove_row','copy'],
+           manualColumnMove: true,
+           fillHandle: {
+               autoInsertRow: false,
+           },
+           colHeaders: ['ID','LINE','<b>Account Title</b>','<b>UACS Expense Code</b>'],
+           
+           cells: function (r, c, prop) {
+               var cellProperties = {};
+               if (c === 0 || c === 1) cellProperties.readOnly = true;
+               return cellProperties;
+           },
+           beforeRemoveRow: function (index, column) {
+               var items = this.getData();
+               var row_item = items[index];
+               var url = $("#table").data('delete');
+
+               var ps = {
+                   "ID": row_item[0]
+               };
+               var data = {
+                   data: JSON.stringify(ps)
+               };
+               $.post(url, data, function (resdata) {
+                   if (resdata.length > 0) {
+                       var tabledata = [];
+                       var total;
+
+                       table.loadData(tabledata);
+                   }
+               });
+           },
+           afterValidate: function (isValid, value, row, prop, source) {
+               if (!isValid) {
+                   valid = false;
+                   alert('there exists an invalid cell, disable save');
+               } else { valid = true;}
+           },
+       });
+
+
+       $(document).ready(function () {
+           var url = $("#table").data('get');
+           $.get(url, function (resdata) {
+               if (resdata.length > 0) {
+                   var tabledata = [];
+                   var total;
+                   for (var i = 0; i < resdata.length; i++) {
+                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Line'], resdata[i]['Title'], resdata[i]['Code']);
+                   }
+                   table.loadData(tabledata);
+               }
+           });
+        });
+
+       $(window).bind('keydown', function (event) {
+           if (event.ctrlKey || event.metaKey) {
+               switch (String.fromCharCode(event.which).toLowerCase())
+               {
+                   case 's':
+                       event.preventDefault();
+                       document.body.style.cursor = 'wait';
+                       if (valid == true) {
+                           var url = $("#table").data('save');
+                           var uacs = [];
+                           var data = table.getData();
+                           for (var i = 0; i < data.length; i++) {
+                               data[i][2] = data[i][2] ? data[i][2] : null;
+                               data[i][3] = data[i][3] ? data[i][3] : null;
+                               uacs[i] = {
+                                   "ID": data[i][0],
+                                   "Line":  (i + 1),
+                                   "Title": data[i][2],
+                                   "Code" : data[i][3]
+                               };
+                           }
+                           console.log(uacs);
+                           var data = {
+                               data: JSON.stringify(uacs)
+                           };
+
+                            $.post(url, data, function (resdata) {
+                                if (resdata.length > 0) {
+                                    var tabledata = [];
+                                    var total;
+                                    for (var i = 0; i < resdata.length; i++) {
+                                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Line'], resdata[i]['Title'], resdata[i]['Code']);
+                                    }
+                                    table.loadData(tabledata);
+                                }
+                                document.body.style.cursor = 'default';
+                            });
+                       } else {
+                           alert("Failed to save because theres an ivalid data inputed. See the color red in each rows to indentify errors.");
+                       }
+
+                   break;
+               }
+           }
+       });
+
+    </script>
+    }

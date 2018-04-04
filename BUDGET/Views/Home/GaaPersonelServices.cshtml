@@ -3,7 +3,7 @@
     ViewBag.Title = "GAA Personnel Services";
 }
 
-<div id="table" data-get="@Url.RouteUrl("get_json_gaa")" data-save="@Url.RouteUrl("save_json_gaa")"></div>
+<div id="table" data-get="@Url.RouteUrl("get_json_gaa")" data-save="@Url.RouteUrl("save_json_gaa")" data-delete="@Url.RouteUrl("delete_json_gaa")"></div>
 
 @section scripts {
     <script>
@@ -14,13 +14,35 @@
            startCols: 7,
            manualColumnResize: true,
            rowHeaders: true,
-           colWidths : [1,400,200,200,200,200,200],
+           colWidths : [1,1,400,200,200,200,200,200],
            colHeaders: true,
            contextMenu: true,
            fillHandle: {
                    autoInsertRow: false,
            },
-           colHeaders: ['ID','<strong style="font-weight:bolder;">PARTICULARS</strong>', 'UACS EXPENSE CODE', 'STO-Operations <br /> of Regional Offices', 'Public Health Management', 'Regulation of Regional <br />Health Facilities and Services', 'Total'],
+           colHeaders: ['ID', 'LINE', '<strong style="font-weight:bolder;">PARTICULARS</strong>', 'UACS EXPENSE CODE', 'STO-Operations <br /> of Regional Offices', 'Public Health Management', 'Regulation of Regional <br />Health Facilities and Services', 'Total'],
+           beforeRemoveRow : function(index,column) {
+               var items = this.getData();
+               var row_item = items[index];
+               var url = $("#table").data('delete');
+               
+               var ps = {
+                   "ID": row_item[0]
+               };
+               var data = {
+                   data : JSON.stringify(ps)
+               };
+               $.post(url, data, function (resdata) {
+                   if (resdata.length > 0) {
+                       var tabledata = [];
+                       var total;
+                       for (var i = 0; i < resdata.length; i++) {
+                           tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Line'], resdata[i]['Particulars'], resdata[i]['UACS'], numberWithCommas(resdata[i]['STO_Operations']), numberWithCommas(resdata[i]['PHM']), numberWithCommas(resdata[i]['RRHFS']), numberWithCommas(resdata[i]['Total']));
+                       }
+                       table.loadData(tabledata);
+                   }
+               });
+            }
        });
        $(document).ready(function () {
            var url = $("#table").data('get');
@@ -30,7 +52,7 @@
                    var tabledata = [];
                    var total;
                    for (var i = 0; i < resdata.length; i++) {
-                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Particulars'], resdata[i]['UACS'], numberWithCommas(resdata[i]['STO_Operations']), numberWithCommas(resdata[i]['PHM']), numberWithCommas(resdata[i]['RRHFS']), numberWithCommas(resdata[i]['Total']));
+                       tabledata[i] = new Array(resdata[i]['ID'],resdata[i]['Line'], resdata[i]['Particulars'], resdata[i]['UACS'], numberWithCommas(resdata[i]['STO_Operations']), numberWithCommas(resdata[i]['PHM']), numberWithCommas(resdata[i]['RRHFS']), numberWithCommas(resdata[i]['Total']));
                    }
                    table.loadData(tabledata);
                }
@@ -49,31 +71,34 @@
                        var ps = [];
                        var data = table.getData();
                        for (var i = 0; i < data.length; i++) {
-                           data[i][3] = data[i][3] ? data[i][3] : 0;
+                           
                            data[i][4] = data[i][4] ? data[i][4] : 0;
                            data[i][5] = data[i][5] ? data[i][5] : 0;
+                           data[i][6] = data[i][6] ? data[i][6] : 0;
                            ps[i] = {
                                "ID": data[i][0],
-                               "Particulars": data[i][1],
-                               "UACS": data[i][2],
-                               "STO_Operations": data[i][3],
-                               "PHM": data[i][4],
-                               "RRHFS": data[i][5]
+                               "Line" : (i + 1),
+                               "Particulars": data[i][2],
+                               "UACS": data[i][3],
+                               "STO_Operations": data[i][4],
+                               "PHM": data[i][5],
+                               "RRHFS": data[i][6]
                            };
                        }
                        var data = {
                            data: JSON.stringify(ps)
                        };
-                       $.post(url, data, function (res) {
-                           document.body.style.cursor = 'default';
-                           /*
-                           var total;
-                           for (var i = 0; i < resdata.length; i++) {
-                                                      
-                               tabledata[i] = new Array(resdata[i][0], resdata[i][1], numberWithCommas(resdata[i][2]), numberWithCommas(resdata[i][3]), numberWithCommas(resdata[i][4]), numberWithCommas('10000'));
+                       $.post(url, data, function (resdata) {
+                           
+                           if (resdata.length > 0) {
+                               var tabledata = [];
+                               var total;
+                               for (var i = 0; i < resdata.length; i++) {
+                                   tabledata[i] = new Array(resdata[i]['ID'],resdata[i]['Line'], resdata[i]['Particulars'], resdata[i]['UACS'], numberWithCommas(resdata[i]['STO_Operations']), numberWithCommas(resdata[i]['PHM']), numberWithCommas(resdata[i]['RRHFS']), numberWithCommas(resdata[i]['Total']));
+                               }
+                               table.loadData(tabledata);
                            }
-                           table.loadData(tabledata);
-                           */
+                           document.body.style.cursor = 'default';
                        });
                     break;
                }

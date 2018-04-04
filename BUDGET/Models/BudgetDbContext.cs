@@ -15,6 +15,9 @@ namespace BUDGET.Models
         public DbSet<User> users { get; set; }
         public DbSet<PersonnelServices> ps { get; set; }
         public DbSet<MOOEs> mooe { get; set; }
+        public DbSet<ORSPS> orsps { get; set; }
+        public DbSet<UACS> uacs { get; set; }
+        public DbSet<ORSMOOE> orsmooe { get; set; }
 
     }
 }

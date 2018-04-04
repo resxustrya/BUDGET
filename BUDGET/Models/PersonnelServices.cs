@@ -11,7 +11,6 @@ namespace BUDGET.Models
         [Key]
         [Column(Order=0)]
         public Int32 ID { get; set; }
-        [Required]
         public Int32 Line { get; set; }
         [Required]
         public String Particulars { get; set; }

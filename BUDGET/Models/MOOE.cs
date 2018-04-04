@@ -8,10 +8,11 @@ namespace BUDGET.Models
 {
     public class MOOEs
     {
+
         [Key]
         [Column(Order = 0)]
         public Int32 ID { get; set; }
-        [Required]
+        
         public Int32 Line { get; set; }
         [Required]
         public String Paraticulars { get; set; }

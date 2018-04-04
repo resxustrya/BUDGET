@@ -1,0 +1,10 @@
+﻿1>------ Build started: Project: BUDGET, Configuration: Debug Any CPU ------
+1>C:\Users\user\documents\visual studio 2015\Projects\BUDGET\BUDGET\Controllers\FormsController.cs(51,30,51,33): warning CS0168: The variable 'err' is declared but never used
+1>C:\Users\user\documents\visual studio 2015\Projects\BUDGET\BUDGET\DataHelpers\JsonGetter.cs(31,30,31,32): warning CS0168: The variable 'es' is declared but never used
+1>C:\Users\user\documents\visual studio 2015\Projects\BUDGET\BUDGET\Controllers\HomeController.cs(64,30,64,32): warning CS0168: The variable 'ex' is declared but never used
+1>C:\Users\user\documents\visual studio 2015\Projects\BUDGET\BUDGET\Controllers\HomeController.cs(208,34,208,36): warning CS0168: The variable 'ex' is declared but never used
+1>C:\Users\user\documents\visual studio 2015\Projects\BUDGET\BUDGET\Controllers\HomeController.cs(244,29,244,31): warning CS0168: The variable 'ex' is declared but never used
+1>C:\Users\user\documents\visual studio 2015\Projects\BUDGET\BUDGET\Controllers\HomeController.cs(267,30,267,32): warning CS0168: The variable 'ex' is declared but never used
+1>C:\Users\user\documents\visual studio 2015\Projects\BUDGET\BUDGET\Controllers\HomeController.cs(320,34,320,36): warning CS0168: The variable 'ex' is declared but never used
+1>  BUDGET -> C:\Users\user\documents\visual studio 2015\Projects\BUDGET\BUDGET\bin\BUDGET.dll
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========

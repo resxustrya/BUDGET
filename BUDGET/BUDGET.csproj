@@ -44,8 +44,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="EPPlus, Version=4.1.1.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.4.1.1\lib\net40\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.12.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.12\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -215,10 +222,17 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ExpenseCodesController.cs" />
     <Compile Include="Controllers\FormsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\JsonController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ORSController.cs" />
+    <Compile Include="Controllers\ORSReportsController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="DataHelpers\ExcelDataExport.cs" />
     <Compile Include="DataHelpers\JsonGetter.cs" />
+    <Compile Include="DataHelpers\ORSReporting.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -247,17 +261,61 @@
     <Compile Include="Migrations\201802220242407_RemoveKeys.Designer.cs">
       <DependentUpon>201802220242407_RemoveKeys.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803090835351_ORPS.cs" />
+    <Compile Include="Migrations\201803090835351_ORPS.Designer.cs">
+      <DependentUpon>201803090835351_ORPS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803120112267_AddedColumnsORS.cs" />
+    <Compile Include="Migrations\201803120112267_AddedColumnsORS.Designer.cs">
+      <DependentUpon>201803120112267_AddedColumnsORS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803120551370_UCAS.cs" />
+    <Compile Include="Migrations\201803120551370_UCAS.Designer.cs">
+      <DependentUpon>201803120551370_UCAS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803130728435_ChangeString.cs" />
+    <Compile Include="Migrations\201803130728435_ChangeString.Designer.cs">
+      <DependentUpon>201803130728435_ChangeString.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803140205574_ORSMOOE.cs" />
+    <Compile Include="Migrations\201803140205574_ORSMOOE.Designer.cs">
+      <DependentUpon>201803140205574_ORSMOOE.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803190511494_UACS_LINE.cs" />
+    <Compile Include="Migrations\201803190511494_UACS_LINE.Designer.cs">
+      <DependentUpon>201803190511494_UACS_LINE.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803190628191_Removed_Add_Condition_to_UACS.cs" />
+    <Compile Include="Migrations\201803190628191_Removed_Add_Condition_to_UACS.Designer.cs">
+      <DependentUpon>201803190628191_Removed_Add_Condition_to_UACS.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\BudgetDbContenct.cs" />
+    <Compile Include="Models\BudgetDbContext.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MOOE.cs" />
+    <Compile Include="Models\ORSMOOE.cs" />
+    <Compile Include="Models\ORSPS.cs" />
     <Compile Include="Models\PagingInfo.cs" />
     <Compile Include="Models\PersonnelServices.cs" />
     <Compile Include="Models\ProductListViewModel.cs" />
+    <Compile Include="Models\UACS.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\YearlyBudgets.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\MOOE.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MOOE.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\ORS_PS.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ORS_PS.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -270,9 +328,16 @@
     <Content Include="Content\dist\js\sb-admin-2.min.js" />
     <Content Include="Content\handson\handsontable.css" />
     <Content Include="Content\handson\handsontable.js" />
+    <Content Include="Content\handson\languages.js" />
+    <Content Include="Content\handson\moment.js" />
+    <Content Include="Content\handson\pikaday.css" />
+    <Content Include="Content\handson\pikaday.js" />
     <Content Include="Content\img\banner.png" />
+    <Content Include="Content\img\favicon.png" />
+    <Content Include="Content\img\ro7.png" />
     <Content Include="Content\img\spin.gif" />
     <Content Include="Content\sb-admin2.css" />
+    <Content Include="Content\scrollstyle.css" />
     <Content Include="Content\vendor\bootstrap-social\bootstrap-social.css" />
     <Content Include="Content\vendor\bootstrap\css\bootstrap.css" />
     <Content Include="Content\vendor\bootstrap\css\bootstrap.min.css" />
@@ -435,6 +500,10 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\page\scripts.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -484,6 +553,10 @@
     <Content Include="Views\Home\UploadGaa.cshtml" />
     <Content Include="Views\Home\GaaPersonelServices.cshtml" />
     <Content Include="Views\Home\MOOE.cshtml" />
+    <Content Include="Views\ORS\ORPS.cshtml" />
+    <Content Include="Views\ORS\ORSMOOE.cshtml" />
+    <Content Include="Views\ORSReports\PrintOrs.cshtml" />
+    <Content Include="Views\ExpenseCodes\ExpenseCodes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -491,12 +564,19 @@
     <Folder Include="Content\js\" />
     <Folder Include="Content\less\" />
     <Folder Include="Content\upload\" />
+    <Folder Include="obj\" />
+    <Folder Include="rpt_ors\mooe\" />
+    <Folder Include="rpt_ors\ps\" />
+    <Folder Include="Views\Json\" />
+    <Folder Include="Views\Reports\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
@@ -530,6 +610,38 @@
     <EmbeddedResource Include="Migrations\201802220242407_RemoveKeys.resx">
       <DependentUpon>201802220242407_RemoveKeys.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803090835351_ORPS.resx">
+      <DependentUpon>201803090835351_ORPS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803120112267_AddedColumnsORS.resx">
+      <DependentUpon>201803120112267_AddedColumnsORS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803120551370_UCAS.resx">
+      <DependentUpon>201803120551370_UCAS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803130728435_ChangeString.resx">
+      <DependentUpon>201803130728435_ChangeString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803140205574_ORSMOOE.resx">
+      <DependentUpon>201803140205574_ORSMOOE.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803190511494_UACS_LINE.resx">
+      <DependentUpon>201803190511494_UACS_LINE.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803190628191_Removed_Add_Condition_to_UACS.resx">
+      <DependentUpon>201803190628191_Removed_Add_Condition_to_UACS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\MOOE.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>MOOE.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ORS_PS.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ORS_PS.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

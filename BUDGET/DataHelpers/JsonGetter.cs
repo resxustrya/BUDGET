@@ -15,19 +15,39 @@ namespace BUDGET.DataHelpers
         public int GetLastLine(String table)
         {
             int LastLine = 0;
-            switch(table)
+            try
             {
-                case "PS":
-                    LastLine = db.ps.LastOrDefault().Line;
-                    
-                    break;
-                case "MOOE":
-                    LastLine = db.mooe.LastOrDefault().Line;
-                    break;
+                switch (table)
+                {
+                    case "PS":
+                        int psline = db.ps.OrderByDescending(x => x.Line).FirstOrDefault().Line;
+                        LastLine = psline;
+                        break;
+                    case "MOOE":
+                        int mooline = db.mooe.OrderByDescending(x => x.Line).FirstOrDefault().Line;
+                        LastLine = mooline;
+                        break;
+                    case "ORSPS":
+                        int orspsline = db.orsps.OrderByDescending(x => x.Row).FirstOrDefault().Row;
+                        LastLine = orspsline;
+                        break;
+                }
+            }catch(Exception es)
+            {
+
             }
             if (LastLine == 0)
-                LastLine = 0;
-            return LastLine;
+                return LastLine = 1;
+            return LastLine + 1;
         }
+        public List<MOOEs> GetMOOE()
+        {
+            var query = from list in db.mooe
+                        orderby list.Line ascending
+                        select list;
+            List<MOOEs> ps = query.ToList<MOOEs>();
+            return ps;
+        }
+
     }
 }

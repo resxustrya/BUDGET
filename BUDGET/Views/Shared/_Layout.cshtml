@@ -6,13 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Budget System</title>
-
+    <link rel="icon" href="@Url.Content("~/Content/img/favicon.png")" type="image/x-icon">
+    <title>@ViewBag.Title</title>
+    
     <!-- Bootstrap Core CSS -->
+    @Scripts.Render("~/sb-admin-js")
     @Styles.Render("~/Content/css")
   
     @Styles.Render("~/font-awesome")
-    @Scripts.Render("~/sb-admin-js")
+   
     <script>
         function numberWithCommas(x) {
             if (x == 0 || x == null) {
@@ -33,8 +35,6 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     <!-- SB ADMIN SCRIPTS -->
-    
-    <script src="~/Scripts/page/scripts.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

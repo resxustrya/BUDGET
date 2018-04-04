@@ -2,7 +2,6 @@
     <div class="row">
         <div class="col-md-12">
             <form id="form_upload" action="@Url.Action("UploadGaaPost","Home")" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                 <h3 style="font-weight: bold;" class="text-center">Upload a file</h3>
                 <div class="modal-body">
                     <table class="table table-hover table-form table-striped">

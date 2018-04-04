@@ -24,18 +24,28 @@ namespace BUDGET
                       "~/Scripts/respond.js",
                       "~/Scripts/page/scripts.js"));
 
+
+            bundles.Add(new StyleBundle("~/login/css").Include(
+                      "~/Content/bootstrap.css", "~/Content/sb-admin2.css"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/sb-admin2.css",
-                      "~/Content/handson/handsontable.css"));
+                      "~/Content/handson/pikaday.css",
+                      "~/Content/handson/handsontable.css",
+                      "~/Content/scrollstyle.css"
+                      ));
+
+            
 
             bundles.Add(new StyleBundle("~/font-awesome").Include("~/Content/vendor/font-awesome/font-awesome.css", new CssRewriteUrlTransform()));
 
             bundles.Add(new ScriptBundle("~/sb-admin-js").Include(
+                      "~/Content/handson/moment.js",
+                      "~/Content/handson/pikaday.js",
+                      "~/Content/handson/languages.js",
                       "~/Content/handson/handsontable.js"));
 
-            bundles.Add(new StyleBundle("~/login/css").Include(
-                      "~/Content/adminlte.css"));
         }
     }
 }
