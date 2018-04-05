@@ -35,6 +35,8 @@ namespace BUDGET.DataHelpers
             header_text.Alignment = Element.ALIGN_CENTER;
             doc.Add(header_text);
 
+            Paragraph nextline = new Paragraph("\n");
+            doc.Add(nextline);
             PdfPTable table = new PdfPTable(3);
             table.PaddingTop = 5f;
             table.WidthPercentage = 100f;
@@ -346,6 +348,11 @@ namespace BUDGET.DataHelpers
 
 
             doc.Close();
+        }
+
+        public void GenerateORSPS(String id)
+        {
+
         }
     }
 }
