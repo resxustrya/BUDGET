@@ -1,9 +1,10 @@
 ﻿
 @{
-    ViewBag.Title = "ORS | MOOE";
+    ViewBag.Title = "ORS | CO";
 }
 
-<div id="table" data-get="@Url.RouteUrl("get_ors_mooe")" data-save="@Url.RouteUrl("save_ors_mooe")" data-delete="@Url.RouteUrl("delete_ors_mooe")" data-expense="@Url.RouteUrl("get_expense_codes_number")"></div>
+
+<div id="table" data-get="@Url.RouteUrl("get_ors_co")" data-save="@Url.RouteUrl("save_ors_co")" data-delete="@Url.RouteUrl("delete_ors_co")" data-expense="@Url.RouteUrl("get_expense_codes_number")"></div>
 
 @section scripts {
     <script>
@@ -34,10 +35,10 @@
                                var protocol = window.location.protocol;
                                var port = window.location.port;
                                var url = protocol + "//" + hostname + ":" + port + "/print/ors/mooe/" + id;
-                               alert(url);
+
                                var server_url = getBaseUrl() + "print/ors/mooe/" + id;
                                window.location.href = url;
-                             
+
                            }
                        }
                    }, "row_above": {}, "row_below": {}, "remove_row": {}, "copy": {}
@@ -75,9 +76,8 @@
                var data = {
                    data: JSON.stringify(ps)
                };
-               
+
                $.post(url, data, function (resdata) {
-                  
                });
            },
            afterValidate: function (isValid, value, row, prop, source) {
@@ -118,7 +118,7 @@
                        document.body.style.cursor = 'wait';
                        if (valid == true) {
                            var url = $("#table").data('save');
-                           var orsps = [];
+                           var orsco = [];
                            var data = table.getData();
                            for (var i = 0; i < data.length; i++) {
                                data[i][0] = data[i][0] ? data[i][0] : null
@@ -157,7 +157,7 @@
                                data[i][33] = data[i][33] ? data[i][33] : null;
                                data[i][34] = data[i][34] ? data[i][34] : null;
                                data[i][35] = data[i][35] ? data[i][35] : null;
-                               orsps[i] = {
+                               orsco[i] = {
                                    "ID": data[i][0],
                                    "Row": (i + 1),
                                    "Date": data[i][2],
@@ -196,9 +196,9 @@
                                }
                            }
 
-                           console.log(orsps);
+
                            var data = {
-                               data: JSON.stringify(orsps)
+                               data: JSON.stringify(orsco)
                            };
 
                             $.post(url, data, function (resdata) {
@@ -223,3 +223,8 @@
 
     </script>
 }
+
+
+
+
+

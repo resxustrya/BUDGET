@@ -244,8 +244,8 @@ namespace BUDGET.Controllers
             {
 
             }
-           
-            return GetPersonelGaa();
+
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
         public ActionResult MOOE()
         {
@@ -267,7 +267,7 @@ namespace BUDGET.Controllers
             {
 
             }
-            return GetMOOE();
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
         [Route("get/json/mooe",Name = "get_json_mooe")]
         public JsonResult GetMOOE()

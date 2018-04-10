@@ -289,14 +289,24 @@
     <Compile Include="Migrations\201803190628191_Removed_Add_Condition_to_UACS.Designer.cs">
       <DependentUpon>201803190628191_Removed_Add_Condition_to_UACS.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804100438001_ORSVTF.cs" />
+    <Compile Include="Migrations\201804100438001_ORSVTF.Designer.cs">
+      <DependentUpon>201804100438001_ORSVTF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804100638133_ORSCO.cs" />
+    <Compile Include="Migrations\201804100638133_ORSCO.Designer.cs">
+      <DependentUpon>201804100638133_ORSCO.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BudgetDbContext.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MOOE.cs" />
+    <Compile Include="Models\ORSCO.cs" />
     <Compile Include="Models\ORSMOOE.cs" />
     <Compile Include="Models\ORSPS.cs" />
+    <Compile Include="Models\ORSVTF.cs" />
     <Compile Include="Models\PagingInfo.cs" />
     <Compile Include="Models\PersonnelServices.cs" />
     <Compile Include="Models\ProductListViewModel.cs" />
@@ -557,6 +567,8 @@
     <Content Include="Views\ORS\ORSMOOE.cshtml" />
     <Content Include="Views\ORSReports\PrintOrs.cshtml" />
     <Content Include="Views\ExpenseCodes\ExpenseCodes.cshtml" />
+    <Content Include="Views\ORS\ORSVTF.cshtml" />
+    <Content Include="Views\ORS\ORSCO.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -630,6 +642,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803190628191_Removed_Add_Condition_to_UACS.resx">
       <DependentUpon>201803190628191_Removed_Add_Condition_to_UACS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804100438001_ORSVTF.resx">
+      <DependentUpon>201804100438001_ORSVTF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804100638133_ORSCO.resx">
+      <DependentUpon>201804100638133_ORSCO.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\MOOE.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

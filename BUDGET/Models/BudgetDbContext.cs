@@ -18,6 +18,7 @@ namespace BUDGET.Models
         public DbSet<ORSPS> orsps { get; set; }
         public DbSet<UACS> uacs { get; set; }
         public DbSet<ORSMOOE> orsmooe { get; set; }
-
+        public DbSet<ORSVTF> orsvtf { get; set; }
+        public DbSet<ORSCO> orsco { get; set; }
     }
 }

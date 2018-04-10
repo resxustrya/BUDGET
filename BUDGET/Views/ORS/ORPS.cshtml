@@ -75,13 +75,9 @@
                var data = {
                    data: JSON.stringify(ps)
                };
+               
                $.post(url, data, function (resdata) {
-                   if (resdata.length > 0) {
-                       var tabledata = [];
-                       var total;
-
-                       table.loadData(tabledata);
-                   }
+                  
                });
            },
            afterValidate: function (isValid, value, row, prop, source) {

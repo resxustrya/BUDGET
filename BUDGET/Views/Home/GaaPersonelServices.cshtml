@@ -33,14 +33,6 @@
                    data : JSON.stringify(ps)
                };
                $.post(url, data, function (resdata) {
-                   if (resdata.length > 0) {
-                       var tabledata = [];
-                       var total;
-                       for (var i = 0; i < resdata.length; i++) {
-                           tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Line'], resdata[i]['Particulars'], resdata[i]['UACS'], numberWithCommas(resdata[i]['STO_Operations']), numberWithCommas(resdata[i]['PHM']), numberWithCommas(resdata[i]['RRHFS']), numberWithCommas(resdata[i]['Total']));
-                       }
-                       table.loadData(tabledata);
-                   }
                });
             }
        });

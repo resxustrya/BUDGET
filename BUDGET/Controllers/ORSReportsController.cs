@@ -21,6 +21,7 @@ namespace BUDGET.Controllers
             var response_file = new FileStream(Server.MapPath("/rpt_ors/ps/" + filename), FileMode.Open);
             return File(response_file, "application/pdf", "ORS_PS.pdf");
         }
+
         [Route("print/ors/mooe/{id}",Name ="print_ors_mooe")]
         public ActionResult PrintORSMOOE(String id)
         {
@@ -31,6 +32,5 @@ namespace BUDGET.Controllers
             var response_file = new FileStream(Server.MapPath("/rpt_ors/mooe/" + filename), FileMode.Open);
             return File(response_file, "application/pdf", "ORS_MOOE.pdf");
         }
-        
     }
 }
