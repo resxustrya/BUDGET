@@ -8,6 +8,7 @@ using System.Data;
 using BUDGET.Models;
 using BUDGET.DataHelpers;
 using System.Globalization;
+using System.IO;
 namespace BUDGET.DataHelpers
 {
     public class ExcelDataExport
@@ -35,10 +36,10 @@ namespace BUDGET.DataHelpers
                 table.Columns.Add("Human Resources for Health (HRH) and Institutional Capacity Management");
                 table.Columns.Add(" Human Resource for Health Deployment");
                 table.Columns.Add("Health Promotion");
-                table.Columns.Add("Epidemiology and Surveillance"); 
+                table.Columns.Add("Epidemiology and Surveillance");
                 table.Columns.Add("Health Emergency Preparedness and Response");
                 
-
+                    
                 foreach(MOOEs mooe in mooelist)
                 {
                     String sto_operation = mooe.STO_Operations > 0 ? mooe.STO_Operations.ToString("N", new CultureInfo("en-US")) : "";
@@ -99,6 +100,23 @@ namespace BUDGET.DataHelpers
                 worksheet.InsertRow(1, 1);
                 worksheet.Column(1).Width = 5;
                 result = package.GetAsByteArray();
+            }
+            return result;
+        }
+
+        public byte[] ReadReports()
+        {
+            byte[] result = null;
+            FileInfo fileinfo = new FileInfo(System.Web.HttpContext.Current.Server.MapPath("/excel_reports/gaa.xlsx"));
+            if (fileinfo.Exists)
+            {
+                using (ExcelPackage p = new ExcelPackage(fileinfo))
+                {
+                    ExcelWorksheet ws = p.Workbook.Worksheets[3];
+                    ws.Cells[1, 1].Value = "HAHAHEHE";
+                    p.Save();
+                    result = p.GetAsByteArray();
+                }
             }
             return result;
         }

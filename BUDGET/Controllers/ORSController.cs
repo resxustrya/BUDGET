@@ -164,6 +164,8 @@ namespace BUDGET.Controllers
                             orps.AH = sb.AH;
                             orps.AI = sb.AI;
                             orps.Created_By = User.Identity.GetUserName();
+
+
                             db.orsps.Add(orps);
                             
                             try { db.SaveChanges(); } catch { }
@@ -184,6 +186,7 @@ namespace BUDGET.Controllers
             {
                 dynamic orsps = JsonConvert.DeserializeObject<dynamic>(data);
                 int ID = Convert.ToInt32(orsps.ID);
+
                 var del_orsps = db.orsps.Where(p => p.ID == ID).FirstOrDefault();
                 db.orsps.Remove(del_orsps);
                 db.SaveChanges();

@@ -21,73 +21,12 @@ namespace BUDGET.Controllers
         BudgetDB db = new BudgetDB();
         JsonGetter jg = new JsonGetter();
         public int PageSize = 10;
-        public ActionResult Index(int page = 1)
+        public ActionResult Index()
         {
-            ProductListViewModel model = new ProductListViewModel
-            {
-                userslist = db.users.OrderBy(p => p.ID).Skip((page - 1) * PageSize).Take(PageSize),
-                PagingInfo = new PagingInfo
-                {
-                    CurrentPage = page,
-                    ItemsPerPage = PageSize,
-                    TotalItems = db.users.Count()
-                }
-            };
-            return View(model);
+            return RedirectToRoute("GAA_Personnel_Services");
         }
-        public ActionResult Edit(int id)
-        {
-            User user = db.users.Find(id);
-            if(user != null)
-            {
-                Session["edit_user"] = user.ID;
-                return View(user);
-            }
-            return RedirectToAction("Index");
-        }
-        [HttpPost]
-        public ActionResult Edit(FormCollection formcollection)
-        {
-            String firtname = formcollection["firstname"].ToString();
-            String middlename = formcollection["middlename"].ToString();
-            String lastname = formcollection["lastname"].ToString();
-            int id = (int)Session["edit_user"];
-            var user = (from u in db.users where u.ID == id select u).FirstOrDefault();
-            
-            user.FirstName = firtname;
-            user.MiddleName = middlename;
-            user.LastName = lastname;
-            try
-            {
-                db.SaveChanges();
-            }catch(Exception ex)
-            {
-
-            }
-            return RedirectToAction("Index");
-        }
-        public ActionResult Delete(int id)
-        {
-            User user = db.users.Find(id);
-            if(user != null)
-            {
-                db.users.Remove(user);
-                db.SaveChangesAsync();
-            }
-            return RedirectToAction("Index", "Home");
-        }
-        public ActionResult About() 
-        {
-            ViewBag.Message = "Your application description page.";
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
+       
+      
         [AllowAnonymous]
         public ActionResult Handson()
         {
@@ -374,10 +313,14 @@ namespace BUDGET.Controllers
             
            
         }
-        [Route("myname/{name}/is")]
-        public String MyName(String name)
+
+        public FileContentResult GAA()
         {
-            return name;
+            ExcelDataExport report = new ExcelDataExport();
+            string contenttype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            byte[] filecontent = report.ReadReports();
+            return File(filecontent, contenttype, "MOOE.xlsx");
+
         }
     }
 }

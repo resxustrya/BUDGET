@@ -20,5 +20,6 @@ namespace BUDGET.Models
         public DbSet<ORSMOOE> orsmooe { get; set; }
         public DbSet<ORSVTF> orsvtf { get; set; }
         public DbSet<ORSCO> orsco { get; set; }
+        public DbSet<YearBudget> yearbudget { get; set; }
     }
 }

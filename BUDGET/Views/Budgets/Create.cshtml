@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+}
+
+
+
+<div class="container">
+    <h2>Create</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <form action="@Url.Action("Create","Budgets")" method="post">
+                <table class="table">
+                    <tr>
+                        <td>Year</td>
+                        <td>
+                            <input class="form-control" name="year" type="number" required/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="submit" name="submit" value="Submit" class="btn btn-success"/></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
