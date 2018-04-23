@@ -13,19 +13,19 @@
             <p><a href="@Url.Action("Create","Budgets")" class="btn btn-success">Create New</a></p>
             <table class="table table-bordered">
                 <tr>
-                    <th class="text-center">Year</th>
+                    <th width="100" class="text-center">Year</th>
                     <th class="text-center">Created By</th>
                     <th class="text-center">Actions</th>
                 </tr>
                 @foreach (YearBudget yb in Model)
                 {
                     <tr>
-                        <td><strong>@yb.Year</strong></td>
+                        <td class="text-center"><span style="color:coral;font-size:small;font-weight:bolder;">@yb.Year Budget</span></td>
                         <td><strong>@yb.CreatedBy</strong></td>
                         <td>
-                            <a href="#" class="btn btn-success">USE</a>
+                            <a href="@Url.Action("Year","Budgets",new { id = yb.ID })" class="btn btn-success">USE</a>
                             <a href="#" class="btn btn-info">UPDATE</a>
-                            <a href="#" class="btn btn-danger">DELETE</a>
+                            <a href="#" class="btn btn-danger">CANCEL</a>
                         </td>
                     </tr>
                 }

@@ -21,5 +21,7 @@ namespace BUDGET.Models
         public DbSet<ORSVTF> orsvtf { get; set; }
         public DbSet<ORSCO> orsco { get; set; }
         public DbSet<YearBudget> yearbudget { get; set; }
+        public DbSet<PREXC> prexc { get; set; }
+        public DbSet<FundSource> fund_source { get; set; }
     }
 }

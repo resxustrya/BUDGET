@@ -83,7 +83,7 @@ namespace BUDGET.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToRoute("GAA_Personnel_Services");
+                    return RedirectToAction("Index", "Budgets");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:

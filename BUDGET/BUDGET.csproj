@@ -233,86 +233,37 @@
     <Compile Include="Controllers\BudgetsController.cs" />
     <Compile Include="Controllers\ExpenseCodesController.cs" />
     <Compile Include="Controllers\FormsController.cs" />
+    <Compile Include="Controllers\FundSourceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JsonController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ORSController.cs" />
     <Compile Include="Controllers\ORSReportsController.cs" />
-    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="DataHelpers\ExcelDataExport.cs" />
     <Compile Include="DataHelpers\JsonGetter.cs" />
     <Compile Include="DataHelpers\ORSReporting.cs" />
+    <Compile Include="Filters\YearlyFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="GlobalYear.cs" />
     <Compile Include="HtmlHelpers\PagingHelpers.cs" />
-    <Compile Include="Migrations\201802140326176_Personnel.cs" />
-    <Compile Include="Migrations\201802140326176_Personnel.Designer.cs">
-      <DependentUpon>201802140326176_Personnel.cs</DependentUpon>
+    <Compile Include="Migrations\201804230301592_InitialCreate.cs" />
+    <Compile Include="Migrations\201804230301592_InitialCreate.Designer.cs">
+      <DependentUpon>201804230301592_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201802190651273_NewUpdates.cs" />
-    <Compile Include="Migrations\201802190651273_NewUpdates.Designer.cs">
-      <DependentUpon>201802190651273_NewUpdates.cs</DependentUpon>
+    <Compile Include="Migrations\201804230645569_FundSource.cs" />
+    <Compile Include="Migrations\201804230645569_FundSource.Designer.cs">
+      <DependentUpon>201804230645569_FundSource.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201802220138399_RequiredAdded.cs" />
-    <Compile Include="Migrations\201802220138399_RequiredAdded.Designer.cs">
-      <DependentUpon>201802220138399_RequiredAdded.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201802220221013_AddKey.cs" />
-    <Compile Include="Migrations\201802220221013_AddKey.Designer.cs">
-      <DependentUpon>201802220221013_AddKey.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201802220224234_Changes.cs" />
-    <Compile Include="Migrations\201802220224234_Changes.Designer.cs">
-      <DependentUpon>201802220224234_Changes.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201802220242407_RemoveKeys.cs" />
-    <Compile Include="Migrations\201802220242407_RemoveKeys.Designer.cs">
-      <DependentUpon>201802220242407_RemoveKeys.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803090835351_ORPS.cs" />
-    <Compile Include="Migrations\201803090835351_ORPS.Designer.cs">
-      <DependentUpon>201803090835351_ORPS.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803120112267_AddedColumnsORS.cs" />
-    <Compile Include="Migrations\201803120112267_AddedColumnsORS.Designer.cs">
-      <DependentUpon>201803120112267_AddedColumnsORS.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803120551370_UCAS.cs" />
-    <Compile Include="Migrations\201803120551370_UCAS.Designer.cs">
-      <DependentUpon>201803120551370_UCAS.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803130728435_ChangeString.cs" />
-    <Compile Include="Migrations\201803130728435_ChangeString.Designer.cs">
-      <DependentUpon>201803130728435_ChangeString.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803140205574_ORSMOOE.cs" />
-    <Compile Include="Migrations\201803140205574_ORSMOOE.Designer.cs">
-      <DependentUpon>201803140205574_ORSMOOE.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803190511494_UACS_LINE.cs" />
-    <Compile Include="Migrations\201803190511494_UACS_LINE.Designer.cs">
-      <DependentUpon>201803190511494_UACS_LINE.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803190628191_Removed_Add_Condition_to_UACS.cs" />
-    <Compile Include="Migrations\201803190628191_Removed_Add_Condition_to_UACS.Designer.cs">
-      <DependentUpon>201803190628191_Removed_Add_Condition_to_UACS.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804100438001_ORSVTF.cs" />
-    <Compile Include="Migrations\201804100438001_ORSVTF.Designer.cs">
-      <DependentUpon>201804100438001_ORSVTF.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804100638133_ORSCO.cs" />
-    <Compile Include="Migrations\201804100638133_ORSCO.Designer.cs">
-      <DependentUpon>201804100638133_ORSCO.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804120845479_YearlyBudget.cs" />
-    <Compile Include="Migrations\201804120845479_YearlyBudget.Designer.cs">
-      <DependentUpon>201804120845479_YearlyBudget.cs</DependentUpon>
+    <Compile Include="Migrations\201804230718127_ABR.cs" />
+    <Compile Include="Migrations\201804230718127_ABR.Designer.cs">
+      <DependentUpon>201804230718127_ABR.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BudgetDbContext.cs" />
+    <Compile Include="Models\FundSource.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MOOE.cs" />
@@ -322,23 +273,12 @@
     <Compile Include="Models\ORSVTF.cs" />
     <Compile Include="Models\PagingInfo.cs" />
     <Compile Include="Models\PersonnelServices.cs" />
+    <Compile Include="Models\PREXC.cs" />
     <Compile Include="Models\ProductListViewModel.cs" />
     <Compile Include="Models\UACS.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\YearBudget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reports\MOOE.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MOOE.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Reports\ORS_PS.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ORS_PS.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -516,6 +456,8 @@
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="excel_reports\gaa.xlsx" />
     <None Include="Properties\PublishProfiles\budget.pubxml" />
+    <Content Include="rpt_ors\mooe\3.pdf" />
+    <Content Include="rpt_ors\ps\1003.pdf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -586,6 +528,9 @@
     <Content Include="Views\ORS\ORSCO.cshtml" />
     <Content Include="Views\Budgets\Index.cshtml" />
     <Content Include="Views\Budgets\Create.cshtml" />
+    <Content Include="Views\ExpenseCodes\Prexc.cshtml" />
+    <Content Include="Views\Home\TEST.cshtml" />
+    <Content Include="Views\FundSource\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -594,8 +539,6 @@
     <Folder Include="Content\less\" />
     <Folder Include="Content\upload\" />
     <Folder Include="obj\" />
-    <Folder Include="rpt_ors\mooe\" />
-    <Folder Include="rpt_ors\ps\" />
     <Folder Include="Views\Json\" />
     <Folder Include="Views\Reports\" />
   </ItemGroup>
@@ -621,65 +564,18 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201802140326176_Personnel.resx">
-      <DependentUpon>201802140326176_Personnel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201802190651273_NewUpdates.resx">
-      <DependentUpon>201802190651273_NewUpdates.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201802220138399_RequiredAdded.resx">
-      <DependentUpon>201802220138399_RequiredAdded.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201802220221013_AddKey.resx">
-      <DependentUpon>201802220221013_AddKey.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201802220224234_Changes.resx">
-      <DependentUpon>201802220224234_Changes.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201802220242407_RemoveKeys.resx">
-      <DependentUpon>201802220242407_RemoveKeys.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803090835351_ORPS.resx">
-      <DependentUpon>201803090835351_ORPS.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803120112267_AddedColumnsORS.resx">
-      <DependentUpon>201803120112267_AddedColumnsORS.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803120551370_UCAS.resx">
-      <DependentUpon>201803120551370_UCAS.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803130728435_ChangeString.resx">
-      <DependentUpon>201803130728435_ChangeString.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803140205574_ORSMOOE.resx">
-      <DependentUpon>201803140205574_ORSMOOE.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803190511494_UACS_LINE.resx">
-      <DependentUpon>201803190511494_UACS_LINE.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803190628191_Removed_Add_Condition_to_UACS.resx">
-      <DependentUpon>201803190628191_Removed_Add_Condition_to_UACS.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804100438001_ORSVTF.resx">
-      <DependentUpon>201804100438001_ORSVTF.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804100638133_ORSCO.resx">
-      <DependentUpon>201804100638133_ORSCO.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804120845479_YearlyBudget.resx">
-      <DependentUpon>201804120845479_YearlyBudget.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\MOOE.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>MOOE.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\ORS_PS.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>ORS_PS.cs</LastGenOutput>
-    </EmbeddedResource>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+    <EmbeddedResource Include="Migrations\201804230301592_InitialCreate.resx">
+      <DependentUpon>201804230301592_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804230645569_FundSource.resx">
+      <DependentUpon>201804230645569_FundSource.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804230718127_ABR.resx">
+      <DependentUpon>201804230718127_ABR.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

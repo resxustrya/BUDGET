@@ -17,11 +17,13 @@
         //35 cols
        table = new Handsontable(container, {
            startRows: 50,
-           startCols: 37,
+           startCols: 41,
            manualColumnResize: true,
            rowHeaders: true,
-           colWidths: [100,100, 100, 100, 100, 100, 300, 300, 300, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 300,200],
+           colWidths: [100,100, 100, 100, 100, 100, 300, 300, 300, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 300,200,200,200,200,200],
            colHeaders: true,
+           filters :true,
+            dropdownMenu: true,
            contextMenu: {
                items: {
                    "make_bold": {
@@ -36,18 +38,18 @@
                                var protocol = window.location.protocol;
                                var port = window.location.port;
                                var url = protocol + "//" + hostname + ":" + port + "/print/ors/ps/" + id;
-                               var server_url = getBaseUrl() + "print/ors/ps/" + id;
+                               var server_url = getBaseUrl() + "/print/ors/ps/" + id;
                                window.location.href = url;
                            }
                        }
-                   }, "row_above": {}, "row_below": {}, "remove_row": {},"copy" : {}
+                   }, "row_below": {}, "row_above": {}, "remove_row": {},"copy" : {}
                }
            },
            manualColumnMove: true,
            fillHandle: {
                autoInsertRow: false,
            },
-           colHeaders: ['<b>ID</b>','<b>ROW#</b>', '<b>DATE</b/>', '<b>DV</b>', '<b>PO#</b>', '<b>PR#</b>', '<b>PAYEE</b>', '<b>ADDRESS</b>', '<b>PARTICULARS</b>', '<b>ORS NO</b>', '<b>LINE #</b>', '<b>FUND SOURCE</b>', '<b>GROSS</b>', '<b>EXP CODE 1</b>', '<b>Amount 1</b>', '<b>EXP CODE 2</b>', '<b>Amount 2</b>', '<b>EXP CODE 3</b>', '<b>Amount 3</b>', '<b>EXP CODE 4</b>', '<b>Amount 4</b>', '<b>EXP CODE 5</b>', '<b>Amount 5</b>', '<b>EXP CODE 6</b>', '<b>Amount 6</b>', '<b>EXP CODE 7</b>','<b>Amount 7</b>', '<b>EXP CODE 8</b>', '<b>Amount 8</b>', '<b>EXP CODE 9</b>', '<b>Amount 9</b>', '<b>AE</b>', '<b>AF</b>', '<b>AG</b>', '<b>AH</b>', '<b>AI</b>','<b>CREATED BY</b>'],
+           colHeaders: ['<b>ID</b>','<b>ROW#</b>', '<b>DATE</b/>', '<b>DV</b>', '<b>PO#</b>', '<b>PR#</b>', '<b>PAYEE</b>', '<b>ADDRESS</b>', '<b>PARTICULARS</b>', '<b>ORS NO</b>', '<b>LINE #</b>', '<b>FUND SOURCE</b>', '<b>GROSS</b>', '<b>EXP CODE 1</b>', '<b>Amount 1</b>', '<b>EXP CODE 2</b>', '<b>Amount 2</b>', '<b>EXP CODE 3</b>', '<b>Amount 3</b>', '<b>EXP CODE 4</b>', '<b>Amount 4</b>', '<b>EXP CODE 5</b>', '<b>Amount 5</b>', '<b>EXP CODE 6</b>', '<b>Amount 6</b>', '<b>EXP CODE 7</b>','<b>Amount 7</b>', '<b>EXP CODE 8</b>', '<b>Amount 8</b>', '<b>EXP CODE 9</b>', '<b>Amount 9</b>', '<b>AE</b>', '<b>AF</b>', '<b>AG</b>', '<b>AH</b>', '<b>AI</b>','<b>CREATED BY</b>','<b>Date Received</b>','<b>Time Received</b>','<b>Date Released</b>','<b>Time Released</b>'],
            columns: [
                {},
                {},{
@@ -57,7 +59,29 @@
                    defaultDate: Date.now()
                }, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
                { type: 'dropdown', source: expense_codes },
-               {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, {}, {}, {}, {}, {}, {}
+               {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, {}, {}, {}, {}, {}, {},
+               {
+                   type : 'date',
+                   dateFormat : 'MM/DD/YYYY',
+                   correctFormat : true,
+                   defaultDate : Date.now()
+               },
+               {
+                   type: 'time',
+                   timeFormat: 'HH:mm:ss',
+                   correctFormat: true
+               },
+               {
+                   type: 'date',
+                   dateFormat: 'MM/DD/YYYY',
+                   correctFormat: true,
+                   defaultDate: Date.now()
+               },
+               {
+                   type: 'time',
+                   timeFormat: 'HH:mm:ss',
+                   correctFormat: true
+               }
            ],
            cells: function (r, c, prop) {
                var cellProperties = {};
@@ -77,7 +101,6 @@
                };
                
                $.post(url, data, function (resdata) {
-                  
                });
            },
            afterValidate: function (isValid, value, row, prop, source) {
@@ -98,7 +121,7 @@
                    var total;
                    
                    for (var i = 0; i < resdata.length; i++) {
-                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'],resdata[i]['Row'],resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['EXP_CODE_1'], numberWithCommas(resdata[i]['Amount_1']), resdata[i]['EXP_CODE_2'], numberWithCommas(resdata[i]['Amount_2']), resdata[i]['EXP_CODE_3'], numberWithCommas(resdata[i]['Amount_3']), resdata[i]['EXP_CODE_4'], numberWithCommas(resdata[i]['Amount_4']), resdata[i]['EXP_CODE_5'], numberWithCommas(resdata[i]['Amount_5']), resdata[i]['EXP_CODE_6'], numberWithCommas(resdata[i]['Amount_6']), resdata[i]['EXP_CODE_7'], numberWithCommas(resdata[i]['Amount_7']), resdata[i]['EXP_CODE_8'], numberWithCommas(resdata[i]['Amount_8']), resdata[i]['EXP_CODE_9'], numberWithCommas(resdata[i]['Amount_9']), resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'],resdata[i]['Created_By']);
+                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['EXP_CODE_1'], numberWithCommas(resdata[i]['Amount_1']), resdata[i]['EXP_CODE_2'], numberWithCommas(resdata[i]['Amount_2']), resdata[i]['EXP_CODE_3'], numberWithCommas(resdata[i]['Amount_3']), resdata[i]['EXP_CODE_4'], numberWithCommas(resdata[i]['Amount_4']), resdata[i]['EXP_CODE_5'], numberWithCommas(resdata[i]['Amount_5']), resdata[i]['EXP_CODE_6'], numberWithCommas(resdata[i]['Amount_6']), resdata[i]['EXP_CODE_7'], numberWithCommas(resdata[i]['Amount_7']), resdata[i]['EXP_CODE_8'], numberWithCommas(resdata[i]['Amount_8']), resdata[i]['EXP_CODE_9'], numberWithCommas(resdata[i]['Amount_9']), resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
                    }
                    table.loadData(tabledata);
                }
@@ -110,7 +133,6 @@
                    }
                }
            });
-           
         });
 
        $(window).bind('keydown', function (event) {
@@ -161,6 +183,11 @@
                                data[i][33] = data[i][33] ? data[i][33] : null;
                                data[i][34] = data[i][34] ? data[i][34] : null;
                                data[i][35] = data[i][35] ? data[i][35] : null;
+                               data[i][37] = data[i][37] ? data[i][37] : null;
+                               data[i][38] = data[i][38] ? data[i][38] : null;
+                               data[i][39] = data[i][39] ? data[i][39] : null;
+                               data[i][40] = data[i][40] ? data[i][40] : null;
+
                                orsps[i] = {
                                    "ID": data[i][0],
                                    "Row": (i + 1),
@@ -196,7 +223,11 @@
                                    "AF": data[i][32],
                                    "AG": data[i][33],
                                    "AH": data[i][34],
-                                   "AI": data[i][35]
+                                   "AI": data[i][35],
+                                   "DateReceived" : data[i][37],
+                                   "TimeReceived": data[i][38],
+                                   "DateReleased": data[i][39],
+                                   "TimeReleased": data[i][40]
                                }
                            }
                            console.log(orsps);
@@ -210,7 +241,7 @@
                                     var total;
                                     
                                     for (var i = 0; i < resdata.length; i++) {
-                                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['EXP_CODE_1'], numberWithCommas(resdata[i]['Amount_1']), resdata[i]['EXP_CODE_2'], numberWithCommas(resdata[i]['Amount_2']), resdata[i]['EXP_CODE_3'], numberWithCommas(resdata[i]['Amount_3']), resdata[i]['EXP_CODE_4'], numberWithCommas(resdata[i]['Amount_4']), resdata[i]['EXP_CODE_5'], numberWithCommas(resdata[i]['Amount_5']), resdata[i]['EXP_CODE_6'], numberWithCommas(resdata[i]['Amount_6']), resdata[i]['EXP_CODE_7'], numberWithCommas(resdata[i]['Amount_7']), resdata[i]['EXP_CODE_8'], numberWithCommas(resdata[i]['Amount_8']), resdata[i]['EXP_CODE_9'], numberWithCommas(resdata[i]['Amount_9']), resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By']);
+                                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['EXP_CODE_1'], numberWithCommas(resdata[i]['Amount_1']), resdata[i]['EXP_CODE_2'], numberWithCommas(resdata[i]['Amount_2']), resdata[i]['EXP_CODE_3'], numberWithCommas(resdata[i]['Amount_3']), resdata[i]['EXP_CODE_4'], numberWithCommas(resdata[i]['Amount_4']), resdata[i]['EXP_CODE_5'], numberWithCommas(resdata[i]['Amount_5']), resdata[i]['EXP_CODE_6'], numberWithCommas(resdata[i]['Amount_6']), resdata[i]['EXP_CODE_7'], numberWithCommas(resdata[i]['Amount_7']), resdata[i]['EXP_CODE_8'], numberWithCommas(resdata[i]['Amount_8']), resdata[i]['EXP_CODE_9'], numberWithCommas(resdata[i]['Amount_9']), resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
                                     }
                                     table.loadData(tabledata);
                                 }

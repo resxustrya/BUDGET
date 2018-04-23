@@ -3,15 +3,18 @@
     ViewBag.Title = "GAA Personnel Services";
 }
 
-<div id="table" data-get="@Url.RouteUrl("get_json_gaa")" data-save="@Url.RouteUrl("save_json_gaa")" data-delete="@Url.RouteUrl("delete_json_gaa")"></div>
+<div id="table" data-get="@Url.RouteUrl("get_json_gaa")" data-save="@Url.RouteUrl("save_json_gaa")" data-delete="@Url.RouteUrl("delete_json_gaa")" data-expense="@Url.RouteUrl("get_expense_codes_number")"></div>
 
 @section scripts {
     <script>
+       var expense_codes = [];
        var container = document.getElementById("table");
        var table;
+       var valid = true;
+       var expense_url = $("#table").data('expense');
        table = new Handsontable(container, {
            startRows: 50,
-           startCols: 7,
+           startCols: 8,
            manualColumnResize: true,
            rowHeaders: true,
            colWidths : [1,1,400,200,200,200,200,200],
@@ -21,7 +24,18 @@
                    autoInsertRow: false,
            },
            colHeaders: ['ID', 'LINE', '<strong style="font-weight:bolder;">PARTICULARS</strong>', 'UACS EXPENSE CODE', 'STO-Operations <br /> of Regional Offices', 'Public Health Management', 'Regulation of Regional <br />Health Facilities and Services', 'Total'],
-           beforeRemoveRow : function(index,column) {
+           columns: [
+               {},
+               {},
+               {},
+               { type: 'dropdown', source: expense_codes },
+               {},
+               {},
+               {},
+               {}
+               
+           ],
+           beforeRemoveRow: function (index, column) {
                var items = this.getData();
                var row_item = items[index];
                var url = $("#table").data('delete');
@@ -34,7 +48,13 @@
                };
                $.post(url, data, function (resdata) {
                });
-            }
+            },
+            afterValidate: function (isValid, value, row, prop, source) {
+                if (!isValid) {
+                    valid = false;
+                    alert('there exists an invalid cell, disable save');
+                } else { valid = true; }
+            },
        });
        $(document).ready(function () {
            var url = $("#table").data('get');
@@ -49,6 +69,13 @@
                    table.loadData(tabledata);
                }
            });
+           $.get(expense_url, function (expense_res) {
+               if (expense_res.length > 0) {
+                   for (var i = 0; i < expense_res.length; i++) {
+                       expense_codes[i] = expense_res[i]["Code"];
+                   }
+               }
+           });
        });
 
        $(window).bind('keydown', function (event) {
@@ -58,40 +85,44 @@
                    case 's':
                        event.preventDefault();
                        document.body.style.cursor = 'wait';
+                       if (valid == true) {
+                           var url = $("#table").data('save');
+                           var ps = [];
+                           var data = table.getData();
+                           for (var i = 0; i < data.length; i++) {
 
-                       var url = $("#table").data('save');
-                       var ps = [];
-                       var data = table.getData();
-                       for (var i = 0; i < data.length; i++) {
-                           
-                           data[i][4] = data[i][4] ? data[i][4] : 0;
-                           data[i][5] = data[i][5] ? data[i][5] : 0;
-                           data[i][6] = data[i][6] ? data[i][6] : 0;
-                           ps[i] = {
-                               "ID": data[i][0],
-                               "Line" : (i + 1),
-                               "Particulars": data[i][2],
-                               "UACS": data[i][3],
-                               "STO_Operations": data[i][4],
-                               "PHM": data[i][5],
-                               "RRHFS": data[i][6]
-                           };
-                       }
-                       var data = {
-                           data: JSON.stringify(ps)
-                       };
-                       $.post(url, data, function (resdata) {
-                           
-                           if (resdata.length > 0) {
-                               var tabledata = [];
-                               var total;
-                               for (var i = 0; i < resdata.length; i++) {
-                                   tabledata[i] = new Array(resdata[i]['ID'],resdata[i]['Line'], resdata[i]['Particulars'], resdata[i]['UACS'], numberWithCommas(resdata[i]['STO_Operations']), numberWithCommas(resdata[i]['PHM']), numberWithCommas(resdata[i]['RRHFS']), numberWithCommas(resdata[i]['Total']));
-                               }
-                               table.loadData(tabledata);
+                               data[i][4] = data[i][4] ? data[i][4] : 0;
+                               data[i][5] = data[i][5] ? data[i][5] : 0;
+                               data[i][6] = data[i][6] ? data[i][6] : 0;
+                               ps[i] = {
+                                   "ID": data[i][0],
+                                   "Line": (i + 1),
+                                   "Particulars": data[i][2],
+                                   "UACS": data[i][3],
+                                   "STO_Operations": data[i][4],
+                                   "PHM": data[i][5],
+                                   "RRHFS": data[i][6]
+                               };
                            }
-                           document.body.style.cursor = 'default';
-                       });
+                           var data = {
+                               data: JSON.stringify(ps)
+                           };
+                           $.post(url, data, function (resdata) {
+
+                               if (resdata.length > 0) {
+                                   var tabledata = [];
+                                   var total;
+                                   for (var i = 0; i < resdata.length; i++) {
+                                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Line'], resdata[i]['Particulars'], resdata[i]['UACS'], numberWithCommas(resdata[i]['STO_Operations']), numberWithCommas(resdata[i]['PHM']), numberWithCommas(resdata[i]['RRHFS']), numberWithCommas(resdata[i]['Total']));
+                                   }
+                                   table.loadData(tabledata);
+                               }
+                               document.body.style.cursor = 'default';
+                           });
+                       } else {
+                           alert("Failed to save because theres an ivalid data inputed. See the color red in each rows to indentify errors.");
+                       }
+                       
                     break;
                }
            }

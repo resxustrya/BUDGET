@@ -16,10 +16,13 @@
                         <td>
                             <input class="form-control" name="year" type="number" required/>
                         </td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td><input type="submit" name="submit" value="Submit" class="btn btn-success"/></td>
+                        <td><input type="submit" name="submit" value="Submit" class="btn btn-success"/>
+                            <a href="@Url.Action("Index","Budgets")" class="btn btn-warning">Cancel</a>
+                        </td>
                     </tr>
                 </table>
             </form>

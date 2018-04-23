@@ -6,10 +6,12 @@ using System.Web.Mvc;
 using System.IO;
 using OfficeOpenXml;
 using BUDGET.Models;
+using BUDGET.Filters;
 using Microsoft.Office.Core;
 namespace BUDGET.Controllers
 {
-   
+    [Authorize]
+    [YearlyFilter]
     public class FormsController : Controller
     {
         // GET: Forms

@@ -15,11 +15,30 @@ namespace BUDGET.Controllers
         // GET: Budgets
         public ActionResult Index(int? page)
         {
+            Session.Remove("year");
+            GlobalYear.Year = null;
             int pageSize = 10;
             int pageIndex = 1;
             pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
-            var yearlybudget = from yb in db.yearbudget orderby yb.Year ascending select yb;
+            var yearlybudget = from yb in db.yearbudget orderby yb.Year descending select yb;
             return View(yearlybudget.ToPagedList(pageIndex,pageSize));
+        }
+        public ActionResult Year(String id)
+        {
+            Int32 ID = Convert.ToInt32(id);
+            var year = db.yearbudget.Where(p => p.ID == ID).FirstOrDefault();
+            GlobalYear.Year = year.Year.ToString();
+
+            if(year != null)
+            {
+                Session["year"] = year.ID;
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+            
         }
         public ActionResult Create()
         {

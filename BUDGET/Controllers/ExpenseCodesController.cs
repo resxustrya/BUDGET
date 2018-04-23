@@ -6,9 +6,11 @@ using System.Web.Mvc;
 using BUDGET.Models;
 using Newtonsoft;
 using Newtonsoft.Json;
+using BUDGET.Filters;
 namespace BUDGET.Controllers
 {
     [Authorize]
+    [YearlyFilter]
     public class ExpenseCodesController : Controller
     {
         // GET: ExpenseCodes
@@ -85,9 +87,85 @@ namespace BUDGET.Controllers
                         orderby list.Line ascending
                         select new
                         {
-                            Code = list.Code,
+                            Code = list.Code
                         }).ToList();
             return Json(uacs, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Prexc()
+        {
+            ViewBag.Menu = "PREXC";
+            return View();
+        }
+        [Route("get/prexc",Name ="get_prexc")]
+        public JsonResult GetPrexc()
+        {
+            var prexc = (from list in db.prexc
+                         orderby list.Line ascending
+                         select new
+                         {
+                             ID = list.ID,
+                             Line = list.Line,
+                             Desc = list.Desc,
+                             Code1 = list.Code1,
+                             Code2 = list.Code2
+                         }).ToList();
+            return Json(prexc, JsonRequestBehavior.AllowGet);
+        }
+        [Route("save/prexc",Name ="save_prexc")]
+        public JsonResult SavePrexc(String data)
+        {
+            List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
+            Int32 id = 0;
+            foreach (Object s in list)
+            {
+                try
+                {
+                    dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
+                    //var ps = db.ps.Where(p => p.ID == sb.ID).FirstOrDefault();
+                    id = Convert.ToInt32(sb.ID);
+                    var prexc = db.prexc.Where(p => p.ID == id).FirstOrDefault();
+                    prexc.Line = sb.Line;
+                    prexc.Desc = sb.Desc;
+                    prexc.Code1 = sb.Code1;
+                    prexc.Code2 = sb.Code2;
+                    try { db.SaveChanges(); } catch { }
+                }
+                catch (Exception ex)
+                {
+                    dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
+                    try
+                    {
+                        if (sb.Desc != null && sb.Code1 != null && sb.Code2 != null)
+                        {
+                            PREXC prexc = new PREXC();
+                            prexc.Line = sb.Line;
+                            prexc.Desc = sb.Desc;
+                            prexc.Code1 = sb.Code1;
+                            prexc.Code2 = sb.Code2;
+                            db.prexc.Add(prexc);
+                            try { db.SaveChanges(); } catch { }
+                        }
+                    }
+                    catch { }
+                }
+            }
+            return GetPrexc();
+        }
+        [Route("delete/prexc",Name ="delete_prexc")]
+        public String DeletePrexc(String data)
+        {
+            return "";
+        }
+        [Route("get/prexc/number",Name = "get_prexc_number")]
+        public JsonResult GetPrexcCodeNumber()
+        {
+            var prexc_list = (from list in db.prexc
+                              select new
+                              {
+                                  prexc = list.Code1
+                              }).ToList();
+            return Json(prexc_list, JsonRequestBehavior.AllowGet);
         }
     }
 }

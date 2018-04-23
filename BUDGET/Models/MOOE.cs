@@ -28,5 +28,6 @@ namespace BUDGET.Models
         public Double HP { get; set; }
         public Double ES { get; set; }
         public Double HEPR { get; set; }
+        public String Year { get; set; }
     }
 }

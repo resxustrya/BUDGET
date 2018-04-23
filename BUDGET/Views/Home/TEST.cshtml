@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "TEST";
+}
+
+<div id="example1"></div>
+@section scripts {
+    <script>
+
+        var dataObj = [
+    ['Lorem', 'ipsum', 'dolor', 'sit', '12/1/2015', 23],
+    ['adipiscing', 'elit', 'Ut', 'imperdiet', '5/12/2015', 6],
+    ['Pellentesque', 'vulputate', 'leo', 'semper', '10/23/2015', 26],
+    ['diam', 'et', 'malesuada', 'libero', '12/1/2014', 98],
+    ['orci', 'et', 'dignissim', 'hendrerit', '12/1/2016', 8.5]
+        ];
+        var example1 = document.getElementById('example1');
+
+        var hot = new Handsontable(example1, {
+            data: dataObj,
+            columns: [
+              { type: 'text' },
+              { type: 'text' },
+              { type: 'text' },
+              { type: 'text' },
+              { type: 'date', dateFormat: 'M/D/YYYY' },
+              { type: 'numeric' }
+            ],
+            colHeaders: true,
+            rowHeaders: true,
+            dropdownMenu: true,
+            filters: true
+        });
+    </script>
+}
+

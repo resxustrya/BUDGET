@@ -1,10 +1,10 @@
 ﻿
 @{
-    ViewBag.Title = "ExpenseCodes";
+    ViewBag.Title = "Fund Sources";
 }
 
 
-<div id="table" data-get="@Url.RouteUrl("get_expense_codes")" data-save="@Url.RouteUrl("save_expense_codes")" data-delete="@Url.RouteUrl("delete_expense_codes")"></div>
+<div id="table" data-get="@Url.RouteUrl("get_fund_source")" data-save="@Url.RouteUrl("save_fund_source")" data-delete="@Url.RouteUrl("delete_fund_source")" data-expense="@Url.RouteUrl("get_expense_codes_number")"></div>
 
 @section scripts {
     <script>
@@ -14,21 +14,21 @@
         //35 cols
        table = new Handsontable(container, {
            startRows: 50,
-           startCols: 4,
+           startCols: 5,
            manualColumnResize: true,
            rowHeaders: true,
-           colWidths: [1,1, 700,200],
+           colWidths: [100,500,200,200,200],
            colHeaders: true,
-           contextMenu: ['row_above','row_below','remove_row','copy'],
+           contextMenu: ['row_below','row_above','remove_row','copy'],
            manualColumnMove: true,
            fillHandle: {
                autoInsertRow: false,
            },
-           colHeaders: ['ID','LINE','<b>Account Title</b>','<b>UACS Expense Code</b>'],
-           
+           colHeaders: ['ID', 'FUND SOURCE TITLE', '<b>TITLE ABBREVIATION</b>', '<b>UACS EXPENSE CODES</b>','PREXC CODES'],
+
            cells: function (r, c, prop) {
                var cellProperties = {};
-               if (c === 0 || c === 1) cellProperties.readOnly = true;
+               if (c === 0) cellProperties.readOnly = true;
                return cellProperties;
            },
            beforeRemoveRow: function (index, column) {
@@ -46,7 +46,6 @@
                    if (resdata.length > 0) {
                        var tabledata = [];
                        var total;
-
                        table.loadData(tabledata);
                    }
                });
@@ -67,12 +66,13 @@
                    var tabledata = [];
                    var total;
                    for (var i = 0; i < resdata.length; i++) {
-                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Line'], resdata[i]['Title'], resdata[i]['Code']);
+                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['SourceTitle'], resdata[i]['ABR'], resdata[i]['uacs'],resdata[i]['prexc']);
                    }
                    table.loadData(tabledata);
                }
            });
         });
+
 
        $(window).bind('keydown', function (event) {
            if (event.ctrlKey || event.metaKey) {
@@ -83,21 +83,19 @@
                        document.body.style.cursor = 'wait';
                        if (valid == true) {
                            var url = $("#table").data('save');
-                           var uacs = [];
+                           var fund = [];
                            var data = table.getData();
                            for (var i = 0; i < data.length; i++) {
-                               data[i][2] = data[i][2] ? data[i][2] : null;
-                               data[i][3] = data[i][3] ? data[i][3] : null;
-                               uacs[i] = {
+                               fund[i] = {
                                    "ID": data[i][0],
-                                   "Line":  (i + 1),
-                                   "Title": data[i][2],
-                                   "Code" : data[i][3]
+                                   "SourceTitle": data[i][1],
+                                   "ABR": data[i][2],
+                                   "uacs": data[i][3],
+                                   "prexc" :data[i][4]
                                };
                            }
-                           console.log(uacs);
                            var data = {
-                               data: JSON.stringify(uacs)
+                               data: JSON.stringify(fund)
                            };
 
                             $.post(url, data, function (resdata) {
@@ -105,7 +103,7 @@
                                     var tabledata = [];
                                     var total;
                                     for (var i = 0; i < resdata.length; i++) {
-                                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Line'], resdata[i]['Title'], resdata[i]['Code']);
+                                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['SourceTitle'], resdata[i]['ABR'], resdata[i]['uacs'], resdata[i]['prexc']);
                                     }
                                     table.loadData(tabledata);
                                 }
@@ -114,11 +112,10 @@
                        } else {
                            alert("Failed to save because theres an ivalid data inputed. See the color red in each rows to indentify errors.");
                        }
-
                    break;
                }
            }
        });
 
     </script>
-    }
+}

@@ -19,7 +19,7 @@ namespace BUDGET.DataHelpers
             Document doc = new Document(PageSize.A4);
             try
             {
-                System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("rpt_ors/mooe/" + filename));
+                System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("/rpt_ors/mooe/" + filename));
             }
             catch
             { }
@@ -358,7 +358,7 @@ namespace BUDGET.DataHelpers
             Document doc = new Document(PageSize.A4);
             try
             {
-                System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("rpt_ors/ps/" + filename));
+                System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("/rpt_ors/ps/" + filename));
             }
             catch
             { }

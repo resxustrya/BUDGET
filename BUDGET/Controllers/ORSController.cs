@@ -7,9 +7,11 @@ using BUDGET.Models;
 using BUDGET.DataHelpers;
 using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
+using BUDGET.Filters;
 namespace BUDGET.Controllers
 {
     [Authorize]
+    [YearlyFilter]
     [OutputCache(Location = System.Web.UI.OutputCacheLocation.None, NoStore = true)]
     public class ORSController : Controller
     {
@@ -23,7 +25,7 @@ namespace BUDGET.Controllers
         [Route("ors/ps", Name = "ors_ps")]
         public ActionResult ORPS()
         {
-            ViewBag.Menu = "ORS Personnel Services";
+            ViewBag.Menu = GlobalYear.Year + " ORS Personnel Services";
             return View();
         }
         [Route("get/ors/ps",Name = "get_ors_ps")]
@@ -68,7 +70,11 @@ namespace BUDGET.Controllers
                           AG = list.AG,
                           AH = list.AH,
                           AI = list.AI,
-                          Created_By = list.Created_By
+                          Created_By = list.Created_By,
+                          DateReceived = list.DateReceived,
+                          TimeReceived = list.TimeReceived,
+                          DateReleased = list.DateReleased,
+                          TimeReleased = list.TimeReleased
                       }).ToList();
             return Json(orsps, JsonRequestBehavior.AllowGet);
         }
@@ -78,7 +84,7 @@ namespace BUDGET.Controllers
             List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
             Int32 id = 0;
             foreach (Object s in list)
-            {
+            {   
                 try
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
@@ -119,6 +125,12 @@ namespace BUDGET.Controllers
                     orps.AG = sb.AG;
                     orps.AH = sb.AH;
                     orps.AI = sb.AI;
+                    orps.DateReceived = sb.DateReceived;
+                    orps.TimeReceived = sb.TimeReceived;
+                    orps.DateReleased = sb.DateReleased;
+                    orps.TimeReleased = sb.TimeReleased;
+
+
                     try { db.SaveChanges(); } catch { }
                 }
                 catch (Exception ex)
@@ -164,7 +176,10 @@ namespace BUDGET.Controllers
                             orps.AH = sb.AH;
                             orps.AI = sb.AI;
                             orps.Created_By = User.Identity.GetUserName();
-
+                            orps.DateReceived = sb.DateReceived;
+                            orps.TimeReceived = sb.TimeReceived;
+                            orps.DateReleased = sb.DateReleased;
+                            orps.TimeReleased = sb.TimeReleased;
 
                             db.orsps.Add(orps);
                             
@@ -201,7 +216,7 @@ namespace BUDGET.Controllers
         [Route("ors/mooe",Name = "ors_mooe")]
         public ActionResult ORSMOOE()
         {
-            ViewBag.Menu = "ORS | MOOE";
+            ViewBag.Menu = GlobalYear.Year + " ORS | MOOE";
             return View();
         }
         [Route("get/ors/mooe",Name ="get_ors_mooe")]
@@ -373,7 +388,7 @@ namespace BUDGET.Controllers
         [Route("ors/vtf",Name = "ors_vtf")]
         public ActionResult ORSVTF()
         {
-            ViewBag.Menu = "ORS | VTF";
+            ViewBag.Menu = GlobalYear.Year + " ORS | VTF";
             return View();
         }
         [Route("get/ors/vtf",Name ="get_ors_vtf")]
@@ -545,7 +560,7 @@ namespace BUDGET.Controllers
         [Route("ors/co", Name = "ors_co")]
         public ActionResult ORSCO()
         {
-            ViewBag.Menu = "ORS | CO";
+            ViewBag.Menu = GlobalYear.Year +  " ORS | CO";
             return View();
         }
         

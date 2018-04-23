@@ -19,5 +19,6 @@ namespace BUDGET.Models
         public Double STO_Operations { get; set; }
         public Double PHM { get; set; }
         public Double RRHFS { get; set; }
+        public String Year { get; set; }
     }
 }

@@ -48,5 +48,7 @@ namespace BUDGET.Models
         public String AH { get; set; }
         public String AI { get; set; }
         public String Created_By { get; set; }
+        public String Year { get; set; }
+        
     }
 }

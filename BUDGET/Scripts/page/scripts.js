@@ -40,6 +40,11 @@
 
 
 function getBaseUrl() {
-    var re = new RegExp(/^.*\//);
-    return re.exec(window.location.href);
+    var url = window.location.href;
+    var segments = url.split('/');
+    
+    var hostname = window.location.hostname;
+    var protocol = window.location.protocol;
+    var url = protocol + "//" + hostname + "/" + segments[3] + "/";
+    return url;
 }

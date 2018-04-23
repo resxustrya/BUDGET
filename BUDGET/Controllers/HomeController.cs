@@ -1,4 +1,4 @@
-﻿using CrystalDecisions.CrystalReports.Engine;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +12,11 @@ using Newtonsoft;
 using Newtonsoft.Json;
 using System.Data.Entity;
 using BUDGET.DataHelpers;
+using BUDGET.Filters;
 namespace BUDGET.Controllers
 {
     [Authorize]
+    [YearlyFilter]
     [OutputCache(Location = System.Web.UI.OutputCacheLocation.None, NoStore = true)]
     public class HomeController : Controller
     {
@@ -25,8 +27,7 @@ namespace BUDGET.Controllers
         {
             return RedirectToRoute("GAA_Personnel_Services");
         }
-       
-      
+        
         [AllowAnonymous]
         public ActionResult Handson()
         {
@@ -105,7 +106,7 @@ namespace BUDGET.Controllers
         [Route("gaa/personel-services",Name = "GAA_Personnel_Services")]
         public ActionResult GaaPersonelServices()
         {
-            ViewBag.Menu = "2018 GAA | PERSONNEL SERVICES";
+            ViewBag.Menu = GlobalYear.Year + " GAA | PERSONNEL SERVICES";
             return View();
         }
         [Route("get/gaa/personnel-services",Name = "get_json_gaa")]
@@ -188,7 +189,7 @@ namespace BUDGET.Controllers
         }
         public ActionResult MOOE()
         {
-            ViewBag.Menu = "2018 GAA MOOE";
+            ViewBag.Menu = GlobalYear.Year + " GAA MOOE";
             return View();
         }
         [HttpPost]
@@ -298,22 +299,6 @@ namespace BUDGET.Controllers
 
         }
 
-        public ActionResult ExportMOOE()
-        {
-            ReportDocument rd = new ReportDocument();
-            rd.Load(Path.Combine(Server.MapPath("~/Reports"), "MOOE.rpt"));
-            rd.SetDataSource(jg.GetMOOE().ToList());
-            Response.Buffer = false;
-            Response.ClearContent();
-            Response.ClearContent();
-            
-            Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
-            stream.Seek(0, SeekOrigin.Begin);
-            return File(stream, "application/pdf", "MOOE.pdf");
-            
-           
-        }
-
         public FileContentResult GAA()
         {
             ExcelDataExport report = new ExcelDataExport();
@@ -321,6 +306,10 @@ namespace BUDGET.Controllers
             byte[] filecontent = report.ReadReports();
             return File(filecontent, contenttype, "MOOE.xlsx");
 
+        }
+        public ActionResult TEST()
+        {
+            return View();
         }
     }
 }
