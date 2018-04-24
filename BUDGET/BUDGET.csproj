@@ -260,6 +260,10 @@
     <Compile Include="Migrations\201804230718127_ABR.Designer.cs">
       <DependentUpon>201804230718127_ABR.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804240027427_ORSMOOE_UPDATE.cs" />
+    <Compile Include="Migrations\201804240027427_ORSMOOE_UPDATE.Designer.cs">
+      <DependentUpon>201804240027427_ORSMOOE_UPDATE.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BudgetDbContext.cs" />
@@ -575,6 +579,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804230718127_ABR.resx">
       <DependentUpon>201804230718127_ABR.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804240027427_ORSMOOE_UPDATE.resx">
+      <DependentUpon>201804240027427_ORSMOOE_UPDATE.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

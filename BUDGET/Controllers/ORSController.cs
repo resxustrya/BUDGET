@@ -222,7 +222,7 @@ namespace BUDGET.Controllers
         [Route("get/ors/mooe",Name ="get_ors_mooe")]
         public JsonResult GetOrsMOOE()
         {
-            var orsps = (from list in db.orsmooe
+            var orsmooe = (from list in db.orsmooe
                          orderby list.Row ascending
                          select new
                          {
@@ -261,9 +261,13 @@ namespace BUDGET.Controllers
                              AG = list.AG,
                              AH = list.AH,
                              AI = list.AI,
-                             Created_By = list.Created_By
+                             Created_By = list.Created_By,
+                             DateReceived = list.DateReceived,
+                             TimeReceived = list.TimeReceived,
+                             DateReleased = list.DateReleased,
+                             TimeReleased = list.TimeReleased
                          }).ToList();
-            return Json(orsps, JsonRequestBehavior.AllowGet);
+            return Json(orsmooe, JsonRequestBehavior.AllowGet);
         }
         [Route("save/ors/mooe",Name ="save_ors_mooe")]
         public JsonResult SaveOrsMOOE(String data)
@@ -277,41 +281,48 @@ namespace BUDGET.Controllers
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     //var ps = db.ps.Where(p => p.ID == sb.ID).FirstOrDefault();
                     id = Convert.ToInt32(sb.ID);
-                    var orps = db.orsmooe.Where(p => p.ID == id).FirstOrDefault();
-                    orps.Row = sb.Row;
-                    orps.Date = sb.Date;
-                    orps.DB = sb.DB;
-                    orps.PO = sb.PO;
-                    orps.PR = sb.PR;
-                    orps.PAYEE = sb.PAYEE;
-                    orps.Adress = sb.Adress;
-                    orps.Particulars = sb.Particulars;
-                    orps.ORS_NO = sb.ORS_NO;
-                    orps.FundSource = sb.FundSource;
-                    orps.Gross = sb.Gross;
-                    orps.EXP_CODE_1 = sb.EXP_CODE_1;
-                    orps.Amount_1 = sb.Amount_1;
-                    orps.EXP_CODE_2 = sb.EXP_CODE_2;
-                    orps.Amount_2 = sb.Amount_2;
-                    orps.EXP_CODE_3 = sb.EXP_CODE_3;
-                    orps.Amount_3 = sb.Amount_3;
-                    orps.EXP_CODE_4 = sb.EXP_CODE_4;
-                    orps.Amount_4 = sb.Amount_4;
-                    orps.EXP_CODE_5 = sb.EXP_CODE_5;
-                    orps.Amount_5 = sb.Amount_5;
-                    orps.EXP_CODE_6 = sb.EXP_CODE_6;
-                    orps.Amount_6 = sb.Amount_6;
-                    orps.EXP_CODE_7 = sb.EXP_CODE_7;
-                    orps.Amount_7 = sb.Amount_7;
-                    orps.EXP_CODE_8 = sb.EXP_CODE_8;
-                    orps.Amount_8 = sb.Amount_8;
-                    orps.EXP_CODE_9 = sb.EXP_CODE_9;
-                    orps.Amount_9 = sb.Amount_9;
-                    orps.AE = sb.AE;
-                    orps.AF = sb.AF;
-                    orps.AG = sb.AG;
-                    orps.AH = sb.AH;
-                    orps.AI = sb.AI;
+                    var orsmooe = db.orsmooe.Where(p => p.ID == id).FirstOrDefault();
+                    orsmooe.Row = sb.Row;
+                    orsmooe.Date = sb.Date;
+                    orsmooe.DB = sb.DB;
+                    orsmooe.PO = sb.PO;
+                    orsmooe.PR = sb.PR;
+                    orsmooe.PAYEE = sb.PAYEE;
+                    orsmooe.Adress = sb.Adress;
+                    orsmooe.Particulars = sb.Particulars;
+                    orsmooe.ORS_NO = sb.ORS_NO;
+                    orsmooe.FundSource = sb.FundSource;
+                    orsmooe.Gross = sb.Gross;
+                    orsmooe.EXP_CODE_1 = sb.EXP_CODE_1;
+                    orsmooe.Amount_1 = sb.Amount_1;
+                    orsmooe.EXP_CODE_2 = sb.EXP_CODE_2;
+                    orsmooe.Amount_2 = sb.Amount_2;
+                    orsmooe.EXP_CODE_3 = sb.EXP_CODE_3;
+                    orsmooe.Amount_3 = sb.Amount_3;
+                    orsmooe.EXP_CODE_4 = sb.EXP_CODE_4;
+                    orsmooe.Amount_4 = sb.Amount_4;
+                    orsmooe.EXP_CODE_5 = sb.EXP_CODE_5;
+                    orsmooe.Amount_5 = sb.Amount_5;
+                    orsmooe.EXP_CODE_6 = sb.EXP_CODE_6;
+                    orsmooe.Amount_6 = sb.Amount_6;
+                    orsmooe.EXP_CODE_7 = sb.EXP_CODE_7;
+                    orsmooe.Amount_7 = sb.Amount_7;
+                    orsmooe.EXP_CODE_8 = sb.EXP_CODE_8;
+                    orsmooe.Amount_8 = sb.Amount_8;
+                    orsmooe.EXP_CODE_9 = sb.EXP_CODE_9;
+                    orsmooe.Amount_9 = sb.Amount_9;
+                    orsmooe.AE = sb.AE;
+                    orsmooe.AF = sb.AF;
+                    orsmooe.AG = sb.AG;
+                    orsmooe.AH = sb.AH;
+                    orsmooe.AI = sb.AI;
+                    orsmooe.Created_By = User.Identity.GetUserName();
+
+                    orsmooe.DateReceived = sb.DateReceived;
+                    orsmooe.TimeReceived = sb.TimeReceived;
+                    orsmooe.DateReleased = sb.DateReleased;
+                    orsmooe.TimeReleased = sb.TimeReleased;
+
                     try { db.SaveChanges(); } catch { }
                 }
                 catch (Exception ex)
@@ -357,6 +368,12 @@ namespace BUDGET.Controllers
                             orsmooe.AH = sb.AH;
                             orsmooe.AI = sb.AI;
                             orsmooe.Created_By = User.Identity.GetUserName();
+
+                            orsmooe.DateReceived = sb.DateReceived;
+                            orsmooe.TimeReceived = sb.TimeReceived;
+                            orsmooe.DateReleased = sb.DateReleased;
+                            orsmooe.TimeReleased = sb.TimeReleased;
+
                             db.orsmooe.Add(orsmooe);
                             try { db.SaveChanges(); } catch { }
                         }

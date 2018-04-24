@@ -4,13 +4,17 @@
 }
 
 
-<div id="table" data-get="@Url.RouteUrl("get_fund_source")" data-save="@Url.RouteUrl("save_fund_source")" data-delete="@Url.RouteUrl("delete_fund_source")" data-expense="@Url.RouteUrl("get_expense_codes_number")"></div>
+<div id="table" data-get="@Url.RouteUrl("get_fund_source")" data-save="@Url.RouteUrl("save_fund_source")" data-delete="@Url.RouteUrl("delete_fund_source")" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-prexc="@Url.RouteUrl("get_prexc_number")"></div>
 
 @section scripts {
     <script>
+       var expense_codes = [];
+       var prexc_numbers = [];
        var container = document.getElementById("table");
        var table;
        var valid = true;
+       var expense_url = $("#table").data('expense');
+       var prexc_url = $("#table").data('prexc');
         //35 cols
        table = new Handsontable(container, {
            startRows: 50,
@@ -25,7 +29,13 @@
                autoInsertRow: false,
            },
            colHeaders: ['ID', 'FUND SOURCE TITLE', '<b>TITLE ABBREVIATION</b>', '<b>UACS EXPENSE CODES</b>','PREXC CODES'],
-
+           columns: [
+               {},
+               {},
+               {},
+               { type: 'dropdown', source: expense_codes },
+               { type : 'dropdown', source : prexc_numbers }
+           ],
            cells: function (r, c, prop) {
                var cellProperties = {};
                if (c === 0) cellProperties.readOnly = true;
@@ -69,6 +79,20 @@
                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['SourceTitle'], resdata[i]['ABR'], resdata[i]['uacs'],resdata[i]['prexc']);
                    }
                    table.loadData(tabledata);
+               }
+           });
+           $.get(expense_url, function (expense_res) {
+               if (expense_res.length > 0) {
+                   for (var i = 0; i < expense_res.length; i++) {
+                       expense_codes[i] = expense_res[i]["Code"];
+                   }
+               }
+           });
+           $.get(prexc_url, function (prexc_res) {
+               if (prexc_res.length > 0) {
+                   for (var i = 0; i < prexc_res.length; i++) {
+                       prexc_numbers[i] = prexc_res[i]["prexc"];
+                   }
                }
            });
         });

@@ -12,6 +12,10 @@ namespace BUDGET.Models
         [Required]
         public Int32 Row { get; set; }
         public String Date { get; set; }
+        public String DateReceived { get; set; }
+        public String TimeReceived { get; set; }
+        public String DateReleased { get; set; }
+        public String TimeReleased { get; set; }
         public String DB { get; set; }
         public String PO { get; set; }
         public String PR { get; set; }
