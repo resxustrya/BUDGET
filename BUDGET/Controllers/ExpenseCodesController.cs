@@ -94,7 +94,7 @@ namespace BUDGET.Controllers
 
         public ActionResult Prexc()
         {
-            ViewBag.Menu = "PREXC";
+            ViewBag.Menu = "FUND SOURCE | PREXC";
             return View();
         }
         [Route("get/prexc",Name ="get_prexc")]

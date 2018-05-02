@@ -1,33 +1,37 @@
 ﻿
 @{
-    ViewBag.Title = "FUND SOURCE | PREXC";
+    ViewBag.Title = ViewBag.Menu;
 }
 
-<div id="table" data-get="@Url.RouteUrl("get_prexc")" data-save="@Url.RouteUrl("save_prexc")" data-delete="@Url.RouteUrl("delete_prexc")"></div>
+<div id="table" data-get="@Url.RouteUrl("get_budget_source_fund")" data-save="@Url.RouteUrl("save_budget_source_fund")" data-delete="@Url.RouteUrl("delete_prexc")" data-prexcnumber="@Url.RouteUrl("get_prexc_number")"></div>
 
 @section scripts {
     <script>
+       var prexc_numbers = [];
        var container = document.getElementById("table");
        var table;
        var valid = true;
+       var prexc_url = $("#table").data('prexcnumber');
         //35 cols
        table = new Handsontable(container, {
            startRows: 50,
-           startCols: 5,
+           startCols: 3,
            manualColumnResize: true,
            rowHeaders: true,
-           colWidths: [100,100, 700,200,200],
+           colWidths: [100,200,500],
            colHeaders: true,
            contextMenu: ['row_above','row_below','remove_row','copy'],
            manualColumnMove: true,
            fillHandle: {
                autoInsertRow: false,
            },
-           colHeaders: ['ID','LINE','<b>Account Title</b>','<b>Code 1</b>','<b>Code 2</b>'],
-
+           colHeaders: ['LINE','<b>PREXC CODE</b>','<b>Fund Source Title</b>'],
+           columns :[
+               {}, { type: 'dropdown', source: prexc_numbers }, {}
+           ],
            cells: function (r, c, prop) {
                var cellProperties = {};
-               if (c === 0 || c === 1) cellProperties.readOnly = true;
+               if (c === 0 || c === 2) cellProperties.readOnly = true;
                return cellProperties;
            },
            beforeRemoveRow: function (index, column) {
@@ -57,7 +61,7 @@
                } else { valid = true;}
            },
        });
-
+        
        $(document).ready(function () {
            var url = $("#table").data('get');
            $.get(url, function (resdata) {
@@ -65,9 +69,18 @@
                    var tabledata = [];
                    var total;
                    for (var i = 0; i < resdata.length; i++) {
-                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Line'], resdata[i]['Desc'], resdata[i]['Code1'],resdata[i]['Code2']);
+                       tabledata[i] = new Array(resdata[i]['Line'], resdata[i]['PREXC'], resdata[i]['Title']);
                    }
                    table.loadData(tabledata);
+               }
+           });
+           
+           $.get(prexc_url, function (data) {
+               if (data.length > 0) {
+                   for (var i = 0; i < data.length; i++) {
+                       prexc_numbers[i] = data[i]["prexc"];
+                   }
+                   console.log(prexc_numbers);
                }
            });
         });
@@ -81,19 +94,16 @@
                        document.body.style.cursor = 'wait';
                        if (valid == true) {
                            var url = $("#table").data('save');
-                           var prexc = [];
+                           var budgetsourcefund = [];
                            var data = table.getData();
                            for (var i = 0; i < data.length; i++) {
-                               prexc[i] = {
-                                   "ID": data[i][0],
+                               budgetsourcefund[i] = {
                                    "Line":  (i + 1),
-                                   "Desc": data[i][2],
-                                   "Code1": data[i][3],
-                                   "Code2": data[i][4]
+                                   "prexc" : data[i][1]
                                };
                            }
                            var data = {
-                               data: JSON.stringify(prexc)
+                               data: JSON.stringify(budgetsourcefund)
                            };
 
                             $.post(url, data, function (resdata) {
@@ -101,7 +111,7 @@
                                     var tabledata = [];
                                     var total;
                                     for (var i = 0; i < resdata.length; i++) {
-                                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Line'], resdata[i]['Desc'], resdata[i]['Code1'],resdata[i]['Code2']);
+                                        tabledata[i] = new Array(resdata[i]['Line'], resdata[i]['PREXC'], resdata[i]['Title']);
                                     }
                                     table.loadData(tabledata);
                                 }

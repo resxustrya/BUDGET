@@ -106,7 +106,7 @@ namespace BUDGET.Controllers
         [Route("gaa/personel-services",Name = "GAA_Personnel_Services")]
         public ActionResult GaaPersonelServices()
         {
-            ViewBag.Menu = GlobalYear.Year + " GAA | PERSONNEL SERVICES";
+            ViewBag.Menu = GlobalData.Year + " GAA | PERSONNEL SERVICES";
             return View();
         }
         [Route("get/gaa/personnel-services",Name = "get_json_gaa")]
@@ -189,7 +189,7 @@ namespace BUDGET.Controllers
         }
         public ActionResult MOOE()
         {
-            ViewBag.Menu = GlobalYear.Year + " GAA MOOE";
+            ViewBag.Menu = GlobalData.Year + " GAA MOOE";
             return View();
         }
         [HttpPost]

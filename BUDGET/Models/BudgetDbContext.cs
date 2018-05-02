@@ -23,5 +23,9 @@ namespace BUDGET.Models
         public DbSet<YearBudget> yearbudget { get; set; }
         public DbSet<PREXC> prexc { get; set; }
         public DbSet<FundSource> fund_source { get; set; }
+        public DbSet<Allotments> allotments { get; set; }
+        public DbSet<BudgetSourceFund> budgetsourcefund { get; set; }
+        public DbSet<ORSMaster> orsmaster { get; set; }
+        public DbSet<ORS> ors { get; set; }
     }
 }

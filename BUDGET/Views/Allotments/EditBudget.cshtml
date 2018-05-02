@@ -1,0 +1,30 @@
+﻿@model Allotments
+@{
+    ViewBag.Title = "Edit Budget";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <h2>Edit Budget</h2>
+            <form action="@Url.Action("EditBudget","Allotments")" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="ID" value="@Model.ID" />
+                <table class="table">
+                    <tr>
+                        <td>Allotment Title</td>
+                        <td><input type="text" name="title" class="form-control" value="@Model.Title" /></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="submit" class="btn btn-success" name="submit" value="Submit" />
+                            <a href="@Url.Action("Index","Allotments")" class="btn btn-warning">Cancel</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+

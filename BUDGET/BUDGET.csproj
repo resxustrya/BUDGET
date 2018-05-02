@@ -230,6 +230,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AllotmentsController.cs" />
     <Compile Include="Controllers\BudgetsController.cs" />
     <Compile Include="Controllers\ExpenseCodesController.cs" />
     <Compile Include="Controllers\FormsController.cs" />
@@ -239,14 +240,16 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ORSController.cs" />
     <Compile Include="Controllers\ORSReportsController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="DataHelpers\ExcelDataExport.cs" />
     <Compile Include="DataHelpers\JsonGetter.cs" />
+    <Compile Include="DataHelpers\ModelAllotments.cs" />
     <Compile Include="DataHelpers\ORSReporting.cs" />
     <Compile Include="Filters\YearlyFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="GlobalYear.cs" />
+    <Compile Include="GlobalData.cs" />
     <Compile Include="HtmlHelpers\PagingHelpers.cs" />
     <Compile Include="Migrations\201804230301592_InitialCreate.cs" />
     <Compile Include="Migrations\201804230301592_InitialCreate.Designer.cs">
@@ -264,14 +267,50 @@
     <Compile Include="Migrations\201804240027427_ORSMOOE_UPDATE.Designer.cs">
       <DependentUpon>201804240027427_ORSMOOE_UPDATE.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804270054498_Allotments.cs" />
+    <Compile Include="Migrations\201804270054498_Allotments.Designer.cs">
+      <DependentUpon>201804270054498_Allotments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804270820055_allotments_changes.cs" />
+    <Compile Include="Migrations\201804270820055_allotments_changes.Designer.cs">
+      <DependentUpon>201804270820055_allotments_changes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804291406463_BudgetSourceFundUpdate.cs" />
+    <Compile Include="Migrations\201804291406463_BudgetSourceFundUpdate.Designer.cs">
+      <DependentUpon>201804291406463_BudgetSourceFundUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804291423009_AddedLine.cs" />
+    <Compile Include="Migrations\201804291423009_AddedLine.Designer.cs">
+      <DependentUpon>201804291423009_AddedLine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804300553318_Added_Unique_Key.cs" />
+    <Compile Include="Migrations\201804300553318_Added_Unique_Key.Designer.cs">
+      <DependentUpon>201804300553318_Added_Unique_Key.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804300627447_REMOVE_UNIQUE_EKY.cs" />
+    <Compile Include="Migrations\201804300627447_REMOVE_UNIQUE_EKY.Designer.cs">
+      <DependentUpon>201804300627447_REMOVE_UNIQUE_EKY.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805020050487_ORSMaster.cs" />
+    <Compile Include="Migrations\201805020050487_ORSMaster.Designer.cs">
+      <DependentUpon>201805020050487_ORSMaster.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805020148359_ors.cs" />
+    <Compile Include="Migrations\201805020148359_ors.Designer.cs">
+      <DependentUpon>201805020148359_ors.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Allotments.cs" />
     <Compile Include="Models\BudgetDbContext.cs" />
+    <Compile Include="Models\BudgetSourceFund.cs" />
     <Compile Include="Models\FundSource.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MOOE.cs" />
+    <Compile Include="Models\ORS.cs" />
     <Compile Include="Models\ORSCO.cs" />
+    <Compile Include="Models\ORSMaster.cs" />
     <Compile Include="Models\ORSMOOE.cs" />
     <Compile Include="Models\ORSPS.cs" />
     <Compile Include="Models\ORSVTF.cs" />
@@ -459,6 +498,7 @@
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="excel_reports\gaa.xlsx" />
+    <Content Include="excel_reports\2018_RO7_DOH_SAOB.xlsx" />
     <None Include="Properties\PublishProfiles\budget.pubxml" />
     <Content Include="rpt_ors\mooe\3.pdf" />
     <Content Include="rpt_ors\ps\1003.pdf" />
@@ -535,6 +575,15 @@
     <Content Include="Views\ExpenseCodes\Prexc.cshtml" />
     <Content Include="Views\Home\TEST.cshtml" />
     <Content Include="Views\FundSource\Index.cshtml" />
+    <Content Include="Views\Allotments\Index.cshtml" />
+    <Content Include="Views\Allotments\Create.cshtml" />
+    <Content Include="Views\Allotments\FundSource.cshtml" />
+    <Content Include="Views\Allotments\View.cshtml" />
+    <Content Include="Views\Allotments\ORS.cshtml" />
+    <Content Include="Views\Allotments\CreateOrs.cshtml" />
+    <Content Include="Views\ORS\OrsItem.cshtml" />
+    <Content Include="Views\Allotments\EditOrs.cshtml" />
+    <Content Include="Views\Allotments\EditBudget.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -582,6 +631,30 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804240027427_ORSMOOE_UPDATE.resx">
       <DependentUpon>201804240027427_ORSMOOE_UPDATE.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804270054498_Allotments.resx">
+      <DependentUpon>201804270054498_Allotments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804270820055_allotments_changes.resx">
+      <DependentUpon>201804270820055_allotments_changes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804291406463_BudgetSourceFundUpdate.resx">
+      <DependentUpon>201804291406463_BudgetSourceFundUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804291423009_AddedLine.resx">
+      <DependentUpon>201804291423009_AddedLine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804300553318_Added_Unique_Key.resx">
+      <DependentUpon>201804300553318_Added_Unique_Key.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804300627447_REMOVE_UNIQUE_EKY.resx">
+      <DependentUpon>201804300627447_REMOVE_UNIQUE_EKY.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805020050487_ORSMaster.resx">
+      <DependentUpon>201805020050487_ORSMaster.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805020148359_ors.resx">
+      <DependentUpon>201805020148359_ors.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

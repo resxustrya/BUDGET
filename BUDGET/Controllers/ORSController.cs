@@ -25,13 +25,22 @@ namespace BUDGET.Controllers
         [Route("ors/ps", Name = "ors_ps")]
         public ActionResult ORPS()
         {
-            ViewBag.Menu = GlobalYear.Year + " ORS Personnel Services";
+            ViewBag.Menu = GlobalData.Year + " ORS Personnel Services";
+            return View();
+        }
+        public ActionResult OrsItem(String id)
+        {
+            Int32 ID = Convert.ToInt32(id);
+            var ors = (from list in db.orsmaster where list.ID == ID && list.Year == GlobalData.Year select list).FirstOrDefault();
+            GlobalData.ors_id = ors.ID.ToString();
+            ViewBag.Menu = ors.Year + " | " + ors.Title;
             return View();
         }
         [Route("get/ors/ps",Name = "get_ors_ps")]
         public JsonResult GetOrsPS()
         {
-            var orsps = (from list in db.orsps
+            Int32 ors_id = Convert.ToInt32(GlobalData.ors_id);
+            var orsps = (from list in db.ors where list.ors_id == ors_id
                       orderby list.Row ascending
                       select new
                       {
@@ -88,48 +97,48 @@ namespace BUDGET.Controllers
                 try
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
-                    //var ps = db.ps.Where(p => p.ID == sb.ID).FirstOrDefault();
+                    
                     id = Convert.ToInt32(sb.ID);
-                    var orps = db.orsps.Where(p => p.ID == id).FirstOrDefault();
-                    orps.Row = sb.Row;
-                    orps.Date = sb.Date;
-                    orps.DB = sb.DB;
-                    orps.PO = sb.PO;
-                    orps.PR = sb.PR;
-                    orps.PAYEE = sb.PAYEE;
-                    orps.Adress = sb.Adress;
-                    orps.Particulars = sb.Particulars;
-                    orps.ORS_NO = sb.ORS_NO;
-                    orps.FundSource = sb.FundSource;
-                    orps.Gross = sb.Gross;
-                    orps.EXP_CODE_1 = sb.EXP_CODE_1;
-                    orps.Amount_1 = sb.Amount_1;
-                    orps.EXP_CODE_2 = sb.EXP_CODE_2;
-                    orps.Amount_2 = sb.Amount_2;
-                    orps.EXP_CODE_3 = sb.EXP_CODE_3;
-                    orps.Amount_3 = sb.Amount_3;
-                    orps.EXP_CODE_4 = sb.EXP_CODE_4;
-                    orps.Amount_4 = sb.Amount_4;
-                    orps.EXP_CODE_5 = sb.EXP_CODE_5;
-                    orps.Amount_5 = sb.Amount_5;
-                    orps.EXP_CODE_6 = sb.EXP_CODE_6;
-                    orps.Amount_6 = sb.Amount_6;
-                    orps.EXP_CODE_7 = sb.EXP_CODE_7;
-                    orps.Amount_7 = sb.Amount_7;
-                    orps.EXP_CODE_8 = sb.EXP_CODE_8;
-                    orps.Amount_8 = sb.Amount_8;
-                    orps.EXP_CODE_9 = sb.EXP_CODE_9;
-                    orps.Amount_9 = sb.Amount_9;
-                    orps.AE = sb.AE;
-                    orps.AF = sb.AF;
-                    orps.AG = sb.AG;
-                    orps.AH = sb.AH;
-                    orps.AI = sb.AI;
-                    orps.DateReceived = sb.DateReceived;
-                    orps.TimeReceived = sb.TimeReceived;
-                    orps.DateReleased = sb.DateReleased;
-                    orps.TimeReleased = sb.TimeReleased;
-
+                    var ors = db.ors.Where(p => p.ID == id).FirstOrDefault();
+                    ors.Row = sb.Row;
+                    ors.Date = sb.Date;
+                    ors.DB = sb.DB;
+                    ors.PO = sb.PO;
+                    ors.PR = sb.PR;
+                    ors.PAYEE = sb.PAYEE;
+                    ors.Adress = sb.Adress;
+                    ors.Particulars = sb.Particulars;
+                    ors.ORS_NO = sb.ORS_NO;
+                    ors.FundSource = sb.FundSource;
+                    ors.Gross = sb.Gross;
+                    ors.EXP_CODE_1 = sb.EXP_CODE_1;
+                    ors.Amount_1 = sb.Amount_1;
+                    ors.EXP_CODE_2 = sb.EXP_CODE_2;
+                    ors.Amount_2 = sb.Amount_2;
+                    ors.EXP_CODE_3 = sb.EXP_CODE_3;
+                    ors.Amount_3 = sb.Amount_3;
+                    ors.EXP_CODE_4 = sb.EXP_CODE_4;
+                    ors.Amount_4 = sb.Amount_4;
+                    ors.EXP_CODE_5 = sb.EXP_CODE_5;
+                    ors.Amount_5 = sb.Amount_5;
+                    ors.EXP_CODE_6 = sb.EXP_CODE_6;
+                    ors.Amount_6 = sb.Amount_6;
+                    ors.EXP_CODE_7 = sb.EXP_CODE_7;
+                    ors.Amount_7 = sb.Amount_7;
+                    ors.EXP_CODE_8 = sb.EXP_CODE_8;
+                    ors.Amount_8 = sb.Amount_8;
+                    ors.EXP_CODE_9 = sb.EXP_CODE_9;
+                    ors.Amount_9 = sb.Amount_9;
+                    ors.AE = sb.AE;
+                    ors.AF = sb.AF;
+                    ors.AG = sb.AG;
+                    ors.AH = sb.AH;
+                    ors.AI = sb.AI;
+                    ors.DateReceived = sb.DateReceived;
+                    ors.TimeReceived = sb.TimeReceived;
+                    ors.DateReleased = sb.DateReleased;
+                    ors.TimeReleased = sb.TimeReleased;
+               
 
                     try { db.SaveChanges(); } catch { }
                 }
@@ -140,48 +149,49 @@ namespace BUDGET.Controllers
                     {
                         if(sb.Date != null && sb.Particulars != null && sb.PAYEE != null)
                         {
-                            ORSPS orps = new ORSPS();
-                            orps.Row = sb.Row;
-                            orps.Date = sb.Date;
-                            orps.DB = sb.DB;
-                            orps.PO = sb.PO;
-                            orps.PR = sb.PR;
-                            orps.PAYEE = sb.PAYEE;
-                            orps.Adress = sb.Adress;
-                            orps.Particulars = sb.Particulars;
-                            orps.ORS_NO = sb.ORS_NO;
-                            orps.FundSource = sb.FundSource;
-                            orps.Gross = sb.Gross;
-                            orps.EXP_CODE_1 = sb.EXP_CODE_1;
-                            orps.Amount_1 = sb.Amount_1;
-                            orps.EXP_CODE_2 = sb.EXP_CODE_2;
-                            orps.Amount_2 = sb.Amount_2;
-                            orps.EXP_CODE_3 = sb.EXP_CODE_3;
-                            orps.Amount_3 = sb.Amount_3;
-                            orps.EXP_CODE_4 = sb.EXP_CODE_4;
-                            orps.Amount_4 = sb.Amount_4;
-                            orps.EXP_CODE_5 = sb.EXP_CODE_5;
-                            orps.Amount_5 = sb.Amount_5;
-                            orps.EXP_CODE_6 = sb.EXP_CODE_6;
-                            orps.Amount_6 = sb.Amount_6;
-                            orps.EXP_CODE_7 = sb.EXP_CODE_7;
-                            orps.Amount_7 = sb.Amount_7;
-                            orps.EXP_CODE_8 = sb.EXP_CODE_8;
-                            orps.Amount_8 = sb.Amount_8;
-                            orps.EXP_CODE_9 = sb.EXP_CODE_9;
-                            orps.Amount_9 = sb.Amount_9;
-                            orps.AE = sb.AE;
-                            orps.AF = sb.AF;
-                            orps.AG = sb.AG;
-                            orps.AH = sb.AH;
-                            orps.AI = sb.AI;
-                            orps.Created_By = User.Identity.GetUserName();
-                            orps.DateReceived = sb.DateReceived;
-                            orps.TimeReceived = sb.TimeReceived;
-                            orps.DateReleased = sb.DateReleased;
-                            orps.TimeReleased = sb.TimeReleased;
+                            ORS ors = new ORS();
+                            ors.ors_id = Convert.ToInt32(GlobalData.ors_id);
+                            ors.Row = sb.Row;
+                            ors.Date = sb.Date;
+                            ors.DB = sb.DB;
+                            ors.PO = sb.PO;
+                            ors.PR = sb.PR;
+                            ors.PAYEE = sb.PAYEE;
+                            ors.Adress = sb.Adress;
+                            ors.Particulars = sb.Particulars;
+                            ors.ORS_NO = sb.ORS_NO;
+                            ors.FundSource = sb.FundSource;
+                            ors.Gross = sb.Gross;
+                            ors.EXP_CODE_1 = sb.EXP_CODE_1;
+                            ors.Amount_1 = sb.Amount_1;
+                            ors.EXP_CODE_2 = sb.EXP_CODE_2;
+                            ors.Amount_2 = sb.Amount_2;
+                            ors.EXP_CODE_3 = sb.EXP_CODE_3;
+                            ors.Amount_3 = sb.Amount_3;
+                            ors.EXP_CODE_4 = sb.EXP_CODE_4;
+                            ors.Amount_4 = sb.Amount_4;
+                            ors.EXP_CODE_5 = sb.EXP_CODE_5;
+                            ors.Amount_5 = sb.Amount_5;
+                            ors.EXP_CODE_6 = sb.EXP_CODE_6;
+                            ors.Amount_6 = sb.Amount_6;
+                            ors.EXP_CODE_7 = sb.EXP_CODE_7;
+                            ors.Amount_7 = sb.Amount_7;
+                            ors.EXP_CODE_8 = sb.EXP_CODE_8;
+                            ors.Amount_8 = sb.Amount_8;
+                            ors.EXP_CODE_9 = sb.EXP_CODE_9;
+                            ors.Amount_9 = sb.Amount_9;
+                            ors.AE = sb.AE;
+                            ors.AF = sb.AF;
+                            ors.AG = sb.AG;
+                            ors.AH = sb.AH;
+                            ors.AI = sb.AI;
+                            ors.Created_By = User.Identity.GetUserName();
+                            ors.DateReceived = sb.DateReceived;
+                            ors.TimeReceived = sb.TimeReceived;
+                            ors.DateReleased = sb.DateReleased;
+                            ors.TimeReleased = sb.TimeReleased;
 
-                            db.orsps.Add(orps);
+                            db.ors.Add(ors);
                             
                             try { db.SaveChanges(); } catch { }
                         }
@@ -199,11 +209,11 @@ namespace BUDGET.Controllers
         {
             try
             {
-                dynamic orsps = JsonConvert.DeserializeObject<dynamic>(data);
-                int ID = Convert.ToInt32(orsps.ID);
+                dynamic ors = JsonConvert.DeserializeObject<dynamic>(data);
+                int ID = Convert.ToInt32(ors.ID);
 
-                var del_orsps = db.orsps.Where(p => p.ID == ID).FirstOrDefault();
-                db.orsps.Remove(del_orsps);
+                var del_ors = db.ors.Where(p => p.ID == ID).FirstOrDefault();
+                db.ors.Remove(del_ors);
                 db.SaveChanges();
             }
             catch (Exception ex)
@@ -211,12 +221,11 @@ namespace BUDGET.Controllers
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
-       
 
         [Route("ors/mooe",Name = "ors_mooe")]
         public ActionResult ORSMOOE()
         {
-            ViewBag.Menu = GlobalYear.Year + " ORS | MOOE";
+            ViewBag.Menu = GlobalData.Year + " ORS | MOOE";
             return View();
         }
         [Route("get/ors/mooe",Name ="get_ors_mooe")]
@@ -405,7 +414,7 @@ namespace BUDGET.Controllers
         [Route("ors/vtf",Name = "ors_vtf")]
         public ActionResult ORSVTF()
         {
-            ViewBag.Menu = GlobalYear.Year + " ORS | VTF";
+            ViewBag.Menu = GlobalData.Year + " ORS | VTF";
             return View();
         }
         [Route("get/ors/vtf",Name ="get_ors_vtf")]
@@ -577,7 +586,7 @@ namespace BUDGET.Controllers
         [Route("ors/co", Name = "ors_co")]
         public ActionResult ORSCO()
         {
-            ViewBag.Menu = GlobalYear.Year +  " ORS | CO";
+            ViewBag.Menu = GlobalData.Year +  " ORS | CO";
             return View();
         }
         

@@ -1,0 +1,162 @@
+﻿
+@{
+    ViewBag.Title = "GAA MOOE";
+}
+
+<div id="table" data-get="@Url.RouteUrl("get_json_mooe")" data-save="@Url.RouteUrl("save_json_mooe")" data-delete="@Url.RouteUrl("delete_json_mooe")" data-expense="@Url.RouteUrl("get_expense_codes_number")"></div>
+
+@section scripts {
+    <script>
+
+       var expense_codes = [];
+       var container = document.getElementById("table");
+       var table;
+       var valid = true;
+       var expense_url = $("#table").data('expense');
+       table = new Handsontable(container, {
+           startRows: 50,
+           startCols: 13,
+           manualColumnResize: true,
+           rowHeaders: true,
+           colWidths : [1,1,400,200,200,200,200,200,200,200,200,200,200,200,200],
+           colHeaders: true,
+           contextMenu: true,
+           manualColumnMove: true,
+           fillHandle: {
+                   autoInsertRow: false,
+           },
+           colHeaders: ['ID','LINE', '<strong style="font-weight:bolder;">PARTICULARS <br />MOOE</strong>', 'UACS<br/>EXPENSE<br />CODE', 'STO-Operations <br />of Regional Offices', 'Public Health Management', 'Regulation of Regional <br />Health Facilities and Services', 'Health Sector <br />Research Development ', 'Local Health Systems <br />Development and Assistance ', 'Human Resources for Health (HRH)<br /> and Institutional Capacity Management', 'Human Resource for <br />Health Deployment', 'Health Promotion', 'Epidemiology and Surveillance ', 'Health Emergency <br />Preparedness and Response ', 'Total'],
+           columns: [
+               {},
+               {},
+               {},
+               { type: 'dropdown', source: expense_codes },
+               {},
+               {},
+               {},
+               {},
+               {},
+               {},
+               {},
+               {},
+               {}
+
+           ],
+           cells: function (r, c, prop) {
+               var cellProperties = {};
+               if (c === 0 || c === 1 ) cellProperties.readOnly = true;
+               return cellProperties;
+           },
+           beforeRemoveRow: function (index, column) {
+               var items = this.getData();
+               var row_item = items[index];
+               var url = $("#table").data('delete');
+
+               var ps = {
+                   "ID": row_item[0]
+               };
+               var data = {
+                   data: JSON.stringify(ps)
+               };
+
+               $.post(url, data, function (resdata) {
+               });
+           },
+           afterValidate: function (isValid, value, row, prop, source) {
+               if (!isValid) {
+                   valid = false;
+                   alert('there exists an invalid cell, disable save');
+               } else { valid = true; }
+           },
+       });
+
+
+       $(document).ready(function () {
+           var url = $("#table").data('get');
+           $.get(url, function (resdata) {
+               if (resdata.length > 0) {
+                   var tabledata = [];
+                   var total;
+                   for (var i = 0; i < resdata.length; i++) {
+                       tabledata[i] = new Array(resdata[i]['ID'],resdata[i]['Line'], resdata[i]['Paraticulars'], resdata[i]['UACS'], numberWithCommas(resdata[i]['STO_Operations']), numberWithCommas(resdata[i]['PHM']), numberWithCommas(resdata[i]['RRHFS']), numberWithCommas(resdata[i]['HSRD']), numberWithCommas(resdata[i]['LHSDA']), numberWithCommas(resdata[i]['HRHICM']), numberWithCommas(resdata[i]['HRDP']), numberWithCommas(resdata[i]['HP']), numberWithCommas(resdata[i]['ES']), numberWithCommas(resdata[i]['HEPR']), numberWithCommas(resdata[i]['Total']));
+                   }
+                   table.loadData(tabledata);
+               }
+           });
+           $.get(expense_url, function (expense_res) {
+               if (expense_res.length > 0) {
+                   for (var i = 0; i < expense_res.length; i++) {
+                       expense_codes[i] = expense_res[i]["Code"];
+                   }
+               }
+           });
+        });
+
+       $(window).bind('keydown', function (event) {
+           if (event.ctrlKey || event.metaKey) {
+               switch (String.fromCharCode(event.which).toLowerCase())
+               {
+                   case 's':
+                       event.preventDefault();
+                       document.body.style.cursor = 'wait';
+                       if (valid == true) {
+                           var url = $("#table").data('save');
+                           var mooe = [];
+                           var data = table.getData();
+                           for (var i = 0; i < data.length; i++) {
+                               data[i][0] = data[i][0] ? data[i][0] : null;
+                               data[i][2] = data[i][2] ? data[i][2] : null;
+                               data[i][3] = data[i][3] ? data[i][3] : null;
+                               data[i][4] = data[i][4] ? data[i][4] : 0;
+                               data[i][5] = data[i][5] ? data[i][5] : 0;
+                               data[i][6] = data[i][6] ? data[i][6] : 0;
+                               data[i][7] = data[i][7] ? data[i][7] : 0;
+                               data[i][8] = data[i][8] ? data[i][8] : 0;
+                               data[i][9] = data[i][9] ? data[i][9] : 0;
+                               data[i][10] = data[i][10] ? data[i][10] : 0;
+                               data[i][11] = data[i][11] ? data[i][11] : 0;
+                               data[i][12] = data[i][12] ? data[i][12] : 0;
+                               data[i][13] = data[i][13] ? data[i][13] : 0;
+                               mooe[i] = {
+                                   "ID": data[i][0],
+                                   "Line": (i + 1),
+                                   "Paraticulars": data[i][2],
+                                   "UACS": data[i][3],
+                                   "STO_Operations": data[i][4],
+                                   "PHM": data[i][5],
+                                   "RRHFS": data[i][6],
+                                   "HSRD": data[i][7],
+                                   "LHSDA": data[i][8],
+                                   "HRHICM": data[i][9],
+                                   "HRDP": data[i][10],
+                                   "HP": data[i][11],
+                                   "ES": data[i][12],
+                                   "HEPR": data[i][13]
+                               };
+                           }
+
+                           var data = {
+                               data: JSON.stringify(mooe)
+                           };
+                           $.post(url, data, function (resdata) {
+                               if (resdata.length > 0) {
+                                   var tabledata = [];
+                                   var total;
+                                   for (var i = 0; i < resdata.length; i++) {
+                                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Line'], resdata[i]['Paraticulars'], resdata[i]['UACS'], numberWithCommas(resdata[i]['STO_Operations']), numberWithCommas(resdata[i]['PHM']), numberWithCommas(resdata[i]['RRHFS']), numberWithCommas(resdata[i]['HSRD']), numberWithCommas(resdata[i]['LHSDA']), numberWithCommas(resdata[i]['HRHICM']), numberWithCommas(resdata[i]['HRDP']), numberWithCommas(resdata[i]['HP']), numberWithCommas(resdata[i]['ES']), numberWithCommas(resdata[i]['HEPR']), numberWithCommas(resdata[i]['Total']));
+                                   }
+                                   table.loadData(tabledata);
+                               }
+                               document.body.style.cursor = 'default';
+                           });
+                       } else {
+                           alert("Failed to save because theres an ivalid data inputed. See the color red in each rows to indentify errors.");
+                       }
+
+                   break;
+               }
+           }
+       });
+
+    </script>
+}

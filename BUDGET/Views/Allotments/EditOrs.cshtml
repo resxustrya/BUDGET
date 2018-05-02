@@ -1,0 +1,31 @@
+﻿@model ORSMaster
+@{
+    ViewBag.Title = "EditOrs";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <h2>Create ORS</h2>
+            <form action="@Url.Action("EditOrs","Allotments")" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="ID" value="@Model.ID" />
+                <table class="table">
+                    <tr>
+                        <td>ORS TITLE</td>
+                        <td><input type="text" name="title" value="@Model.Title" class="form-control" /></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="submit" class="btn btn-success" name="submit" value="Submit" />
+                            <a href="@Url.Action("ORS","Allotments")" class="btn btn-warning">Cancel</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+

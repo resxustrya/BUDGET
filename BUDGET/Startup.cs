@@ -35,10 +35,10 @@ namespace BUDGET
                 //Here we create a Admin super user who will maintain the website                  
 
                 var user = new ApplicationUser();
-                user.UserName = "d0H7budget";
+                user.UserName = "doh7budget";
                 user.Email = "doh7budget@gmail.com";
 
-                string userPWD = "d0H7budget_system";
+                string userPWD = "doh7budget";
 
                 var chkUser = UserManager.Create(user, userPWD);
 

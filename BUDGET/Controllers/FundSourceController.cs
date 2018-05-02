@@ -66,7 +66,7 @@ namespace BUDGET.Controllers
                             fund_source.SourceTitle = sb.SourceTitle;
                             fund_source.prexc = sb.prexc;
                             fund_source.uacs = sb.uacs;
-                            fund_source.Year = GlobalYear.Year;
+                            fund_source.Year = GlobalData.Year;
                             fund_source.ABR = sb.ABR;
                             db.fund_source.Add(fund_source);
                             try { db.SaveChanges(); } catch { }

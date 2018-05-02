@@ -16,7 +16,7 @@ namespace BUDGET.Controllers
         public ActionResult Index(int? page)
         {
             Session.Remove("year");
-            GlobalYear.Year = null;
+            GlobalData.Year = null;
             int pageSize = 10;
             int pageIndex = 1;
             pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
@@ -27,7 +27,7 @@ namespace BUDGET.Controllers
         {
             Int32 ID = Convert.ToInt32(id);
             var year = db.yearbudget.Where(p => p.ID == ID).FirstOrDefault();
-            GlobalYear.Year = year.Year.ToString();
+            GlobalData.Year = year.Year.ToString();
 
             if(year != null)
             {

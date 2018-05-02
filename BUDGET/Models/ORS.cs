@@ -5,11 +5,11 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 namespace BUDGET.Models
 {
-    public class ORSPS
+    public class ORS
     {
         [Key]
         public Int32 ID { get; set; }
-        
+        public Int32 ors_id { get; set; }
         public Int32 Row { get; set; }
         public String Date { get; set; }
         public String DateReceived { get; set; }
@@ -49,6 +49,6 @@ namespace BUDGET.Models
         public String AH { get; set; }
         public String AI { get; set; }
         public String Created_By { get; set; }
-        public String Year { get; set; }
+
     }
 }

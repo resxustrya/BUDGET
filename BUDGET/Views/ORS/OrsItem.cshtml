@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = ViewBag.Menu;
+    ViewBag.Title = "ORS | Personnel Services";
 }
 
 <div id="table" data-get="@Url.RouteUrl("get_ors_ps")" data-save="@Url.RouteUrl("save_ors_ps")" data-delete="@Url.RouteUrl("delete_ors_ps")" data-expense="@Url.RouteUrl("get_expense_codes_number")"></div>
@@ -13,7 +13,7 @@
         var table;
         var valid = true;
         var expense_url = $("#table").data('expense');
-        
+
         //35 cols
        table = new Handsontable(container, {
            startRows: 50,
@@ -99,7 +99,7 @@
                var data = {
                    data: JSON.stringify(ps)
                };
-               
+
                $.post(url, data, function (resdata) {
                });
            },
@@ -114,12 +114,12 @@
 
        $(document).ready(function () {
            var url = $("#table").data('get');
-          
+
            $.get(url, function (resdata) {
                if (resdata.length > 0) {
                    var tabledata = [];
                    var total;
-                   
+
                    for (var i = 0; i < resdata.length; i++) {
                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['EXP_CODE_1'], numberWithCommas(resdata[i]['Amount_1']), resdata[i]['EXP_CODE_2'], numberWithCommas(resdata[i]['Amount_2']), resdata[i]['EXP_CODE_3'], numberWithCommas(resdata[i]['Amount_3']), resdata[i]['EXP_CODE_4'], numberWithCommas(resdata[i]['Amount_4']), resdata[i]['EXP_CODE_5'], numberWithCommas(resdata[i]['Amount_5']), resdata[i]['EXP_CODE_6'], numberWithCommas(resdata[i]['Amount_6']), resdata[i]['EXP_CODE_7'], numberWithCommas(resdata[i]['Amount_7']), resdata[i]['EXP_CODE_8'], numberWithCommas(resdata[i]['Amount_8']), resdata[i]['EXP_CODE_9'], numberWithCommas(resdata[i]['Amount_9']), resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
                    }
@@ -239,7 +239,7 @@
                                 if (resdata.length > 0) {
                                     var tabledata = [];
                                     var total;
-                                    
+
                                     for (var i = 0; i < resdata.length; i++) {
                                         tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['EXP_CODE_1'], numberWithCommas(resdata[i]['Amount_1']), resdata[i]['EXP_CODE_2'], numberWithCommas(resdata[i]['Amount_2']), resdata[i]['EXP_CODE_3'], numberWithCommas(resdata[i]['Amount_3']), resdata[i]['EXP_CODE_4'], numberWithCommas(resdata[i]['Amount_4']), resdata[i]['EXP_CODE_5'], numberWithCommas(resdata[i]['Amount_5']), resdata[i]['EXP_CODE_6'], numberWithCommas(resdata[i]['Amount_6']), resdata[i]['EXP_CODE_7'], numberWithCommas(resdata[i]['Amount_7']), resdata[i]['EXP_CODE_8'], numberWithCommas(resdata[i]['Amount_8']), resdata[i]['EXP_CODE_9'], numberWithCommas(resdata[i]['Amount_9']), resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
                                     }
