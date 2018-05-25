@@ -27,10 +27,7 @@ namespace BUDGET.DataHelpers
                         int mooline = db.mooe.OrderByDescending(x => x.Line).FirstOrDefault().Line;
                         LastLine = mooline;
                         break;
-                    case "ORSPS":
-                        int orspsline = db.orsps.OrderByDescending(x => x.Row).FirstOrDefault().Row;
-                        LastLine = orspsline;
-                        break;
+                    
                 }
             }catch(Exception es)
             {

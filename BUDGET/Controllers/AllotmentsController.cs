@@ -31,6 +31,14 @@ namespace BUDGET.Controllers
             allotments.year = GlobalData.Year;
             db.allotments.Add(allotments);
             db.SaveChanges();
+
+            ORSMaster orsmaster = new ORSMaster();
+            orsmaster.Title = collection.Get("title");
+            orsmaster.allotments = allotments.ID;
+            orsmaster.Year = GlobalData.Year;
+            db.orsmaster.Add(orsmaster);
+            db.SaveChanges();
+            
             return RedirectToAction("Index");
         }
 
@@ -46,6 +54,10 @@ namespace BUDGET.Controllers
             Int32 id = Convert.ToInt32(collection.Get("ID"));
             var allotments = db.allotments.Where(p => p.ID == id).FirstOrDefault();
             allotments.Title = collection.Get("title");
+
+            var orsmaster = db.orsmaster.Where(p => p.allotments == id).FirstOrDefault();
+            orsmaster.Title = collection.Get("title");
+
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -57,6 +69,14 @@ namespace BUDGET.Controllers
                 int ID = Convert.ToInt32(id);
                 var del_allot = db.allotments.Where(p => p.ID == ID).FirstOrDefault();
                 db.allotments.Remove(del_allot);
+                try
+                {
+                    var orsmaster = (from ors in db.orsmaster where ors.allotments == ID select ors).FirstOrDefault();
+                    db.orsmaster.Remove(orsmaster);
+                }
+                catch { }
+               
+
                 var fsh = db.fsh.Where(p => p.allotment == ID.ToString()).ToList();
                 foreach(FundSourceHdr f in fsh)
                 {
@@ -66,10 +86,7 @@ namespace BUDGET.Controllers
                 db.fsh.RemoveRange(fsh);
                 db.SaveChanges();
             }
-            catch (Exception ex)
-            {
-                return RedirectToAction("Index");
-            }
+            catch { }
             return RedirectToAction("Index");
         }
         public ActionResult FundSource(String ID)

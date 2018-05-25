@@ -15,11 +15,7 @@ namespace BUDGET.Models
         public DbSet<User> users { get; set; }
         public DbSet<PersonnelServices> ps { get; set; }
         public DbSet<MOOEs> mooe { get; set; }
-        public DbSet<ORSPS> orsps { get; set; }
         public DbSet<UACS> uacs { get; set; }
-        public DbSet<ORSMOOE> orsmooe { get; set; }
-        public DbSet<ORSVTF> orsvtf { get; set; }
-        public DbSet<ORSCO> orsco { get; set; }
         public DbSet<YearBudget> yearbudget { get; set; }
         public DbSet<PREXC> prexc { get; set; }
         public DbSet<Allotments> allotments { get; set; }
@@ -28,5 +24,6 @@ namespace BUDGET.Models
         public DbSet<FundSourceHdr> fsh { get; set; }
         public DbSet<FundSourceAmount> fsa { get; set; }
         public DbSet<ORS_EXPENSE_CODES> ors_expense_codes { get; set; }
+        public DbSet<ors_head_request> ors_head_request { get; set; }
     }
 }

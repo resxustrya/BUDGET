@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "CreateOrsHeadRequest";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <h2>Create new entry</h2>
+            <form action="@Url.Action("CreateOrsHeadRequest","ORS")" method="post">
+                @Html.AntiForgeryToken()
+                <table class="table">
+                    <tr>
+                        <td>Name</td>
+                        <td><input type="text" name="name" class="form-control" required /></td>
+                    </tr>
+                    <tr>
+                        <td>Position</td>
+                        <td><input type="text" name="position" class="form-control" required /></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="submit" class="btn btn-success" name="submit" value="Submit" />
+                            <a href="@Url.Action("ors_head_request_office","ORS")" class="btn btn-warning">Cancel</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+

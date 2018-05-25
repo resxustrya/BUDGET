@@ -17,7 +17,7 @@ namespace BUDGET.Controllers
         {
             Session.Remove("year");
             GlobalData.Year = null;
-            int pageSize = 2;
+            int pageSize = 10;
             int pageIndex = 1;
             pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
             var yearlybudget = from yb in db.yearbudget orderby yb.Year descending select yb;

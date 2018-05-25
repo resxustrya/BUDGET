@@ -332,6 +332,18 @@
     <Compile Include="Migrations\201805230819382_added_gross_col.Designer.cs">
       <DependentUpon>201805230819382_added_gross_col.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805250153392_ors_head_request.cs" />
+    <Compile Include="Migrations\201805250153392_ors_head_request.Designer.cs">
+      <DependentUpon>201805250153392_ors_head_request.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805250722158_remove_models.cs" />
+    <Compile Include="Migrations\201805250722158_remove_models.Designer.cs">
+      <DependentUpon>201805250722158_remove_models.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805250733133_added_culomn.cs" />
+    <Compile Include="Migrations\201805250733133_added_culomn.Designer.cs">
+      <DependentUpon>201805250733133_added_culomn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -343,12 +355,9 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MOOE.cs" />
     <Compile Include="Models\ORS.cs" />
-    <Compile Include="Models\ORSCO.cs" />
     <Compile Include="Models\ORSMaster.cs" />
-    <Compile Include="Models\ORSMOOE.cs" />
-    <Compile Include="Models\ORSPS.cs" />
-    <Compile Include="Models\ORSVTF.cs" />
     <Compile Include="Models\ORS_EXPENSE_CODES.cs" />
+    <Compile Include="Models\ors_head_request.cs" />
     <Compile Include="Models\PagingInfo.cs" />
     <Compile Include="Models\PersonnelServices.cs" />
     <Compile Include="Models\PREXC.cs" />
@@ -622,6 +631,8 @@
     <Content Include="Views\Uploads\Index.cshtml" />
     <Content Include="Views\Uploads\UploadPrexc.cshtml" />
     <Content Include="Views\ORS\SaveOrsObligation.cshtml" />
+    <Content Include="Views\ORS\ors_head_request_office.cshtml" />
+    <Content Include="Views\ORS\CreateOrsHeadRequest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -717,6 +728,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805230819382_added_gross_col.resx">
       <DependentUpon>201805230819382_added_gross_col.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805250153392_ors_head_request.resx">
+      <DependentUpon>201805250153392_ors_head_request.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805250722158_remove_models.resx">
+      <DependentUpon>201805250722158_remove_models.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805250733133_added_culomn.resx">
+      <DependentUpon>201805250733133_added_culomn.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

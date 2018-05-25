@@ -8,6 +8,7 @@ using BUDGET.DataHelpers;
 using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
 using BUDGET.Filters;
+using PagedList;
 namespace BUDGET.Controllers
 {
     [Authorize]
@@ -239,6 +240,30 @@ namespace BUDGET.Controllers
             }
             ViewBag.ors_obligation = id.ToString();
             return PartialView();
+        }
+        public ActionResult ors_head_request_office(int? page)
+        {
+            int pageSize = 10;
+            int pageIndex = 1;
+            pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+            var ors_request = (from list in db.ors_head_request select list).ToList();
+            return View(ors_request.ToPagedList(pageIndex, pageSize));
+        }
+        [HttpGet]
+        public ActionResult CreateOrsHeadRequest()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateOrsHeadRequest(FormCollection collection)
+        {
+            ors_head_request ohr = new ors_head_request();
+            ohr.Name = collection.Get("name");
+            ohr.Position = collection.Get("position");
+            db.ors_head_request.Add(ohr);
+            db.SaveChanges();
+            return RedirectToAction("ors_head_request_office");
         }
     }
 }
