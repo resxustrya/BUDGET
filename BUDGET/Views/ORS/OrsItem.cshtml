@@ -17,10 +17,10 @@
         //35 cols
        table = new Handsontable(container, {
            startRows: 50,
-           startCols: 41,
+           startCols: 23,
            manualColumnResize: true,
            rowHeaders: true,
-           colWidths: [100,100, 100, 100, 100, 100, 300, 300, 300, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 300,200,200,200,200,200],
+           colWidths: [1,1, 100, 200, 200, 200, 300, 300, 500, 100, 100, 200,200, 100, 100, 100, 100, 300,200,200,200,200,200],
            colHeaders: true,
            filters :true,
             dropdownMenu: true,
@@ -42,14 +42,32 @@
                                window.location.href = url;
                            }
                        }
-                   }, "row_below": {}, "row_above": {}, "remove_row": {},"copy" : {}
+                   },
+                   "": {
+                       name: 'UACS Amount Entry',
+                       callback: function (key, options) {
+                           var selection = this.getSelectedRange();
+                           var fromRow = Math.min(selection.from.row, selection.to.row);
+                           var tempdata = this.getData();
+                           var id = tempdata[fromRow][0];
+                           if (id) {
+                               var hostname = window.location.hostname;
+                               var protocol = window.location.protocol;
+                               var port = window.location.port;
+                               var url = protocol + "//" + hostname + ":" + port + "/ors/ors_uacs/" + id;
+                               var server_url = getBaseUrl() + "/ors/ors_uacs/" + id;
+                               window.location.href = url;
+                           }
+                       }
+                   }, "row_below": {}, "row_above": {}, "remove_row": {}, "copy": {}
+                   
                }
            },
            manualColumnMove: true,
            fillHandle: {
                autoInsertRow: false,
            },
-           colHeaders: ['<b>ID</b>','<b>ROW#</b>', '<b>DATE</b/>', '<b>DV</b>', '<b>PO#</b>', '<b>PR#</b>', '<b>PAYEE</b>', '<b>ADDRESS</b>', '<b>PARTICULARS</b>', '<b>ORS NO</b>', '<b>LINE #</b>', '<b>FUND SOURCE</b>', '<b>GROSS</b>', '<b>EXP CODE 1</b>', '<b>Amount 1</b>', '<b>EXP CODE 2</b>', '<b>Amount 2</b>', '<b>EXP CODE 3</b>', '<b>Amount 3</b>', '<b>EXP CODE 4</b>', '<b>Amount 4</b>', '<b>EXP CODE 5</b>', '<b>Amount 5</b>', '<b>EXP CODE 6</b>', '<b>Amount 6</b>', '<b>EXP CODE 7</b>','<b>Amount 7</b>', '<b>EXP CODE 8</b>', '<b>Amount 8</b>', '<b>EXP CODE 9</b>', '<b>Amount 9</b>', '<b>AE</b>', '<b>AF</b>', '<b>AG</b>', '<b>AH</b>', '<b>AI</b>','<b>CREATED BY</b>','<b>Date Received</b>','<b>Time Received</b>','<b>Date Released</b>','<b>Time Released</b>'],
+           colHeaders: ['<b>ID</b>','<b>ROW#</b>', '<b>DATE</b/>', '<b>DV</b>', '<b>PO#</b>', '<b>PR#</b>', '<b>PAYEE</b>', '<b>ADDRESS</b>', '<b>PARTICULARS</b>', '<b>ORS NO</b>', '<b>LINE #</b>', '<b>FUND SOURCE</b>', '<b>GROSS</b>','<b>AE</b>', '<b>AF</b>', '<b>AG</b>', '<b>AH</b>', '<b>AI</b>','<b>CREATED BY</b>','<b>Date Received</b>','<b>Time Received</b>','<b>Date Released</b>','<b>Time Released</b>'],
            columns: [
                {},
                {},{
@@ -58,8 +76,7 @@
                    correctFormat: true,
                    defaultDate: Date.now()
                }, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-               { type: 'dropdown', source: expense_codes },
-               {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, { type: 'dropdown', source: expense_codes }, {}, {}, {}, {}, {}, {}, {},
+                {}, {}, {}, {}, {}, {},
                {
                    type : 'date',
                    dateFormat : 'MM/DD/YYYY',
@@ -121,7 +138,7 @@
                    var total;
 
                    for (var i = 0; i < resdata.length; i++) {
-                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['EXP_CODE_1'], numberWithCommas(resdata[i]['Amount_1']), resdata[i]['EXP_CODE_2'], numberWithCommas(resdata[i]['Amount_2']), resdata[i]['EXP_CODE_3'], numberWithCommas(resdata[i]['Amount_3']), resdata[i]['EXP_CODE_4'], numberWithCommas(resdata[i]['Amount_4']), resdata[i]['EXP_CODE_5'], numberWithCommas(resdata[i]['Amount_5']), resdata[i]['EXP_CODE_6'], numberWithCommas(resdata[i]['Amount_6']), resdata[i]['EXP_CODE_7'], numberWithCommas(resdata[i]['Amount_7']), resdata[i]['EXP_CODE_8'], numberWithCommas(resdata[i]['Amount_8']), resdata[i]['EXP_CODE_9'], numberWithCommas(resdata[i]['Amount_9']), resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
+                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
                    }
                    table.loadData(tabledata);
                }
@@ -147,7 +164,7 @@
                            var orsps = [];
                            var data = table.getData();
                            for (var i = 0; i < data.length; i++) {
-                               data[i][0] = data[i][0] ? data[i][0] : null
+                               data[i][0] = data[i][0] ? data[i][0] : null;
                                data[i][1] = data[i][1] ? data[i][1] : null;
                                data[i][2] = data[i][2] ? data[i][2] : null;
                                data[i][3] = data[i][3] ? data[i][3] : null;
@@ -159,34 +176,17 @@
                                data[i][9] = data[i][9] ? data[i][9] : null;
                                data[i][10] = data[i][10] ? data[i][10] : null;
                                data[i][11] = data[i][11] ? data[i][11] : null;
-                               data[i][12] = data[i][12] ? data[i][12] : 0;
+                               data[i][12] = data[i][12] ? data[i][12] : null;
                                data[i][13] = data[i][13] ? data[i][13] : null;
-                               data[i][14] = data[i][14] ? data[i][14] : 0;
+                               data[i][14] = data[i][14] ? data[i][14] : null;
                                data[i][15] = data[i][15] ? data[i][15] : null;
-                               data[i][16] = data[i][16] ? data[i][16] : 0;
+                               data[i][16] = data[i][16] ? data[i][16] : null;
                                data[i][17] = data[i][17] ? data[i][17] : null;
-                               data[i][18] = data[i][18] ? data[i][18] : 0;
+                               data[i][18] = data[i][18] ? data[i][18] : null;
                                data[i][19] = data[i][19] ? data[i][19] : null;
-                               data[i][20] = data[i][20] ? data[i][20] : 0;
+                               data[i][20] = data[i][20] ? data[i][20] : null;
                                data[i][21] = data[i][21] ? data[i][21] : null;
-                               data[i][22] = data[i][22] ? data[i][22] : 0;
-                               data[i][23] = data[i][23] ? data[i][23] : null;
-                               data[i][24] = data[i][24] ? data[i][24] : 0;
-                               data[i][25] = data[i][25] ? data[i][25] : null;
-                               data[i][26] = data[i][26] ? data[i][26] : 0;
-                               data[i][27] = data[i][27] ? data[i][27] : null;
-                               data[i][28] = data[i][28] ? data[i][28] : 0;
-                               data[i][29] = data[i][29] ? data[i][29] : null;
-                               data[i][30] = data[i][30] ? data[i][30] : 0;
-                               data[i][31] = data[i][31] ? data[i][31] : null;
-                               data[i][32] = data[i][32] ? data[i][32] : null;
-                               data[i][33] = data[i][33] ? data[i][33] : null;
-                               data[i][34] = data[i][34] ? data[i][34] : null;
-                               data[i][35] = data[i][35] ? data[i][35] : null;
-                               data[i][37] = data[i][37] ? data[i][37] : null;
-                               data[i][38] = data[i][38] ? data[i][38] : null;
-                               data[i][39] = data[i][39] ? data[i][39] : null;
-                               data[i][40] = data[i][40] ? data[i][40] : null;
+                               data[i][21] = data[i][22] ? data[i][22] : null;
 
                                orsps[i] = {
                                    "ID": data[i][0],
@@ -201,33 +201,15 @@
                                    "ORS_NO": data[i][9],
                                    "FundSource": data[i][11],
                                    "Gross": data[i][12],
-                                   "EXP_CODE_1": data[i][13],
-                                   "Amount_1": data[i][14],
-                                   "EXP_CODE_2": data[i][15],
-                                   "Amount_2": data[i][16],
-                                   "EXP_CODE_3": data[i][17],
-                                   "Amount_3": data[i][18],
-                                   "EXP_CODE_4": data[i][19],
-                                   "Amount_4": data[i][20],
-                                   "EXP_CODE_5": data[i][21],
-                                   "Amount_5": data[i][22],
-                                   "EXP_CODE_6": data[i][23],
-                                   "Amount_6": data[i][24],
-                                   "EXP_CODE_7": data[i][25],
-                                   "Amount_7": data[i][26],
-                                   "EXP_CODE_8": data[i][27],
-                                   "Amount_8": data[i][28],
-                                   "EXP_CODE_9": data[i][29],
-                                   "Amount_9": data[i][30],
-                                   "AE": data[i][31],
-                                   "AF": data[i][32],
-                                   "AG": data[i][33],
-                                   "AH": data[i][34],
-                                   "AI": data[i][35],
-                                   "DateReceived" : data[i][37],
-                                   "TimeReceived": data[i][38],
-                                   "DateReleased": data[i][39],
-                                   "TimeReleased": data[i][40]
+                                   "AE": data[i][13],
+                                   "AF": data[i][14],
+                                   "AG": data[i][15],
+                                   "AH": data[i][16],
+                                   "AI": data[i][17],
+                                   "DateReceived" : data[i][19],
+                                   "TimeReceived": data[i][20],
+                                   "DateReleased": data[i][21],
+                                   "TimeReleased": data[i][22]
                                }
                            }
                            console.log(orsps);
@@ -241,7 +223,7 @@
                                     var total;
 
                                     for (var i = 0; i < resdata.length; i++) {
-                                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['EXP_CODE_1'], numberWithCommas(resdata[i]['Amount_1']), resdata[i]['EXP_CODE_2'], numberWithCommas(resdata[i]['Amount_2']), resdata[i]['EXP_CODE_3'], numberWithCommas(resdata[i]['Amount_3']), resdata[i]['EXP_CODE_4'], numberWithCommas(resdata[i]['Amount_4']), resdata[i]['EXP_CODE_5'], numberWithCommas(resdata[i]['Amount_5']), resdata[i]['EXP_CODE_6'], numberWithCommas(resdata[i]['Amount_6']), resdata[i]['EXP_CODE_7'], numberWithCommas(resdata[i]['Amount_7']), resdata[i]['EXP_CODE_8'], numberWithCommas(resdata[i]['Amount_8']), resdata[i]['EXP_CODE_9'], numberWithCommas(resdata[i]['Amount_9']), resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
+                                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
                                     }
                                     table.loadData(tabledata);
                                 }

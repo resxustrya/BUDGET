@@ -241,6 +241,7 @@
     <Compile Include="Controllers\ORSController.cs" />
     <Compile Include="Controllers\ORSReportsController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\UploadsController.cs" />
     <Compile Include="DataHelpers\ExcelDataExport.cs" />
     <Compile Include="DataHelpers\JsonGetter.cs" />
     <Compile Include="DataHelpers\ModelAllotments.cs" />
@@ -299,12 +300,45 @@
     <Compile Include="Migrations\201805020148359_ors.Designer.cs">
       <DependentUpon>201805020148359_ors.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805081243533_RemovedModels.cs" />
+    <Compile Include="Migrations\201805081243533_RemovedModels.Designer.cs">
+      <DependentUpon>201805081243533_RemovedModels.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805081330219_FundSourceHdr.cs" />
+    <Compile Include="Migrations\201805081330219_FundSourceHdr.Designer.cs">
+      <DependentUpon>201805081330219_FundSourceHdr.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805090335064_Added_FundSourceAmount.cs" />
+    <Compile Include="Migrations\201805090335064_Added_FundSourceAmount.Designer.cs">
+      <DependentUpon>201805090335064_Added_FundSourceAmount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805210023028_DESC_FUND_SOURCE_HDR.cs" />
+    <Compile Include="Migrations\201805210023028_DESC_FUND_SOURCE_HDR.Designer.cs">
+      <DependentUpon>201805210023028_DESC_FUND_SOURCE_HDR.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805210055083_ORS_ADDED_EXP_CODES.cs" />
+    <Compile Include="Migrations\201805210055083_ORS_ADDED_EXP_CODES.Designer.cs">
+      <DependentUpon>201805210055083_ORS_ADDED_EXP_CODES.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805210209197_ors_expense_codes.cs" />
+    <Compile Include="Migrations\201805210209197_ors_expense_codes.Designer.cs">
+      <DependentUpon>201805210209197_ors_expense_codes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805230807354_ORS_REMOVED_COLUMNS.cs" />
+    <Compile Include="Migrations\201805230807354_ORS_REMOVED_COLUMNS.Designer.cs">
+      <DependentUpon>201805230807354_ORS_REMOVED_COLUMNS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805230819382_added_gross_col.cs" />
+    <Compile Include="Migrations\201805230819382_added_gross_col.Designer.cs">
+      <DependentUpon>201805230819382_added_gross_col.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
     <Compile Include="Models\BudgetDbContext.cs" />
-    <Compile Include="Models\BudgetSourceFund.cs" />
-    <Compile Include="Models\FundSource.cs" />
+    <Compile Include="Models\FundSourceAmount.cs" />
+    <Compile Include="Models\FundSourceHdr.cs" />
+    <Compile Include="Models\FundSourceViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MOOE.cs" />
@@ -314,6 +348,7 @@
     <Compile Include="Models\ORSMOOE.cs" />
     <Compile Include="Models\ORSPS.cs" />
     <Compile Include="Models\ORSVTF.cs" />
+    <Compile Include="Models\ORS_EXPENSE_CODES.cs" />
     <Compile Include="Models\PagingInfo.cs" />
     <Compile Include="Models\PersonnelServices.cs" />
     <Compile Include="Models\PREXC.cs" />
@@ -564,12 +599,8 @@
     <Content Include="Views\Home\UploadGaa.cshtml" />
     <Content Include="Views\Home\GaaPersonelServices.cshtml" />
     <Content Include="Views\Home\MOOE.cshtml" />
-    <Content Include="Views\ORS\ORPS.cshtml" />
-    <Content Include="Views\ORS\ORSMOOE.cshtml" />
     <Content Include="Views\ORSReports\PrintOrs.cshtml" />
     <Content Include="Views\ExpenseCodes\ExpenseCodes.cshtml" />
-    <Content Include="Views\ORS\ORSVTF.cshtml" />
-    <Content Include="Views\ORS\ORSCO.cshtml" />
     <Content Include="Views\Budgets\Index.cshtml" />
     <Content Include="Views\Budgets\Create.cshtml" />
     <Content Include="Views\ExpenseCodes\Prexc.cshtml" />
@@ -584,6 +615,13 @@
     <Content Include="Views\ORS\OrsItem.cshtml" />
     <Content Include="Views\Allotments\EditOrs.cshtml" />
     <Content Include="Views\Allotments\EditBudget.cshtml" />
+    <Content Include="Views\Allotments\CreateFundSource.cshtml" />
+    <Content Include="Views\Allotments\EditFundSource.cshtml" />
+    <Content Include="Views\Allotments\_Ok.cshtml" />
+    <Content Include="Views\ORS\ORS_UACS.cshtml" />
+    <Content Include="Views\Uploads\Index.cshtml" />
+    <Content Include="Views\Uploads\UploadPrexc.cshtml" />
+    <Content Include="Views\ORS\SaveOrsObligation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -655,6 +693,30 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805020148359_ors.resx">
       <DependentUpon>201805020148359_ors.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805081243533_RemovedModels.resx">
+      <DependentUpon>201805081243533_RemovedModels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805081330219_FundSourceHdr.resx">
+      <DependentUpon>201805081330219_FundSourceHdr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805090335064_Added_FundSourceAmount.resx">
+      <DependentUpon>201805090335064_Added_FundSourceAmount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805210023028_DESC_FUND_SOURCE_HDR.resx">
+      <DependentUpon>201805210023028_DESC_FUND_SOURCE_HDR.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805210055083_ORS_ADDED_EXP_CODES.resx">
+      <DependentUpon>201805210055083_ORS_ADDED_EXP_CODES.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805210209197_ors_expense_codes.resx">
+      <DependentUpon>201805210209197_ors_expense_codes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805230807354_ORS_REMOVED_COLUMNS.resx">
+      <DependentUpon>201805230807354_ORS_REMOVED_COLUMNS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805230819382_added_gross_col.resx">
+      <DependentUpon>201805230819382_added_gross_col.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

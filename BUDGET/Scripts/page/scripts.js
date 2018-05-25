@@ -12,18 +12,30 @@
         
     });
 
-    $("#upload_mooe").click(function () {
+    $("#upload_prex").click(function () {
         $("#page_modal").modal('show');
         $('.loading').show();
         $('.modal_body').html('');
         var url = $(this).data('url');
-        
+
         $.get(url, function (res) {
             $('.modal_body').html(res);
             $('.loading').hide();
         });
-        
     });
+
+    $("#uacs_upload").click(function () {
+        $("#page_modal").modal('show');
+        $('.loading').show();
+        $('.modal_body').html('');
+        var url = $(this).data('url');
+
+        $.get(url, function (res) {
+            $('.modal_body').html(res);
+            $('.loading').hide();
+        });
+    });
+
 
     $("#print_ors").click(function () {
         $("#page_modal").modal('show');

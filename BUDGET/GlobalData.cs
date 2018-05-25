@@ -41,5 +41,16 @@ namespace BUDGET
                 HttpContext.Current.Application["ors_id"] = value;
             }
         }
+        public static String allotment
+        {
+            get
+            {
+                return HttpContext.Current.Application["allotment"] as String;
+            }
+            set
+            {
+                HttpContext.Current.Application["allotment"] = value;
+            }
+        }
     }
 }

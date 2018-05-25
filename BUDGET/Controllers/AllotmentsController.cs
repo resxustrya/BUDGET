@@ -16,7 +16,7 @@ namespace BUDGET.Controllers
         // GET: Allotments
         public ActionResult Index()
         {
-            var allotments = (from list in db.allotments select list).ToList();
+            var allotments = (from list in db.allotments where list.year == GlobalData.Year select list).ToList();
             return View(allotments);
         }
         public ActionResult Create()
@@ -57,6 +57,13 @@ namespace BUDGET.Controllers
                 int ID = Convert.ToInt32(id);
                 var del_allot = db.allotments.Where(p => p.ID == ID).FirstOrDefault();
                 db.allotments.Remove(del_allot);
+                var fsh = db.fsh.Where(p => p.allotment == ID.ToString()).ToList();
+                foreach(FundSourceHdr f in fsh)
+                {
+                    var fsa = db.fsa.Where(p => p.fundsource == f.ID.ToString()).ToList();
+                    db.fsa.RemoveRange(fsa);
+                }
+                db.fsh.RemoveRange(fsh);
                 db.SaveChanges();
             }
             catch (Exception ex)
@@ -69,61 +76,139 @@ namespace BUDGET.Controllers
         {
             int id = Convert.ToInt32(ID);
             var allotment = db.allotments.Where(p => p.ID == id).FirstOrDefault();
-            GlobalData.BudgetID = allotment.ID.ToString();
+            GlobalData.allotment = allotment.ID.ToString();
+            var fundsources = (from list in db.fsh where list.allotment == allotment.ID.ToString() select list).ToList();
             ViewBag.Menu = allotment.Title + " | Fund Source : ID " + allotment.ID;
+            return View(fundsources);
+        }
+        public ActionResult CreateFundSource()
+        {
             return View();
         }
-        [Route("get/budget/source-fund",Name = "get_budget_source_fund")]
-        public JsonResult GetBudgetFundSource()
+        [HttpPost]
+        public ActionResult CreateFundSource(FormCollection collection)
         {
-            int allotment = Convert.ToInt32(GlobalData.BudgetID);
-            var data = (from list in db.budgetsourcefund join prexc in db.prexc on list.prexc equals prexc.Code1
-                        where list.allotment == allotment
-                        orderby list.Line ascending
-                        select new
-                        {
-                            Line = list.Line,
-                            PREXC = list.prexc,
-                            Title = prexc.Desc
-                        }).ToList();
-            return Json(data, JsonRequestBehavior.AllowGet);
+            FundSourceHdr hdr = new FundSourceHdr();
+            hdr.prexc = collection.Get("prexcode");
+            hdr.SourceTitle = collection.Get("source_title");
+            hdr.desc = collection.Get("description");
+            hdr.allotment = GlobalData.allotment;
+            db.fsh.Add(hdr);
+            db.SaveChanges();
+            String data = collection.Get("data");
+            SaveFundSourceExpese(hdr.ID.ToString(), data);
+            return PartialView("_Ok");
         }
-        [Route("save/budget/source-fund",Name = "save_budget_source_fund")]
-        public JsonResult SaveBudgetSourceFund(String data)
+        
+        public ActionResult EditFundSource(String id)
+        {
+            Int32 ID = Convert.ToInt32(id);
+            var fsh = db.fsh.Where(p => p.ID == ID).FirstOrDefault();
+            return View(fsh);
+        }
+        [HttpPost]
+        public ActionResult EditFundSource(FormCollection collection)
+        {
+            Int32 id = Convert.ToInt32(collection.Get("ID"));
+            var fsh = db.fsh.Where(p => p.ID == id).FirstOrDefault();
+            fsh.SourceTitle = collection.Get("source_title");
+            fsh.prexc = collection.Get("prexcode");
+            fsh.desc = collection.Get("description");
+            db.SaveChanges();
+            String data = collection.Get("data");
+            SaveFundSourceExpese(id.ToString(), data);
+            return PartialView("_Ok");
+        }
+        public ActionResult DeleteFundSource(String ID)
+        {
+            Int32 id = Convert.ToInt32(ID);
+            var fsh = db.fsh.Where(p => p.ID == id).FirstOrDefault();
+            db.fsh.Remove(fsh);
+            var fsa = db.fsa.Where(p => p.fundsource == id.ToString()).ToList();
+            db.fsa.RemoveRange(fsa);
+            db.SaveChanges();
+            return RedirectToAction("FundSource", new { id = GlobalData.allotment });
+        }
+        [Route("get/fundsource/expense",Name = "get_fund_source_expense")]
+        public JsonResult GetFundSourceExpense(String fsh)
+        {
+            var fsa = (from list in db.fsa
+                       join expensecode
+                        in db.uacs on list.expensecode equals expensecode.Code
+                       where list.fundsource == fsh
+                       select new
+                       {
+                           ID = list.ID,
+                           ExpenseCode = list.expensecode,
+                           Title = expensecode.Title,
+                           Amount = list.amount
+                       }
+                       );
+            return Json(fsa, JsonRequestBehavior.AllowGet);
+        }
+        [Route("save/fundsource/expense",Name ="save_fundsource_expese")]
+        public Boolean SaveFundSourceExpese(String fundsource, String data)
         {
             List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
-            String prexc = "";
-            Int32 allotment = 0;
+            Int32 id = 0;
             foreach (Object s in list)
             {
                 try
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
-                    prexc = sb.prexc;
-                    allotment = Convert.ToInt32(GlobalData.BudgetID);
-                    var budgetsourcefund = db.budgetsourcefund.Where(x => x.prexc == prexc && x.allotment == allotment).ToList();
-                    if(budgetsourcefund.Count <= 0)
-                    {
-                        BudgetSourceFund new_budgetsourcefund = new BudgetSourceFund();
-                        new_budgetsourcefund.Line = sb.Line;
-                        new_budgetsourcefund.prexc = sb.prexc;
-                        new_budgetsourcefund.allotment = Convert.ToInt32(GlobalData.BudgetID);
-                        db.budgetsourcefund.Add(new_budgetsourcefund);
-                        try { db.SaveChanges(); } catch { }
-                    }
+                    id = Convert.ToInt32(sb.ID);
+                    var fsa = db.fsa.Where(p => p.ID == id && p.fundsource == fundsource).FirstOrDefault();
+                    fsa.expensecode = sb.expense_code;
+                    fsa.amount = Convert.ToDouble(sb.amount);
+                    try { db.SaveChanges(); } catch { }
                 }
                 catch (Exception ex)
                 {
+                    dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
+                    try
+                    {
+                        if (sb.expense_code != null)
+                        {
+                            Object uacs_obj = sb.expense_code;
+                            String uacs = uacs_obj.ToString();
+                            var expense_exist = (from exist in db.fsa where exist.expensecode == uacs && exist.fundsource == fundsource select exist).ToList();
+                            if(expense_exist.Count <= 0)
+                            {
+                                FundSourceAmount fsa = new FundSourceAmount();
+                                fsa.expensecode = sb.expense_code;
+                                fsa.amount = Convert.ToDouble(sb.amount);
+                                fsa.fundsource = fundsource;
+                                db.fsa.Add(fsa);
+                                try { db.SaveChanges(); } catch { }
+                            }
+                        }
+
+                    }
+                    catch { }
                 }
+
             }
-            return GetBudgetFundSource();
+            return true;
+            
         }
-
-        public ActionResult View(String ID)
+        [Route("delete/fundsource/amount",Name ="delete_fund_source_amount")]
+        public JsonResult DeleteFundSourceAmount(String data)
         {
-            return View();
-        }
+            try
+            {
+                dynamic ors = JsonConvert.DeserializeObject<dynamic>(data);
+                int ID = Convert.ToInt32(ors.ID);
 
+                var delete_fsa = db.fsa.Where(p => p.ID == ID).FirstOrDefault();
+                db.fsa.Remove(delete_fsa);
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+        
         public ActionResult ORS()
         {
             var ors = (from list in db.orsmaster where list.Year == GlobalData.Year select list).ToList();

@@ -55,25 +55,7 @@ namespace BUDGET.Controllers
                           Particulars = list.Particulars,
                           ORS_NO = list.ORS_NO,
                           FundSource = list.FundSource,
-                          Gross = list.Gross,
-                          EXP_CODE_1 = list.EXP_CODE_1,
-                          Amount_1 = list.Amount_1,
-                          EXP_CODE_2 = list.EXP_CODE_2,
-                          Amount_2 = list.Amount_2,
-                          EXP_CODE_3 = list.EXP_CODE_3,
-                          Amount_3 = list.Amount_3,
-                          EXP_CODE_4 = list.EXP_CODE_4,
-                          Amount_4 = list.Amount_4,
-                          EXP_CODE_5 = list.EXP_CODE_5,
-                          Amount_5 = list.Amount_5,
-                          EXP_CODE_6 = list.EXP_CODE_6,
-                          Amount_6 = list.Amount_5,
-                          EXP_CODE_7 = list.EXP_CODE_7,
-                          Amount_7 = list.Amount_7,
-                          EXP_CODE_8 = list.EXP_CODE_8,
-                          Amount_8 = list.Amount_8,
-                          EXP_CODE_9 = list.EXP_CODE_9,
-                          Amount_9 = list.Amount_9,
+                          Gross = (from ors_uacs in db.ors_expense_codes where ors_uacs.ors_obligation == list.ID select ors_uacs.amount).DefaultIfEmpty(0).Sum(),
                           AE = list.AE,
                           AF = list.AF,
                           AG = list.AG,
@@ -87,11 +69,19 @@ namespace BUDGET.Controllers
                       }).ToList();
             return Json(orsps, JsonRequestBehavior.AllowGet);
         }
+
+        public Double GetGross(Int32 id)
+        {
+            Double total = 0.00;
+            total = (from ors_uacs in db.ors_expense_codes where ors_uacs.ors_obligation == id select ors_uacs.amount).Sum();
+            return total;
+        }
         [Route("save/ors/ps",Name = "save_ors_ps")]
         public JsonResult SaveORPS(String data)
         {
             List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
             Int32 id = 0;
+            Int32 ors_id = Convert.ToInt32(GlobalData.ors_id);
             foreach (Object s in list)
             {   
                 try
@@ -99,7 +89,7 @@ namespace BUDGET.Controllers
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     
                     id = Convert.ToInt32(sb.ID);
-                    var ors = db.ors.Where(p => p.ID == id).FirstOrDefault();
+                    var ors = db.ors.Where(p => p.ID == id).Where(p => p.ors_id == ors_id ).FirstOrDefault();
                     ors.Row = sb.Row;
                     ors.Date = sb.Date;
                     ors.DB = sb.DB;
@@ -110,25 +100,6 @@ namespace BUDGET.Controllers
                     ors.Particulars = sb.Particulars;
                     ors.ORS_NO = sb.ORS_NO;
                     ors.FundSource = sb.FundSource;
-                    ors.Gross = sb.Gross;
-                    ors.EXP_CODE_1 = sb.EXP_CODE_1;
-                    ors.Amount_1 = sb.Amount_1;
-                    ors.EXP_CODE_2 = sb.EXP_CODE_2;
-                    ors.Amount_2 = sb.Amount_2;
-                    ors.EXP_CODE_3 = sb.EXP_CODE_3;
-                    ors.Amount_3 = sb.Amount_3;
-                    ors.EXP_CODE_4 = sb.EXP_CODE_4;
-                    ors.Amount_4 = sb.Amount_4;
-                    ors.EXP_CODE_5 = sb.EXP_CODE_5;
-                    ors.Amount_5 = sb.Amount_5;
-                    ors.EXP_CODE_6 = sb.EXP_CODE_6;
-                    ors.Amount_6 = sb.Amount_6;
-                    ors.EXP_CODE_7 = sb.EXP_CODE_7;
-                    ors.Amount_7 = sb.Amount_7;
-                    ors.EXP_CODE_8 = sb.EXP_CODE_8;
-                    ors.Amount_8 = sb.Amount_8;
-                    ors.EXP_CODE_9 = sb.EXP_CODE_9;
-                    ors.Amount_9 = sb.Amount_9;
                     ors.AE = sb.AE;
                     ors.AF = sb.AF;
                     ors.AG = sb.AG;
@@ -161,25 +132,6 @@ namespace BUDGET.Controllers
                             ors.Particulars = sb.Particulars;
                             ors.ORS_NO = sb.ORS_NO;
                             ors.FundSource = sb.FundSource;
-                            ors.Gross = sb.Gross;
-                            ors.EXP_CODE_1 = sb.EXP_CODE_1;
-                            ors.Amount_1 = sb.Amount_1;
-                            ors.EXP_CODE_2 = sb.EXP_CODE_2;
-                            ors.Amount_2 = sb.Amount_2;
-                            ors.EXP_CODE_3 = sb.EXP_CODE_3;
-                            ors.Amount_3 = sb.Amount_3;
-                            ors.EXP_CODE_4 = sb.EXP_CODE_4;
-                            ors.Amount_4 = sb.Amount_4;
-                            ors.EXP_CODE_5 = sb.EXP_CODE_5;
-                            ors.Amount_5 = sb.Amount_5;
-                            ors.EXP_CODE_6 = sb.EXP_CODE_6;
-                            ors.Amount_6 = sb.Amount_6;
-                            ors.EXP_CODE_7 = sb.EXP_CODE_7;
-                            ors.Amount_7 = sb.Amount_7;
-                            ors.EXP_CODE_8 = sb.EXP_CODE_8;
-                            ors.Amount_8 = sb.Amount_8;
-                            ors.EXP_CODE_9 = sb.EXP_CODE_9;
-                            ors.Amount_9 = sb.Amount_9;
                             ors.AE = sb.AE;
                             ors.AF = sb.AF;
                             ors.AG = sb.AG;
@@ -192,7 +144,6 @@ namespace BUDGET.Controllers
                             ors.TimeReleased = sb.TimeReleased;
 
                             db.ors.Add(ors);
-                            
                             try { db.SaveChanges(); } catch { }
                         }
                         
@@ -221,295 +172,44 @@ namespace BUDGET.Controllers
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
-
-        [Route("ors/mooe",Name = "ors_mooe")]
-        public ActionResult ORSMOOE()
-        {
-            ViewBag.Menu = GlobalData.Year + " ORS | MOOE";
-            return View();
-        }
-        [Route("get/ors/mooe",Name ="get_ors_mooe")]
-        public JsonResult GetOrsMOOE()
-        {
-            var orsmooe = (from list in db.orsmooe
-                         orderby list.Row ascending
-                         select new
-                         {
-                             ID = list.ID,
-                             Row = list.Row,
-                             Date = list.Date,
-                             DB = list.DB,
-                             PO = list.PO,
-                             PR = list.PR,
-                             PAYEE = list.PAYEE,
-                             Adress = list.Adress,
-                             Particulars = list.Particulars,
-                             ORS_NO = list.ORS_NO,
-                             FundSource = list.FundSource,
-                             Gross = list.Gross,
-                             EXP_CODE_1 = list.EXP_CODE_1,
-                             Amount_1 = list.Amount_1,
-                             EXP_CODE_2 = list.EXP_CODE_2,
-                             Amount_2 = list.Amount_2,
-                             EXP_CODE_3 = list.EXP_CODE_3,
-                             Amount_3 = list.Amount_3,
-                             EXP_CODE_4 = list.EXP_CODE_4,
-                             Amount_4 = list.Amount_4,
-                             EXP_CODE_5 = list.EXP_CODE_5,
-                             Amount_5 = list.Amount_5,
-                             EXP_CODE_6 = list.EXP_CODE_6,
-                             Amount_6 = list.Amount_5,
-                             EXP_CODE_7 = list.EXP_CODE_7,
-                             Amount_7 = list.Amount_7,
-                             EXP_CODE_8 = list.EXP_CODE_8,
-                             Amount_8 = list.Amount_8,
-                             EXP_CODE_9 = list.EXP_CODE_9,
-                             Amount_9 = list.Amount_9,
-                             AE = list.AE,
-                             AF = list.AF,
-                             AG = list.AG,
-                             AH = list.AH,
-                             AI = list.AI,
-                             Created_By = list.Created_By,
-                             DateReceived = list.DateReceived,
-                             TimeReceived = list.TimeReceived,
-                             DateReleased = list.DateReleased,
-                             TimeReleased = list.TimeReleased
-                         }).ToList();
-            return Json(orsmooe, JsonRequestBehavior.AllowGet);
-        }
-        [Route("save/ors/mooe",Name ="save_ors_mooe")]
-        public JsonResult SaveOrsMOOE(String data)
-        {
-            List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
-            Int32 id = 0;
-            foreach (Object s in list)
-            {
-                try
-                {
-                    dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
-                    //var ps = db.ps.Where(p => p.ID == sb.ID).FirstOrDefault();
-                    id = Convert.ToInt32(sb.ID);
-                    var orsmooe = db.orsmooe.Where(p => p.ID == id).FirstOrDefault();
-                    orsmooe.Row = sb.Row;
-                    orsmooe.Date = sb.Date;
-                    orsmooe.DB = sb.DB;
-                    orsmooe.PO = sb.PO;
-                    orsmooe.PR = sb.PR;
-                    orsmooe.PAYEE = sb.PAYEE;
-                    orsmooe.Adress = sb.Adress;
-                    orsmooe.Particulars = sb.Particulars;
-                    orsmooe.ORS_NO = sb.ORS_NO;
-                    orsmooe.FundSource = sb.FundSource;
-                    orsmooe.Gross = sb.Gross;
-                    orsmooe.EXP_CODE_1 = sb.EXP_CODE_1;
-                    orsmooe.Amount_1 = sb.Amount_1;
-                    orsmooe.EXP_CODE_2 = sb.EXP_CODE_2;
-                    orsmooe.Amount_2 = sb.Amount_2;
-                    orsmooe.EXP_CODE_3 = sb.EXP_CODE_3;
-                    orsmooe.Amount_3 = sb.Amount_3;
-                    orsmooe.EXP_CODE_4 = sb.EXP_CODE_4;
-                    orsmooe.Amount_4 = sb.Amount_4;
-                    orsmooe.EXP_CODE_5 = sb.EXP_CODE_5;
-                    orsmooe.Amount_5 = sb.Amount_5;
-                    orsmooe.EXP_CODE_6 = sb.EXP_CODE_6;
-                    orsmooe.Amount_6 = sb.Amount_6;
-                    orsmooe.EXP_CODE_7 = sb.EXP_CODE_7;
-                    orsmooe.Amount_7 = sb.Amount_7;
-                    orsmooe.EXP_CODE_8 = sb.EXP_CODE_8;
-                    orsmooe.Amount_8 = sb.Amount_8;
-                    orsmooe.EXP_CODE_9 = sb.EXP_CODE_9;
-                    orsmooe.Amount_9 = sb.Amount_9;
-                    orsmooe.AE = sb.AE;
-                    orsmooe.AF = sb.AF;
-                    orsmooe.AG = sb.AG;
-                    orsmooe.AH = sb.AH;
-                    orsmooe.AI = sb.AI;
-                    orsmooe.Created_By = User.Identity.GetUserName();
-
-                    orsmooe.DateReceived = sb.DateReceived;
-                    orsmooe.TimeReceived = sb.TimeReceived;
-                    orsmooe.DateReleased = sb.DateReleased;
-                    orsmooe.TimeReleased = sb.TimeReleased;
-
-                    try { db.SaveChanges(); } catch { }
-                }
-                catch (Exception ex)
-                {
-                    dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
-                    try
-                    {
-                        if (sb.Date != null && sb.Particulars != null && sb.PAYEE != null)
-                        {
-                            ORSMOOE orsmooe = new ORSMOOE();
-                            orsmooe.Row = sb.Row;
-                            orsmooe.Date = sb.Date;
-                            orsmooe.DB = sb.DB;
-                            orsmooe.PO = sb.PO;
-                            orsmooe.PR = sb.PR;
-                            orsmooe.PAYEE = sb.PAYEE;
-                            orsmooe.Adress = sb.Adress;
-                            orsmooe.Particulars = sb.Particulars;
-                            orsmooe.ORS_NO = sb.ORS_NO;
-                            orsmooe.FundSource = sb.FundSource;
-                            orsmooe.Gross = sb.Gross;
-                            orsmooe.EXP_CODE_1 = sb.EXP_CODE_1;
-                            orsmooe.Amount_1 = sb.Amount_1;
-                            orsmooe.EXP_CODE_2 = sb.EXP_CODE_2;
-                            orsmooe.Amount_2 = sb.Amount_2;
-                            orsmooe.EXP_CODE_3 = sb.EXP_CODE_3;
-                            orsmooe.Amount_3 = sb.Amount_3;
-                            orsmooe.EXP_CODE_4 = sb.EXP_CODE_4;
-                            orsmooe.Amount_4 = sb.Amount_4;
-                            orsmooe.EXP_CODE_5 = sb.EXP_CODE_5;
-                            orsmooe.Amount_5 = sb.Amount_5;
-                            orsmooe.EXP_CODE_6 = sb.EXP_CODE_6;
-                            orsmooe.Amount_6 = sb.Amount_6;
-                            orsmooe.EXP_CODE_7 = sb.EXP_CODE_7;
-                            orsmooe.Amount_7 = sb.Amount_7;
-                            orsmooe.EXP_CODE_8 = sb.EXP_CODE_8;
-                            orsmooe.Amount_8 = sb.Amount_8;
-                            orsmooe.EXP_CODE_9 = sb.EXP_CODE_9;
-                            orsmooe.Amount_9 = sb.Amount_9;
-                            orsmooe.AE = sb.AE;
-                            orsmooe.AF = sb.AF;
-                            orsmooe.AG = sb.AG;
-                            orsmooe.AH = sb.AH;
-                            orsmooe.AI = sb.AI;
-                            orsmooe.Created_By = User.Identity.GetUserName();
-
-                            orsmooe.DateReceived = sb.DateReceived;
-                            orsmooe.TimeReceived = sb.TimeReceived;
-                            orsmooe.DateReleased = sb.DateReleased;
-                            orsmooe.TimeReleased = sb.TimeReleased;
-
-                            db.orsmooe.Add(orsmooe);
-                            try { db.SaveChanges(); } catch { }
-                        }
-
-                    }
-                    catch { }
-                }
-
-            }
-            return GetOrsMOOE();
-        }
-        [Route("delete/ors/mooe",Name ="delete_ors_mooe")]
-        public ActionResult DeleteORSMOOE(String data)
-        {
-            try
-            {
-                dynamic orsps = JsonConvert.DeserializeObject<dynamic>(data);
-                int ID = Convert.ToInt32(orsps.ID);
-                var del_orsmooe = db.orsmooe.Where(p => p.ID == ID).FirstOrDefault();
-                db.orsmooe.Remove(del_orsmooe);
-                db.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
         
-        [Route("ors/vtf",Name = "ors_vtf")]
-        public ActionResult ORSVTF()
+        public ActionResult  ORS_UACS(String ID)
         {
-            ViewBag.Menu = GlobalData.Year + " ORS | VTF";
-            return View();
+            Int32 id = Convert.ToInt32(ID);
+            var ors = db.ors.Where(p => p.ID == id).FirstOrDefault();
+            ViewBag.ors_obligation = ID;
+            return View(ors);
         }
-        [Route("get/ors/vtf",Name ="get_ors_vtf")]
-        public ActionResult GETORSVTF()
+        public JsonResult GetORSUacs(String ID)
         {
-            var orsvtf = (from list in db.orsvtf
-                         orderby list.Row ascending
-                         select new
-                         {
-                             ID = list.ID,
-                             Row = list.Row,
-                             Date = list.Date,
-                             DB = list.DB,
-                             PO = list.PO,
-                             PR = list.PR,
-                             PAYEE = list.PAYEE,
-                             Adress = list.Adress,
-                             Particulars = list.Particulars,
-                             ORS_NO = list.ORS_NO,
-                             FundSource = list.FundSource,
-                             Gross = list.Gross,
-                             EXP_CODE_1 = list.EXP_CODE_1,
-                             Amount_1 = list.Amount_1,
-                             EXP_CODE_2 = list.EXP_CODE_2,
-                             Amount_2 = list.Amount_2,
-                             EXP_CODE_3 = list.EXP_CODE_3,
-                             Amount_3 = list.Amount_3,
-                             EXP_CODE_4 = list.EXP_CODE_4,
-                             Amount_4 = list.Amount_4,
-                             EXP_CODE_5 = list.EXP_CODE_5,
-                             Amount_5 = list.Amount_5,
-                             EXP_CODE_6 = list.EXP_CODE_6,
-                             Amount_6 = list.Amount_5,
-                             EXP_CODE_7 = list.EXP_CODE_7,
-                             Amount_7 = list.Amount_7,
-                             EXP_CODE_8 = list.EXP_CODE_8,
-                             Amount_8 = list.Amount_8,
-                             EXP_CODE_9 = list.EXP_CODE_9,
-                             Amount_9 = list.Amount_9,
-                             AE = list.AE,
-                             AF = list.AF,
-                             AG = list.AG,
-                             AH = list.AH,
-                             AI = list.AI,
-                             Created_By = list.Created_By
-                         }).ToList();
-            return Json(orsvtf, JsonRequestBehavior.AllowGet);
+            Int32 id = Convert.ToInt32(ID);
+            var ors_uacs = (from list in db.ors_expense_codes join uacs in db.uacs on list.uacs equals uacs.Code where list.ors_obligation == id
+                            select
+                            new
+                            {
+                                ID = list.ID,
+                                ExpenseCode = list.uacs,
+                                Title = uacs.Title,
+                                Amount = list.amount
+                            }).ToList();
+            return Json(ors_uacs, JsonRequestBehavior.AllowGet);
         }
-        [Route("save/ors/vtf",Name ="save_ors_vtf")]
-        public ActionResult SaveORSVtf(String data)
+
+        public ActionResult SaveOrsObligation(FormCollection collection)
         {
+            Int32 id = Convert.ToInt32(collection.Get("ID"));
+            String data = collection.Get("data");
+            Int32 line_id = 0;
             List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
-            Int32 id = 0;
             foreach (Object s in list)
             {
                 try
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
-                    //var ps = db.ps.Where(p => p.ID == sb.ID).FirstOrDefault();
-                    id = Convert.ToInt32(sb.ID);
-                    var orsvtf = db.orsvtf.Where(p => p.ID == id).FirstOrDefault();
-                    orsvtf.Row = sb.Row;
-                    orsvtf.Date = sb.Date;
-                    orsvtf.DB = sb.DB;
-                    orsvtf.PO = sb.PO;
-                    orsvtf.PR = sb.PR;
-                    orsvtf.PAYEE = sb.PAYEE;
-                    orsvtf.Adress = sb.Adress;
-                    orsvtf.Particulars = sb.Particulars;
-                    orsvtf.ORS_NO = sb.ORS_NO;
-                    orsvtf.FundSource = sb.FundSource;
-                    orsvtf.Gross = sb.Gross;
-                    orsvtf.EXP_CODE_1 = sb.EXP_CODE_1;
-                    orsvtf.Amount_1 = sb.Amount_1;
-                    orsvtf.EXP_CODE_2 = sb.EXP_CODE_2;
-                    orsvtf.Amount_2 = sb.Amount_2;
-                    orsvtf.EXP_CODE_3 = sb.EXP_CODE_3;
-                    orsvtf.Amount_3 = sb.Amount_3;
-                    orsvtf.EXP_CODE_4 = sb.EXP_CODE_4;
-                    orsvtf.Amount_4 = sb.Amount_4;
-                    orsvtf.EXP_CODE_5 = sb.EXP_CODE_5;
-                    orsvtf.Amount_5 = sb.Amount_5;
-                    orsvtf.EXP_CODE_6 = sb.EXP_CODE_6;
-                    orsvtf.Amount_6 = sb.Amount_6;
-                    orsvtf.EXP_CODE_7 = sb.EXP_CODE_7;
-                    orsvtf.Amount_7 = sb.Amount_7;
-                    orsvtf.EXP_CODE_8 = sb.EXP_CODE_8;
-                    orsvtf.Amount_8 = sb.Amount_8;
-                    orsvtf.EXP_CODE_9 = sb.EXP_CODE_9;
-                    orsvtf.Amount_9 = sb.Amount_9;
-                    orsvtf.AE = sb.AE;
-                    orsvtf.AF = sb.AF;
-                    orsvtf.AG = sb.AG;
-                    orsvtf.AH = sb.AH;
-                    orsvtf.AI = sb.AI;
+                    line_id = Convert.ToInt32(sb.ID);
+                    var ors_uacs = db.ors_expense_codes.Where(p => p.ID == line_id).FirstOrDefault();
+                    ors_uacs.uacs = sb.expense_code;
+                    ors_uacs.amount = sb.amount;
                     try { db.SaveChanges(); } catch { }
                 }
                 catch (Exception ex)
@@ -517,243 +217,28 @@ namespace BUDGET.Controllers
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     try
                     {
-                        if (sb.Date != null && sb.Particulars != null && sb.PAYEE != null)
+                        if (sb.expense_code != null)
                         {
-                            ORSVTF orsvtf = new ORSVTF();
-                            orsvtf.Row = sb.Row;
-                            orsvtf.Date = sb.Date;
-                            orsvtf.DB = sb.DB;
-                            orsvtf.PO = sb.PO;
-                            orsvtf.PR = sb.PR;
-                            orsvtf.PAYEE = sb.PAYEE;
-                            orsvtf.Adress = sb.Adress;
-                            orsvtf.Particulars = sb.Particulars;
-                            orsvtf.ORS_NO = sb.ORS_NO;
-                            orsvtf.FundSource = sb.FundSource;
-                            orsvtf.Gross = sb.Gross;
-                            orsvtf.EXP_CODE_1 = sb.EXP_CODE_1;
-                            orsvtf.Amount_1 = sb.Amount_1;
-                            orsvtf.EXP_CODE_2 = sb.EXP_CODE_2;
-                            orsvtf.Amount_2 = sb.Amount_2;
-                            orsvtf.EXP_CODE_3 = sb.EXP_CODE_3;
-                            orsvtf.Amount_3 = sb.Amount_3;
-                            orsvtf.EXP_CODE_4 = sb.EXP_CODE_4;
-                            orsvtf.Amount_4 = sb.Amount_4;
-                            orsvtf.EXP_CODE_5 = sb.EXP_CODE_5;
-                            orsvtf.Amount_5 = sb.Amount_5;
-                            orsvtf.EXP_CODE_6 = sb.EXP_CODE_6;
-                            orsvtf.Amount_6 = sb.Amount_6;
-                            orsvtf.EXP_CODE_7 = sb.EXP_CODE_7;
-                            orsvtf.Amount_7 = sb.Amount_7;
-                            orsvtf.EXP_CODE_8 = sb.EXP_CODE_8;
-                            orsvtf.Amount_8 = sb.Amount_8;
-                            orsvtf.EXP_CODE_9 = sb.EXP_CODE_9;
-                            orsvtf.Amount_9 = sb.Amount_9;
-                            orsvtf.AE = sb.AE;
-                            orsvtf.AF = sb.AF;
-                            orsvtf.AG = sb.AG;
-                            orsvtf.AH = sb.AH;
-                            orsvtf.AI = sb.AI;
-                            orsvtf.Created_By = User.Identity.GetUserName();
-                            db.orsvtf.Add(orsvtf);
-                            try { db.SaveChanges(); } catch { }
-                        }
+                            Object uacs_obj = sb.expense_code;
+                            String uacs = uacs_obj.ToString();
 
+                            var uacs_exist = (from exist in db.ors_expense_codes where exist.uacs == uacs && exist.ors_obligation == id select exist).ToList();
+                            if(uacs_exist.Count <= 0)
+                            {
+                                ORS_EXPENSE_CODES oec = new ORS_EXPENSE_CODES();
+                                oec.uacs = sb.expense_code;
+                                oec.ors_obligation = id;
+                                oec.amount = sb.amount;
+                                db.ors_expense_codes.Add(oec);
+                                try { db.SaveChanges(); } catch { }
+                            }
+                        }
                     }
                     catch { }
                 }
             }
-            return GETORSVTF();
-        }
-
-
-        [Route("delete/ors/vtf",Name ="delete_ors_vtf")]
-        public ActionResult  DeleteORSVtf(String data)
-        {
-            try
-            {
-                dynamic orsvtf = JsonConvert.DeserializeObject<dynamic>(data);
-                int ID = Convert.ToInt32(orsvtf.ID);
-                var del_orsvtf = db.orsvtf.Where(p => p.ID == ID).FirstOrDefault();
-                db.orsvtf.Remove(del_orsvtf);
-                db.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-        [Route("ors/co", Name = "ors_co")]
-        public ActionResult ORSCO()
-        {
-            ViewBag.Menu = GlobalData.Year +  " ORS | CO";
-            return View();
-        }
-        
-        [Route("get/ors/co",Name ="get_ors_co")]
-        public ActionResult GetORSCO()
-        {
-            var orsco = (from list in db.orsco
-                          orderby list.Row ascending
-                          select new
-                          {
-                              ID = list.ID,
-                              Row = list.Row,
-                              Date = list.Date,
-                              DB = list.DB,
-                              PO = list.PO,
-                              PR = list.PR,
-                              PAYEE = list.PAYEE,
-                              Adress = list.Adress,
-                              Particulars = list.Particulars,
-                              ORS_NO = list.ORS_NO,
-                              FundSource = list.FundSource,
-                              Gross = list.Gross,
-                              EXP_CODE_1 = list.EXP_CODE_1,
-                              Amount_1 = list.Amount_1,
-                              EXP_CODE_2 = list.EXP_CODE_2,
-                              Amount_2 = list.Amount_2,
-                              EXP_CODE_3 = list.EXP_CODE_3,
-                              Amount_3 = list.Amount_3,
-                              EXP_CODE_4 = list.EXP_CODE_4,
-                              Amount_4 = list.Amount_4,
-                              EXP_CODE_5 = list.EXP_CODE_5,
-                              Amount_5 = list.Amount_5,
-                              EXP_CODE_6 = list.EXP_CODE_6,
-                              Amount_6 = list.Amount_5,
-                              EXP_CODE_7 = list.EXP_CODE_7,
-                              Amount_7 = list.Amount_7,
-                              EXP_CODE_8 = list.EXP_CODE_8,
-                              Amount_8 = list.Amount_8,
-                              EXP_CODE_9 = list.EXP_CODE_9,
-                              Amount_9 = list.Amount_9,
-                              AE = list.AE,
-                              AF = list.AF,
-                              AG = list.AG,
-                              AH = list.AH,
-                              AI = list.AI,
-                              Created_By = list.Created_By
-                          }).ToList();
-            return Json(orsco, JsonRequestBehavior.AllowGet);
-        }
-        [Route("save/ors/co",Name ="save_ors_co")]
-        public ActionResult SaveORSCO(String data)
-        {
-            List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
-            Int32 id = 0;
-            foreach (Object s in list)
-            {
-                try
-                {
-                    dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
-                    //var ps = db.ps.Where(p => p.ID == sb.ID).FirstOrDefault();
-                    id = Convert.ToInt32(sb.ID);
-                    var orsco = db.orsco.Where(p => p.ID == id).FirstOrDefault();
-                    orsco.Row = sb.Row;
-                    orsco.Date = sb.Date;
-                    orsco.DB = sb.DB;
-                    orsco.PO = sb.PO;
-                    orsco.PR = sb.PR;
-                    orsco.PAYEE = sb.PAYEE;
-                    orsco.Adress = sb.Adress;
-                    orsco.Particulars = sb.Particulars;
-                    orsco.ORS_NO = sb.ORS_NO;
-                    orsco.FundSource = sb.FundSource;
-                    orsco.Gross = sb.Gross;
-                    orsco.EXP_CODE_1 = sb.EXP_CODE_1;
-                    orsco.Amount_1 = sb.Amount_1;
-                    orsco.EXP_CODE_2 = sb.EXP_CODE_2;
-                    orsco.Amount_2 = sb.Amount_2;
-                    orsco.EXP_CODE_3 = sb.EXP_CODE_3;
-                    orsco.Amount_3 = sb.Amount_3;
-                    orsco.EXP_CODE_4 = sb.EXP_CODE_4;
-                    orsco.Amount_4 = sb.Amount_4;
-                    orsco.EXP_CODE_5 = sb.EXP_CODE_5;
-                    orsco.Amount_5 = sb.Amount_5;
-                    orsco.EXP_CODE_6 = sb.EXP_CODE_6;
-                    orsco.Amount_6 = sb.Amount_6;
-                    orsco.EXP_CODE_7 = sb.EXP_CODE_7;
-                    orsco.Amount_7 = sb.Amount_7;
-                    orsco.EXP_CODE_8 = sb.EXP_CODE_8;
-                    orsco.Amount_8 = sb.Amount_8;
-                    orsco.EXP_CODE_9 = sb.EXP_CODE_9;
-                    orsco.Amount_9 = sb.Amount_9;
-                    orsco.AE = sb.AE;
-                    orsco.AF = sb.AF;
-                    orsco.AG = sb.AG;
-                    orsco.AH = sb.AH;
-                    orsco.AI = sb.AI;
-                    try { db.SaveChanges(); } catch { }
-                }
-                catch (Exception ex)
-                {
-                    dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
-                    try
-                    {
-                        if (sb.Date != null && sb.Particulars != null && sb.PAYEE != null)
-                        {
-                            ORSCO orsco = new ORSCO();
-                            orsco.Row = sb.Row;
-                            orsco.Date = sb.Date;
-                            orsco.DB = sb.DB;
-                            orsco.PO = sb.PO;
-                            orsco.PR = sb.PR;
-                            orsco.PAYEE = sb.PAYEE;
-                            orsco.Adress = sb.Adress;
-                            orsco.Particulars = sb.Particulars;
-                            orsco.ORS_NO = sb.ORS_NO;
-                            orsco.FundSource = sb.FundSource;
-                            orsco.Gross = sb.Gross;
-                            orsco.EXP_CODE_1 = sb.EXP_CODE_1;
-                            orsco.Amount_1 = sb.Amount_1;
-                            orsco.EXP_CODE_2 = sb.EXP_CODE_2;
-                            orsco.Amount_2 = sb.Amount_2;
-                            orsco.EXP_CODE_3 = sb.EXP_CODE_3;
-                            orsco.Amount_3 = sb.Amount_3;
-                            orsco.EXP_CODE_4 = sb.EXP_CODE_4;
-                            orsco.Amount_4 = sb.Amount_4;
-                            orsco.EXP_CODE_5 = sb.EXP_CODE_5;
-                            orsco.Amount_5 = sb.Amount_5;
-                            orsco.EXP_CODE_6 = sb.EXP_CODE_6;
-                            orsco.Amount_6 = sb.Amount_6;
-                            orsco.EXP_CODE_7 = sb.EXP_CODE_7;
-                            orsco.Amount_7 = sb.Amount_7;
-                            orsco.EXP_CODE_8 = sb.EXP_CODE_8;
-                            orsco.Amount_8 = sb.Amount_8;
-                            orsco.EXP_CODE_9 = sb.EXP_CODE_9;
-                            orsco.Amount_9 = sb.Amount_9;
-                            orsco.AE = sb.AE;
-                            orsco.AF = sb.AF;
-                            orsco.AG = sb.AG;
-                            orsco.AH = sb.AH;
-                            orsco.AI = sb.AI;
-                            orsco.Created_By = User.Identity.GetUserName();
-                            db.orsco.Add(orsco);
-                            try { db.SaveChanges(); } catch { }
-                        }
-
-                    }
-                    catch { }
-                }
-            }
-            return GetORSCO();
-        }
-        [Route("delete/ors/co",Name ="delete_ors_co")]
-        public ActionResult DeleteORSCO(String data)
-        {
-            try
-            {
-                dynamic orsco = JsonConvert.DeserializeObject<dynamic>(data);
-                int ID = Convert.ToInt32(orsco.ID);
-                var del_orsco = db.orsco.Where(p => p.ID == ID).FirstOrDefault();
-                db.orsco.Remove(del_orsco);
-                db.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
+            ViewBag.ors_obligation = id.ToString();
+            return PartialView();
         }
     }
 }
