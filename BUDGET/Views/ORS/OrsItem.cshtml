@@ -3,12 +3,12 @@
     ViewBag.Title = "ORS | Personnel Services";
 }
 
-<div id="table" data-get="@Url.RouteUrl("get_ors_ps")" data-save="@Url.RouteUrl("save_ors_ps")" data-delete="@Url.RouteUrl("delete_ors_ps")" data-expense="@Url.RouteUrl("get_expense_codes_number")"></div>
+<div id="table" data-get="@Url.RouteUrl("get_ors_ps")" data-save="@Url.RouteUrl("save_ors_ps")" data-delete="@Url.RouteUrl("delete_ors_ps")" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-allotments="@Url.Action("GetFundSource","ORS",new { ID = ViewBag.allotments })"></div>
 
 @section scripts {
     <script>
-
         var expense_codes = [];
+        var fund_source = [];
         var container = document.getElementById("table");
         var table;
         var valid = true;
@@ -20,7 +20,7 @@
            startCols: 23,
            manualColumnResize: true,
            rowHeaders: true,
-           colWidths: [1,1, 100, 200, 200, 200, 300, 300, 700, 100, 100, 200,200, 100, 100, 100, 100, 300,200,200,200,200,200],
+           colWidths: [100,100,100, 200, 200, 200, 300, 300, 700, 100, 100, 200,200, 100, 100, 100, 100, 300,200,200,200,200,200],
            colHeaders: true,
            filters :true,
             dropdownMenu: true,
@@ -75,7 +75,12 @@
                    dateFormat: 'MM/DD/YYYY',
                    correctFormat: true,
                    defaultDate: Date.now()
-               }, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
+               }, {}, {}, {}, {}, {}, {}, {}, {},
+               {
+                   type : 'dropdown',
+                   source : fund_source
+               },
+               {},
                 {}, {}, {}, {}, {}, {},
                {
                    type : 'date',
@@ -131,7 +136,7 @@
 
        $(document).ready(function () {
            var url = $("#table").data('get');
-
+           var allotments_url = $("#table").data('allotments');
            $.get(url, function (resdata) {
                if (resdata.length > 0) {
                    var tabledata = [];
@@ -147,6 +152,13 @@
                if (expense_res.length > 0) {
                    for (var i = 0; i < expense_res.length; i++) {
                        expense_codes[i] = expense_res[i]["Code"];
+                   }
+               }
+           });
+           $.get(allotments_url, function (response) {
+               if (response.length > 0) {
+                   for (var i = 0; i < response.length; i++) {
+                       fund_source[i] = response[i]["Code"];
                    }
                }
            });

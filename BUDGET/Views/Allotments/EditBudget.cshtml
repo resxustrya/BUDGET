@@ -13,7 +13,11 @@
                 <table class="table">
                     <tr>
                         <td>Allotment Title</td>
-                        <td><input type="text" name="title" class="form-control" value="@Model.Title" /></td>
+                        <td><input type="text" name="title" class="form-control" value="@Model.Title" required /></td>
+                    </tr>
+                    <tr>
+                        <td>Code</td>
+                        <td><input type="text" name="code" class="form-control" value="@Model.Code" required /></td>
                     </tr>
                     <tr>
                         <td></td>

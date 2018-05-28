@@ -13,12 +13,14 @@
                     <table class="table">
                         <tr>
                             <th>Title</th>
+                            <th>Code</th>
                             <th>Action</th>
                         </tr>
                         @foreach(Allotments data in Model)
                         {
                             <tr>
                                 <td style="font-size:1em;">@data.Title</td>
+                                <td style="font-size:1em;">@data.Code</td>
                                 <td>
                                     <a href="@Url.Action("FundSource","Allotments",new { id = data.ID })" class="btn btn-success">Fund Source</a>
                                     <a href="@Url.Action("EditBudget","Allotments", new { id = data.ID })" class="btn btn-info">Edit</a>

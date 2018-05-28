@@ -11,6 +11,7 @@ namespace BUDGET.Models
         [Key]
         public Int32 ID { get; set; }
         public String prexc { get; set; }
+        public String Code { get; set; }
         public String SourceTitle { get; set; }
         public String allotment { get; set; }
         public String desc { get; set; }

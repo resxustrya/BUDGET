@@ -344,6 +344,14 @@
     <Compile Include="Migrations\201805250733133_added_culomn.Designer.cs">
       <DependentUpon>201805250733133_added_culomn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805270715454_add_code_remove_mooe.cs" />
+    <Compile Include="Migrations\201805270715454_add_code_remove_mooe.Designer.cs">
+      <DependentUpon>201805270715454_add_code_remove_mooe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805280129062_added_collumn.cs" />
+    <Compile Include="Migrations\201805280129062_added_collumn.Designer.cs">
+      <DependentUpon>201805280129062_added_collumn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -353,7 +361,6 @@
     <Compile Include="Models\FundSourceViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\MOOE.cs" />
     <Compile Include="Models\ORS.cs" />
     <Compile Include="Models\ORSMaster.cs" />
     <Compile Include="Models\ORS_EXPENSE_CODES.cs" />
@@ -737,6 +744,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805250733133_added_culomn.resx">
       <DependentUpon>201805250733133_added_culomn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805270715454_add_code_remove_mooe.resx">
+      <DependentUpon>201805270715454_add_code_remove_mooe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805280129062_added_collumn.resx">
+      <DependentUpon>201805280129062_added_collumn.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

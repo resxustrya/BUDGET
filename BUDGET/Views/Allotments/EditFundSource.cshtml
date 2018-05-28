@@ -54,6 +54,10 @@
                                         <td><input type="text" name="source_title" id="source_title" placeholder="Fund Source Title" class="form-control" value="@Model.SourceTitle" required /></td>
                                     </tr>
                                     <tr>
+                                        <td>Title Code</td>
+                                        <td><input type="text" name="title_code" id="title_code" placeholder="Title Code" class="form-control" value="@Model.Code" required /></td>
+                                    </tr>
+                                    <tr>
                                         <td>Description</td>
                                         <td><input type="text" name="description" id="description" placeholder="Description" class="form-control" value="@Model.desc" required" /></td>
                                     </tr>
@@ -148,6 +152,7 @@
            var prexc = $("#prexcode").val();
            var source_title = $("#source_title").val();
            var description = $("input[name='description']").val();
+           var title_code = $("#title_code").val();
            var url = $("#source_form").prop('action');
            var tabledata = table.getData();
            var expense = [];
@@ -162,7 +167,8 @@
                ID : ID,
                prexcode: prexc,
                source_title: source_title,
-               description : description,
+               description: description,
+               title_code : title_code,
                data: JSON.stringify(expense)
            };
            setTimeout(function () {

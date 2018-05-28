@@ -11,6 +11,7 @@ namespace BUDGET.Models
         [Key]
         public Int32 ID { get; set; }
         public String Title { get; set; }
+        public String Code { get; set; }
         public String year { get; set; }
     }
 }

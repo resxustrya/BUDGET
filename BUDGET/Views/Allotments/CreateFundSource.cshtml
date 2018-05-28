@@ -51,6 +51,10 @@
                                         <td><input type="text" name="source_title" placeholder="Fund Source Title" class="form-control" required id="source_title" /></td>
                                     </tr>
                                     <tr>
+                                        <td>Title Code</td>
+                                        <td><input type="text" name="title_code" placeholder="Title Code" class="form-control" required id="title_code" /></td>
+                                    </tr>
+                                    <tr>
                                         <td>Description</td>
                                         <td><input type="text" name="description" placeholder="Description" class="form-control" required /></td>
                                     </tr>
@@ -129,6 +133,7 @@
            var prexc = $("#prexcode").val();
            var source_title = $("#source_title").val();
            var description = $("input[name='description']").val();
+           var title_code = $("#title_code").val();
            var url = $("#source_form").prop('action');
            var tabledata = table.getData();
            var expense = [];
@@ -143,7 +148,8 @@
            var data = {
                prexcode: prexc,
                source_title: source_title,
-               description : description,
+               description: description,
+               title_code : title_code,
                data: JSON.stringify(expense)
            };
            setTimeout(function () {

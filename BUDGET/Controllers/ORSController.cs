@@ -35,6 +35,7 @@ namespace BUDGET.Controllers
             var ors = (from list in db.orsmaster where list.ID == ID && list.Year == GlobalData.Year select list).FirstOrDefault();
             GlobalData.ors_id = ors.ID.ToString();
             ViewBag.Menu = ors.Year + " | " + ors.Title;
+            ViewBag.allotments = ors.allotments;
             return View();
         }
         [Route("get/ors/ps",Name = "get_ors_ps")]
@@ -240,6 +241,13 @@ namespace BUDGET.Controllers
             }
             ViewBag.ors_obligation = id.ToString();
             return PartialView();
+        }
+
+        public JsonResult GetFundSource(String ID)
+        {
+            var ors_allotments = db.fsh.Where(p => p.allotment == ID).ToList();
+
+            return Json(ors_allotments, JsonRequestBehavior.AllowGet);
         }
         public ActionResult ors_head_request_office(int? page)
         {

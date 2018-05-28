@@ -28,12 +28,13 @@ namespace BUDGET.Controllers
         {
             Allotments allotments = new Allotments();
             allotments.Title = collection.Get("Title");
+            allotments.Code = collection.Get("code");
             allotments.year = GlobalData.Year;
             db.allotments.Add(allotments);
             db.SaveChanges();
 
             ORSMaster orsmaster = new ORSMaster();
-            orsmaster.Title = collection.Get("title");
+            orsmaster.Title = collection.Get("code");
             orsmaster.allotments = allotments.ID;
             orsmaster.Year = GlobalData.Year;
             db.orsmaster.Add(orsmaster);
@@ -105,15 +106,16 @@ namespace BUDGET.Controllers
         [HttpPost]
         public ActionResult CreateFundSource(FormCollection collection)
         {
-            FundSourceHdr hdr = new FundSourceHdr();
-            hdr.prexc = collection.Get("prexcode");
-            hdr.SourceTitle = collection.Get("source_title");
-            hdr.desc = collection.Get("description");
-            hdr.allotment = GlobalData.allotment;
-            db.fsh.Add(hdr);
+            FundSourceHdr fsh = new FundSourceHdr();
+            fsh.prexc = collection.Get("prexcode");
+            fsh.SourceTitle = collection.Get("source_title");
+            fsh.desc = collection.Get("description");
+            fsh.Code = collection.Get("title_code");
+            fsh.allotment = GlobalData.allotment;
+            db.fsh.Add(fsh);
             db.SaveChanges();
             String data = collection.Get("data");
-            SaveFundSourceExpese(hdr.ID.ToString(), data);
+            SaveFundSourceExpese(fsh.ID.ToString(), data);
             return PartialView("_Ok");
         }
         
@@ -131,6 +133,7 @@ namespace BUDGET.Controllers
             fsh.SourceTitle = collection.Get("source_title");
             fsh.prexc = collection.Get("prexcode");
             fsh.desc = collection.Get("description");
+            fsh.Code = collection.Get("title_code");
             db.SaveChanges();
             String data = collection.Get("data");
             SaveFundSourceExpese(id.ToString(), data);

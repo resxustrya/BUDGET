@@ -22,12 +22,14 @@
                     <table class="table">
                         <tr>
                             <th>Title</th>
+                            <th>Title Code</th>
                             <th>Action</th>
                         </tr>
                         @foreach (FundSourceHdr data in Model)
                         {
                             <tr>
                                 <td style="font-size:1em;">@data.SourceTitle</td>
+                                <td style="font-size:1em;">@data.Code</td>
                                 <td>
                                     <a href="@Url.Action("EditFundSource","Allotments", new { id = data.ID })" class="btn btn-info">Edit</a>
                                     <a href="@Url.Action("DeleteFundSource","Allotments",new { id = data.ID })" class="btn btn-danger" onclick="return confirm('Do you want to delete this budget');">Delete</a>
