@@ -10,6 +10,8 @@ namespace BUDGET.Controllers
 {
     [Authorize]
     [YearlyFilter]
+    [NoCache]
+    [OutputCache(NoStore = true, Duration = 0)]
     public class AllotmentsController : Controller
     {
         BudgetDB db = new BudgetDB();

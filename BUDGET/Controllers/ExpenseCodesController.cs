@@ -11,7 +11,8 @@ namespace BUDGET.Controllers
 {
     [Authorize]
     [YearlyFilter]
-    [OutputCache(Duration = 0)]
+    [NoCache]
+    [OutputCache(NoStore = true, Duration = 0)]
     public class ExpenseCodesController : Controller
     {
         // GET: ExpenseCodes

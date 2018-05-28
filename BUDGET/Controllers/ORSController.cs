@@ -13,8 +13,8 @@ namespace BUDGET.Controllers
 {
     [Authorize]
     [YearlyFilter]
-    [OutputCache(Duration = 0)]
-    //[OutputCache(Location = System.Web.UI.OutputCacheLocation.None, NoStore = true)]
+    [NoCache]
+    [OutputCache(NoStore = true, Duration = 0)]
     public class ORSController : Controller
     {
         JsonGetter jg = new JsonGetter();

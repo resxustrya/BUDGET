@@ -8,12 +8,14 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using BUDGET.Filters;
 using BUDGET.Models;
 
 namespace BUDGET.Controllers
 {
     [Authorize(Roles ="Administrator,Admin")]
-    [OutputCache(Duration = 0)]
+    [NoCache]
+    [OutputCache(NoStore = true, Duration = 0)]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;

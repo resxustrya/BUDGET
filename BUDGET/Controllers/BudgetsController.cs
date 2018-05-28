@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using BUDGET.Models;
 using Microsoft.AspNet.Identity;
 using PagedList;
+using BUDGET.Filters;
 namespace BUDGET.Controllers
 {
     [Authorize]
