@@ -19,6 +19,7 @@
             {
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <span class="glyphicon glyphicon-tasks"> </span>
                         <b>ORS <i class="fa fa-caret-down"></i></b>
                     </a>
                     <ul class="dropdown-menu dropdown-tasks">
@@ -26,7 +27,7 @@
                         {
                             foreach(ORSMaster orsmaster in orslist)
                             {
-                                <li><a href="@Url.Action("OrsItem","Ors",new { ID = orsmaster.ID })">@orsmaster.Title</a></li>
+                                <li><a href="@Url.Action("OrsItem","Ors",new { ID = orsmaster.ID })"><i class="glyphicon glyphicon-chevron-right"> </i> @orsmaster.Title</a></li>
                             }
                         }
                         else
@@ -38,13 +39,14 @@
 
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <span class="glyphicon glyphicon-stats"> </span>
                         <b>Budget Allotments <i class="fa fa-caret-down"> </i> </b>
                     </a>
                     <ul class="dropdown-menu dropdown-tasks">
                         @if (allotments.Count > 0) {
                             foreach (Allotments data in allotments)
                             {
-                                <li><a href="@Url.Action("View","Allotments",new { ID = data.ID })">@data.Title</a></li>
+                                <li><a href="@Url.Action("View","Allotments",new { ID = data.ID })"><i class="glyphicon glyphicon-chevron-right"> </i> @data.Code</a></li>
                             }
                         } else {
                             <li><a href="javascript:void(0);" class="colo">No Allotments Created</a></li>
@@ -54,23 +56,26 @@
 
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <span class="glyphicon glyphicon-upload"> </span>
                         Upload Documents <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-alerts">
                         <li>
                             <a href="javascript:void(0);" id="gaa_upload" data-url="@Url.Action("UploadGaa","Home")">
+                                <i class="glyphicon glyphicon-chevron-right"> </i>
                                 GAA Upload
                             </a>
                         </li>
-                        <li class="divider"></li>
+                       
                         <li>
                             <a href="javascript:void(0);" id="uacs_upload" data-url="@Url.Action("Index","Uploads")">
+                                <i class="glyphicon glyphicon-chevron-right"> </i>
                                 Upload UACS
                             </a>
                         </li>
-                        <li class="divider"></li>
                         <li>
                             <a href="javascript:void(0);" id="upload_prex" data-url="@Url.Action("UploadPrexc", "Uploads")">
+                                <i class="glyphicon glyphicon-chevron-right"> </i>
                                 Upload PREXC
                             </a>
                         </li>
@@ -79,22 +84,26 @@
                 </li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <span class="glyphicon glyphicon-print"> </span>
                         Budget Reports <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="@Url.Action("SAOB","Reports")">@GlobalData.Year </a></li>
+                        <li>
+                            <a href="javascript:void(0)" id="saob" data-url="@Url.Action("DownloadSaob","Reports")"><i class="glyphicon glyphicon-chevron-right"> </i> STATEMENT OF ALLOTMENT, OBLIGATIONS AND BALANCES </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <span class="glyphicon glyphicon-floppy-disk"> </span>
                         <b>Master Data <i class="fa fa-caret-down"> </i> </b>
                     </a>
                     <ul class="dropdown-menu dropdown-tasks">
-                        <li><a href="@Url.Action("ExpenseCodes","ExpenseCodes")">UACS Expense Codes</a></li>
-                        <li><a href="@Url.Action("Prexc","ExpenseCodes")">Fund Source | PREXC</a></li>
-                        <li><a href="@Url.Action("Index","Allotments")">@GlobalData.Year Budget Allotments</a></li>
-                        <li><a href="@Url.Action("ors_head_request_office","ORS")">ORS Head Requesting Head</a></li>
-                        <li><a href="@Url.Action("Index","Budgets")">Yearly Budget Reference</a></li>
+                        <li><a href="@Url.Action("ExpenseCodes","ExpenseCodes")"> <i class="glyphicon glyphicon-chevron-right"> </i> UACS Expense Codes</a></li>
+                        <li><a href="@Url.Action("Prexc","ExpenseCodes")"><i class="glyphicon glyphicon-chevron-right"> </i> Fund Source | PREXC</a></li>
+                        <li><a href="@Url.Action("Index","Allotments")"><i class="glyphicon glyphicon-chevron-right"> </i> @GlobalData.Year Budget Allotments</a></li>
+                        <li><a href="@Url.Action("ors_head_request_office","ORS")"><i class="glyphicon glyphicon-chevron-right"> </i> ORS Head Requesting Head</a></li>
+                        <li><a href="@Url.Action("Index","Budgets")"><i class="glyphicon glyphicon-chevron-right"> </i> Yearly Budget Reference</a></li>
                     </ul>
                 </li>
             }

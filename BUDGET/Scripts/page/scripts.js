@@ -36,6 +36,17 @@
         });
     });
 
+    $("#saob").click(function () {
+        $("#page_modal").modal('show');
+        $('.loading').show();
+        $('.modal_body').html('');
+        var url = $("#saob").data('url');
+        $.get(url, function (res) {
+            $('.modal_body').html(res);
+            $('.loading').hide();
+        });
+    });
+
 
     $("#print_ors").click(function () {
         $("#page_modal").modal('show');

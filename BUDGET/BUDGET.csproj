@@ -640,6 +640,8 @@
     <Content Include="Views\ORS\SaveOrsObligation.cshtml" />
     <Content Include="Views\ORS\ors_head_request_office.cshtml" />
     <Content Include="Views\ORS\CreateOrsHeadRequest.cshtml" />
+    <Content Include="Views\Shared\footer.cshtml" />
+    <Content Include="Views\Reports\DownloadSaob.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -649,7 +651,6 @@
     <Folder Include="Content\upload\" />
     <Folder Include="obj\" />
     <Folder Include="Views\Json\" />
-    <Folder Include="Views\Reports\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

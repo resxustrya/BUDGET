@@ -9,6 +9,7 @@ using PagedList;
 namespace BUDGET.Controllers
 {
     [Authorize]
+    [OutputCache(Duration = 0)]
     public class BudgetsController : Controller
     {
         public BudgetDB db = new BudgetDB();

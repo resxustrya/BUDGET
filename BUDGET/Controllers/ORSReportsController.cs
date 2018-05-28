@@ -10,6 +10,7 @@ using iTextSharp.text;
 using BUDGET.DataHelpers;
 namespace BUDGET.Controllers
 {
+    [OutputCache(Duration = 0)]
     public class ORSReportsController : Controller
     {
         ORSReporting rpt_ors = new ORSReporting();

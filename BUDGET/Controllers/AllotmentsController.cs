@@ -96,7 +96,7 @@ namespace BUDGET.Controllers
             var allotment = db.allotments.Where(p => p.ID == id).FirstOrDefault();
             GlobalData.allotment = allotment.ID.ToString();
             var fundsources = (from list in db.fsh where list.allotment == allotment.ID.ToString() select list).ToList();
-            ViewBag.Menu = allotment.Title + " | Fund Source : ID " + allotment.ID;
+            ViewBag.Menu = "";
             return View(fundsources);
         }
         public ActionResult CreateFundSource()

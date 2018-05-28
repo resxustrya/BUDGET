@@ -29,6 +29,7 @@
             font-size: 12px;
             font-family: arial,sans-serif;
         }
+
     </style>
     <script>
         function numberWithCommas(x) {
@@ -40,12 +41,12 @@
     </script>
 </head>
 <body style="background-color:white;">
-    <div id="wrapper">
+    <div id="container-fluid">
         @Html.Partial("nav_header")
         @RenderBody()
     </div>
-
     @Html.Partial("modals")
+    @Html.Partial("footer")
     <!-- Begin page content -->
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

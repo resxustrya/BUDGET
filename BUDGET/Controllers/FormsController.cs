@@ -12,6 +12,7 @@ namespace BUDGET.Controllers
 {
     [Authorize]
     [YearlyFilter]
+    [OutputCache(Duration = 0)]
     public class FormsController : Controller
     {
         // GET: Forms

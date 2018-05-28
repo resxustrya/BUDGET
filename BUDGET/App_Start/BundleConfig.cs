@@ -33,7 +33,8 @@ namespace BUDGET
                       "~/Content/sb-admin2.css",
                       "~/Content/handson/pikaday.css",
                       "~/Content/handson/handsontable.css",
-                      "~/Content/scrollstyle.css"
+                      "~/Content/scrollstyle.css",
+                      "~/Content/Site.css"
                       ));
 
             
