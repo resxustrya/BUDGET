@@ -246,6 +246,7 @@
     <Compile Include="DataHelpers\JsonGetter.cs" />
     <Compile Include="DataHelpers\ModelAllotments.cs" />
     <Compile Include="DataHelpers\ORSReporting.cs" />
+    <Compile Include="DataHelpers\rpt_saob.cs" />
     <Compile Include="Filters\NoCache.cs" />
     <Compile Include="Filters\YearlyFilter.cs" />
     <Compile Include="Global.asax.cs">
@@ -651,6 +652,7 @@
     <Folder Include="Content\less\" />
     <Folder Include="Content\upload\" />
     <Folder Include="obj\" />
+    <Folder Include="rpt_saob\" />
     <Folder Include="Views\Json\" />
   </ItemGroup>
   <ItemGroup>

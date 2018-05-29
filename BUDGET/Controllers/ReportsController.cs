@@ -15,6 +15,7 @@ namespace BUDGET.Controllers
     public class ReportsController : Controller
     {
         BudgetDB db = new BudgetDB();
+        
         // GET: Reports
         public ActionResult DownloadSaob()
         {
@@ -25,7 +26,9 @@ namespace BUDGET.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DownloadSaob(FormCollection collection)
         {
-            var fileStream = new FileStream(Server.MapPath("~/rpt_ors/mooe/" + "1008.pdf"),
+            rpt_saob rpt = new rpt_saob();
+            rpt.generate_saob();
+            var fileStream = new FileStream(Server.MapPath("~/rpt_saob/saob.pdf"),
                                      FileMode.Open,
                                      FileAccess.Read
                                    );
