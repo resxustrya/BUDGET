@@ -31,7 +31,8 @@ namespace BUDGET.Models
         public String AH { get; set; }
         public String AI { get; set; }
         public String Created_By { get; set; }
-
+        public DateTime Date_Added { get; set; }
+        public String dateadded { get; set; }
         public ORS()
         {
             this.Gross = 0.00;

@@ -354,6 +354,22 @@
     <Compile Include="Migrations\201805280129062_added_collumn.Designer.cs">
       <DependentUpon>201805280129062_added_collumn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805300650596_date_added_in_ors.cs" />
+    <Compile Include="Migrations\201805300650596_date_added_in_ors.Designer.cs">
+      <DependentUpon>201805300650596_date_added_in_ors.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805310113262_model_added_saahdr.cs" />
+    <Compile Include="Migrations\201805310113262_model_added_saahdr.Designer.cs">
+      <DependentUpon>201805310113262_model_added_saahdr.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805310247254_added_culomn1.cs" />
+    <Compile Include="Migrations\201805310247254_added_culomn1.Designer.cs">
+      <DependentUpon>201805310247254_added_culomn1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805310255250_added_column.cs" />
+    <Compile Include="Migrations\201805310255250_added_column.Designer.cs">
+      <DependentUpon>201805310255250_added_column.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -371,6 +387,7 @@
     <Compile Include="Models\PersonnelServices.cs" />
     <Compile Include="Models\PREXC.cs" />
     <Compile Include="Models\ProductListViewModel.cs" />
+    <Compile Include="Models\SubAllotmentHeader.cs" />
     <Compile Include="Models\UACS.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\YearBudget.cs" />
@@ -644,6 +661,8 @@
     <Content Include="Views\ORS\CreateOrsHeadRequest.cshtml" />
     <Content Include="Views\Shared\footer.cshtml" />
     <Content Include="Views\Reports\DownloadSaob.cshtml" />
+    <Content Include="Views\Allotments\SubAllotment.cshtml" />
+    <Content Include="Views\Allotments\CreateSubAllotment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -754,6 +773,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805280129062_added_collumn.resx">
       <DependentUpon>201805280129062_added_collumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805300650596_date_added_in_ors.resx">
+      <DependentUpon>201805300650596_date_added_in_ors.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805310113262_model_added_saahdr.resx">
+      <DependentUpon>201805310113262_model_added_saahdr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805310247254_added_culomn1.resx">
+      <DependentUpon>201805310247254_added_culomn1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805310255250_added_column.resx">
+      <DependentUpon>201805310255250_added_column.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

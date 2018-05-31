@@ -274,5 +274,52 @@ namespace BUDGET.Controllers
             db.SaveChanges();
             return RedirectToAction("ORS");
         }
+
+        public ActionResult SubAllotment(String allotment, String fundsource)
+        {
+            Session.Add("allotment", allotment);
+            Session.Add("fundsource", fundsource);
+            var saahdr = db.saahdr.Where(p => p.allotment == allotment && p.fundsource == fundsource).ToList();
+
+            var details = (from alt in db.allotments
+                           join fsh in db.fsh on alt.ID.ToString() equals fsh.allotment
+                           where fsh.ID.ToString() == fundsource
+                           select new
+                           {
+                               Allotment = alt.Code,
+                               FundSource = fsh.Code
+                           }).FirstOrDefault();
+
+            ViewBag.Header = "Sub-Allotment for " + details.FundSource + " in " + details.Allotment;
+            return View(saahdr);
+        }
+        public ActionResult CreateSubAllotment()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateSubAllotment(FormCollection collection)
+        {
+            SubAllotmentHeader saahdr = new SubAllotmentHeader();
+            saahdr.prexc = collection.Get("prexcode");
+            saahdr.allotment = Session["allotment"].ToString();
+            saahdr.fundsource = Session["fundsource"].ToString();
+            saahdr.Title = collection.Get("source_title");
+            saahdr.TitleCode = collection.Get("title_code");
+            saahdr.allotment_for = collection.Get("description");
+            db.saahdr.Add(saahdr);
+            db.SaveChanges();
+
+            String data = collection.Get("data");
+            SaveSubAllotmentsAmount(saahdr.ID.ToString(), data);
+
+
+            return RedirectToAction("SubAllotment", new { allotment = Session["allotment"].ToString(), fundsource = Session["fundsource"].ToString() });
+        }
+        public void SaveSubAllotmentsAmount(String fundsource, String data)
+        {
+            
+        }
     }
 }

@@ -145,7 +145,8 @@ namespace BUDGET.Controllers
                             ors.TimeReceived = sb.TimeReceived;
                             ors.DateReleased = sb.DateReleased;
                             ors.TimeReleased = sb.TimeReleased;
-
+                            ors.Date_Added = DateTime.Now.Date;
+                            ors.dateadded = DateTime.Now.Date.ToString();
                             db.ors.Add(ors);
                             try { db.SaveChanges(); } catch { }
                         }

@@ -1,0 +1,163 @@
+﻿@{
+    BudgetDB db = new BudgetDB();
+    var prexc = (from list in db.prexc select list).ToList();
+}
+@{
+    ViewBag.Title = ViewBag.Menu;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary" style="margin-top:10px;">
+                <div class="panel-heading">
+                    <i class="fa fa-bar-chart-o fa-fw"></i> Create Sub-Allotment
+                    <div class="pull-right">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                Actions
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right" role="menu">
+                                <li>
+                                    <a href="javascript:void(0)" id="submit">Save</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("FundSource","Allotments",new { id = GlobalData.allotment })">Exit</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form action="@Url.Action("CreateSubAllotment","Allotments")" method="post" id="source_form">
+                                <table class="table">
+                                    <tr>
+                                        <td>PREXC CODE</td>
+                                        <td>
+                                            <select name="prexcode" class="form-control" id="prexcode">
+                                                @foreach (PREXC p in prexc)
+                                                {
+                                                    <option value="@p.Code1">@p.Desc</option>
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Title</td>
+                                        <td><input type="text" name="source_title" placeholder="Fund Source Title" class="form-control" required id="source_title" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Title Code</td>
+                                        <td><input type="text" name="title_code" placeholder="Title Code" class="form-control" required id="title_code" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Description</td>
+                                        <td><input type="text" name="description" placeholder="Sub-Allotment for" class="form-control" required /></td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-save="@Url.RouteUrl("save_fundsource_expese")"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section scripts {
+    <script>
+       var expense_codes = [];
+       var container = document.getElementById("table");
+       var table;
+       var valid = true;
+       var expense_url = $("#table").data('expense');
+       table = new Handsontable(container, {
+           startRows: 50,
+           startCols: 4,
+           manualColumnResize: true,
+           rowHeaders: true,
+           colWidths: [1, 200, 300, 300],
+           stretchH: 'all',
+           colHeaders: true,
+           contextMenu: ['row_above','row_below','remove_row','copy'],
+           manualColumnMove: true,
+           fillHandle: {
+               autoInsertRow: false,
+           },
+           colHeaders: ['ID','UACS','Title','Amount'],
+           columns : [
+              {}, { type: 'dropdown', source: expense_codes }, {}, {}
+           ],
+           cells: function (r, c, prop) {
+               var cellProperties = {};
+               if (c === 0) cellProperties.readOnly = true;
+               return cellProperties;
+           },
+           beforeRemoveRow: function (index, column) {
+               var items = this.getData();
+               var row_item = items[index];
+               var url = $("#table").data('delete');
+
+               var ps = {
+                   "ID": row_item[0]
+               };
+               var data = {
+                   data: JSON.stringify(ps)
+               };
+               $.post(url, data, function (resdata) {
+
+               });
+           }
+       });
+       $(document).ready(function () {
+           $.get(expense_url, function (expense_res) {
+               if (expense_res.length > 0) {
+                   for (var i = 0; i < expense_res.length; i++) {
+                       expense_codes[i] = expense_res[i]["Code"];
+                   }
+               }
+           });
+       });
+
+       $("#submit").click(function () {
+           $("#loading_modal").modal('show');
+           var prexc = $("#prexcode").val();
+           var source_title = $("#source_title").val();
+           var description = $("input[name='description']").val();
+           var title_code = $("#title_code").val();
+           var url = $("#source_form").prop('action');
+           var tabledata = table.getData();
+           var expense = [];
+           for (var i = 0; i < tabledata.length; i++)
+           {
+               expense[i] = {
+                   "ID": tabledata[i][0],
+                   "expense_code": tabledata[i][1],
+                   "amount" : tabledata[i][3]
+               };
+           }
+           var data = {
+               prexcode: prexc,
+               source_title: source_title,
+               description: description,
+               title_code : title_code,
+               data: JSON.stringify(expense)
+           };
+           setTimeout(function () {
+               $.post(url, data, function (res) {
+                   $(".panel-body").html(res);
+                   $("#loading_modal").modal('hide');
+               });
+           }, 1000);
+       });
+    </script>
+}
