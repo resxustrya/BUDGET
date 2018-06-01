@@ -298,7 +298,6 @@ namespace BUDGET.Controllers
             return View();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult CreateSubAllotment(FormCollection collection)
         {
             SubAllotmentHeader saahdr = new SubAllotmentHeader();
@@ -314,12 +313,60 @@ namespace BUDGET.Controllers
             String data = collection.Get("data");
             SaveSubAllotmentsAmount(saahdr.ID.ToString(), data);
 
-
-            return RedirectToAction("SubAllotment", new { allotment = Session["allotment"].ToString(), fundsource = Session["fundsource"].ToString() });
+            return PartialView();
         }
-        public void SaveSubAllotmentsAmount(String fundsource, String data)
+        public ActionResult EditSubAllotment(String ID)
+        {
+            Int32 id = Convert.ToInt32(ID);
+            var saahdr = db.saahdr.Where(p => p.ID == id).FirstOrDefault();
+            return View(saahdr);
+        }
+        /*
+        [HttpPost]
+        public ActionResult EditSubAllotment(FormCollection collection)
         {
             
+        }
+        */
+        public void SaveSubAllotmentsAmount(String fundsource, String data)
+        {
+            List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
+            Int32 id = 0;
+            foreach (Object s in list)
+            {
+                try
+                {
+                    dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
+                    id = Convert.ToInt32(sb.ID);
+                    var saaamount = db.saaamount.Where(p => p.ID == id && p.fundsource == fundsource).FirstOrDefault();
+                    saaamount.expensecode = sb.expense_code;
+                    saaamount.amount = Convert.ToDouble(sb.amount);
+                    try { db.SaveChanges(); } catch { }
+                }
+                catch (Exception ex)
+                {
+                    dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
+                    try
+                    {
+                        if (sb.expense_code != null)
+                        {
+                            Object uacs_obj = sb.expense_code;
+                            String uacs = uacs_obj.ToString();
+                            var expense_exist = (from exist in db.fsa where exist.expensecode == uacs && exist.fundsource == fundsource select exist).ToList();
+                            if (expense_exist.Count <= 0)
+                            {
+                                SubAllotmentAmounts saaamount = new SubAllotmentAmounts();
+                                saaamount.expensecode = sb.expense_code;
+                                saaamount.amount = Convert.ToDouble(sb.amount);
+                                saaamount.fundsource = fundsource;
+                                db.saaamount.Add(saaamount);
+                                try { db.SaveChanges(); } catch { }
+                            }
+                        }
+                    }
+                    catch { }
+                }
+            }
         }
     }
 }

@@ -370,6 +370,14 @@
     <Compile Include="Migrations\201805310255250_added_column.Designer.cs">
       <DependentUpon>201805310255250_added_column.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805310344329_saa_amounts.cs" />
+    <Compile Include="Migrations\201805310344329_saa_amounts.Designer.cs">
+      <DependentUpon>201805310344329_saa_amounts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805310348276_changes.cs" />
+    <Compile Include="Migrations\201805310348276_changes.Designer.cs">
+      <DependentUpon>201805310348276_changes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -387,6 +395,7 @@
     <Compile Include="Models\PersonnelServices.cs" />
     <Compile Include="Models\PREXC.cs" />
     <Compile Include="Models\ProductListViewModel.cs" />
+    <Compile Include="Models\SubAllotmentAmounts.cs" />
     <Compile Include="Models\SubAllotmentHeader.cs" />
     <Compile Include="Models\UACS.cs" />
     <Compile Include="Models\User.cs" />
@@ -663,6 +672,7 @@
     <Content Include="Views\Reports\DownloadSaob.cshtml" />
     <Content Include="Views\Allotments\SubAllotment.cshtml" />
     <Content Include="Views\Allotments\CreateSubAllotment.cshtml" />
+    <Content Include="Views\Allotments\EditSubAllotment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -785,6 +795,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805310255250_added_column.resx">
       <DependentUpon>201805310255250_added_column.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805310344329_saa_amounts.resx">
+      <DependentUpon>201805310344329_saa_amounts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805310348276_changes.resx">
+      <DependentUpon>201805310348276_changes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
