@@ -35,7 +35,6 @@
                     <div class="row">
                         <div class="col-md-12">
                             <form action="@Url.Action("EditFundSource","Allotments")" method="post" id="source_form">
-                                <input type="hidden" name="ID" value="@Model.ID" />
                                 @Html.AntiForgeryToken()
                                 <table class="table">
                                     <tr>
@@ -67,7 +66,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-get="@Url.RouteUrl("get_fund_source_expense")" data-delete="@Url.RouteUrl("delete_fund_source_amount")"></div>
+                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-get="@Url.RouteUrl("get_fund_source_expense")" data-delete="@Url.RouteUrl("delete_fund_source_amount")" data-id="@Model.ID"></div>
                         </div>
                     </div>
                 </div>
@@ -122,7 +121,7 @@
            }
        });
        $(document).ready(function () {
-           var fsh = $("input[name='ID']").val();
+           var fsh = $("#table").data('id');
            var data = {
                fsh: fsh
            };

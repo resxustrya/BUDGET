@@ -12,6 +12,6 @@ namespace BUDGET.Models
         public Int32 ID { get; set; }
         public String expensecode { get; set; }
         public Double amount { get; set; }
-        public String fundsource { get; set; }
+        public String saahdr { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model SubAllotmentHeader
+@{
     BudgetDB db = new BudgetDB();
     var prexc = (from list in db.prexc select list).ToList();
 }
@@ -9,7 +10,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <div class="panel panel-primary" style="margin-top:10px;">
+            <div class="panel panel-info" style="margin-top:10px;">
                 <div class="panel-heading">
                     <i class="fa fa-bar-chart-o fa-fw"></i> Create Sub-Allotment
                     <div class="pull-right">
@@ -41,22 +42,22 @@
                                             <select name="prexcode" class="form-control" id="prexcode">
                                                 @foreach (PREXC p in prexc)
                                                 {
-                                                    <option value="@p.Code1">@p.Desc</option>
+                                                    <option value="@p.Code1" @( p.Code1 == Model.prexc ? " selected" : " " )>@p.Desc</option>
                                                 }
                                             </select>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Title</td>
-                                        <td><input type="text" name="source_title" placeholder="Fund Source Title" class="form-control" required id="source_title" /></td>
+                                        <td><input type="text" name="source_title" placeholder="Fund Source Title" class="form-control" value="@Model.Title" required id="source_title" /></td>
                                     </tr>
                                     <tr>
                                         <td>Title Code</td>
-                                        <td><input type="text" name="title_code" placeholder="Title Code" class="form-control" required id="title_code" /></td>
+                                        <td><input type="text" name="title_code" placeholder="Title Code" class="form-control" value="@Model.TitleCode" required id="title_code" /></td>
                                     </tr>
                                     <tr>
                                         <td>Description</td>
-                                        <td><input type="text" name="description" placeholder="Sub-Allotment for" class="form-control" required /></td>
+                                        <td><input type="text" name="description" placeholder="Sub-Allotment for" class="form-control" value="@Model.allotment_for" required /></td>
                                     </tr>
                                 </table>
                             </form>
@@ -64,7 +65,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_number")"></div>
+                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-get="@Url.RouteUrl("get_saaamt")" data-saaamt="@Model.ID"></div>
                         </div>
                     </div>
                 </div>
@@ -124,6 +125,22 @@
                    for (var i = 0; i < expense_res.length; i++) {
                        expense_codes[i] = expense_res[i]["Code"];
                    }
+               }
+           });
+
+           var fsh = $("#table").data('saaamt');
+           var data = {
+               fsh: fsh
+           };
+           var url = $("#table").data('get');
+           $.get(url, data, function (resdata) {
+               if (resdata.length > 0) {
+                   var tabledata = [];
+                   var total;
+                   for (var i = 0; i < resdata.length; i++) {
+                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseCode'], resdata[i]['Title'], numberWithCommas(resdata[i]['Amount']));
+                   }
+                   table.loadData(tabledata);
                }
            });
        });

@@ -14,5 +14,6 @@ namespace BUDGET.Models
         public String Title { get; set; }
         public String Year { get; set; }
         public Int32 allotments { get; set; }
+        public String TitlCode { get; set; }
     }
 }

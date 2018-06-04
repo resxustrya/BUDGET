@@ -313,7 +313,7 @@ namespace BUDGET.Controllers
             String data = collection.Get("data");
             SaveSubAllotmentsAmount(saahdr.ID.ToString(), data);
 
-            return PartialView();
+            return PartialView("_PartialSubAllotment");
         }
         public ActionResult EditSubAllotment(String ID)
         {
@@ -321,6 +321,25 @@ namespace BUDGET.Controllers
             var saahdr = db.saahdr.Where(p => p.ID == id).FirstOrDefault();
             return View(saahdr);
         }
+
+        [Route("get/saamt", Name = "get_saaamt")]
+        public JsonResult GetSaaAmt(String saahdr)
+        {
+            var fsa = (from list in db.saaamount
+                       join expensecode
+                        in db.uacs on list.expensecode equals expensecode.Code
+                       where list.saahdr == saahdr
+                       select new
+                       {
+                           ID = list.ID,
+                           ExpenseCode = list.expensecode,
+                           Title = expensecode.Title,
+                           Amount = list.amount
+                       }
+                       );
+            return Json(fsa, JsonRequestBehavior.AllowGet);
+        }
+
         /*
         [HttpPost]
         public ActionResult EditSubAllotment(FormCollection collection)
@@ -328,7 +347,20 @@ namespace BUDGET.Controllers
             
         }
         */
-        public void SaveSubAllotmentsAmount(String fundsource, String data)
+        public ActionResult DeleteSubAllotment(String ID)
+        {
+            Int32 id = Convert.ToInt32(ID);
+            var saahdr = db.saahdr.Where(p => p.ID == id).FirstOrDefault();
+            db.saahdr.Remove(saahdr);
+
+            var saaamt = db.saaamount.Where(p => p.saahdr == id.ToString()).ToList();
+            db.saaamount.RemoveRange(saaamt);
+
+            db.SaveChanges();
+
+            return RedirectToAction("SubAllotment", "Allotments", new { allotment = Session["allotment"].ToString(), fundsource = Session["fundsource"].ToString() });
+        }
+        public void SaveSubAllotmentsAmount(String saahdr, String data)
         {
             List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
             Int32 id = 0;
@@ -338,7 +370,7 @@ namespace BUDGET.Controllers
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     id = Convert.ToInt32(sb.ID);
-                    var saaamount = db.saaamount.Where(p => p.ID == id && p.fundsource == fundsource).FirstOrDefault();
+                    var saaamount = db.saaamount.Where(p => p.ID == id && p.saahdr == saahdr).FirstOrDefault();
                     saaamount.expensecode = sb.expense_code;
                     saaamount.amount = Convert.ToDouble(sb.amount);
                     try { db.SaveChanges(); } catch { }
@@ -352,13 +384,13 @@ namespace BUDGET.Controllers
                         {
                             Object uacs_obj = sb.expense_code;
                             String uacs = uacs_obj.ToString();
-                            var expense_exist = (from exist in db.fsa where exist.expensecode == uacs && exist.fundsource == fundsource select exist).ToList();
+                            var expense_exist = (from exist in db.fsa where exist.expensecode == uacs && exist.fundsource == saahdr select exist).ToList();
                             if (expense_exist.Count <= 0)
                             {
                                 SubAllotmentAmounts saaamount = new SubAllotmentAmounts();
                                 saaamount.expensecode = sb.expense_code;
                                 saaamount.amount = Convert.ToDouble(sb.amount);
-                                saaamount.fundsource = fundsource;
+                                saaamount.saahdr = saahdr;
                                 db.saaamount.Add(saaamount);
                                 try { db.SaveChanges(); } catch { }
                             }

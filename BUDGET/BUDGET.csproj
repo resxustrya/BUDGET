@@ -378,6 +378,14 @@
     <Compile Include="Migrations\201805310348276_changes.Designer.cs">
       <DependentUpon>201805310348276_changes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806040439253_added_col_orsmaster.cs" />
+    <Compile Include="Migrations\201806040439253_added_col_orsmaster.Designer.cs">
+      <DependentUpon>201806040439253_added_col_orsmaster.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806040900397_change_col_name.cs" />
+    <Compile Include="Migrations\201806040900397_change_col_name.Designer.cs">
+      <DependentUpon>201806040900397_change_col_name.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -673,6 +681,7 @@
     <Content Include="Views\Allotments\SubAllotment.cshtml" />
     <Content Include="Views\Allotments\CreateSubAllotment.cshtml" />
     <Content Include="Views\Allotments\EditSubAllotment.cshtml" />
+    <Content Include="Views\Allotments\_PartialSubAllotment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -801,6 +810,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805310348276_changes.resx">
       <DependentUpon>201805310348276_changes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806040439253_added_col_orsmaster.resx">
+      <DependentUpon>201806040439253_added_col_orsmaster.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806040900397_change_col_name.resx">
+      <DependentUpon>201806040900397_change_col_name.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1,0 +1,9 @@
+﻿
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="alert alert-success">
+            <strong><span class="glyphicon glyphicon-ok"></span></strong> Successfully Saved!
+        </div>
+        <a href="@Url.Action("SubAllotment","Allotments", new { allotment = Session["allotment"].ToString() , fundsource = Session["fundsource"].ToString() })" class="btn btn-success btn-lg">Ok</a>
+    </div>
+</div>
