@@ -34,7 +34,8 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <form action="@Url.Action("CreateSubAllotment","Allotments")" method="post" id="source_form">
+                            <form action="@Url.Action("EditSubAllotment","Allotments")" method="post" id="source_form">
+                                <input type="hidden" name="id" value="@Model.ID" />
                                 <table class="table">
                                     <tr>
                                         <td>PREXC CODE</td>
@@ -128,9 +129,9 @@
                }
            });
 
-           var fsh = $("#table").data('saaamt');
+           var saahdr = $("#table").data('saaamt');
            var data = {
-               fsh: fsh
+               saahdr: saahdr
            };
            var url = $("#table").data('get');
            $.get(url, data, function (resdata) {
@@ -163,6 +164,7 @@
                };
            }
            var data = {
+               ID : $("#table").data('saaamt'),
                prexcode: prexc,
                source_title: source_title,
                description: description,

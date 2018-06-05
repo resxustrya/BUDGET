@@ -312,7 +312,7 @@ namespace BUDGET.Controllers
 
             String data = collection.Get("data");
             SaveSubAllotmentsAmount(saahdr.ID.ToString(), data);
-
+            ViewBag.Message = "Sub-allotment entry successfully created";
             return PartialView("_PartialSubAllotment");
         }
         public ActionResult EditSubAllotment(String ID)
@@ -339,14 +339,26 @@ namespace BUDGET.Controllers
                        );
             return Json(fsa, JsonRequestBehavior.AllowGet);
         }
-
-        /*
+        
         [HttpPost]
         public ActionResult EditSubAllotment(FormCollection collection)
         {
-            
+            Int32 id = Convert.ToInt32(collection.Get("ID"));
+            var saahdr = db.saahdr.Where(p => p.ID == id).FirstOrDefault();
+            saahdr.prexc = collection.Get("prexcode");
+            saahdr.allotment = Session["allotment"].ToString();
+            saahdr.fundsource = Session["fundsource"].ToString();
+            saahdr.Title = collection.Get("source_title");
+            saahdr.TitleCode = collection.Get("title_code");
+            saahdr.allotment_for = collection.Get("description");
+            db.SaveChanges();
+
+            String data = collection.Get("data");
+            SaveSubAllotmentsAmount(saahdr.ID.ToString(), data);
+            ViewBag.Message = "Sub-allotment entry successfully edited";
+            return PartialView("_PartialSubAllotment");
         }
-        */
+        
         public ActionResult DeleteSubAllotment(String ID)
         {
             Int32 id = Convert.ToInt32(ID);
