@@ -244,7 +244,16 @@ namespace BUDGET.Controllers
             ViewBag.ors_obligation = id.ToString();
             return PartialView();
         }
-
+        [HttpPost]
+        public JsonResult DeleteUacs(FormCollection collection)
+        {
+            String ID = collection.Get("ID");
+            Int32 id = Convert.ToInt32(ID);
+            var remove_uacs = db.ors_expense_codes.Where(p => p.ID == id).FirstOrDefault();
+            db.ors_expense_codes.Remove(remove_uacs);
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult GetFundSource(String ID)
         {
             var ors_allotments = db.fsh.Where(p => p.allotment == ID).ToList();

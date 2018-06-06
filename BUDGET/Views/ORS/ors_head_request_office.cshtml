@@ -33,9 +33,10 @@
                         }
                     </table>
                     <div class="pagination">
-                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
-                        of @Model.PageCount
-                        @Html.PagedListPager(Model, page => Url.Action("ors_head_request_office", new { page }))
+                       @if (Model.PageCount >= 10)
+                       {
+                           @Html.PagedListPager(Model, page => Url.Action("ors_head_request_office", new { page }))
+                       }
                     </div>
                 </div>
             </div>
