@@ -8,20 +8,27 @@ using iTextSharp;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
 using BUDGET.DataHelpers;
+using BUDGET.Models;
+using System.Globalization;
 namespace BUDGET.Controllers
 {
     [OutputCache(Duration = 0)]
     public class ORSReportsController : Controller
     {
         ORSReporting rpt_ors = new ORSReporting();
+        BudgetDB db = new BudgetDB();
+        
         // GET: ORSReports
         [Route("print/ors/ps/{id}",Name = "print_ors_ps")]
         public ActionResult  PrintOrsPS(String id)
         {
-            Response.Buffer = false;
-            Response.ClearContent();
+            
+            Int32 ID = Convert.ToInt32(id);
+            var ors = db.ors.Where(p => p.ID == ID).FirstOrDefault();
+            
+            var ors_uacs = db.ors_expense_codes.Where(p => p.ors_obligation == ors.ID).ToList();
+           
             String filename = id + ".pdf";
-
             Document doc = new Document(PageSize.A4);
             try
             {
@@ -100,7 +107,7 @@ namespace BUDGET.Controllers
             table_row_2.WidthPercentage = 100f;
             table_row_2.SetWidths(tbt_row2_width);
             table_row_2.AddCell(new PdfPCell(new Paragraph("Payee", arial_font_10)) { HorizontalAlignment = Element.ALIGN_CENTER });
-            table_row_2.AddCell(new PdfPCell(new Paragraph("JONATAHN NIEL V. ERASMO", arial_font_10)));
+            table_row_2.AddCell(new PdfPCell(new Paragraph(ors.PAYEE, arial_font_10)));
             table_row_2.AddCell(new PdfPCell(new Paragraph("", arial_font_10)));
 
 
@@ -121,7 +128,7 @@ namespace BUDGET.Controllers
             table_row_4.WidthPercentage = 100f;
             table_row_4.SetWidths(tbt_row4_width);
             table_row_4.AddCell(new PdfPCell(new Paragraph("Address", arial_font_10)) { HorizontalAlignment = Element.ALIGN_CENTER });
-            table_row_4.AddCell(new PdfPCell(new Paragraph("Cebu", arial_font_10)));
+            table_row_4.AddCell(new PdfPCell(new Paragraph(ors.Adress, arial_font_10)));
             table_row_4.AddCell(new PdfPCell(new Paragraph()));
 
 
@@ -146,12 +153,22 @@ namespace BUDGET.Controllers
             table_row_6.WidthPercentage = 100f;
             table_row_6.SetWidths(tbt_ro6_width);
 
+            Double total_amt = 0.00;
+            String str_amt = "";
+            String uacs = "";
+            foreach(var u in ors_uacs)
+            {
+                uacs += u.uacs + "\n";
+                str_amt += u.amount.ToString("N", new CultureInfo("en-US")) + "\n";
+                total_amt += u.amount;
+            }
 
-            table_row_6.AddCell(new PdfPCell(new Paragraph("\nHRH-INSTITUTINAL CAPACITY", table_row_5_font)) { Border = 13, FixedHeight = 150f, HorizontalAlignment = Element.ALIGN_CENTER });
-            table_row_6.AddCell(new PdfPCell(new Paragraph("\nTO OBLIGATE PAYMENT FO MEALS (PACKED) FOR THE PRE SERVICE MEDICAL SCHOLARSHIP PROGRAM ORIENTATION, IN THE AMOUNT OF", table_row_5_font)) { Border = 13, FixedHeight = 150f, HorizontalAlignment = Element.ALIGN_LEFT });
+
+            table_row_6.AddCell(new PdfPCell(new Paragraph("\n" + ors.FundSource, table_row_5_font)) { Border = 13, FixedHeight = 150f, HorizontalAlignment = Element.ALIGN_CENTER });
+            table_row_6.AddCell(new PdfPCell(new Paragraph("\n" + ors.Particulars, table_row_5_font)) { Border = 13, FixedHeight = 150f, HorizontalAlignment = Element.ALIGN_LEFT });
             table_row_6.AddCell(new PdfPCell(new Paragraph("\n", table_row_5_font)) { Border = 13, FixedHeight = 150f, HorizontalAlignment = Element.ALIGN_CENTER });
-            table_row_6.AddCell(new PdfPCell(new Paragraph("\n", table_row_5_font)) { Border = 13, FixedHeight = 150f, HorizontalAlignment = Element.ALIGN_CENTER });
-            table_row_6.AddCell(new PdfPCell(new Paragraph("\n", table_row_5_font)) { Border = 13, FixedHeight = 150f, HorizontalAlignment = Element.ALIGN_CENTER });
+            table_row_6.AddCell(new PdfPCell(new Paragraph("\n" + uacs, table_row_5_font)) { Border = 13, FixedHeight = 150f, HorizontalAlignment = Element.ALIGN_CENTER });
+            table_row_6.AddCell(new PdfPCell(new Paragraph("\n" + str_amt, table_row_5_font)) { Border = 13, FixedHeight = 150f, HorizontalAlignment = Element.ALIGN_RIGHT });
             doc.Add(table_row_6);
 
 
@@ -169,14 +186,13 @@ namespace BUDGET.Controllers
             PdfPTable po_dv = new PdfPTable(2);
             po_dv.WidthPercentage = 100f;
 
-            po_dv.AddCell(new PdfPCell(new Paragraph("PO No.2018-007", table_row_5_font)) { Border = 0, HorizontalAlignment = Element.ALIGN_LEFT });
-            po_dv.AddCell(new PdfPCell(new Paragraph("PR No.B9-18-30", table_row_5_font)) { Border = 0, HorizontalAlignment = Element.ALIGN_LEFT });
+            po_dv.AddCell(new PdfPCell(new Paragraph("PO No." + ors.PO, table_row_5_font)) { Border = 0, HorizontalAlignment = Element.ALIGN_LEFT });
+            po_dv.AddCell(new PdfPCell(new Paragraph("PR No. " + ors.PR, table_row_5_font)) { Border = 0, HorizontalAlignment = Element.ALIGN_LEFT });
 
-            po_dv.AddCell(new PdfPCell(new Paragraph("DV No.232323", table_row_5_font)) { Border = 0, HorizontalAlignment = Element.ALIGN_LEFT });
-            po_dv.AddCell(new PdfPCell(new Paragraph("Total", table_row_5_font)) { Border = 0, HorizontalAlignment = Element.ALIGN_RIGHT });
+            po_dv.AddCell(new PdfPCell(new Paragraph("DV No. " + ors.DB, table_row_5_font)) { Border = 0, HorizontalAlignment = Element.ALIGN_LEFT });
+            po_dv.AddCell(new PdfPCell(new Phrase("Total", table_row_5_font)) { Border = 0, HorizontalAlignment = Element.ALIGN_RIGHT });
             // END OF REMOVE BORDER
             table_row_7.AddCell(new PdfPCell(po_dv) { Border = 14 });
-
 
 
 
@@ -190,7 +206,7 @@ namespace BUDGET.Controllers
             tbt_total_amt.WidthPercentage = 100f;
             tbt_total_amt.SetWidths(tbt_total_amt_width);
             tbt_total_amt.AddCell(new PdfPCell(new Paragraph("\n", table_row_5_font)) { Border = 0, HorizontalAlignment = Element.ALIGN_CENTER });
-            tbt_total_amt.AddCell(new PdfPCell(new Paragraph("10,000", table_row_5_font)) { HorizontalAlignment = Element.ALIGN_RIGHT });
+            tbt_total_amt.AddCell(new PdfPCell(new Paragraph(total_amt.ToString("N", new CultureInfo("en-US")), table_row_5_font)) { HorizontalAlignment = Element.ALIGN_RIGHT });
             table_row_7.AddCell(new PdfPCell(tbt_total_amt) { Border = 14 });
 
             doc.Add(table_row_7);
@@ -199,8 +215,6 @@ namespace BUDGET.Controllers
             PdfPTable table_row_8 = new PdfPTable(2);
             table_row_8.WidthPercentage = 100f;
             table_row_8.SetWidths(new float[] { 20, 20 });
-
-            
 
 
             PdfPTable table_row8_col1 = new PdfPTable(2);
@@ -357,20 +371,15 @@ namespace BUDGET.Controllers
 
             doc.Close();
 
+            var fileStream = new FileStream(Server.MapPath("~/rpt_ors/ps/" + filename),
+                                     FileMode.Open,
+                                     FileAccess.Read
+                                   );
+            var fsResult = new FileStreamResult(fileStream, "application/pdf");
 
-            var response_file = new FileStream(Server.MapPath("~/rpt_ors/ps/" + filename), FileMode.Open);
-            return File(response_file, "application/pdf", "ORS_PS.pdf");
+            return fsResult;
         }
 
-        [Route("print/ors/mooe/{id}",Name ="print_ors_mooe")]
-        public ActionResult PrintORSMOOE(String id)
-        {
-            Response.Buffer = false;
-            Response.ClearContent();
-            rpt_ors.GenerateORSMOOE(id);
-            String filename = id + ".pdf";
-            var response_file = new FileStream(Server.MapPath("/rpt_ors/mooe/" + filename), FileMode.Open);
-            return File(response_file, "application/pdf", "ORS_MOOE.pdf");
-        }
+        
     }
 }

@@ -409,6 +409,11 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\YearBudget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -589,6 +594,10 @@
     <None Include="Properties\PublishProfiles\budget.pubxml" />
     <Content Include="rpt_ors\mooe\3.pdf" />
     <Content Include="rpt_ors\ps\1003.pdf" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -689,7 +698,6 @@
     <Folder Include="Content\js\" />
     <Folder Include="Content\less\" />
     <Folder Include="Content\upload\" />
-    <Folder Include="obj\" />
     <Folder Include="rpt_saob\" />
     <Folder Include="Views\Json\" />
   </ItemGroup>
