@@ -15,6 +15,5 @@ namespace BUDGET.Models
         public String allotment_for { get; set; }
         public String TitleCode { get; set; }
         public String prexc { get; set; }
-        public String fundsource { get; set; }
     }
 }

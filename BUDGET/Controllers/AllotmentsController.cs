@@ -275,22 +275,20 @@ namespace BUDGET.Controllers
             return RedirectToAction("ORS");
         }
 
-        public ActionResult SubAllotment(String allotment, String fundsource)
+        public ActionResult SubAllotment(String allotment)
         {
             Session.Add("allotment", allotment);
-            Session.Add("fundsource", fundsource);
-            var saahdr = db.saahdr.Where(p => p.allotment == allotment && p.fundsource == fundsource).ToList();
+            var saahdr = db.saahdr.Where(p => p.allotment == allotment ).ToList();
 
             var details = (from alt in db.allotments
                            join fsh in db.fsh on alt.ID.ToString() equals fsh.allotment
-                           where fsh.ID.ToString() == fundsource
                            select new
                            {
                                Allotment = alt.Code,
-                               FundSource = fsh.Code
+                              
                            }).FirstOrDefault();
 
-            ViewBag.Header = "Sub-Allotment for " + details.FundSource + " in " + details.Allotment;
+            ViewBag.Header = "Sub-Allotment for " + details.Allotment;
             return View(saahdr);
         }
         public ActionResult CreateSubAllotment()
@@ -303,7 +301,6 @@ namespace BUDGET.Controllers
             SubAllotmentHeader saahdr = new SubAllotmentHeader();
             saahdr.prexc = collection.Get("prexcode");
             saahdr.allotment = Session["allotment"].ToString();
-            saahdr.fundsource = Session["fundsource"].ToString();
             saahdr.Title = collection.Get("source_title");
             saahdr.TitleCode = collection.Get("title_code");
             saahdr.allotment_for = collection.Get("description");
@@ -347,7 +344,6 @@ namespace BUDGET.Controllers
             var saahdr = db.saahdr.Where(p => p.ID == id).FirstOrDefault();
             saahdr.prexc = collection.Get("prexcode");
             saahdr.allotment = Session["allotment"].ToString();
-            saahdr.fundsource = Session["fundsource"].ToString();
             saahdr.Title = collection.Get("source_title");
             saahdr.TitleCode = collection.Get("title_code");
             saahdr.allotment_for = collection.Get("description");

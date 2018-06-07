@@ -242,7 +242,7 @@ namespace BUDGET.Controllers
 
             table_row8_col1_col2.AddCell(new PdfPCell(new Paragraph("Certified:", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))));
             table_row8_col1_col2.AddCell(new PdfPCell(new Paragraph("Charges to appropriatio/ allotment necessary, lawful and under my direct supervision; and supporting document valid, proper and legal", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { FixedHeight = 48 });
-            table_row8_col1_col2.AddCell(new PdfPCell(new Paragraph("Sigenature", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))));
+            table_row8_col1_col2.AddCell(new PdfPCell(new Paragraph("", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))));
             table_row8_col1_col2.AddCell(new PdfPCell(new Paragraph("GUY R. PEREZ, MD, RPT, FPSMS, MBAHA, CESE", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
             table_row8_col1_col2.AddCell(new PdfPCell(new Paragraph("OIC - Chief - Regulation, Liscensing, Enforcement Division", FontFactory.GetFont("Arial", 6, Font.BOLD, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, Padding = 2.5f });
             table_row8_col1_col2.AddCell(new PdfPCell(new Paragraph("\n")) { FixedHeight = 25 });
@@ -279,7 +279,7 @@ namespace BUDGET.Controllers
 
             table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("Certified:", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))));
             table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("Allotment available and obligated for the purpose/adjustment necesarry as indicated above", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { FixedHeight = 48 });
-            table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("Signature", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))));
+            table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))));
             table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("LEONORA A. ANIEL", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
             table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("BUDGET OFFICER III", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, Padding = 2.5f });
             table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("\n")) { FixedHeight = 25 });

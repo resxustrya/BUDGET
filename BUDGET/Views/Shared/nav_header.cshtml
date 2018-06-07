@@ -27,7 +27,7 @@
                         {
                             foreach(ORSMaster orsmaster in orslist)
                             {
-                                <li><a href="@Url.Action("OrsItem","Ors",new { ID = orsmaster.ID })"><i class="glyphicon glyphicon-chevron-right"> </i> @orsmaster.Title</a></li>
+                                <li><a href="@Url.Action("OrsItem","Ors",new { ID = orsmaster.ID })"><span class="glyphicon glyphicon-share-alt"></span> @orsmaster.Title</a></li>
                             }
                         }
                         else
@@ -46,7 +46,7 @@
                         @if (allotments.Count > 0) {
                             foreach (Allotments data in allotments)
                             {
-                                <li><a href="@Url.Action("View","Allotments",new { ID = data.ID })"><i class="glyphicon glyphicon-chevron-right"> </i> @data.Code</a></li>
+                                <li><a href="@Url.Action("View","Allotments",new { ID = data.ID })"><span class="glyphicon glyphicon-share-alt"></span> @data.Code</a></li>
                             }
                         } else {
                             <li><a href="javascript:void(0);" class="colo">No Allotments Created</a></li>
@@ -62,20 +62,20 @@
                     <ul class="dropdown-menu dropdown-alerts">
                         <li>
                             <a href="javascript:void(0);" id="gaa_upload" data-url="@Url.Action("UploadGaa","Home")">
-                                <i class="glyphicon glyphicon-chevron-right"> </i>
+                                <span class="glyphicon glyphicon-share-alt"></span>
                                 GAA Upload
                             </a>
                         </li>
                        
                         <li>
                             <a href="javascript:void(0);" id="uacs_upload" data-url="@Url.Action("Index","Uploads")">
-                                <i class="glyphicon glyphicon-chevron-right"> </i>
+                                <span class="glyphicon glyphicon-share-alt"></span>
                                 Upload UACS
                             </a>
                         </li>
                         <li>
                             <a href="javascript:void(0);" id="upload_prex" data-url="@Url.Action("UploadPrexc", "Uploads")">
-                                <i class="glyphicon glyphicon-chevron-right"> </i>
+                                <span class="glyphicon glyphicon-share-alt"></span>
                                 Upload PREXC
                             </a>
                         </li>
@@ -88,20 +88,22 @@
                         Budget Reports <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="javascript:void(0)" id="saob" data-url="@Url.Action("DownloadSaob","Reports")"><i class="glyphicon glyphicon-chevron-right"> </i> STATEMENT OF ALLOTMENT, OBLIGATIONS AND BALANCES </a></li>
+                        <li><a href="javascript:void(0)" id="saob" data-url="@Url.Action("DownloadSaob","Reports")"><span class="glyphicon glyphicon-share-alt"></span> STATEMENT OF ALLOTMENT, OBLIGATIONS AND BALANCES </a></li>
                     </ul>
                 </li>
+                
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <span class="glyphicon glyphicon-floppy-disk"> </span>
                         <b>Master Data <i class="fa fa-caret-down"> </i> </b>
                     </a>
                     <ul class="dropdown-menu dropdown-tasks">
-                        <li><a href="@Url.Action("ExpenseCodes","ExpenseCodes")"> <i class="glyphicon glyphicon-chevron-right"> </i> UACS Expense Codes</a></li>
-                        <li><a href="@Url.Action("Prexc","ExpenseCodes")"><i class="glyphicon glyphicon-chevron-right"> </i> Fund Source | PREXC</a></li>
-                        <li><a href="@Url.Action("Index","Allotments")"><i class="glyphicon glyphicon-chevron-right"> </i> @GlobalData.Year Budget Allotments</a></li>
-                        <li><a href="@Url.Action("ors_head_request_office","ORS")"><i class="glyphicon glyphicon-chevron-right"> </i> ORS Head Requesting Head</a></li>
-                        <li><a href="@Url.Action("Index","Budgets")"><i class="glyphicon glyphicon-chevron-right"> </i> Yearly Budget Reference</a></li>
+                        <li><a href="@Url.Action("ExpenseCodes","ExpenseCodes")"> <span class="glyphicon glyphicon-share-alt"></span> UACS Expense Codes</a></li>
+                        <li><a href="@Url.Action("Prexc","ExpenseCodes")"><span class="glyphicon glyphicon-share-alt"></span> Fund Source | PREXC</a></li>
+                        <li><a href="@Url.Action("Index","Allotments")"><span class="glyphicon glyphicon-share-alt"></span> @GlobalData.Year Budget Allotments</a></li>
+                        <li><a href="@Url.Action("Realignment","Allotments")"><span class="glyphicon glyphicon-share-alt"></span> Realignment</a></li>
+                        <li><a href="@Url.Action("ors_head_request_office","ORS")"><span class="glyphicon glyphicon-share-alt"></span> ORS Head Requesting Head</a></li>
+                        <li><a href="@Url.Action("Index","Budgets")"><span class="glyphicon glyphicon-share-alt"></span> Yearly Budget Reference</a></li>
                     </ul>
                 </li>
             }

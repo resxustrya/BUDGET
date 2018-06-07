@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "ORS | Personnel Services";
+    ViewBag.Title = "ORS";
 }
 
 <div id="table" data-get="@Url.RouteUrl("get_ors_ps")" data-save="@Url.RouteUrl("save_ors_ps")" data-delete="@Url.RouteUrl("delete_ors_ps")" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-allotments="@Url.Action("GetFundSource","ORS",new { ID = ViewBag.allotments })"></div>
