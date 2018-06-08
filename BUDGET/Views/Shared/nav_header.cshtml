@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNet.Identity
 @{ 
     BudgetDB db = new BudgetDB();
-    var allotments = (from list in db.allotments select list).ToList();
+    var allotments = (from list in db.allotments where list.year == GlobalData.Year select list).ToList();
     var orslist = (from list in db.orsmaster where list.Year == GlobalData.Year select list).ToList();
 }
 <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0;background-color:white;min-height: 20px;">
