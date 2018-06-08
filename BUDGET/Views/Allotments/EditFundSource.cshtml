@@ -34,7 +34,7 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <form action="@Url.Action("EditFundSource","Allotments")" method="post" id="source_form">
+                            <form action="@Url.Action("SaveEditFundSource","Allotments")" method="post" id="source_form">
                                 @Html.AntiForgeryToken()
                                 <table class="table">
                                     <tr>
@@ -147,12 +147,12 @@
        });
        $("#submit").click(function () {
            $("#loading_modal").modal('show');
-           var ID = $("input[name='ID']").val();
+           var ID = $("#table").data('id');
            var prexc = $("#prexcode").val();
            var source_title = $("#source_title").val();
            var description = $("input[name='description']").val();
+           var save_url = $("#source_form").attr('action');
            var title_code = $("#title_code").val();
-           var url = $("#source_form").prop('action');
            var tabledata = table.getData();
            var expense = [];
            for (var i = 0; i < tabledata.length; i++) {
@@ -170,13 +170,10 @@
                title_code : title_code,
                data: JSON.stringify(expense)
            };
-           setTimeout(function () {
-               $.post(url, data, function (res) {
-                   $(".panel-body").html(res);
-                   $("#loading_modal").modal('hide');
-               });
-           },1000);
-           
+           $.post(save_url, data, function (res) {
+               $(".panel-body").html(res);
+               $("#loading_modal").modal('hide');
+           });
        });
     </script>
 }

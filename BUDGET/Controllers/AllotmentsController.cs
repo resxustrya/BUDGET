@@ -120,7 +120,7 @@ namespace BUDGET.Controllers
             SaveFundSourceExpese(fsh.ID.ToString(), data);
             return PartialView("_Ok");
         }
-        
+        [HttpGet]
         public ActionResult EditFundSource(String id)
         {
             Int32 ID = Convert.ToInt32(id);
@@ -128,7 +128,7 @@ namespace BUDGET.Controllers
             return View(fsh);
         }
         [HttpPost]
-        public ActionResult EditFundSource(FormCollection collection)
+        public ActionResult SaveEditFundSource(FormCollection collection)
         {
             Int32 id = Convert.ToInt32(collection.Get("ID"));
             var fsh = db.fsh.Where(p => p.ID == id).FirstOrDefault();
