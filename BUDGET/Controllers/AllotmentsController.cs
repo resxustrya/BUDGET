@@ -366,7 +366,7 @@ namespace BUDGET.Controllers
 
             db.SaveChanges();
 
-            return RedirectToAction("SubAllotment", "Allotments", new { allotment = Session["allotment"].ToString(), fundsource = Session["fundsource"].ToString() });
+            return RedirectToAction("SubAllotment", "Allotments", new { allotment = Session["allotment"].ToString()});
         }
         public void SaveSubAllotmentsAmount(String saahdr, String data)
         {
@@ -408,5 +408,11 @@ namespace BUDGET.Controllers
                 }
             }
         }
+
+        public String Realignment(String fundsource)
+        {
+            return fundsource;
+        }
+
     }
 }

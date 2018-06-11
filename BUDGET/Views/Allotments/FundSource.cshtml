@@ -24,6 +24,7 @@
                             <th>Title</th>
                             <th>Title Code</th>
                             <th>Action</th>
+                            <th>Realignment</th>
                         </tr>
                         @foreach (FundSourceHdr data in Model)
                         {
@@ -34,7 +35,7 @@
                                     <a href="@Url.Action("EditFundSource","Allotments", new { id = data.ID })" class="btn btn-info"><span class="glyphicon glyphicon-edit"></span> Edit</a>
                                     <a href="@Url.Action("DeleteFundSource","Allotments",new { id = data.ID })" class="btn btn-danger" onclick="return confirm('Do you want to delete this budget');"><span class="glyphicon glyphicon-trash"></span> Delete</a>
                                 </td>
-                               
+                                <td><a href="@Url.Action("Realignment","Allotments", new { fundsource = data.ID })" class="btn btn-info"><span class="glyphicon glyphicon-transfer"></span> Funds Realignment</a></td>
                             </tr>
                         }
                     </table>

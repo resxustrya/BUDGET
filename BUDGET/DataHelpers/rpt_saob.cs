@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-
 using iTextSharp;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
@@ -18,14 +17,15 @@ namespace BUDGET.DataHelpers
         
         public void generate_saob()
         {
-            
-            Document doc = new Document(PageSize.LEGAL.Rotate());
+           
             try
             {
                 System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("/rpt_saob/saob.pdf"));
             }
             catch
             { }
+
+            Document doc = new Document(PageSize.LEGAL.Rotate());
             var output = new FileStream(System.Web.HttpContext.Current.Server.MapPath("/rpt_saob/saob.pdf"), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
             doc.Open();
