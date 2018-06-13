@@ -1,0 +1,121 @@
+﻿
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-success" style="margin-top:10px;">
+                <div class="panel-heading">
+                    <i class="glyphicon glyphicon-transfer"></i> FundSource Realignment
+                    <div class="pull-right">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                Actions
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right" role="menu">
+                                <li>
+                                    <a href="javascript:void(0)" id="submit">Save</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-save="@Url.RouteUrl("save_fundsource_expese")" data-fundsource="@ViewBag.fundsource"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+       var expense_codes = [];
+       var container = document.getElementById("table");
+       var table;
+       var valid = true;
+       var expense_url = $("#table").data('expense');
+       table = new Handsontable(container, {
+           startRows: 50,
+           startCols: 4,
+           manualColumnResize: true,
+           rowHeaders: true,
+           colWidths: [1, 200, 300, 300],
+           stretchH: 'all',
+           colHeaders: true,
+           contextMenu: ['row_above','row_below','remove_row','copy'],
+           manualColumnMove: true,
+           fillHandle: {
+               autoInsertRow: false,
+           },
+           colHeaders: ['ID','UACS','Title','Amount'],
+           columns : [
+              {}, { type: 'dropdown', source: expense_codes }, {}, {}
+           ],
+           cells: function (r, c, prop) {
+               var cellProperties = {};
+               if (c === 0) cellProperties.readOnly = true;
+               return cellProperties;
+           },
+           beforeRemoveRow: function (index, column) {
+               var items = this.getData();
+               var row_item = items[index];
+               var url = $("#table").data('delete');
+
+               var ps = {
+                   "ID": row_item[0]
+               };
+               var data = {
+                   data: JSON.stringify(ps)
+               };
+               $.post(url, data, function (resdata) {
+
+               });
+           }
+       });
+       $(document).ready(function () {
+           $.get(expense_url, function (expense_res) {
+               if (expense_res.length > 0) {
+                   for (var i = 0; i < expense_res.length; i++) {
+                       expense_codes[i] = expense_res[i]["Code"];
+                   }
+               }
+           });
+       });
+
+       $("#submit").click(function () {
+           $("#loading_modal").modal('show');
+           var prexc = $("#prexcode").val();
+           var source_title = $("#source_title").val();
+           var description = $("input[name='description']").val();
+           var title_code = $("#title_code").val();
+           var url = $("#source_form").prop('action');
+           var tabledata = table.getData();
+           var expense = [];
+           for (var i = 0; i < tabledata.length; i++)
+           {
+               expense[i] = {
+                   "ID": tabledata[i][0],
+                   "expense_code": tabledata[i][1],
+                   "amount" : tabledata[i][3]
+               };
+           }
+           var data = {
+               prexcode: prexc,
+               source_title: source_title,
+               description: description,
+               title_code : title_code,
+               data: JSON.stringify(expense)
+           };
+           setTimeout(function () {
+               $.post(url, data, function (res) {
+                   $(".panel-body").html(res);
+                   $("#loading_modal").modal('hide');
+               });
+           }, 1000);
+       });
+    </script>
+}

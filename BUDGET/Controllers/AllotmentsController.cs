@@ -409,9 +409,10 @@ namespace BUDGET.Controllers
             }
         }
 
-        public String Realignment(String fundsource)
+        public ActionResult Realignment(String fundsource)
         {
-            return fundsource;
+            ViewBag.fundsource = fundsource;
+            return View();
         }
 
     }

@@ -695,6 +695,7 @@
     <Content Include="Views\Allotments\CreateSubAllotment.cshtml" />
     <Content Include="Views\Allotments\EditSubAllotment.cshtml" />
     <Content Include="Views\Allotments\_PartialSubAllotment.cshtml" />
+    <Content Include="Views\Allotments\Realignment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
