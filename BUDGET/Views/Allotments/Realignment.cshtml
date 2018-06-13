@@ -23,6 +23,7 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-12">
+                            <h4>@ViewBag.Head</h4>
                             <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-save="@Url.RouteUrl("save_fundsource_expese")" data-fundsource="@ViewBag.fundsource"></div>
                         </div>
                     </div>
@@ -51,7 +52,7 @@
            fillHandle: {
                autoInsertRow: false,
            },
-           colHeaders: ['ID','UACS','Title','Amount'],
+           colHeaders: ['ID','Realignment','','Amount'],
            columns : [
               {}, { type: 'dropdown', source: expense_codes }, {}, {}
            ],

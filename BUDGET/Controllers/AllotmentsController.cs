@@ -411,6 +411,15 @@ namespace BUDGET.Controllers
 
         public ActionResult Realignment(String fundsource)
         {
+            var allotment = (from _fsh in db.fsh join _allotment in db.allotments on _fsh.allotment
+                             equals _allotment.ID.ToString()
+                             where _fsh.ID.ToString() == fundsource
+                             select new
+                             {
+                                 Allotment = _allotment.Title,
+                                 FundSource = _fsh.SourceTitle
+                             }).FirstOrDefault();
+            ViewBag.Head = allotment.Allotment + " " + allotment.FundSource;
             ViewBag.fundsource = fundsource;
             return View();
         }
