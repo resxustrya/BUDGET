@@ -486,7 +486,10 @@ namespace BUDGET.Controllers
                                 where _realignment.fundsource == fundSource
                                 select new
                                 {
-
+                                    uacs_from = _realignment.uacs_from,
+                                    before_amount = _fsa.amount,
+                                    uacs_to = _realignment.uacs_to,
+                                    realignment_amt = _realignment.amount
                                 });
             return Json(realignments, JsonRequestBehavior.AllowGet);
         }
