@@ -481,8 +481,14 @@ namespace BUDGET.Controllers
         }
         public JsonResult GetRealignments(String fundSource)
         {
-            //var realignments = (from realignment in db.realignment join   )
-            //return Json(realignments, JsonRequestBehavior.AllowGet);
+            var realignments = (from _realignment in db.realignment
+                                join _fsa in db.fsa on _realignment.uacs_from equals _fsa.expensecode
+                                where _realignment.fundsource == fundSource
+                                select new
+                                {
+
+                                });
+            return Json(realignments, JsonRequestBehavior.AllowGet);
         }
     }
 }
