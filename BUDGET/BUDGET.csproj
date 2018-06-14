@@ -390,6 +390,10 @@
     <Compile Include="Migrations\201806070519068_remove_col.Designer.cs">
       <DependentUpon>201806070519068_remove_col.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806140619057_realignment.cs" />
+    <Compile Include="Migrations\201806140619057_realignment.Designer.cs">
+      <DependentUpon>201806140619057_realignment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -833,6 +837,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806070519068_remove_col.resx">
       <DependentUpon>201806070519068_remove_col.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806140619057_realignment.resx">
+      <DependentUpon>201806140619057_realignment.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

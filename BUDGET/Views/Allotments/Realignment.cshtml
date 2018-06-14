@@ -24,7 +24,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <h4>@ViewBag.Head</h4>
-                            <div id="table" data-expense="@Url.Action("GetFundSourceUacs","Allotments",new { fundsource = ViewBag.fundsource })" data-save="@Url.RouteUrl("save_fundsource_expese")" data-fundsource="@ViewBag.fundsource"></div>
+                            <div id="table" data-expense="@Url.Action("GetFundSourceUacs","Allotments",new { fundsource = ViewBag.fundsource })" data-save="@Url.Action("SaveRealignment","Allotments")" data-fundsource="@ViewBag.fundsource"></div>
                         </div>
                     </div>
                 </div>
@@ -90,17 +90,17 @@
        $("#submit").click(function () {
            var tabledata = table.getData();
            var realignment = [];
-
            for (var i = 0; i < tabledata.length; i++) {
-               expense[i] = {
+               realignment[i] = {
                    "ID": tabledata[i][0],
-                   "expense_code": tabledata[i][1],
-                   "amount": tabledata[i][3]
+                   "uacs_from": tabledata[i][1],
+                   "uacs_to" : tabledata[i][4],
+                   "amount": tabledata[i][5]
                };
            }
            var data = {
                fundsource : $("#table").data('fundsource'),
-               data: JSON.stringify(expense)
+               data: JSON.stringify(realignment)
            };
            setTimeout(function () {
                var url = $("#table").data('save');

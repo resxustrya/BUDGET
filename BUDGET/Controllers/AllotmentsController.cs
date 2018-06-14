@@ -432,5 +432,56 @@ namespace BUDGET.Controllers
             }).ToList();
             return Json(_fsa, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult SaveRealignment(String fundsource, String data)
+        {
+            List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
+            Int32 id = 0;
+            foreach (Object s in list)
+            {
+                try
+                {
+                    dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
+                    id = Convert.ToInt32(sb.ID);
+                    var realignment = db.realignment.Where(p => p.ID == id && p.fundsource == fundsource).FirstOrDefault();
+                    realignment.uacs_from = sb.uacs_from;
+                    realignment.uacs_to = sb.uacs_to;
+                    realignment.amount = Convert.ToDouble(sb.amount);
+                    try { db.SaveChanges(); } catch { }
+                }
+                catch (Exception ex)
+                {
+                    dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
+                    try
+                    {
+                        if (sb.uacs_from != null && sb.uacs_to != null)
+                        {
+                            Object uacs_from_obj = sb.uacs_from;
+                            Object uacs_to_ojb = sb.uacs_to;
+
+                            String uacs_from = uacs_from_obj.ToString();
+                            String uacs_to = uacs_to_ojb.ToString();
+
+                            var realignment_exist = (from exist in db.realignment where exist.uacs_from == uacs_from && exist.uacs_to == uacs_to select exist).ToList();
+                            if (realignment_exist.Count <= 0)
+                            {
+                                Realignment realignment = new Realignment();
+                                realignment.uacs_from = uacs_from;
+                                realignment.uacs_to = uacs_to;
+                                realignment.amount = Convert.ToDouble(sb.amount);
+                                realignment.fundsource = fundsource;
+                                db.realignment.Add(realignment);
+                                try { db.SaveChanges(); } catch { }
+                            }
+                        }
+                    }
+                    catch { }
+                }
+            }
+            return GetRealignments(fundsource);
+        }
+        public JsonResult GetRealignments(String fundSource)
+        {
+
+        }
     }
 }

@@ -26,5 +26,6 @@ namespace BUDGET
         public DbSet<ors_head_request> ors_head_request { get; set; }
         public DbSet<SubAllotmentHeader> saahdr { get; set; }
         public DbSet<SubAllotmentAmounts> saaamount { get; set; }
+        public DbSet<Realignment> realignment { get; set; }
     }
 }
