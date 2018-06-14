@@ -481,7 +481,8 @@ namespace BUDGET.Controllers
         }
         public JsonResult GetRealignments(String fundSource)
         {
-
+            //var realignments = (from realignment in db.realignment join   )
+            //return Json(realignments, JsonRequestBehavior.AllowGet);
         }
     }
 }
