@@ -5,7 +5,7 @@ using System.Web;
 using System.Data;
 using System.Data.Entity;
 
-namespace BUDGET.Models
+namespace BUDGET
 {
     public class BudgetDB : DbContext
     {

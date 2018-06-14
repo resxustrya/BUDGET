@@ -407,6 +407,7 @@
     <Compile Include="Models\PersonnelServices.cs" />
     <Compile Include="Models\PREXC.cs" />
     <Compile Include="Models\ProductListViewModel.cs" />
+    <Compile Include="Models\Realignment.cs" />
     <Compile Include="Models\SubAllotmentAmounts.cs" />
     <Compile Include="Models\SubAllotmentHeader.cs" />
     <Compile Include="Models\UACS.cs" />

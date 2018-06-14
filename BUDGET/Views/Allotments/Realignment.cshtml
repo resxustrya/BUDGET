@@ -24,7 +24,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <h4>@ViewBag.Head</h4>
-                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-save="@Url.RouteUrl("save_fundsource_expese")" data-fundsource="@ViewBag.fundsource"></div>
+                            <div id="table" data-expense="@Url.Action("GetFundSourceUacs","Allotments",new { fundsource = ViewBag.fundsource })" data-save="@Url.RouteUrl("save_fundsource_expese")" data-fundsource="@ViewBag.fundsource"></div>
                         </div>
                     </div>
                 </div>
@@ -38,13 +38,13 @@
        var container = document.getElementById("table");
        var table;
        var valid = true;
-       var expense_url = $("#table").data('expense');
+      
        table = new Handsontable(container, {
            startRows: 50,
-           startCols: 4,
+           startCols: 6,
            manualColumnResize: true,
            rowHeaders: true,
-           colWidths: [1, 200, 300, 300],
+           colWidths: [1, 300, 300, 300,300,300],
            stretchH: 'all',
            colHeaders: true,
            contextMenu: ['row_above','row_below','remove_row','copy'],
@@ -52,9 +52,9 @@
            fillHandle: {
                autoInsertRow: false,
            },
-           colHeaders: ['ID','Realignment','','Amount'],
+           colHeaders: ['ID', 'Realignment From (UACS)','Amt. Before Any Realignment','Amt. After Realignments','Realign To (UACS)','Realignment Amt.'],
            columns : [
-              {}, { type: 'dropdown', source: expense_codes }, {}, {}
+              {}, { type: 'dropdown', source: expense_codes }, {}, {}, { type: 'dropdown', source: expense_codes }, {}
            ],
            cells: function (r, c, prop) {
                var cellProperties = {};
@@ -77,41 +77,33 @@
                });
            }
        });
+       var expense_url = $("#table").data('expense');
        $(document).ready(function () {
            $.get(expense_url, function (expense_res) {
                if (expense_res.length > 0) {
                    for (var i = 0; i < expense_res.length; i++) {
-                       expense_codes[i] = expense_res[i]["Code"];
+                       expense_codes[i] = expense_res[i]["uacs"];
                    }
                }
            });
        });
-
        $("#submit").click(function () {
-           $("#loading_modal").modal('show');
-           var prexc = $("#prexcode").val();
-           var source_title = $("#source_title").val();
-           var description = $("input[name='description']").val();
-           var title_code = $("#title_code").val();
-           var url = $("#source_form").prop('action');
            var tabledata = table.getData();
-           var expense = [];
-           for (var i = 0; i < tabledata.length; i++)
-           {
+           var realignment = [];
+
+           for (var i = 0; i < tabledata.length; i++) {
                expense[i] = {
                    "ID": tabledata[i][0],
                    "expense_code": tabledata[i][1],
-                   "amount" : tabledata[i][3]
+                   "amount": tabledata[i][3]
                };
            }
            var data = {
-               prexcode: prexc,
-               source_title: source_title,
-               description: description,
-               title_code : title_code,
+               fundsource : $("#table").data('fundsource'),
                data: JSON.stringify(expense)
            };
            setTimeout(function () {
+               var url = $("#table").data('save');
                $.post(url, data, function (res) {
                    $(".panel-body").html(res);
                    $("#loading_modal").modal('hide');

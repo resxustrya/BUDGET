@@ -5,7 +5,7 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BUDGET.Models
+namespace BUDGET
 {
     public class ORS_EXPENSE_CODES
     {

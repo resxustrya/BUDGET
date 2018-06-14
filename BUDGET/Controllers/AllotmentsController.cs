@@ -416,13 +416,21 @@ namespace BUDGET.Controllers
                              where _fsh.ID.ToString() == fundsource
                              select new
                              {
-                                 Allotment = _allotment.Title,
-                                 FundSource = _fsh.SourceTitle
+                                 Allotment = _allotment.Code,
+                                 FundSource = _fsh.Code
                              }).FirstOrDefault();
+
             ViewBag.Head = allotment.Allotment + " " + allotment.FundSource;
             ViewBag.fundsource = fundsource;
             return View();
         }
-
+        public JsonResult GetFundSourceUacs(String fundsource)
+        {
+            var _fsa = (from list in db.fsa where list.fundsource == fundsource select new
+            {
+                uacs = list.expensecode
+            }).ToList();
+            return Json(_fsa, JsonRequestBehavior.AllowGet);
+        }
     }
 }

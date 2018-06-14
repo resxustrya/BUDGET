@@ -7,12 +7,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BUDGET
 {
-    public class SubAllotmentAmounts
+    public class Realignment
     {
         [Key]
         public Int32 ID { get; set; }
-        public String expensecode { get; set; }
+        public String uacs_from { get; set; }
+        public String uacs_to { get; set; }
         public Double amount { get; set; }
-        public String saahdr { get; set; }
+        public String fundsource { get; set; }
     }
 }

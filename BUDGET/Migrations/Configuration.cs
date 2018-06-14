@@ -5,14 +5,14 @@ namespace BUDGET.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<BUDGET.Models.BudgetDB>
+    internal sealed class Configuration : DbMigrationsConfiguration<BudgetDB>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(BUDGET.Models.BudgetDB context)
+        protected override void Seed(BudgetDB context)
         {
             //  This method will be called after migrating to the latest version.
 

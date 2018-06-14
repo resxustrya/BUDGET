@@ -4,7 +4,8 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-namespace BUDGET.Models
+
+namespace BUDGET
 {
     public class SubAllotmentHeader
     {
