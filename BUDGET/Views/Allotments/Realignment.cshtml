@@ -24,7 +24,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <h4>@ViewBag.Head</h4>
-                            <div id="table" data-expense="@Url.Action("GetFundSourceUacs","Allotments",new { fundsource = ViewBag.fundsource })" data-save="@Url.Action("SaveRealignment","Allotments")" data-fundsource="@ViewBag.fundsource"></div>
+                            <div id="table" data-expense="@Url.Action("GetFundSourceUacs","Allotments",new { fundsource = ViewBag.fundsource })" data-save="@Url.Action("SaveRealignment","Allotments")" data-fundsource="@ViewBag.fundsource" data-get_realignments="@Url.Action("GetRealignments","Allotments", new { fundsource = ViewBag.fundsource })"></div>
                         </div>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
            startCols: 6,
            manualColumnResize: true,
            rowHeaders: true,
-           colWidths: [1, 300, 300, 300,300,300],
+           colWidths: [1, 300,300,300,300,300],
            stretchH: 'all',
            colHeaders: true,
            contextMenu: ['row_above','row_below','remove_row','copy'],
@@ -52,9 +52,9 @@
            fillHandle: {
                autoInsertRow: false,
            },
-           colHeaders: ['ID', 'Realignment From (UACS)','Amt. Before Any Realignment','Amt. After Realignments','Realign To (UACS)','Realignment Amt.'],
+           colHeaders: ['ID', 'Realignment From (UACS)','Title','Realign To (UACS)','Title','Realignment Amt.'],
            columns : [
-              {}, { type: 'dropdown', source: expense_codes }, {}, {}, { type: 'dropdown', source: expense_codes }, {}
+              {}, { type: 'dropdown', source: expense_codes },{},{ type: 'dropdown', source: expense_codes },{}, {}
            ],
            cells: function (r, c, prop) {
                var cellProperties = {};
@@ -77,7 +77,9 @@
                });
            }
        });
+
        var expense_url = $("#table").data('expense');
+       var realignment_url = $("#table").data('get_realignments')
        $(document).ready(function () {
            $.get(expense_url, function (expense_res) {
                if (expense_res.length > 0) {
@@ -86,7 +88,17 @@
                    }
                }
            });
+           $.get(realignment_url, function (realignments) {
+               if (realignments.length > 0) {
+                   var tabledata = [];
+                   for (var i = 0; i < realignments.length; i++) {
+                       tabledata[i] = new Array(realignments[i]["ID"], realignments[i]["uacs_from"],realignments[i]["uacs_from_title"], realignments[i]["uacs_to"],realignments[i]["uacs_to_title"],realignments[i]["realignment_amt"]);
+                   }
+                   table.loadData(tabledata);
+               }
+           });
        });
+
        $("#submit").click(function () {
            var tabledata = table.getData();
            var realignment = [];

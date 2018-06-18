@@ -482,15 +482,18 @@ namespace BUDGET.Controllers
         public JsonResult GetRealignments(String fundSource)
         {
             var realignments = (from _realignment in db.realignment
-                                join _fsa in db.fsa on _realignment.uacs_from equals _fsa.expensecode
-                                where _realignment.fundsource == fundSource
+                                join _fsa in db.fsa on _realignment.fundsource equals _fsa.fundsource
+                                where _realignment.fundsource == fundSource && _realignment.uacs_from == _fsa.expensecode
                                 select new
                                 {
+                                    ID = _realignment.ID,
                                     uacs_from = _realignment.uacs_from,
-                                    before_amount = _fsa.amount,
+                                    uacs_from_title = (from uacs in db.uacs where uacs.Code == _realignment.uacs_from select uacs.Title).FirstOrDefault(),
                                     uacs_to = _realignment.uacs_to,
+                                    uacs_to_title = (from uacs in db.uacs where uacs.Code == _realignment.uacs_to select uacs.Title).FirstOrDefault(),
                                     realignment_amt = _realignment.amount
-                                });
+                                }).ToList();
+
             return Json(realignments, JsonRequestBehavior.AllowGet);
         }
     }
