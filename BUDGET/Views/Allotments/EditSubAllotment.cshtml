@@ -12,7 +12,7 @@
         <div class="col-md-12">
             <div class="panel panel-info" style="margin-top:10px;">
                 <div class="panel-heading">
-                    <i class="fa fa-bar-chart-o fa-fw"></i> Create Sub-Allotment
+                    <i class="fa fa-bar-chart-o fa-fw"></i> Edit Sub-Allotment
                     <div class="pull-right">
                         <div class="btn-group">
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -66,7 +66,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-get="@Url.RouteUrl("get_saaamt")" data-saaamt="@Model.ID"></div>
+                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-get="@Url.RouteUrl("get_saaamt")" data-saaamt="@Model.ID" data-delete="@Url.Action("DeleteSaaAmt","Allotments")"></div>
                         </div>
                     </div>
                 </div>

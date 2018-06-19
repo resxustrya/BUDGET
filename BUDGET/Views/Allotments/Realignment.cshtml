@@ -24,7 +24,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <h4>@ViewBag.Head</h4>
-                            <div id="table" data-expense="@Url.Action("GetFundSourceUacs","Allotments",new { fundsource = ViewBag.fundsource })" data-save="@Url.Action("SaveRealignment","Allotments")" data-fundsource="@ViewBag.fundsource" data-get_realignments="@Url.Action("GetRealignments","Allotments", new { fundsource = ViewBag.fundsource })"></div>
+                            <div id="table" data-expense="@Url.Action("GetFundSourceUacs","Allotments",new { fundsource = ViewBag.fundsource })" data-save="@Url.Action("SaveRealignment","Allotments")" data-fundsource="@ViewBag.fundsource" data-get_realignments="@Url.Action("GetRealignments","Allotments", new { fundsource = ViewBag.fundsource })" data-delete="@Url.Action("DeleteRealignment","Allotments")"></div>
                         </div>
                     </div>
                 </div>
@@ -106,7 +106,7 @@
                realignment[i] = {
                    "ID": tabledata[i][0],
                    "uacs_from": tabledata[i][1],
-                   "uacs_to" : tabledata[i][4],
+                   "uacs_to" : tabledata[i][3],
                    "amount": tabledata[i][5]
                };
            }
@@ -116,9 +116,14 @@
            };
            setTimeout(function () {
                var url = $("#table").data('save');
-               $.post(url, data, function (res) {
-                   $(".panel-body").html(res);
-                   $("#loading_modal").modal('hide');
+               $.post(url, data, function (realignments) {
+                   if (realignments.length > 0) {
+                       var tabledata = [];
+                       for (var i = 0; i < realignments.length; i++) {
+                           tabledata[i] = new Array(realignments[i]["ID"], realignments[i]["uacs_from"], realignments[i]["uacs_from_title"], realignments[i]["uacs_to"], realignments[i]["uacs_to_title"], realignments[i]["realignment_amt"]);
+                       }
+                       table.loadData(tabledata);
+                   }
                });
            }, 1000);
        });

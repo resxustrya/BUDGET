@@ -332,8 +332,7 @@ namespace BUDGET.Controllers
                            ExpenseCode = list.expensecode,
                            Title = expensecode.Title,
                            Amount = list.amount
-                       }
-                       );
+                       }).ToList();
             return Json(fsa, JsonRequestBehavior.AllowGet);
         }
         
@@ -354,7 +353,24 @@ namespace BUDGET.Controllers
             ViewBag.Message = "Sub-allotment entry successfully edited";
             return PartialView("_PartialSubAllotment");
         }
-        
+        public JsonResult DeleteSaaAmt(String data)
+        {
+            try
+            {
+                dynamic obj = JsonConvert.DeserializeObject<dynamic>(data);
+                int ID = Convert.ToInt32(obj.ID);
+
+                var saa_amt = db.saaamount.Where(p => p.ID == ID).FirstOrDefault();
+                db.saaamount.Remove(saa_amt);
+                db.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult DeleteSubAllotment(String ID)
         {
             Int32 id = Convert.ToInt32(ID);
@@ -464,6 +480,7 @@ namespace BUDGET.Controllers
                             var realignment_exist = (from exist in db.realignment where exist.uacs_from == uacs_from && exist.uacs_to == uacs_to select exist).ToList();
                             if (realignment_exist.Count <= 0)
                             {
+                                
                                 Realignment realignment = new Realignment();
                                 realignment.uacs_from = uacs_from;
                                 realignment.uacs_to = uacs_to;
@@ -495,6 +512,24 @@ namespace BUDGET.Controllers
                                 }).ToList();
 
             return Json(realignments, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public JsonResult DeleteRealignment(String data)
+        {
+            try
+            {
+                dynamic obj = JsonConvert.DeserializeObject<dynamic>(data);
+                int ID = Convert.ToInt32(obj.ID);
+
+                var _realignment = db.realignment.Where(p => p.ID == ID).FirstOrDefault();
+                db.realignment.Remove(_realignment);
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
 }
