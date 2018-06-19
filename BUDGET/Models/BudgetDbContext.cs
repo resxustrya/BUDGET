@@ -24,8 +24,6 @@ namespace BUDGET
         public DbSet<FundSourceAmount> fsa { get; set; }
         public DbSet<ORS_EXPENSE_CODES> ors_expense_codes { get; set; }
         public DbSet<ors_head_request> ors_head_request { get; set; }
-        public DbSet<SubAllotmentHeader> saahdr { get; set; }
-        public DbSet<SubAllotmentAmounts> saaamount { get; set; }
         public DbSet<Realignment> realignment { get; set; }
     }
 }

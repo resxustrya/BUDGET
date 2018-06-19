@@ -146,7 +146,7 @@ namespace BUDGET.DataHelpers
 
 
                 }
-
+                /*
                 var _sub_allotments = db.saahdr.Where(p => p.allotment == _allotments.ID.ToString()).ToList();
                 if(_sub_allotments.Count > 0)
                 {
@@ -197,6 +197,7 @@ namespace BUDGET.DataHelpers
                         _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
                         _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
 
+
                         var saa_amt = (from list in db.saaamount
                                        join expensecode
                                         in db.uacs on list.expensecode equals expensecode.Code
@@ -225,7 +226,7 @@ namespace BUDGET.DataHelpers
                         }
 
                     }
-                }
+                }*/
             }
 
             doc.Add(_thead);

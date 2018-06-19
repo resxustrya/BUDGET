@@ -394,6 +394,10 @@
     <Compile Include="Migrations\201806140619057_realignment.Designer.cs">
       <DependentUpon>201806140619057_realignment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806190654240_remove_table.cs" />
+    <Compile Include="Migrations\201806190654240_remove_table.Designer.cs">
+      <DependentUpon>201806190654240_remove_table.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -412,8 +416,6 @@
     <Compile Include="Models\PREXC.cs" />
     <Compile Include="Models\ProductListViewModel.cs" />
     <Compile Include="Models\Realignment.cs" />
-    <Compile Include="Models\SubAllotmentAmounts.cs" />
-    <Compile Include="Models\SubAllotmentHeader.cs" />
     <Compile Include="Models\UACS.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\YearBudget.cs" />
@@ -840,6 +842,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806140619057_realignment.resx">
       <DependentUpon>201806140619057_realignment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806190654240_remove_table.resx">
+      <DependentUpon>201806190654240_remove_table.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

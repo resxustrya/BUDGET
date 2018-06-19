@@ -16,5 +16,6 @@ namespace BUDGET
         public String SourceTitle { get; set; }
         public String allotment { get; set; }
         public String desc { get; set; }
+        public String type { get; set; }
     }
 }
