@@ -354,37 +354,8 @@ namespace BUDGET.Controllers
             ViewBag.Message = "Sub-allotment entry successfully edited";
             return PartialView("_PartialSubAllotment");
         }
-        public JsonResult DeleteSaaAmt(String data)
-        {
-            try
-            {
-                dynamic obj = JsonConvert.DeserializeObject<dynamic>(data);
-                int ID = Convert.ToInt32(obj.ID);
 
-                var saa_amt = db.fsa.Where(p => p.ID == ID).FirstOrDefault();
-                db.fsa.Remove(saa_amt);
-                db.SaveChanges();
 
-            }
-            catch (Exception ex)
-            {
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-        public ActionResult DeleteSubAllotment(String ID)
-        {
-            Int32 id = Convert.ToInt32(ID);
-            var fsh = db.fsh.Where(p => p.ID == id && p.type == "SUB").FirstOrDefault();
-            db.fsh.Remove(fsh);
-
-            var fsa = db.fsa.Where(p => p.fundsource == id.ToString()).ToList();
-            db.fsa.RemoveRange(fsa);
-
-            db.SaveChanges();
-
-            return RedirectToAction("SubAllotment", "Allotments", new { allotment = Session["allotment"].ToString()});
-        }
         public void SaveSubAllotmentsAmount(String fsh, String data)
         {
             List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
@@ -425,6 +396,39 @@ namespace BUDGET.Controllers
                 }
             }
         }
+
+        public JsonResult DeleteSaaAmt(String data)
+        {
+            try
+            {
+                dynamic obj = JsonConvert.DeserializeObject<dynamic>(data);
+                int ID = Convert.ToInt32(obj.ID);
+
+                var saa_amt = db.fsa.Where(p => p.ID == ID).FirstOrDefault();
+                db.fsa.Remove(saa_amt);
+                db.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult DeleteSubAllotment(String ID)
+        {
+            Int32 id = Convert.ToInt32(ID);
+            var fsh = db.fsh.Where(p => p.ID == id && p.type == "SUB").FirstOrDefault();
+            db.fsh.Remove(fsh);
+
+            var fsa = db.fsa.Where(p => p.fundsource == id.ToString()).ToList();
+            db.fsa.RemoveRange(fsa);
+
+            db.SaveChanges();
+
+            return RedirectToAction("SubAllotment", "Allotments", new { allotment = Session["allotment"].ToString()});
+        }
+        
 
         public ActionResult Realignment(String fundsource)
         {

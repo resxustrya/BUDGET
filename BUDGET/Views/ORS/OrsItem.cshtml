@@ -3,11 +3,12 @@
     ViewBag.Title = "ORS";
 }
 
-<div id="table" data-get="@Url.RouteUrl("get_ors_ps")" data-save="@Url.RouteUrl("save_ors_ps")" data-delete="@Url.RouteUrl("delete_ors_ps")" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-allotments="@Url.Action("GetFundSource","ORS",new { ID = ViewBag.allotments })"></div>
+<div id="table" data-get="@Url.RouteUrl("get_ors_ps")" data-save="@Url.RouteUrl("save_ors_ps")" data-delete="@Url.RouteUrl("delete_ors_ps")" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-allotments="@Url.Action("GetFundSource","ORS",new { ID = ViewBag.allotments })" data-requesting_head="@Url.Action("GetHeadRequestingHeads","Ors")"></div>
 
 @section scripts {
     <script>
         var expense_codes = [];
+        var head_requesting = [];
         var fund_source = [];
         var container = document.getElementById("table");
         var table;
@@ -17,10 +18,10 @@
         //35 cols
        table = new Handsontable(container, {
            startRows: 50,
-           startCols: 23,
+           startCols: 24,
            manualColumnResize: true,
            rowHeaders: true,
-           colWidths: [1,1,100, 200, 200, 200, 300, 300, 700, 100, 100, 200,200, 100, 100, 100, 100, 300,200,200,200,200,200],
+           colWidths: [1,1,100, 200, 200, 200, 300, 300, 700, 100, 100, 200,200, 200,100, 100, 100, 100, 300,200,200,200,200,200],
            colHeaders: true,
            filters :true,
             dropdownMenu: true,
@@ -67,7 +68,7 @@
            fillHandle: {
                autoInsertRow: false,
            },
-           colHeaders: ['<b>ID</b>','<b>ROW#</b>', '<b>DATE</b/>', '<b>DV</b>', '<b>PO#</b>', '<b>PR#</b>', '<b>PAYEE</b>', '<b>ADDRESS</b>', '<b>PARTICULARS</b>', '<b>ORS NO</b>', '<b>LINE #</b>', '<b>FUND SOURCE</b>', '<b>GROSS</b>','<b>AE</b>', '<b>AF</b>', '<b>AG</b>', '<b>AH</b>', '<b>AI</b>','<b>CREATED BY</b>','<b>Date Received</b>','<b>Time Received</b>','<b>Date Released</b>','<b>Time Released</b>'],
+           colHeaders: ['<b>ID</b>','<b>ROW#</b>', '<b>DATE</b/>', '<b>DV</b>', '<b>PO#</b>', '<b>PR#</b>', '<b>PAYEE</b>', '<b>ADDRESS</b>', '<b>PARTICULARS</b>', '<b>ORS NO</b>', '<b>LINE #</b>', '<b>FUND SOURCE</b>', '<b>GROSS</b>','<b>Requesting Office Head</b>','<b>AE</b>', '<b>AF</b>', '<b>AG</b>', '<b>AH</b>', '<b>AI</b>','<b>CREATED BY</b>','<b>Date Received</b>','<b>Time Received</b>','<b>Date Released</b>','<b>Time Released</b>'],
            columns: [
                {},
                {},{
@@ -75,13 +76,16 @@
                    dateFormat: 'MM/DD/YYYY',
                    correctFormat: true,
                    defaultDate: Date.now()
-               }, {}, {}, {}, {}, {}, {}, {}, {},
+               }, {}, {}, {}, {}, {}, {}, {},
                {
                    type : 'dropdown',
                    source : fund_source
+               },{},{},
+               {
+                   type :'dropdown',
+                   source: head_requesting
                },
-               {},
-                {}, {}, {}, {}, {}, {},
+                {}, {}, {}, {}, {},{},
                {
                    type : 'date',
                    dateFormat : 'MM/DD/YYYY',
@@ -137,13 +141,14 @@
        $(document).ready(function () {
            var url = $("#table").data('get');
            var allotments_url = $("#table").data('allotments');
+           var url_head_requesting = $("#table").data('requesting_head');
            $.get(url, function (resdata) {
                if (resdata.length > 0) {
                    var tabledata = [];
                    var total;
 
                    for (var i = 0; i < resdata.length; i++) {
-                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
+                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']),resdata[i]['hear_requesting_office'], resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
                    }
                    table.loadData(tabledata);
                }
@@ -159,6 +164,14 @@
                if (response.length > 0) {
                    for (var i = 0; i < response.length; i++) {
                        fund_source[i] = response[i]["Code"];
+                   }
+               }
+           });
+           
+           $.get(url_head_requesting, function (response) {
+               if (response.length > 0) {
+                   for (var i = 0; i < response.length; i++) {
+                       head_requesting[i] = response[i]["head"];
                    }
                }
            });
@@ -190,6 +203,7 @@
                                data[i][11] = data[i][11] ? data[i][11] : null;
                                data[i][12] = data[i][12] ? data[i][12] : null;
                                data[i][13] = data[i][13] ? data[i][13] : null;
+                               data[i][13] = data[i][13] ? data[i][13] : null;
                                data[i][14] = data[i][14] ? data[i][14] : null;
                                data[i][15] = data[i][15] ? data[i][15] : null;
                                data[i][16] = data[i][16] ? data[i][16] : null;
@@ -213,15 +227,16 @@
                                    "ORS_NO": data[i][9],
                                    "FundSource": data[i][11],
                                    "Gross": data[i][12],
-                                   "AE": data[i][13],
-                                   "AF": data[i][14],
-                                   "AG": data[i][15],
-                                   "AH": data[i][16],
-                                   "AI": data[i][17],
-                                   "DateReceived" : data[i][19],
-                                   "TimeReceived": data[i][20],
-                                   "DateReleased": data[i][21],
-                                   "TimeReleased": data[i][22]
+                                   "head_requesting" : data[i][13],
+                                   "AE": data[i][14],
+                                   "AF": data[i][15],
+                                   "AG": data[i][16],
+                                   "AH": data[i][17],
+                                   "AI": data[i][18],
+                                   "DateReceived" : data[i][20],
+                                   "TimeReceived": data[i][21],
+                                   "DateReleased": data[i][22],
+                                   "TimeReleased": data[i][23]
                                }
                            }
                            console.log(orsps);
@@ -235,7 +250,7 @@
                                     var total;
 
                                     for (var i = 0; i < resdata.length; i++) {
-                                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
+                                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['hear_requesting_office'], resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
                                     }
                                     table.loadData(tabledata);
                                 }

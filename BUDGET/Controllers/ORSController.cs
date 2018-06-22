@@ -68,7 +68,8 @@ namespace BUDGET.Controllers
                           DateReceived = list.DateReceived,
                           TimeReceived = list.TimeReceived,
                           DateReleased = list.DateReleased,
-                          TimeReleased = list.TimeReleased
+                          TimeReleased = list.TimeReleased,
+                          hear_requesting_office = list.head_requesting_office
                       }).ToList();
             return Json(orsps, JsonRequestBehavior.AllowGet);
         }
@@ -78,6 +79,15 @@ namespace BUDGET.Controllers
             Double total = 0.00;
             total = (from ors_uacs in db.ors_expense_codes where ors_uacs.ors_obligation == id select ors_uacs.amount).Sum();
             return total;
+        }
+        public JsonResult GetHeadRequestingHeads()
+        {
+            var head_requesting_head = (from list in db.ors_head_request
+                                        select new
+                                        {
+                                            head = list.Name
+                                        }).ToList();
+            return Json(head_requesting_head, JsonRequestBehavior.AllowGet);
         }
         [Route("save/ors/ps",Name = "save_ors_ps")]
         public JsonResult SaveORPS(String data)
@@ -112,7 +122,7 @@ namespace BUDGET.Controllers
                     ors.TimeReceived = sb.TimeReceived;
                     ors.DateReleased = sb.DateReleased;
                     ors.TimeReleased = sb.TimeReleased;
-               
+                    ors.head_requesting_office = sb.head_requesting;
 
                     try { db.SaveChanges(); } catch { }
                 }
@@ -147,6 +157,7 @@ namespace BUDGET.Controllers
                             ors.TimeReleased = sb.TimeReleased;
                             ors.Date_Added = DateTime.Now.Date;
                             ors.dateadded = DateTime.Now.Date.ToString();
+                            ors.head_requesting_office = sb.head_requesting;
                             db.ors.Add(ors);
                             try { db.SaveChanges(); } catch { }
                         }

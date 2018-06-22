@@ -398,6 +398,10 @@
     <Compile Include="Migrations\201806190654240_remove_table.Designer.cs">
       <DependentUpon>201806190654240_remove_table.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806220742500_added_col.cs" />
+    <Compile Include="Migrations\201806220742500_added_col.Designer.cs">
+      <DependentUpon>201806220742500_added_col.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -845,6 +849,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806190654240_remove_table.resx">
       <DependentUpon>201806190654240_remove_table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806220742500_added_col.resx">
+      <DependentUpon>201806220742500_added_col.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
