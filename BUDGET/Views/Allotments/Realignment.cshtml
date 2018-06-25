@@ -32,6 +32,9 @@
         </div>
     </div>
 </div>
+@section footer{
+    @Html.Partial("footer")
+}
 @section scripts {
     <script>
        var expense_codes = [];
@@ -111,21 +114,21 @@
                };
            }
            var data = {
-               fundsource : $("#table").data('fundsource'),
+               fundsource: $("#table").data('fundsource'),
                data: JSON.stringify(realignment)
            };
-           setTimeout(function () {
-               var url = $("#table").data('save');
-               $.post(url, data, function (realignments) {
-                   if (realignments.length > 0) {
-                       var tabledata = [];
-                       for (var i = 0; i < realignments.length; i++) {
-                           tabledata[i] = new Array(realignments[i]["ID"], realignments[i]["uacs_from"], realignments[i]["uacs_from_title"], realignments[i]["uacs_to"], realignments[i]["uacs_to_title"], realignments[i]["realignment_amt"]);
-                       }
-                       table.loadData(tabledata);
-                   }
-               });
-           }, 1000);
+           
+            var url = $("#table").data('save');
+            $.post(url, data, function (realignments) {
+                if (realignments.length > 0) {
+                    var tabledata = [];
+                    for (var i = 0; i < realignments.length; i++) {
+                        tabledata[i] = new Array(realignments[i]["ID"], realignments[i]["uacs_from"], realignments[i]["uacs_from_title"], realignments[i]["uacs_to"], realignments[i]["uacs_to_title"], realignments[i]["realignment_amt"]);
+                    }
+                    table.loadData(tabledata);
+                }
+            });
+           
        });
     </script>
 }

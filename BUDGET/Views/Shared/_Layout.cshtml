@@ -46,7 +46,7 @@
     @RenderBody()
     
     @Html.Partial("modals")
-    @Html.Partial("footer")
+    @RenderSection("footer",required: false)
     <!-- Begin page content -->
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
