@@ -130,6 +130,9 @@
 
                    $.post(url, data, function (resdata) {
                    });
+                   return true;
+               } else {
+                   return false;
                }
            },
            afterValidate: function (isValid, value, row, prop, source) {
@@ -243,7 +246,6 @@
                                    "TimeReleased": data[i][23]
                                }
                            }
-                           console.log(orsps);
                            var data = {
                                data: JSON.stringify(orsps)
                            };
