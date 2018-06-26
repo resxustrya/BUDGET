@@ -9,12 +9,21 @@
         <div class="col-md-12">
             <h2>@ViewBag.Header</h2>
             <div class="panel panel-default">
-                <div class="panel-heading"><a href="@Url.Action("CreateSubAllotment","Allotments")" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span> Add new Sub-Allotment</a></div>
+                <div class="panel-heading">
+                    <a href="@Url.Action("CreateSubAllotment","Allotments")" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span> Add new Sub-Allotment</a>
+                    <div class="pull-right">
+                        <div class="btn-group">
+                            <a href="@Url.Action("Index","Allotments", new { id = GlobalData.allotment })" class="btn btn-warning">
+                                <span class="glyphicon glyphicon-arrow-left"></span> Back
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 <div class="panel-body">
                     <table class="table">
                         <tr>
                             <th>Title</th>
-                            <th>Code</th>
+                            <th>PREXC Code</th>
                             <th>Action</th>
                         </tr>
                         @foreach(FundSourceHdr fsh in Model)

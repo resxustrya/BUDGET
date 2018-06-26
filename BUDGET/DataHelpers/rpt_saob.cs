@@ -28,22 +28,23 @@ namespace BUDGET.DataHelpers
             Document doc = new Document(PageSize.LEGAL.Rotate());
             var output = new FileStream(System.Web.HttpContext.Current.Server.MapPath("/rpt_saob/saob.pdf"), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
+            PdfPtableEvents events = new PdfPtableEvents();
+            writer.PageEvent = events;
+
             doc.Open();
-
-            doc.Add( new Paragraph("DEPARTMENT OF HEALTH - REGIONAL OFFICE VII", new Font(Font.FontFamily.HELVETICA, 11f, Font.BOLD)) { Alignment = Element.ALIGN_CENTER });
-            doc.Add(new Paragraph("STATEMENT OF ALLOTMENT, OBLIGATIONS AND BALANCES ", new Font(Font.FontFamily.HELVETICA, 11f, Font.BOLD)) { Alignment = Element.ALIGN_CENTER });
-            doc.Add(new Paragraph("As of March 31, 2018", new Font(Font.FontFamily.HELVETICA, 11f, Font.BOLD)) { Alignment = Element.ALIGN_CENTER });
-
 
             Double total = 0f;
 
-            doc.Add(new Chunk("\n"));
+            
+
 
             PdfPTable _thead = new PdfPTable(10);
             _thead.WidthPercentage = 100f;
             float[] columnWidths = { 130,30,40,40,40,40,40,40,40,30};
             _thead.SetWidths(columnWidths);
+            // _thead.TotalWidth = doc.PageSize.Width - doc.LeftMargin - doc.RightMargin; //this centers [table]
 
+            /*
             //FIRST ROW
             _thead.AddCell(new PdfPCell(new Paragraph("P/A/P/ ALLOTMENT CLASS / OBJECT OF EXPENDITURE", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER , VerticalAlignment = Element.ALIGN_CENTER, Rowspan = 4});
             _thead.AddCell(new PdfPCell(new Paragraph("EXPENSES CODE", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, Rowspan = 4 });
@@ -61,6 +62,9 @@ namespace BUDGET.DataHelpers
             _thead.AddCell(new PdfPCell(new Paragraph("TOTAL AFTER REALIGNMENT", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, Rowspan = 3 });
             _thead.AddCell(new PdfPCell(new Paragraph("March", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, Rowspan = 3 });
             _thead.AddCell(new PdfPCell(new Paragraph("As of March", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, Rowspan = 3 });
+            */
+
+            _thead.SpacingAfter = 100f;
 
             var allotments = db.allotments.Where(p => p.year == GlobalData.Year).ToList();
             foreach(Allotments _allotments in allotments)
@@ -228,7 +232,7 @@ namespace BUDGET.DataHelpers
                     }
                 }
             }
-
+            //_thead.WriteSelectedRows(0, -1, doc.LeftMargin, doc.PageSize.Height - 36, writer.DirectContentUnder);
             doc.Add(_thead);
             doc.Close();
         }

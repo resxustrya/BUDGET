@@ -145,6 +145,7 @@
 
 
        $(document).ready(function () {
+           $("#loading").modal('show');
            var url = $("#table").data('get');
            var allotments_url = $("#table").data('allotments');
            var url_head_requesting = $("#table").data('requesting_head');
@@ -156,6 +157,7 @@
                    for (var i = 0; i < resdata.length; i++) {
                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']),resdata[i]['hear_requesting_office'], resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
                    }
+                   $("#loading").modal('hide');
                    table.loadData(tabledata);
                }
            });
@@ -181,6 +183,7 @@
                    }
                }
            });
+            
         });
 
        $(window).bind('keydown', function (event) {

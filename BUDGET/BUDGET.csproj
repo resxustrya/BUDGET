@@ -246,6 +246,7 @@
     <Compile Include="DataHelpers\JsonGetter.cs" />
     <Compile Include="DataHelpers\ModelAllotments.cs" />
     <Compile Include="DataHelpers\ORSReporting.cs" />
+    <Compile Include="DataHelpers\PdfPtableEvents.cs" />
     <Compile Include="DataHelpers\rpt_saob.cs" />
     <Compile Include="Filters\NoCache.cs" />
     <Compile Include="Filters\YearlyFilter.cs" />
