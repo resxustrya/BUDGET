@@ -64,6 +64,7 @@ namespace BUDGET.DataHelpers
             _thead.AddCell(new PdfPCell(new Paragraph("As of March", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, Rowspan = 3 });
             */
 
+
             _thead.SpacingAfter = 100f;
 
             var allotments = db.allotments.Where(p => p.year == GlobalData.Year).ToList();

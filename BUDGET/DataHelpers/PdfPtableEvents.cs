@@ -38,7 +38,7 @@ namespace BUDGET.DataHelpers
             _thead_page_break.AddCell(new PdfPCell(new Paragraph("March", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, Rowspan = 3 });
             _thead_page_break.AddCell(new PdfPCell(new Paragraph("As of March", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, Rowspan = 3 });
 
-            _thead_page_break.WriteSelectedRows(0,-1,15,110, writer.DirectContentUnder);
+            _thead_page_break.WriteSelectedRows(0,-1,30,600, writer.DirectContentUnder);
 
             
            
