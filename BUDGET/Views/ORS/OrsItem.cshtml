@@ -14,14 +14,14 @@
         var table;
         var valid = true;
         var expense_url = $("#table").data('expense');
-
+        var obligated = ['OBLIGATED', 'NOT OBLIGATED'];
         //35 cols
        table = new Handsontable(container, {
            startRows: 50,
-           startCols: 24,
+           startCols: 25,
            manualColumnResize: true,
            rowHeaders: true,
-           colWidths: [1,1,100, 200, 200, 200, 300, 300, 700, 100, 100, 200,200, 200,100, 100, 100, 100, 300,200,200,200,200,200],
+           colWidths: [1,1,150,100, 200, 200, 200, 300, 300, 700, 100, 100, 200,200, 200,100, 100, 100, 100, 300,200,200,200,200,200],
            colHeaders: true,
            filters :true,
             dropdownMenu: true,
@@ -68,10 +68,15 @@
            fillHandle: {
                autoInsertRow: false,
            },
-           colHeaders: ['<b>ID</b>','<b>ROW#</b>', '<b>DATE</b/>', '<b>DV</b>', '<b>PO#</b>', '<b>PR#</b>', '<b>PAYEE</b>', '<b>ADDRESS</b>', '<b>PARTICULARS</b>', '<b>ORS NO</b>', '<b>LINE #</b>', '<b>FUND SOURCE</b>', '<b>GROSS</b>','<b>Requesting Office Head</b>','<b>AE</b>', '<b>AF</b>', '<b>AG</b>', '<b>AH</b>', '<b>AI</b>','<b>CREATED BY</b>','<b>Date Received</b>','<b>Time Received</b>','<b>Date Released</b>','<b>Time Released</b>'],
+           colHeaders: ['<b>ID</b>','<b>ROW#</b>','STATUS', '<b>DATE</b/>', '<b>DV</b>', '<b>PO#</b>', '<b>PR#</b>', '<b>PAYEE</b>', '<b>ADDRESS</b>', '<b>PARTICULARS</b>', '<b>ORS NO</b>', '<b>LINE #</b>', '<b>FUND SOURCE</b>', '<b>GROSS</b>','<b>Requesting Office Head</b>','<b>AE</b>', '<b>AF</b>', '<b>AG</b>', '<b>AH</b>', '<b>AI</b>','<b>CREATED BY</b>','<b>Date Received</b>','<b>Time Received</b>','<b>Date Released</b>','<b>Time Released</b>'],
            columns: [
                {},
-               {},{
+               {},
+               {
+                   type: 'dropdown',
+                   source: obligated
+               },
+               {
                    type: 'date',
                    dateFormat: 'MM/DD/YYYY',
                    correctFormat: true,
@@ -155,11 +160,12 @@
                    var total;
 
                    for (var i = 0; i < resdata.length; i++) {
-                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']),resdata[i]['hear_requesting_office'], resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
+                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['is_obligated'],resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['hear_requesting_office'], resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
                    }
                    $("#loading").modal('hide');
                    table.loadData(tabledata);
                }
+               $("#loading").modal('hide');
            });
            $.get(expense_url, function (expense_res) {
                if (expense_res.length > 0) {
@@ -183,7 +189,6 @@
                    }
                }
            });
-            
         });
 
        $(window).bind('keydown', function (event) {
@@ -227,26 +232,27 @@
                                orsps[i] = {
                                    "ID": data[i][0],
                                    "Row": (i + 1),
-                                   "Date": data[i][2],
-                                   "DB": data[i][3],
-                                   "PO": data[i][4],
-                                   "PR": data[i][5],
-                                   "PAYEE": data[i][6],
-                                   "Adress": data[i][7],
-                                   "Particulars": data[i][8],
-                                   "ORS_NO": data[i][9],
-                                   "FundSource": data[i][11],
-                                   "Gross": data[i][12],
-                                   "head_requesting" : data[i][13],
-                                   "AE": data[i][14],
-                                   "AF": data[i][15],
-                                   "AG": data[i][16],
-                                   "AH": data[i][17],
-                                   "AI": data[i][18],
-                                   "DateReceived" : data[i][20],
-                                   "TimeReceived": data[i][21],
-                                   "DateReleased": data[i][22],
-                                   "TimeReleased": data[i][23]
+                                   "is_obligated" : data[i][2],
+                                   "Date": data[i][3],
+                                   "DB": data[i][4],
+                                   "PO": data[i][5],
+                                   "PR": data[i][6],
+                                   "PAYEE": data[i][7],
+                                   "Adress": data[i][8],
+                                   "Particulars": data[i][9],
+                                   "ORS_NO": data[i][10],
+                                   "FundSource": data[i][12],
+                                   "Gross": data[i][13],
+                                   "head_requesting" : data[i][14],
+                                   "AE": data[i][15],
+                                   "AF": data[i][16],
+                                   "AG": data[i][17],
+                                   "AH": data[i][18],
+                                   "AI": data[i][19],
+                                   "DateReceived" : data[i][21],
+                                   "TimeReceived": data[i][22],
+                                   "DateReleased": data[i][23],
+                                   "TimeReleased": data[i][24]
                                }
                            }
                            var data = {
@@ -259,7 +265,7 @@
                                     var total;
 
                                     for (var i = 0; i < resdata.length; i++) {
-                                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['hear_requesting_office'], resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
+                                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['is_obligated'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['hear_requesting_office'], resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
                                     }
                                     table.loadData(tabledata);
                                 }
@@ -273,6 +279,5 @@
                }
            }
        });
-
     </script>
 }

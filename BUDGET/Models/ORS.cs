@@ -35,6 +35,7 @@ namespace BUDGET
         public DateTime Date_Added { get; set; }
         public String dateadded { get; set; }
         public String head_requesting_office { get; set; }
+        public String is_obligated { get; set; }
         public ORS()
         {
             this.Gross = 0.00;

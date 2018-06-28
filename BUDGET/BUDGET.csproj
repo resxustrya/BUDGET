@@ -403,6 +403,10 @@
     <Compile Include="Migrations\201806220742500_added_col.Designer.cs">
       <DependentUpon>201806220742500_added_col.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806280821222_added_column1.cs" />
+    <Compile Include="Migrations\201806280821222_added_column1.Designer.cs">
+      <DependentUpon>201806280821222_added_column1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -447,6 +451,7 @@
     <Content Include="Content\handson\pikaday.css" />
     <Content Include="Content\handson\pikaday.js" />
     <Content Include="Content\img\banner.png" />
+    <Content Include="Content\img\doh.png" />
     <Content Include="Content\img\favicon.png" />
     <Content Include="Content\img\ro7.png" />
     <Content Include="Content\img\spin.gif" />
@@ -853,6 +858,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806220742500_added_col.resx">
       <DependentUpon>201806220742500_added_col.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806280821222_added_column1.resx">
+      <DependentUpon>201806280821222_added_column1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

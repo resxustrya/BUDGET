@@ -49,6 +49,7 @@ namespace BUDGET.Controllers
                       {
                           ID = list.ID,
                           Row = list.Row,
+                          is_obligated = list.is_obligated,
                           Date = list.Date,
                           DB = list.DB,
                           PO = list.PO,
@@ -104,6 +105,7 @@ namespace BUDGET.Controllers
                     id = Convert.ToInt32(sb.ID);
                     var ors = db.ors.Where(p => p.ID == id).Where(p => p.ors_id == ors_id ).FirstOrDefault();
                     ors.Row = sb.Row;
+                    ors.is_obligated = sb.is_obligated;
                     ors.Date = sb.Date;
                     ors.DB = sb.DB;
                     ors.PO = sb.PO;
@@ -135,6 +137,7 @@ namespace BUDGET.Controllers
                         {
                             ORS ors = new ORS();
                             ors.ors_id = Convert.ToInt32(GlobalData.ors_id);
+                            ors.is_obligated = sb.is_obligated;
                             ors.Row = sb.Row;
                             ors.Date = sb.Date;
                             ors.DB = sb.DB;
