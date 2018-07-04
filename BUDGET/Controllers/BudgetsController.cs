@@ -44,7 +44,11 @@ namespace BUDGET.Controllers
         }
         public ActionResult Create()
         {
-            return View();
+            if(User.IsInRole("Admin"))
+            {
+                return View();
+            }
+            return RedirectToAction("Index");
         }
         
         [HttpPost]

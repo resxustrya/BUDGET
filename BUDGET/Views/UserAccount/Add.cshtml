@@ -1,0 +1,27 @@
+﻿
+<h3>Add new user logins</h3>
+<form action="@Url.Action("Add","UserAccount")" method="post">
+    @Html.AntiForgeryToken()
+    
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" name="username" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" name="password" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="role">User Role</label>
+        <select name="role" required class="form-control">
+            <option value="" selected>-- Select User role --</option>
+            @foreach (var role in Model)
+            {
+                <option value="@role.Name">@role.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Submit</button>
+    </div>
+</form>

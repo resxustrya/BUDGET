@@ -11,7 +11,7 @@ using BUDGET.Filters;
 using PagedList;
 namespace BUDGET.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="Admin,Encoder")]
     [YearlyFilter]
     [NoCache]
     [OutputCache(NoStore = true, Duration = 0)]

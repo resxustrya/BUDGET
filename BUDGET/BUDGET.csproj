@@ -715,6 +715,7 @@
     <Content Include="Views\Allotments\_PartialSubAllotment.cshtml" />
     <Content Include="Views\Allotments\Realignment.cshtml" />
     <Content Include="Views\UserAccount\Index.cshtml" />
+    <Content Include="Views\UserAccount\Add.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

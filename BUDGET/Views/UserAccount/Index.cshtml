@@ -3,27 +3,57 @@
     ViewBag.Title = "Users Management";
 }
 
-
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <table class="table table-bordered">
-               <tr>
-                   <th>First Name</th>
-                   <th>Last Name</th>
-                   <th>Username</th>
-                   <th>User Role</th>
-               </tr>
-               @foreach(var a in Model)
-               {
-                   <tr>
-                       <td>@a</td>
-                   </tr>
-               }
-            </table>
+
+            <div class="panel panel-info" style="margin-top:10px;">
+                <div class="panel-heading">
+                    <i class="fa fa-bar-chart-o fa-fw"></i> User Management
+                    <div class="pull-right">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-success btn-xs" id="add_new" data-toggle="dropdown" aria-expanded="false" data-url="@Url.Action("Add","UserAccount")">
+                                Add new
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>User Logins</th>
+                            <th>Option</th>
+                        </tr>
+                        @foreach (var a in Model)
+                        {
+                            <tr>
+                                <td>@a.UserName</td>
+                                <td>
+                                    <button class="btn btn-info">Update</button>
+                                    <a class="btn btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-
+@section scripts {
+    <script>
+        $("#add_new").click(function () {
+            $("#page_modal").modal('show');
+            $(".modal_body").html('');
+            $(".loading").show();
+            var url = $(this).data('url');
+            $.get(url, function (res) {
+                $(".modal_body").html(res);
+                $(".loading").hide();
+            });
+        });
+    </script>   
+}
 

@@ -9,7 +9,7 @@ using System.Data;
 using System.Web.Mvc;
 using BUDGET.Models;
 using System.Web.SessionState;
-namespace BUDGET.Filters
+namespace BUDGET
 {
     public class YearlyFilter : ActionFilterAttribute, IActionFilter
     {
