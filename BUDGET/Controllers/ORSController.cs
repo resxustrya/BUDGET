@@ -25,6 +25,7 @@ namespace BUDGET.Controllers
             return View();
         }
         [Route("ors/ps", Name = "ors_ps")]
+
         public ActionResult ORPS()
         {
             ViewBag.Menu = GlobalData.Year + " ORS Personnel Services";
@@ -105,7 +106,6 @@ namespace BUDGET.Controllers
                     id = Convert.ToInt32(sb.ID);
                     var ors = db.ors.Where(p => p.ID == id).Where(p => p.ors_id == ors_id ).FirstOrDefault();
                     ors.Row = sb.Row;
-                    ors.is_obligated = sb.is_obligated;
                     ors.Date = sb.Date;
                     ors.DB = sb.DB;
                     ors.PO = sb.PO;
@@ -137,7 +137,7 @@ namespace BUDGET.Controllers
                         {
                             ORS ors = new ORS();
                             ors.ors_id = Convert.ToInt32(GlobalData.ors_id);
-                            ors.is_obligated = sb.is_obligated;
+                            ors.is_obligated = "OBLIGATED"; 
                             ors.Row = sb.Row;
                             ors.Date = sb.Date;
                             ors.DB = sb.DB;
@@ -154,6 +154,7 @@ namespace BUDGET.Controllers
                             ors.AH = sb.AH;
                             ors.AI = sb.AI;
                             ors.Created_By = User.Identity.GetUserName();
+                            
                             ors.DateReceived = sb.DateReceived;
                             ors.TimeReceived = sb.TimeReceived;
                             ors.DateReleased = sb.DateReleased;

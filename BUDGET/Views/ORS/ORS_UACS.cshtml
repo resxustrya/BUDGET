@@ -145,12 +145,12 @@
                data: JSON.stringify(expense)
            };
            var url = $("#table").data('save');
-           setTimeout(function () {
-               $.post(url, data, function (res) {
-                   $(".panel-body").html(res);
-                   $("#loading_modal").modal('hide');
-               });
-           }, 1000);
+           
+            $.post(url, data, function (res) {
+                $(".panel-body").html(res);
+                $("#loading_modal").modal('hide');
+            });
+           
        });
     </script>
 }

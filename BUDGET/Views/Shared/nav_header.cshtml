@@ -96,9 +96,13 @@
                     <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
-                    <li>
-                        <a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                    </li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li>
+                            <a href="@Url.Action("Users","UserAcount")"><i class="fa fa-user fa-fw"></i>User Management</a>
+                        </li>
+                    }
+                    
                     <li>
                         <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                     </li>
@@ -112,7 +116,7 @@
             <li><strong style="font-size:13px;font-family:sans-serif;">@ViewBag.Menu</strong></li>
             <!-- /.dropdown -->
         </ul>
-    
+        
     <!-- /.navbar-header -->
     
   </nav>

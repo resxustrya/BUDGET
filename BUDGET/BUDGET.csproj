@@ -242,6 +242,7 @@
     <Compile Include="Controllers\ORSReportsController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\UploadsController.cs" />
+    <Compile Include="Controllers\UserAccountController.cs" />
     <Compile Include="DataHelpers\ExcelDataExport.cs" />
     <Compile Include="DataHelpers\JsonGetter.cs" />
     <Compile Include="DataHelpers\ModelAllotments.cs" />
@@ -713,6 +714,7 @@
     <Content Include="Views\Allotments\EditSubAllotment.cshtml" />
     <Content Include="Views\Allotments\_PartialSubAllotment.cshtml" />
     <Content Include="Views\Allotments\Realignment.cshtml" />
+    <Content Include="Views\UserAccount\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

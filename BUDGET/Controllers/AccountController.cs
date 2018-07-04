@@ -13,7 +13,7 @@ using BUDGET.Models;
 
 namespace BUDGET.Controllers
 {
-    [Authorize(Roles ="Administrator,Admin")]
+    //[Authorize(Roles ="Administrator,Admin")]
     [NoCache]
     [OutputCache(NoStore = true, Duration = 0)]
     public class AccountController : Controller
@@ -23,6 +23,7 @@ namespace BUDGET.Controllers
 
         public AccountController()
         {
+
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
