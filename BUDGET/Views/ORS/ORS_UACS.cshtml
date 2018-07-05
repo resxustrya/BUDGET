@@ -1,8 +1,4 @@
 ﻿
-@{
-    ViewBag.Title = "ORS_UACS";
-}
-
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -49,7 +45,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-save="@Url.Action("SaveOrsObligation","ORS")" data-get="@Url.Action("GetORSUacs","ORS", new { ID = ViewBag.ors_obligation })" data-ors_obligation="@ViewBag.ors_obligation" data-delete="@Url.Action("DeleteUacs","ORS")"></div>
+                            <div id="table_uacs" style="width: 500px; height: 200px; overflow: hidden" data-originalstyle="width: 400px; height: 200px; overflow: hidden" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-save="@Url.Action("SaveOrsObligation","ORS")" data-get="@Url.Action("GetORSUacs","ORS", new { ID = ViewBag.ors_obligation })" data-ors_obligation="@ViewBag.ors_obligation" data-delete="@Url.Action("DeleteUacs","ORS")"></div>
                         </div>
                     </div>
                 </div>
@@ -58,14 +54,10 @@
     </div>
 </div>
 
-@section footer{
-    @Html.Partial("footer")
-}
 
-@section scripts {
     <script>
        var expense_codes = [];
-       var container = document.getElementById("table");
+       var container = document.getElementById("table_uacs");
        var table;
        var valid = true;
        var expense_url = $("#table").data('expense');
@@ -82,6 +74,7 @@
            fillHandle: {
                autoInsertRow: false,
            },
+           viewportColumnRenderingOffset: 20,
            colHeaders: ['ID','UACS','Title','Amount'],
            columns : [
               {}, { type: 'dropdown', source: expense_codes }, {}, {}
@@ -153,4 +146,4 @@
            
        });
     </script>
-}
+

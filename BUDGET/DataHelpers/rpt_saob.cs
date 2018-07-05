@@ -17,7 +17,6 @@ namespace BUDGET.DataHelpers
         
         public void generate_saob()
         {
-           
             try
             {
                 System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("/rpt_saob/saob.pdf"));

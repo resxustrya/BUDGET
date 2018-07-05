@@ -57,7 +57,14 @@
                                var port = window.location.port;
                                var url = protocol + "//" + hostname + ":" + port + "/ors/ors_uacs/" + id;
                                var server_url = getBaseUrl() + "/ors/ors_uacs/" + id;
-                               window.location.href = url;
+                               
+                               $("#ors_modal").modal('show');
+                               $(".ors_body").html('');
+                               $(".loading").show();
+                               $.get(url, function (res) {
+                                   $(".ors_body").html(res);
+                                   $(".loading").hide();
+                               });
                            }
                        }
                    }, "row_below": {}, "remove_row": {},

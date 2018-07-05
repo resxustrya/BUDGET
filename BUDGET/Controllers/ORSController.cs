@@ -11,7 +11,8 @@ using BUDGET.Filters;
 using PagedList;
 namespace BUDGET.Controllers
 {
-    [Authorize(Roles ="Admin,Encoder")]
+    
+    [CustomAuthorize(Roles ="Admin,Encoder")]
     [YearlyFilter]
     [NoCache]
     [OutputCache(NoStore = true, Duration = 0)]
@@ -192,12 +193,12 @@ namespace BUDGET.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
         
-        public ActionResult  ORS_UACS(String ID)
+        public PartialViewResult  ORS_UACS(String ID)
         {
             Int32 id = Convert.ToInt32(ID);
             var ors = db.ors.Where(p => p.ID == id).FirstOrDefault();
             ViewBag.ors_obligation = ID;
-            return View(ors);
+            return PartialView(ors);
         }
         public JsonResult GetORSUacs(String ID)
         {
