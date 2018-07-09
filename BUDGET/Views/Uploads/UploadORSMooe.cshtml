@@ -1,0 +1,60 @@
+﻿
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <form id="form_upload" action="@Url.Action("SaveORSMooe","Uploads")" method="POST" enctype="multipart/form-data">
+                <h3 style="font-weight: bold;" class="text-center">Upload a file for ORS MOOE</h3>
+                <div class="modal-body">
+                    <table class="table table-hover table-form table-striped">
+                        <tr>
+                            <td class="col-sm-5">
+                                <input id="file" type="file" class="hidden" value="" name="file" onchange="readFile(this);" />
+                                <p class="text-center" id="file_select" style="border: dashed;padding:20px;">
+                                    Click here to select a file
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                    <button type="button" class="btn-lg btn-success center-block col-sm-12" id="upload" data-loading-text="<i class='fa fa-refresh fa-spin'></i> Uploading time logs">
+                        <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Upload File
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function readFile(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('input[type="file"]').attr('value', e.target.result);
+                $('#file_select').html('<strong>' + $('input[type="file"]').val() + '</strong>');
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#file_select").click(function () {
+        $('input[type="file"]').trigger("click");
+    });
+    $('#upload').on('click', function (e) {
+
+        var x = $('input[type="file"]').val();
+        var arr = x.split('.');
+        if (arr[1] === "xlsx") {
+            $('a').prop('disabled', true);
+            $('#upload').button('loading');
+            $('#upload_loading').modal({
+                backdrop: 'static',
+                keyboard: false,
+                show: true
+            });
+            $('#form_upload').submit();
+        } else {
+            e.preventDefault();
+        }
+    });
+</script>

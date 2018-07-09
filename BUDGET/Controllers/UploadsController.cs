@@ -98,5 +98,60 @@ namespace BUDGET.Controllers
             }
             return RedirectToAction("Prexc", "ExpenseCodes");
         }
+
+        public ActionResult UploadORSMooe()
+        {
+            return PartialView();
+        }
+
+        public String SaveORSMooe(HttpPostedFileBase file)
+        {
+
+            String filename = file.FileName;
+            MemoryStream mem = new MemoryStream();
+            mem.SetLength((int)file.ContentLength);
+            file.InputStream.Read(mem.GetBuffer(), 0, (int)file.ContentLength);
+
+            using (var package = new ExcelPackage(mem))
+            {
+                var worksheet = package.Workbook.Worksheets[1];
+                var noOfCol = worksheet.Dimension.End.Column;
+                var noOfRow = worksheet.Dimension.End.Row;
+                String date = "";
+                //GAA
+                int row = 1;
+                for (int i = 7; i < noOfRow; i++)
+                {
+                    ORS ors = new ORS();
+                    try
+                    {
+                        ors.is_obligated = "OBLIGATED";
+
+                        date = worksheet.Cells[i, 2].Value.ToString();
+                        DateTime datetime = Convert.ToDateTime(date);
+                        try { ors.Date = datetime.ToString("MM/dd/yyyy"); } catch { ors.Date = ""; }
+                        try { ors.DB = worksheet.Cells[i, 3].Value.ToString(); } catch { ors.DB = ""; }
+                        try { ors.PO = worksheet.Cells[i, 4].Value.ToString(); } catch { ors.PO = ""; }
+                        try { ors.PR = worksheet.Cells[i, 5].Value.ToString(); } catch { ors.PR = ""; }
+                        try { ors.PAYEE = worksheet.Cells[i, 6].Value.ToString(); } catch { ors.PAYEE = ""; }
+                        try { ors.Adress = worksheet.Cells[i, 7].Value.ToString(); } catch { ors.Adress = ""; }
+                        try { ors.Particulars = worksheet.Cells[i, 8].Value.ToString(); } catch { ors.Particulars = ""; }
+                        ors.ors_id = 1003;
+                        ors.Date_Added = DateTime.Now.Date;
+                        ors.dateadded = DateTime.Now.Date.ToString();
+                        ors.FundSource = "STO-OPERATIONS";
+                        ors.head_requesting_office = "DR. EMILIA MONICIMPO";
+                        ors.Created_By = "doh7budget";
+                        db.ors.Add(ors);
+                        db.SaveChanges();
+                    }
+                    catch { }      
+                        
+                    
+                }
+                
+            }
+            return "ok";
+        }
     }
 }

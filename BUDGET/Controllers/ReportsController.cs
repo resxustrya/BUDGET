@@ -27,7 +27,9 @@ namespace BUDGET.Controllers
         public ActionResult DownloadSaob(FormCollection collection)
         {
             rpt_saob rpt = new rpt_saob();
-            rpt.generate_saob();
+            String date_from = collection.Get("date_from");
+            String date_to = collection.Get("date_to");
+            rpt.generate_saob(date_from,date_to);
             var fileStream = new FileStream(Server.MapPath("~/rpt_saob/saob.pdf"),
                                      FileMode.Open,
                                      FileAccess.Read

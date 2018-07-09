@@ -58,7 +58,11 @@
                                var url = protocol + "//" + hostname + ":" + port + "/ors/ors_uacs/" + id;
                                var server_url = getBaseUrl() + "/ors/ors_uacs/" + id;
                                
-                               $("#ors_modal").modal('show');
+                               $("#ors_modal").modal({
+                                   backdrop: 'static',
+                                   keyboard: false,
+                                   show: true
+                               });
                                $(".ors_body").html('');
                                $(".loading").show();
                                $.get(url, function (res) {
@@ -286,5 +290,9 @@
                }
            }
        });
+       $("#ors_uacs_close").click(function () {
+           alert("Closing");
+       });
+    
     </script>
 }

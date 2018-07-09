@@ -105,6 +105,7 @@ namespace BUDGET.Controllers
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     
                     id = Convert.ToInt32(sb.ID);
+
                     var ors = db.ors.Where(p => p.ID == id).Where(p => p.ors_id == ors_id ).FirstOrDefault();
                     ors.Row = sb.Row;
                     ors.Date = sb.Date;
@@ -215,7 +216,7 @@ namespace BUDGET.Controllers
             return Json(ors_uacs, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult SaveOrsObligation(FormCollection collection)
+        public JsonResult SaveOrsObligation(FormCollection collection)
         {
             Int32 id = Convert.ToInt32(collection.Get("ID"));
             String data = collection.Get("data");
@@ -257,8 +258,8 @@ namespace BUDGET.Controllers
                     catch { }
                 }
             }
-            ViewBag.ors_obligation = id.ToString();
-            return PartialView();
+            
+            return GetORSUacs(id.ToString());
         }
         [HttpPost]
         public JsonResult DeleteUacs(FormCollection collection)

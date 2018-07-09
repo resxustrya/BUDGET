@@ -9,6 +9,7 @@ namespace BUDGET.DataHelpers
 {
     public class PdfPtableEvents : PdfPageEventHelper
     {
+        private string month;
         public override void OnEndPage(PdfWriter writer, Document document)
         {
             
@@ -36,8 +37,8 @@ namespace BUDGET.DataHelpers
             _thead_page_break.AddCell(new PdfPCell(new Paragraph("REALIGNMENT", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, Rowspan = 3 });
             _thead_page_break.AddCell(new PdfPCell(new Paragraph("TRANSFER TO", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, Rowspan = 3 });
             _thead_page_break.AddCell(new PdfPCell(new Paragraph("TOTAL AFTER REALIGNMENT", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, Rowspan = 3 });
-            _thead_page_break.AddCell(new PdfPCell(new Paragraph("March", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, Rowspan = 3 });
-            _thead_page_break.AddCell(new PdfPCell(new Paragraph("As of March", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, Rowspan = 3 });
+            _thead_page_break.AddCell(new PdfPCell(new Paragraph(month, new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, Rowspan = 3 });
+            _thead_page_break.AddCell(new PdfPCell(new Paragraph("As of " + month, new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, Rowspan = 3 });
 
             
 
@@ -68,5 +69,10 @@ namespace BUDGET.DataHelpers
             table.WriteSelectedRows(0, -1, document.LeftMargin, document.PageSize.Height - 36, writer.DirectContentUnder);
             */
         }
+        public void setHeaderMonth(string month)
+        {
+            this.month = month;
+        }
+        
     }
 }
