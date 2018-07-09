@@ -12,7 +12,9 @@ namespace BUDGET
         public Int32 ID { get; set; }
         public Int32 ors_id { get; set; }
         public Int32 Row { get; set; }
-        public String Date { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime Date { get; set; }
+        public String Date1 { get; set; }
         public String DateReceived { get; set; }
         public String TimeReceived { get; set; }
         public String DateReleased { get; set; }
@@ -36,10 +38,6 @@ namespace BUDGET
         public String dateadded { get; set; }
         public String head_requesting_office { get; set; }
         public String is_obligated { get; set; }
-        public ORS()
-        {
-            this.Gross = 0.00;
-        }
 
     }
 }

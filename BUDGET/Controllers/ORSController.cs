@@ -52,7 +52,7 @@ namespace BUDGET.Controllers
                           ID = list.ID,
                           Row = list.Row,
                           is_obligated = list.is_obligated,
-                          Date = list.Date,
+                          Date = list.Date1,
                           DB = list.DB,
                           PO = list.PO,
                           PR = list.PR,
@@ -108,7 +108,11 @@ namespace BUDGET.Controllers
 
                     var ors = db.ors.Where(p => p.ID == id).Where(p => p.ors_id == ors_id ).FirstOrDefault();
                     ors.Row = sb.Row;
-                    ors.Date = sb.Date;
+                   
+                    Object date = sb.Date;
+                    ors.Date1 = date.ToString();
+                    DateTime datetime = Convert.ToDateTime(date.ToString());
+                    ors.Date = datetime;
                     ors.DB = sb.DB;
                     ors.PO = sb.PO;
                     ors.PR = sb.PR;
@@ -141,7 +145,12 @@ namespace BUDGET.Controllers
                             ors.ors_id = Convert.ToInt32(GlobalData.ors_id);
                             ors.is_obligated = "OBLIGATED"; 
                             ors.Row = sb.Row;
-                            ors.Date = sb.Date;
+
+                            Object date = sb.Date;
+                            ors.Date1 = date.ToString();
+                            DateTime datetime = Convert.ToDateTime(date.ToString());
+                            ors.Date = datetime;
+
                             ors.DB = sb.DB;
                             ors.PO = sb.PO;
                             ors.PR = sb.PR;

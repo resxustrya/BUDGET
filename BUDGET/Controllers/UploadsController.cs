@@ -129,7 +129,8 @@ namespace BUDGET.Controllers
 
                         date = worksheet.Cells[i, 2].Value.ToString();
                         DateTime datetime = Convert.ToDateTime(date);
-                        try { ors.Date = datetime.ToString("MM/dd/yyyy"); } catch { ors.Date = ""; }
+                        try { ors.Date = datetime; } catch { ors.Date = Convert.ToDateTime("01/01/1900"); }
+                        try { ors.Date1 = datetime.ToString("MM/dd/yyyy"); } catch { ors.Date1 = ""; }
                         try { ors.DB = worksheet.Cells[i, 3].Value.ToString(); } catch { ors.DB = ""; }
                         try { ors.PO = worksheet.Cells[i, 4].Value.ToString(); } catch { ors.PO = ""; }
                         try { ors.PR = worksheet.Cells[i, 5].Value.ToString(); } catch { ors.PR = ""; }

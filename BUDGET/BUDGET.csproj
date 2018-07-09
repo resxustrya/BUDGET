@@ -410,6 +410,14 @@
     <Compile Include="Migrations\201806280821222_added_column1.Designer.cs">
       <DependentUpon>201806280821222_added_column1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807090632309_change_datetime_format.cs" />
+    <Compile Include="Migrations\201807090632309_change_datetime_format.Designer.cs">
+      <DependentUpon>201807090632309_change_datetime_format.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807090824418_date_added.cs" />
+    <Compile Include="Migrations\201807090824418_date_added.Designer.cs">
+      <DependentUpon>201807090824418_date_added.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -868,6 +876,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806280821222_added_column1.resx">
       <DependentUpon>201806280821222_added_column1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807090632309_change_datetime_format.resx">
+      <DependentUpon>201807090632309_change_datetime_format.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807090824418_date_added.resx">
+      <DependentUpon>201807090824418_date_added.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
