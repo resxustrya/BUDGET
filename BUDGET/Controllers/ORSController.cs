@@ -175,6 +175,15 @@ namespace BUDGET.Controllers
                             ors.head_requesting_office = sb.head_requesting;
                             db.ors.Add(ors);
                             try { db.SaveChanges(); } catch { }
+
+                            Notifications notifications = new Notifications();
+
+                            notifications.Action = "added a new ors obligation in";
+                            notifications.User = User.Identity.GetUserName();
+                            notifications.Module = "ORS";
+
+                            db.notifications.Add(notifications);
+                            db.SaveChanges();
                         }
                         
                     }

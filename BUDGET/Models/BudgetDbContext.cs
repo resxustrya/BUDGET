@@ -25,5 +25,6 @@ namespace BUDGET
         public DbSet<ORS_EXPENSE_CODES> ors_expense_codes { get; set; }
         public DbSet<ors_head_request> ors_head_request { get; set; }
         public DbSet<Realignment> realignment { get; set; }
+        public DbSet<Notifications> notifications { get; set; }
     }
 }

@@ -418,6 +418,10 @@
     <Compile Include="Migrations\201807090824418_date_added.Designer.cs">
       <DependentUpon>201807090824418_date_added.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807100601310_Notifications.cs" />
+    <Compile Include="Migrations\201807100601310_Notifications.Designer.cs">
+      <DependentUpon>201807100601310_Notifications.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -425,8 +429,10 @@
     <Compile Include="Models\FundSourceAmount.cs" />
     <Compile Include="Models\FundSourceHdr.cs" />
     <Compile Include="Models\FundSourceViewModel.cs" />
+    <Compile Include="Models\HomeViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Notifications.cs" />
     <Compile Include="Models\ORS.cs" />
     <Compile Include="Models\ORSMaster.cs" />
     <Compile Include="Models\ORS_EXPENSE_CODES.cs" />
@@ -662,7 +668,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
@@ -728,6 +733,7 @@
     <Content Include="Views\UserAccount\Add.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Uploads\UploadORSMooe.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -882,6 +888,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807090824418_date_added.resx">
       <DependentUpon>201807090824418_date_added.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807100601310_Notifications.resx">
+      <DependentUpon>201807100601310_Notifications.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

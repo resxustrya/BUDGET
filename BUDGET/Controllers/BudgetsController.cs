@@ -34,7 +34,8 @@ namespace BUDGET.Controllers
             if(year != null)
             {
                 Session["year"] = year.ID;
-                return RedirectToAction("Index", "Home");
+                var orsmaster = db.orsmaster.First();
+                return RedirectToAction("Index", "Home",new { ID = orsmaster.ID });
             }
             else
             {

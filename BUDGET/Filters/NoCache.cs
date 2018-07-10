@@ -10,7 +10,7 @@ using System.Web.Mvc;
 using BUDGET.Models;
 using System.Web.SessionState;
 
-namespace BUDGET.Filters
+namespace BUDGET
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public sealed class NoCacheAttribute : ActionFilterAttribute

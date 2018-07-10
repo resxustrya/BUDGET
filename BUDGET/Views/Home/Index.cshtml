@@ -1,15 +1,48 @@
-﻿
-@model BUDGET.Models.ProductListViewModel
+﻿@model HomeViewModel
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Home";
 }
 
-<div class="container-fluid homepage">
+
+<div class="container">
     <div class="row">
-        <div class="col-md-12">
-            <div class="text-center">
-                
+        <div class="col-md-4">
+            <div class="panel panel-success" style="padding:5px;margin-top:10px;">
+                <h4>ORS Entries</h4>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-bordered">
+                            @foreach (var orsmaster in Model.orsmaster)
+                            {
+                                <tr>
+                                    <td>@orsmaster.Title</td>
+                                    <td><a href="@Url.Action("OrsItem","ORS",new { ID = orsmaster.ID })" class="btn btn-sm btn-success"><i class="glyphicon glyphicon-eye-open"></i> Details</a></td>
+                                </tr>
+                            }
+                        </table>
+                    </div>                  
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="panel panel-success" style="padding:5px;margin-top:10px;">
+                <h4>Notifications</h4>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="list-group">
+                            @foreach (var notification in Model.notifications)
+                            {
+                                <a href="#" class="list-group-item"><b>@notification.User</b> @notification.Action <b>@notification.Module</b></a>
+                            }
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+
+@section footer{
+    @Html.Partial("footer")
+}
