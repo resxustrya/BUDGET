@@ -178,9 +178,18 @@ namespace BUDGET.Controllers
 
                             Notifications notifications = new Notifications();
 
-                            notifications.Action = "added a new ors obligation in";
+                            notifications.Message = "added a new ors obligation in";
                             notifications.User = User.Identity.GetUserName();
                             notifications.Module = "ORS";
+
+                            var action = (from ors_list in db.ors
+                                          join ors_master in db.orsmaster on ors_list.ors_id equals ors_master.ID
+                                          select new
+                                          {
+                                              Title = ors_master.Title
+                                          }).First();
+
+                            notifications.Action = action.Title.ToString();
 
                             db.notifications.Add(notifications);
                             db.SaveChanges();
