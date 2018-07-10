@@ -69,6 +69,50 @@ namespace BUDGET.DataHelpers
 
             doc.NewPage();
 
+            PdfPTable footer = new PdfPTable(3);
+
+            footer.WidthPercentage = 100f;
+            float[] _footer_columnWidths = { 100, 100, 100 };
+            header_table.SetWidths(_footer_columnWidths);
+
+            Paragraph prepared_by = new Paragraph("Prepared By:");
+            Paragraph certified_correct = new Paragraph("Certified Correct:");
+            Paragraph approved = new Paragraph("APPROVED:");
+
+
+            footer.AddCell(new PdfPCell(prepared_by) { Border = 0 });
+            footer.AddCell(new PdfPCell(certified_correct) { Border = 0 });
+            footer.AddCell(new PdfPCell(approved) { Border = 0 });
+
+            footer.AddCell(new PdfPCell(new Paragraph("\n")) { Border = 0 });
+            footer.AddCell(new PdfPCell(new Paragraph("\n")) { Border = 0 });
+            footer.AddCell(new PdfPCell(new Paragraph("\n")) { Border = 0 });
+
+            footer.AddCell(new PdfPCell(new Paragraph("\n")) { Border = 0 });
+            footer.AddCell(new PdfPCell(new Paragraph("\n")) { Border = 0 });
+            footer.AddCell(new PdfPCell(new Paragraph("\n")) { Border = 0 });
+
+
+            footer.AddCell(new PdfPCell(new Paragraph("\n")) { Border = 0 });
+            footer.AddCell(new PdfPCell(new Paragraph("\n")) { Border = 0 });
+            footer.AddCell(new PdfPCell(new Paragraph("\n")) { Border = 0 });
+
+
+            footer.AddCell(new PdfPCell(new Paragraph("Timothy John D. Arriesgado", new Font(Font.FontFamily.HELVETICA, 10f, Font.BOLD))) { Border = 0 });
+            footer.AddCell(new PdfPCell(new Paragraph("Leonora A. Aniel", new Font(Font.FontFamily.HELVETICA, 10f, Font.BOLD))) { Border = 0 });
+            footer.AddCell(new PdfPCell(new Paragraph("Jaime  S. Bernadas, MD, MGM, CESO lll", new Font(Font.FontFamily.HELVETICA, 10f, Font.BOLD))) { Border = 0 });
+
+            footer.AddCell(new PdfPCell(new Paragraph("Administrative Assistant II")) { Border = 0 });
+            footer.AddCell(new PdfPCell(new Paragraph("Budget Officer III")) { Border = 0 });
+            footer.AddCell(new PdfPCell(new Paragraph("Director IV")) { Border = 0 });
+
+            doc.Add(footer);
+
+
+            doc.NewPage();
+
+
+
             PdfPtableEvents events = new PdfPtableEvents();
             writer.PageEvent = events;
             events.setHeaderMonth(date1.ToString("MMMM"));
@@ -126,7 +170,6 @@ namespace BUDGET.DataHelpers
                     _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
                    
 
-
                     var fsa = (from list in db.fsa
                                join expensecode
                                 in db.uacs on list.expensecode equals expensecode.Code
@@ -154,16 +197,18 @@ namespace BUDGET.DataHelpers
 
 
 
-                        var uacs_amounts = (from uacs_amt in db.ors_expense_codes
-                                            join ors in db.ors on uacs_amt.ors_obligation equals ors.ID
+                        var uacs_amounts = (from ors_uacs in db.ors_expense_codes
+                                            join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
                                             join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
                                             join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
-                                            where uacs_amt.uacs == _fsa.ExpenseCode &&
-                                            ors.Date >= date1 && ors.Date <= date2
+                                            where ors.Date >= date1 && ors.Date <= date2 &&
+                                            ors.FundSource == _fsh.Code &&
+                                            ors_uacs.uacs == _fsa.ExpenseCode                                           
                                             select new
                                             {
-                                                Amount = uacs_amt.amount
+                                                Amount = ors_uacs.amount
                                             }).ToList();
+
                         Double month_total = 0;
                         foreach(var amount in uacs_amounts)
                         {
