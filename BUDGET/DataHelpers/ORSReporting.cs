@@ -15,15 +15,16 @@ namespace BUDGET.DataHelpers
         private BudgetDB db = new BudgetDB();
         public void GenerateORSMOOE(String id)
         {
-            String filename = id + ".pdf";
+            String filename = "ors.pdf";
             Document doc = new Document(PageSize.A4);
             try
             {
-                System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("/rpt_ors/mooe/" + filename));
+                System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("~/rpt_ors/" + filename));
             }
             catch
             { }
-            var output = new FileStream(System.Web.HttpContext.Current.Server.MapPath("/rpt_ors/mooe/" + filename), FileMode.Create);
+
+            var output = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/rpt_ors/" + filename), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
             doc.Open();
 
@@ -43,7 +44,7 @@ namespace BUDGET.DataHelpers
             float[] columnWidths = { 5, 25, 15 };
             table.SetWidths(columnWidths);
 
-            Image logo = Image.GetInstance(System.Web.HttpContext.Current.Server.MapPath("/Content/img/ro7.png"));
+            Image logo = Image.GetInstance(System.Web.HttpContext.Current.Server.MapPath("~/Content/img/ro7.png"));
             logo.ScaleAbsolute(60f, 60f);
             PdfPCell logo_cell = new PdfPCell(logo);
             logo_cell.DisableBorderSide(8);
@@ -354,15 +355,16 @@ namespace BUDGET.DataHelpers
 
         public void GenerateORSPS(String id)
         {
-            String filename = id + ".pdf";
+            String filename = "ors.pdf";
             Document doc = new Document(PageSize.A4);
             try
             {
-                System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("/rpt_ors/ps/" + filename));
+                System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("~/rpt_ors/" + filename));
             }
             catch
             { }
-            var output = new FileStream(System.Web.HttpContext.Current.Server.MapPath("/rpt_ors/ps/" + filename), FileMode.Create);
+
+            var output = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/rpt_ors/" + filename), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
             doc.Open();
 

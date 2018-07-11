@@ -19,13 +19,13 @@ namespace BUDGET.DataHelpers
         {
             try
             {
-                System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("/rpt_saob/saob.pdf"));
+                System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("~/rpt_saob/saob.pdf"));
             }
             catch
             { }
 
             Document doc = new Document(PageSize.LEGAL.Rotate());
-            var output = new FileStream(System.Web.HttpContext.Current.Server.MapPath("/rpt_saob/saob.pdf"), FileMode.Create);
+            var output = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/rpt_saob/saob.pdf"), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
             
             doc.Open();
@@ -36,19 +36,19 @@ namespace BUDGET.DataHelpers
             float[] _header_columnWidths = { 50,100,50 };
             header_table.SetWidths(_header_columnWidths);
 
-            Image logo1 = Image.GetInstance(System.Web.HttpContext.Current.Server.MapPath("/Content/img/ro7.png"));
+            Image logo1 = Image.GetInstance(System.Web.HttpContext.Current.Server.MapPath("~/Content/img/ro7.png"));
             logo1.ScaleAbsolute(60f, 60f);
 
             header_table.AddCell(new PdfPCell(logo1) { Rowspan = 3, HorizontalAlignment = Element.ALIGN_CENTER, Border = 0 });
 
-           
+            DateTime date1 = Convert.ToDateTime(date_from);
+            DateTime date2 = Convert.ToDateTime(date_to);
 
             Paragraph p1 = new Paragraph("DEPARTMENT OF HEALTH - REGIONAL OFFICE VII");
             Paragraph p2 = new Paragraph("STATEMENT OF ALLOTMENT, OBLIGATIONS AND BALANCES");
 
 
-            DateTime date1 = Convert.ToDateTime(date_from);
-            DateTime date2 = Convert.ToDateTime(date_to);
+           
 
             Paragraph p3 = new Paragraph("As of " + date1.ToString("MMMM") + " " + date1.ToString("dd") + " - " + date2.ToString("MMMM") + " " + date2.ToString("dd") + " " + date2.ToString("yyyy"));
 
@@ -57,7 +57,7 @@ namespace BUDGET.DataHelpers
             header_table.AddCell(new PdfPCell(p1) { HorizontalAlignment = Element.ALIGN_CENTER, Border = 0 });
             
 
-            Image logo2 = Image.GetInstance(System.Web.HttpContext.Current.Server.MapPath("/Content/img/ro7.png"));
+            Image logo2 = Image.GetInstance(System.Web.HttpContext.Current.Server.MapPath("~/Content/img/ro7.png"));
             logo2.ScaleAbsolute(60f, 60f);
 
             header_table.AddCell(new PdfPCell(logo2) { Rowspan = 3, HorizontalAlignment = Element.ALIGN_CENTER , Border = 0});

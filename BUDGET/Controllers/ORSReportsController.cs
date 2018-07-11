@@ -19,7 +19,6 @@ namespace BUDGET.Controllers
         BudgetDB db = new BudgetDB();
         
         // GET: ORSReports
-        [Route("print/ors/ps/{id}",Name = "print_ors_ps")]
         public ActionResult  PrintOrsPS(String id)
         {
             
@@ -27,16 +26,17 @@ namespace BUDGET.Controllers
             var ors = db.ors.Where(p => p.ID == ID).FirstOrDefault();
             
             var ors_uacs = db.ors_expense_codes.Where(p => p.ors_obligation == ors.ID).ToList();
-           
-            String filename = id + ".pdf";
+
+            String filename = "ors.pdf";
             Document doc = new Document(PageSize.A4);
             try
             {
-                System.IO.File.Delete(Server.MapPath("~/rpt_ors/ps/" + filename));
+                System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("~/rpt_ors/" + filename));
             }
             catch
             { }
-            var output = new FileStream(Server.MapPath("~/rpt_ors/ps/" + filename), FileMode.Create);
+
+            var output = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/rpt_ors/" + filename), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
             doc.Open();
 
@@ -371,7 +371,7 @@ namespace BUDGET.Controllers
 
             doc.Close();
 
-            var fileStream = new FileStream(Server.MapPath("~/rpt_ors/ps/" + filename),
+            var fileStream = new FileStream(Server.MapPath("~/rpt_ors/" + filename),
                                      FileMode.Open,
                                      FileAccess.Read
                                    );

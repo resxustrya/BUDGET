@@ -13,5 +13,6 @@ namespace BUDGET
         public String Action { get; set; }
         public String User { get; set; }
         public String Message { get; set; }
+        public DateTime DateAdded { get; set; }
     }
 }

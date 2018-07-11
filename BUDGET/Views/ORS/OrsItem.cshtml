@@ -3,7 +3,7 @@
     ViewBag.Title = "ORS";
 }
 
-<div id="table" data-get="@Url.RouteUrl("get_ors_ps")" data-save="@Url.RouteUrl("save_ors_ps")" data-delete="@Url.RouteUrl("delete_ors_ps")" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-allotments="@Url.Action("GetFundSource","ORS",new { ID = ViewBag.allotments })" data-requesting_head="@Url.Action("GetHeadRequestingHeads","Ors")"></div>
+<div id="table" data-get="@Url.RouteUrl("get_ors_ps")" data-save="@Url.RouteUrl("save_ors_ps")" data-delete="@Url.RouteUrl("delete_ors_ps")" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-allotments="@Url.Action("GetFundSource","ORS",new { ID = ViewBag.allotments })" data-requesting_head="@Url.Action("GetHeadRequestingHeads","Ors")" data-print_ors="@Url.Action("PrintOrsPS","ORSReports")" data-uacs_amount="@Url.Action("ORS_UACS","ORS")"></div>
 
 @section scripts {
     <script>
@@ -15,6 +15,9 @@
         var valid = true;
         var expense_url = $("#table").data('expense');
         var obligated = ['OBLIGATED'];
+
+        var allotments_url = $("#table").data('allotments');
+        var url_head_requesting = $("#table").data('requesting_head');
         //35 cols
        table = new Handsontable(container, {
            startRows: 50,
@@ -35,11 +38,8 @@
                            var tempdata = this.getData();
                            var id = tempdata[fromRow][0];
                            if (id) {
-                               var hostname = window.location.hostname;
-                               var protocol = window.location.protocol;
-                               var port = window.location.port;
-                               var url = protocol + "//" + hostname + ":" + port + "/print/ors/ps/" + id;
-                               var server_url = getBaseUrl() + "/print/ors/ps/" + id;
+                               var url = $("#table").data('print_ors') + "/" + id;
+                               
                                window.location.href = url;
                            }
                        }
@@ -52,11 +52,7 @@
                            var tempdata = this.getData();
                            var id = tempdata[fromRow][0];
                            if (id) {
-                               var hostname = window.location.hostname;
-                               var protocol = window.location.protocol;
-                               var port = window.location.port;
-                               var url = protocol + "//" + hostname + ":" + port + "/ors/ors_uacs/" + id;
-                               var server_url = getBaseUrl() + "/ors/ors_uacs/" + id;
+                               var url = $("#table").data('uacs_amount') + "/" + id;
                                
                                $("#ors_modal").modal({
                                    backdrop: 'static',
@@ -162,22 +158,8 @@
 
        $(document).ready(function () {
            $("#loading").modal('show');
-           var url = $("#table").data('get');
-           var allotments_url = $("#table").data('allotments');
-           var url_head_requesting = $("#table").data('requesting_head');
-           $.get(url, function (resdata) {
-               if (resdata.length > 0) {
-                   var tabledata = [];
-                   var total;
-
-                   for (var i = 0; i < resdata.length; i++) {
-                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['is_obligated'],resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['hear_requesting_office'], resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
-                   }
-                   $("#loading").modal('hide');
-                   table.loadData(tabledata);
-               }
-               $("#loading").modal('hide');
-           });
+           
+           load_data();
            $.get(expense_url, function (expense_res) {
                if (expense_res.length > 0) {
                    for (var i = 0; i < expense_res.length; i++) {
@@ -294,5 +276,23 @@
            
        });
     
+       function load_data()
+       {
+           var url = $("#table").data('get');
+           
+           $.get(url, function (resdata) {
+               if (resdata.length > 0) {
+                   var tabledata = [];
+                   var total;
+
+                   for (var i = 0; i < resdata.length; i++) {
+                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['is_obligated'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['hear_requesting_office'], resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
+                   }
+                   $("#loading").modal('hide');
+                   table.loadData(tabledata);
+               }
+               $("#loading").modal('hide');
+           });
+       }
     </script>
 }

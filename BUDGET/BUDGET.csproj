@@ -422,6 +422,10 @@
     <Compile Include="Migrations\201807100601310_Notifications.Designer.cs">
       <DependentUpon>201807100601310_Notifications.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807110459418_added_dateitme.cs" />
+    <Compile Include="Migrations\201807110459418_added_dateitme.Designer.cs">
+      <DependentUpon>201807110459418_added_dateitme.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -630,12 +634,12 @@
     <Content Include="excel_reports\gaa.xlsx" />
     <Content Include="excel_reports\2018_RO7_DOH_SAOB.xlsx" />
     <None Include="Properties\PublishProfiles\budget.pubxml" />
-    <Content Include="rpt_ors\mooe\3.pdf" />
-    <Content Include="rpt_ors\ps\1003.pdf" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="rpt_saob\saob.pdf" />
+    <Content Include="rpt_ors\ors.pdf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -741,7 +745,6 @@
     <Folder Include="Content\js\" />
     <Folder Include="Content\less\" />
     <Folder Include="Content\upload\" />
-    <Folder Include="rpt_saob\" />
     <Folder Include="Views\Json\" />
   </ItemGroup>
   <ItemGroup>
@@ -891,6 +894,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807100601310_Notifications.resx">
       <DependentUpon>201807100601310_Notifications.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807110459418_added_dateitme.resx">
+      <DependentUpon>201807110459418_added_dateitme.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
