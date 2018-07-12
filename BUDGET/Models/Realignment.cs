@@ -15,5 +15,6 @@ namespace BUDGET
         public String uacs_to { get; set; }
         public Double amount { get; set; }
         public String fundsource { get; set; }
+        public String type { get; set; }
     }
 }

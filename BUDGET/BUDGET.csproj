@@ -426,6 +426,10 @@
     <Compile Include="Migrations\201807110459418_added_dateitme.Designer.cs">
       <DependentUpon>201807110459418_added_dateitme.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807120105422_added_culomn2.cs" />
+    <Compile Include="Migrations\201807120105422_added_culomn2.Designer.cs">
+      <DependentUpon>201807120105422_added_culomn2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -897,6 +901,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807110459418_added_dateitme.resx">
       <DependentUpon>201807110459418_added_dateitme.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807120105422_added_culomn2.resx">
+      <DependentUpon>201807120105422_added_culomn2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

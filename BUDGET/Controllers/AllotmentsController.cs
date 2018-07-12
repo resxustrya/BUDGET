@@ -499,6 +499,23 @@ namespace BUDGET.Controllers
                     catch { }
                 }
             }
+
+            var realignment_fundsource = (from _fsh in db.fsh
+                                          join _allotment in db.allotments on _fsh.allotment equals _allotment.ID.ToString()
+                                          where _fsh.ID.ToString() == fundsource
+                                          select new
+                                          {
+                                              FundSource = _fsh.Code,
+                                              Allotment = _allotment.Code
+                                          }).FirstOrDefault();
+
+            Notifications notifications = new Notifications()
+            {
+                DateAdded = DateTime.Now,
+                Message = "Added a new realignment in",
+                Module = "Realignment",
+                Action = realignment_fundsource.Allotment
+            };
             return GetRealignments(fundsource);
         }
         public JsonResult GetRealignments(String fundSource)
