@@ -209,11 +209,14 @@ namespace BUDGET.DataHelpers
 
                         //realignments
 
-                        _thead.AddCell(new PdfPCell(new Paragraph(total_from_realignment > 0 ? total_from_realignment.ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                        _thead.AddCell(new PdfPCell(new Paragraph( total_from_realignment > 0 ? "(" + total_from_realignment.ToString("N", new CultureInfo("en-US")) + ")" : "" , new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
                         //realignment to
                         _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_LEFT });
                         //total realignment
-                        _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_LEFT });
+
+                        Double total_after_realignment = _fsa.Amount - total_from_realignment;
+
+                        _thead.AddCell(new PdfPCell(new Paragraph(total_after_realignment > 0 ? total_after_realignment.ToString("N", new CultureInfo("en-US")) : ""  , new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
 
 
 

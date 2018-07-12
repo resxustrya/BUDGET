@@ -43,15 +43,12 @@ namespace BUDGET.Controllers
             }
             
         }
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
-            if(User.IsInRole("Admin"))
-            {
-                return View();
-            }
-            return RedirectToAction("Index");
+            return View();
         }
-        
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {

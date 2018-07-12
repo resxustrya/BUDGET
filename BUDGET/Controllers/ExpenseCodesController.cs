@@ -38,6 +38,7 @@ namespace BUDGET.Controllers
             return Json(uacs, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [Route("save/expense/codes",Name = "save_expense_codes")]
         public JsonResult SaveExpenseCode(String data)
         {
@@ -76,12 +77,13 @@ namespace BUDGET.Controllers
             }
             return GetExpenseCodes();
         }
+        [Authorize(Roles = "Admin")]
         [Route("delete/expense/codes",Name = "delete_expense_codes")]
         public String DeleteExpenseCode()
         {
             return "";
         }
-
+        [Authorize(Roles = "Admin")]
         [Route("get/expense/codes/number",Name = "get_expense_codes_number")]
         public JsonResult GetExpenseCodeNumber()
         {
@@ -114,6 +116,7 @@ namespace BUDGET.Controllers
                          }).ToList();
             return Json(prexc, JsonRequestBehavior.AllowGet);
         }
+        [Authorize(Roles = "Admin")]
         [Route("save/prexc",Name ="save_prexc")]
         public JsonResult SavePrexc(String data)
         {
@@ -154,6 +157,7 @@ namespace BUDGET.Controllers
             }
             return GetPrexc();
         }
+        [Authorize(Roles = "Admin")]
         [Route("delete/prexc",Name ="delete_prexc")]
         public String DeletePrexc(String data)
         {

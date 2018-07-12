@@ -16,7 +16,7 @@ using BUDGET.Filters;
 
 namespace BUDGET.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [YearlyFilter]
     [OutputCache(Duration = 0)]
     public class UploadsController : Controller

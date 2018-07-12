@@ -226,7 +226,7 @@ namespace BUDGET.Controllers
             table_row8_col1_col1.SetWidths(new float[] { 20 });
 
             table_row8_col1_col1.AddCell(new PdfPCell(new Paragraph("A.", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))));
-            table_row8_col1_col1.AddCell(new PdfPCell(new Paragraph(" ", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2, FixedHeight = 48 });
+            table_row8_col1_col1.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2, FixedHeight = 48 });
             table_row8_col1_col1.AddCell(new PdfPCell(new Paragraph("Signature :", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2 });
             table_row8_col1_col1.AddCell(new PdfPCell(new Paragraph("Printed Name :", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2 });
             table_row8_col1_col1.AddCell(new PdfPCell(new Paragraph("Position :", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2 });
@@ -262,8 +262,10 @@ namespace BUDGET.Controllers
             table_row8_col2_col1.WidthPercentage = 100f;
             table_row8_col2_col1.SetWidths(new float[] { 20 });
 
+
+
             table_row8_col2_col1.AddCell(new PdfPCell(new Paragraph("B.", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))));
-            table_row8_col2_col1.AddCell(new PdfPCell(new Paragraph(" ", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2, FixedHeight = 48 });
+            table_row8_col2_col1.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2, FixedHeight = 48 });
             table_row8_col2_col1.AddCell(new PdfPCell(new Paragraph("Signature :", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2 });
             table_row8_col2_col1.AddCell(new PdfPCell(new Paragraph("Printed Name :", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2 });
             table_row8_col2_col1.AddCell(new PdfPCell(new Paragraph("Position :", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2 });
@@ -279,7 +281,7 @@ namespace BUDGET.Controllers
 
             table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("Certified:", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))));
             table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("Allotment available and obligated for the purpose/adjustment necesarry as indicated above", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { FixedHeight = 48 });
-            table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))));
+            table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))));
             table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("LEONORA A. ANIEL", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
             table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("BUDGET OFFICER III", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, Padding = 2.5f });
             table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("\n")) { FixedHeight = 25 });
@@ -292,7 +294,7 @@ namespace BUDGET.Controllers
             table_row_8.AddCell(new PdfPCell(table_row8_col1) { Border = 15 });
             table_row_8.AddCell(new PdfPCell(table_row8_col2) { Border = 15 });
 
-            doc.Add(table_row_8);
+            //doc.Add(table_row_8);
 
             PdfPTable table_row_9 = new PdfPTable(2);
             table_row_9.WidthPercentage = 100f;

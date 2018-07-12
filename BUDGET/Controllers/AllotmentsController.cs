@@ -8,7 +8,7 @@ using BUDGET.Filters;
 using Newtonsoft.Json;
 namespace BUDGET.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [YearlyFilter]
     [NoCache]
     [OutputCache(NoStore = true, Duration = 0)]
@@ -16,6 +16,7 @@ namespace BUDGET.Controllers
     {
         BudgetDB db = new BudgetDB();
         // GET: Allotments
+        
         public ActionResult Index()
         {
             var allotments = (from list in db.allotments where list.year == GlobalData.Year select list).ToList();
