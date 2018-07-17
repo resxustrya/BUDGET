@@ -205,6 +205,7 @@ namespace BUDGET.Controllers
 
             tbt_total_amt.WidthPercentage = 100f;
             tbt_total_amt.SetWidths(tbt_total_amt_width);
+
             tbt_total_amt.AddCell(new PdfPCell(new Paragraph("\n", table_row_5_font)) { Border = 0, HorizontalAlignment = Element.ALIGN_CENTER });
             tbt_total_amt.AddCell(new PdfPCell(new Paragraph(total_amt.ToString("N", new CultureInfo("en-US")), table_row_5_font)) { HorizontalAlignment = Element.ALIGN_RIGHT });
             table_row_7.AddCell(new PdfPCell(tbt_total_amt) { Border = 14 });
@@ -212,89 +213,49 @@ namespace BUDGET.Controllers
             doc.Add(table_row_7);
 
 
-            PdfPTable table_row_8 = new PdfPTable(2);
+            PdfPTable table_row_8 = new PdfPTable(4);
+            float[] w_table_row_8 = { 5,20,5,20 };
             table_row_8.WidthPercentage = 100f;
-            table_row_8.SetWidths(new float[] { 20, 20 });
+            table_row_8.SetWidths(w_table_row_8);
 
 
-            PdfPTable table_row8_col1 = new PdfPTable(2);
-            table_row8_col1.WidthPercentage = 100f;
-            table_row8_col1.SetWidths(new float[] { 20, 80 });
-
-            PdfPTable table_row8_col1_col1 = new PdfPTable(1);
-            table_row8_col1_col1.WidthPercentage = 100f;
-            table_row8_col1_col1.SetWidths(new float[] { 20 });
-
-            table_row8_col1_col1.AddCell(new PdfPCell(new Paragraph("A.", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))));
-            table_row8_col1_col1.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2, FixedHeight = 48 });
-            table_row8_col1_col1.AddCell(new PdfPCell(new Paragraph("Signature :", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2 });
-            table_row8_col1_col1.AddCell(new PdfPCell(new Paragraph("Printed Name :", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2 });
-            table_row8_col1_col1.AddCell(new PdfPCell(new Paragraph("Position :", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2 });
-            table_row8_col1_col1.AddCell(new PdfPCell(new Paragraph("\n")) { FixedHeight = 35, Border = 0 });
-            table_row8_col1_col1.AddCell(new PdfPCell(new Paragraph("Date :", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2 });
-            table_row8_col1_col1.AddCell(new PdfPCell(new Paragraph("\n")));
-
-            table_row8_col1.AddCell(new PdfPCell(table_row8_col1_col1));
-
-            PdfPTable table_row8_col1_col2 = new PdfPTable(1);
-            table_row8_col1_col2.WidthPercentage = 100f;
-            table_row8_col1_col2.SetWidths(new float[] { 80 });
-
-            table_row8_col1_col2.AddCell(new PdfPCell(new Paragraph("Certified:", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))));
-            table_row8_col1_col2.AddCell(new PdfPCell(new Paragraph("Charges to appropriatio/ allotment necessary, lawful and under my direct supervision; and supporting document valid, proper and legal", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { FixedHeight = 48 });
-            table_row8_col1_col2.AddCell(new PdfPCell(new Paragraph("", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))));
-            table_row8_col1_col2.AddCell(new PdfPCell(new Paragraph("GUY R. PEREZ, MD, RPT, FPSMS, MBAHA, CESE", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
-            table_row8_col1_col2.AddCell(new PdfPCell(new Paragraph("OIC - Chief - Regulation, Liscensing, Enforcement Division", FontFactory.GetFont("Arial", 6, Font.BOLD, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, Padding = 2.5f });
-            table_row8_col1_col2.AddCell(new PdfPCell(new Paragraph("\n")) { FixedHeight = 25 });
-
-            table_row8_col1_col2.AddCell(new PdfPCell(new Paragraph("Head Requesting Office / Authorized Representative", FontFactory.GetFont("Arial", 5, Font.BOLD, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, Padding = 2.5f });
-            table_row8_col1_col2.AddCell(new PdfPCell(new Paragraph(DateTime.Now.ToShortDateString(), FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, Padding = 2.5f });
-            table_row8_col1_col2.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, Padding = 2.5f });
-            table_row8_col1.AddCell(new PdfPCell(table_row8_col1_col2));
+            table_row_8.AddCell(new PdfPCell(new Paragraph("A.", new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))));
+            table_row_8.AddCell(new PdfPCell(new Paragraph("Certified:", new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))));
+            table_row_8.AddCell(new PdfPCell(new Paragraph("B.", new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))));
+            table_row_8.AddCell(new PdfPCell(new Paragraph("Certified:", new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))));
 
 
-            PdfPTable table_row8_col2 = new PdfPTable(2);
-            table_row8_col2.WidthPercentage = 100f;
-            table_row8_col2.SetWidths(new float[] { 20, 80 });
+            table_row_8.AddCell(new PdfPCell(new Paragraph("")));
+            table_row_8.AddCell(new PdfPCell(new Paragraph("Charges to appropriation/ allotment necessary, lawful and under my direct supervision; and supporting documents valid, proper and legal \n", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))));
+            table_row_8.AddCell(new PdfPCell(new Paragraph("")));
+            table_row_8.AddCell(new PdfPCell(new Paragraph("Allotment available and obligated for the purpose/adjustment necessary as indicated above \n", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))));
+
+            
+
+            //SIGNATURE 1
+            table_row_8.AddCell(new PdfPCell(new Paragraph("Signature :", new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))));
+
+           
+
+            table_row_8.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))));
+
+            //SIGNATURE 2
+            table_row_8.AddCell(new PdfPCell(new Paragraph("Signature :", new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))));
+
+            table_row_8.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))));
 
 
-            PdfPTable table_row8_col2_col1 = new PdfPTable(1);
-            table_row8_col2_col1.WidthPercentage = 100f;
-            table_row8_col2_col1.SetWidths(new float[] { 20 });
+            var ors_requesting_head = db.ors_head_request.Where(p => p.Name == ors.head_requesting_office).FirstOrDefault();
+
+            table_row_8.AddCell(new PdfPCell(new Paragraph("Printed Name :", new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))));
+            //HEAD REQUESTING OFFICE / AUTHORIZED REPRESENTATIVE
+            table_row_8.AddCell(new PdfPCell(new Paragraph(ors_requesting_head.Name, new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))));
+            table_row_8.AddCell(new PdfPCell(new Paragraph("Printed Name", new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))));
+            table_row_8.AddCell(new PdfPCell(new Paragraph("LEONORA A. ANIEL", new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))));
 
 
 
-            table_row8_col2_col1.AddCell(new PdfPCell(new Paragraph("B.", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))));
-            table_row8_col2_col1.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2, FixedHeight = 48 });
-            table_row8_col2_col1.AddCell(new PdfPCell(new Paragraph("Signature :", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2 });
-            table_row8_col2_col1.AddCell(new PdfPCell(new Paragraph("Printed Name :", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2 });
-            table_row8_col2_col1.AddCell(new PdfPCell(new Paragraph("Position :", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2 });
-            table_row8_col2_col1.AddCell(new PdfPCell(new Paragraph("\n")) { FixedHeight = 35, Border = 0 });
-            table_row8_col2_col1.AddCell(new PdfPCell(new Paragraph("Date :", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { Padding = 2 });
-            table_row8_col2_col1.AddCell(new PdfPCell(new Paragraph("\n")));
-
-            table_row8_col2.AddCell(new PdfPCell(table_row8_col2_col1));
-
-            PdfPTable table_row8_col2_col2 = new PdfPTable(1);
-            table_row8_col2_col2.WidthPercentage = 100f;
-            table_row8_col2_col2.SetWidths(new float[] { 20 });
-
-            table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("Certified:", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))));
-            table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("Allotment available and obligated for the purpose/adjustment necesarry as indicated above", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { FixedHeight = 48 });
-            table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))));
-            table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("LEONORA A. ANIEL", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
-            table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("BUDGET OFFICER III", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, Padding = 2.5f });
-            table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("\n")) { FixedHeight = 25 });
-            table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("Head, Budget Unit/Authorized Representative", FontFactory.GetFont("Arial", 5, Font.BOLD, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, Padding = 2.5f });
-            table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph(DateTime.Now.ToShortDateString(), FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, Padding = 2.5f });
-            table_row8_col2_col2.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, Padding = 2.5f });
-
-            table_row8_col2.AddCell(new PdfPCell(table_row8_col2_col2));
-
-            table_row_8.AddCell(new PdfPCell(table_row8_col1) { Border = 15 });
-            table_row_8.AddCell(new PdfPCell(table_row8_col2) { Border = 15 });
-
-            //doc.Add(table_row_8);
+            doc.Add(table_row_8);
 
             PdfPTable table_row_9 = new PdfPTable(2);
             table_row_9.WidthPercentage = 100f;
