@@ -742,6 +742,7 @@
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Uploads\UploadORSMooe.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Budgets\Year.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

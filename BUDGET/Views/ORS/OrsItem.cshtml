@@ -3,7 +3,7 @@
     ViewBag.Title = "ORS";
 }
 
-<div id="table" data-get="@Url.RouteUrl("get_ors_ps")" data-save="@Url.RouteUrl("save_ors_ps")" data-delete="@Url.RouteUrl("delete_ors_ps")" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-allotments="@Url.Action("GetFundSource","ORS",new { ID = ViewBag.allotments })" data-requesting_head="@Url.Action("GetHeadRequestingHeads","Ors")" data-print_ors="@Url.Action("PrintOrsPS","ORSReports")" data-uacs_amount="@Url.Action("ORS_UACS","ORS")"></div>
+<div style="width: 100%;overflow: hidden;height:600px;"  id="table" data-get="@Url.RouteUrl("get_ors_ps")" data-save="@Url.RouteUrl("save_ors_ps")" data-delete="@Url.RouteUrl("delete_ors_ps")" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-allotments="@Url.Action("GetFundSource","ORS",new { ID = ViewBag.allotments })" data-requesting_head="@Url.Action("GetHeadRequestingHeads","Ors")" data-print_ors="@Url.Action("PrintOrsPS","ORSReports")" data-uacs_amount="@Url.Action("ORS_UACS","ORS")"></div>
 
 @section scripts {
     <script>
@@ -294,5 +294,9 @@
                $("#loading").modal('hide');
            });
        }
+      
     </script>
+}
+@section footer{
+    @Html.Partial("footer")
 }

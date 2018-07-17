@@ -30,17 +30,10 @@ namespace BUDGET.Controllers
             Int32 ID = Convert.ToInt32(id);
             var year = db.yearbudget.Where(p => p.ID == ID).FirstOrDefault();
             GlobalData.Year = year.Year.ToString();
+            
+            Session["year"] = year.ID;
 
-            if(year != null)
-            {
-                Session["year"] = year.ID;
-                var orsmaster = db.orsmaster.First();
-                return RedirectToAction("Index", "Home",new { ID = orsmaster.ID });
-            }
-            else
-            {
-                return RedirectToAction("Index");
-            }
+            return PartialView();
             
         }
         [Authorize(Roles = "Admin")]
