@@ -84,3 +84,16 @@ function getBaseUrl() {
     var url = protocol + "//" + hostname + "/" + segments[3] + "/";
     return url;
 }
+
+
+
+$(window).resize(function () {
+    resize();
+});
+
+function resize() {
+    var d_h = window.innerHeight;
+    var h = d_h - 115;
+    $("#ors_table").height(h);
+}
+    

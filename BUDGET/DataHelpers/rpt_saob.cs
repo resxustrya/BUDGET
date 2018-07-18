@@ -19,7 +19,7 @@ namespace BUDGET.DataHelpers
         {
             try
             {
-                System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("~/rpt_saob/saob.pdf"));
+                //System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("~/rpt_saob/saob.pdf"));
             }
             catch
             { }
@@ -249,6 +249,7 @@ namespace BUDGET.DataHelpers
 
                         total += _fsa.Amount;
                     }
+
 
                     _thead.AddCell(new PdfPCell(new Paragraph("TOTAL " + _allotments.Code.ToUpper() + " " + _fsh.SourceTitle, new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT, PaddingLeft = 20f });
                     _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });

@@ -31,7 +31,7 @@ namespace BUDGET.Controllers
             Document doc = new Document(PageSize.A4);
             try
             {
-                System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("~/rpt_ors/" + filename));
+               // System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("~/rpt_ors/" + filename));
             }
             catch
             { }

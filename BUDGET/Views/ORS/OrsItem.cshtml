@@ -3,21 +3,21 @@
     ViewBag.Title = "ORS";
 }
 
-<div style="width: 100%;overflow: hidden;height:600px;"  id="table" data-get="@Url.RouteUrl("get_ors_ps")" data-save="@Url.RouteUrl("save_ors_ps")" data-delete="@Url.RouteUrl("delete_ors_ps")" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-allotments="@Url.Action("GetFundSource","ORS",new { ID = ViewBag.allotments })" data-requesting_head="@Url.Action("GetHeadRequestingHeads","Ors")" data-print_ors="@Url.Action("PrintOrsPS","ORSReports")" data-uacs_amount="@Url.Action("ORS_UACS","ORS")"></div>
+<div style="width: 100%;overflow: hidden;"  id="ors_table" data-get="@Url.RouteUrl("get_ors_ps")" data-save="@Url.RouteUrl("save_ors_ps")" data-delete="@Url.RouteUrl("delete_ors_ps")" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-allotments="@Url.Action("GetFundSource","ORS",new { ID = ViewBag.allotments })" data-requesting_head="@Url.Action("GetHeadRequestingHeads","Ors")" data-print_ors="@Url.Action("PrintOrsPS","ORSReports")" data-uacs_amount="@Url.Action("ORS_UACS","ORS")"></div>
 
 @section scripts {
     <script>
         var expense_codes = [];
         var head_requesting = [];
         var fund_source = [];
-        var container = document.getElementById("table");
+        var container = document.getElementById("ors_table");
         var table;
         var valid = true;
-        var expense_url = $("#table").data('expense');
+        var expense_url = $("#ors_table").data('expense');
         var obligated = ['OBLIGATED'];
 
-        var allotments_url = $("#table").data('allotments');
-        var url_head_requesting = $("#table").data('requesting_head');
+        var allotments_url = $("#ors_table").data('allotments');
+        var url_head_requesting = $("#ors_table").data('requesting_head');
         //35 cols
        table = new Handsontable(container, {
            startRows: 50,
@@ -38,7 +38,7 @@
                            var tempdata = this.getData();
                            var id = tempdata[fromRow][0];
                            if (id) {
-                               var url = $("#table").data('print_ors') + "/" + id;
+                               var url = $("#ors_table").data('print_ors') + "/" + id;
                                
                                window.location.href = url;
                            }
@@ -52,7 +52,7 @@
                            var tempdata = this.getData();
                            var id = tempdata[fromRow][0];
                            if (id) {
-                               var url = $("#table").data('uacs_amount') + "/" + id;
+                               var url = $("#ors_table").data('uacs_amount') + "/" + id;
                                
                                $("#ors_modal").modal({
                                    backdrop: 'static',
@@ -131,7 +131,7 @@
                if (confirm("Are you sure you want to delete this item") == true) {
                    var items = this.getData();
                    var row_item = items[index];
-                   var url = $("#table").data('delete');
+                   var url = $("#ors_table").data('delete');
 
                    var ps = {
                        "ID": row_item[0]
@@ -158,7 +158,7 @@
 
        $(document).ready(function () {
            $("#loading").modal('show');
-           
+           resize();
            load_data();
            $.get(expense_url, function (expense_res) {
                if (expense_res.length > 0) {
@@ -192,7 +192,7 @@
                        event.preventDefault();
                        document.body.style.cursor = 'wait';
                        if (valid == true) {
-                           var url = $("#table").data('save');
+                           var url = $("#ors_table").data('save');
                            var orsps = [];
                            var data = table.getData();
                            for (var i = 0; i < data.length; i++) {
@@ -278,25 +278,31 @@
     
        function load_data()
        {
-           var url = $("#table").data('get');
+           var url = $("#ors_table").data('get');
            
            $.get(url, function (resdata) {
+               var tabledata = [];
                if (resdata.length > 0) {
-                   var tabledata = [];
-                   var total;
-
                    for (var i = 0; i < resdata.length; i++) {
                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['is_obligated'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['hear_requesting_office'], resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
                    }
                    $("#loading").modal('hide');
                    table.loadData(tabledata);
+               } else {
+                   for (var i = 0; i < 50; i++) {
+                       tabledata[i] = new Array(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                   }
+                   $("#loading").modal('hide');
+                   table.loadData(tabledata);
                }
+
                $("#loading").modal('hide');
            });
        }
       
     </script>
 }
+
 @section footer{
     @Html.Partial("footer")
 }
