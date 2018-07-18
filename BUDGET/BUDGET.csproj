@@ -250,6 +250,8 @@
     <Compile Include="DataHelpers\ORSReporting.cs" />
     <Compile Include="DataHelpers\PdfPtableEvents.cs" />
     <Compile Include="DataHelpers\rpt_saob.cs" />
+    <Compile Include="DataHelpers\rpt_saobsheet2.cs" />
+    <Compile Include="DataHelpers\SaobSheet2.cs" />
     <Compile Include="Filters\CustomAuthorizeAttribute.cs" />
     <Compile Include="Filters\NoCache.cs" />
     <Compile Include="Filters\YearlyFilter.cs" />
@@ -743,6 +745,7 @@
     <Content Include="Views\Uploads\UploadORSMooe.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Budgets\Year.cshtml" />
+    <Content Include="Views\Reports\DownloadSaobSheet2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

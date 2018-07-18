@@ -121,7 +121,7 @@ namespace BUDGET.DataHelpers
             _thead.WidthPercentage = 100f;
             float[] columnWidths = { 130,30,40,40,40,40,40,40,40,30};
             _thead.SetWidths(columnWidths);
-
+            
             Double total = 0.00;
 
 

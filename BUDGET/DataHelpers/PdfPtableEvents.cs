@@ -5,7 +5,7 @@ using iTextSharp.text;
 using System.IO;
 using BUDGET.Models;
 using System.Globalization;
-namespace BUDGET.DataHelpers
+namespace BUDGET
 {
     public class PdfPtableEvents : PdfPageEventHelper
     {
@@ -19,8 +19,6 @@ namespace BUDGET.DataHelpers
             _thead_page_break.SetWidths(_columnWidths);
             _thead_page_break.TotalWidth = document.PageSize.Width - document.LeftMargin - document.RightMargin; //this centers [table]
 
-
-            
 
             //FIRST ROW
             _thead_page_break.AddCell(new PdfPCell(new Paragraph("P/A/P/ ALLOTMENT CLASS / OBJECT OF EXPENDITURE", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_CENTER, Rowspan = 4 });

@@ -37,5 +37,25 @@ namespace BUDGET.Controllers
             var fsResult = new FileStreamResult(fileStream, "application/pdf");
             return fsResult;
         }
+
+        public ActionResult DownloadSaobSheet2()
+        {
+            return PartialView();
+        }
+       [HttpPost]
+       [ValidateAntiForgeryToken]
+       public ActionResult DownloadSaobSheet2(FormCollection collection)
+       {
+            rpt_saobsheet2 rppt2 = new rpt_saobsheet2();
+            String date_from = collection.Get("date_from");
+            String date_to = collection.Get("date_to");
+            rppt2.generate_saob(date_from, date_to);
+            var fileStream = new FileStream(Server.MapPath("~/rpt_saob/saobsheet2.pdf"),
+                                     FileMode.Open,
+                                     FileAccess.Read
+                                   );
+            var fsResult = new FileStreamResult(fileStream, "application/pdf");
+            return fsResult;
+       }
     }
 }

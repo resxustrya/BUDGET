@@ -1,0 +1,25 @@
+﻿
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>SAOB Reports</h3>
+            <form role="form" action="@Url.Action("DownloadSaobSheet2","Reports")" method="post">
+                @Html.AntiForgeryToken()
+                <table>
+                    <tr>
+                        <td>Date From</td>
+                        <td><input type="date" name="date_from" required class="form-control" /></td>
+                    </tr>
+                    <tr>
+                        <td>Date To</td>
+                        <td><input type="date" name="date_to" required class="form-control" /></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><button type="submit" class="btn btn-success btn-lg"> <span class="glyphicon glyphicon-print"></span> Print</button></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
