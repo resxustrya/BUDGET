@@ -79,19 +79,124 @@ namespace BUDGET
             float[] _columnWidths = { 50, 100, 50, 50, 50, 50, 50 };
             _thead.SetWidths(_columnWidths);
 
+            Double grand_total = 0;
+
+
             var allotments = db.allotments.Where(p => p.year == GlobalData.Year).ToList();
 
+            Double allotment_total = 0;
             foreach (Allotments _allotments in allotments)
             {
-                _thead.AddCell(new PdfPCell(new Paragraph(_allotments.Title.ToUpper(), new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-                
+                allotment_total = 0;
+                _thead.AddCell(new PdfPCell(new Paragraph(_allotments.Title.ToUpper(), new Font(Font.FontFamily.HELVETICA, 6f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT, Border = 0, Colspan = 7 });
+
+                var fsh = db.fsh.Where(p => p.allotment == _allotments.ID.ToString() && p.type == "REG").ToList();
+
+                Double fundsource_total = 0;
+                foreach (FundSourceHdr _fsh in fsh)
+                {
+                    fundsource_total = 0;
+                    _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_LEFT, Border = 0 });
+                    _thead.AddCell(new PdfPCell(new Paragraph(_fsh.SourceTitle.ToUpper().ToString(), new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_LEFT, Border = 0 });
+
+                    var fsa = (from list in db.fsa
+                               join expensecode
+                                in db.uacs on list.expensecode equals expensecode.Code
+                               where list.fundsource == _fsh.ID.ToString()
+                               select new
+                               {
+                                   Amount = list.amount
+                               }
+                       ).ToList();
+                    Double fsa_total_amount = 0;
+                    foreach (var _fsa in fsa)
+                    {
+                        fsa_total_amount += _fsa.Amount;
+                    }
+
+                    fundsource_total += fsa_total_amount;
+                    allotment_total += fundsource_total;
+
+                    _thead.AddCell(new PdfPCell(new Paragraph(fsa_total_amount > 0 ? fsa_total_amount.ToString("N",new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 0 });
+                    _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 0 });
+                    _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 0 });
+                    _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 0 });
+                    _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 0 });
+
+
+                }
+
+                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 0 });
+                _thead.AddCell(new PdfPCell(new Paragraph("SUBTOTAL", new Font(Font.FontFamily.HELVETICA, 6f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 1 });
+                _thead.AddCell(new PdfPCell(new Paragraph(fundsource_total > 0 ? fundsource_total.ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 1 });
+                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 1 });
+                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 1 });
+                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 1 });
+                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 1 });
+
+
+                Double saa_allotment_total = 0;
+                var _sub_allotments = db.fsh.Where(p => p.allotment == _allotments.ID.ToString() && p.type == "SUB").ToList();
+                if (_sub_allotments.Count > 0)
+                {
+                    saa_allotment_total = 0;
+                    _thead.AddCell(new PdfPCell(new Paragraph(_allotments.Code.ToUpper().ToString() +" SUB-ALLOTMENT", new Font(Font.FontFamily.HELVETICA, 6f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT, Border = 0,Colspan = 7 });
+
+                    Double saa_fund_source_total = 0;
+                    foreach (FundSourceHdr _fsh_saa in _sub_allotments)
+                    {
+                        saa_fund_source_total = 0;
+                        _thead.AddCell(new PdfPCell(new Paragraph(_fsh_saa.SourceTitle.ToString(), new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_LEFT, Border = 0 });
+                        _thead.AddCell(new PdfPCell(new Paragraph(_fsh_saa.desc.ToString(), new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_LEFT, Border = 0 });
+
+
+                        var saa_amt = (from list in db.fsa
+                                       join expensecode
+                                        in db.uacs on list.expensecode equals expensecode.Code
+                                       where list.fundsource == _fsh_saa.ID.ToString()
+                                       select new
+                                       {
+                                           Amount = list.amount
+                                       }
+                           ).ToList();
+                        Double saa_fsa_amt_total = 0;
+                        foreach (var _saa_amt in saa_amt)
+                        {
+                            saa_fsa_amt_total += _saa_amt.Amount;
+                        }
+
+                        saa_fund_source_total += saa_fsa_amt_total;
+                        allotment_total += saa_fund_source_total;
+
+                        _thead.AddCell(new PdfPCell(new Paragraph(saa_fsa_amt_total > 0 ? saa_fsa_amt_total.ToString("N",new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 0 });
+                        _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_LEFT, Border = 0 });
+                        _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_LEFT, Border = 0 });
+                        _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_LEFT, Border = 0 });
+                        _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_LEFT, Border = 0 });
+                    }
+
+                    _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 0 });
+                    _thead.AddCell(new PdfPCell(new Paragraph("SUBTOTAL", new Font(Font.FontFamily.HELVETICA, 6f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 1 });
+                    _thead.AddCell(new PdfPCell(new Paragraph(saa_fund_source_total > 0 ? saa_fund_source_total.ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 1 });
+                    _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 1 });
+                    _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 1 });
+                    _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 1 });
+                    _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 1 });
+
+                }
+
+                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 0 });
+                _thead.AddCell(new PdfPCell(new Paragraph("TOTAL " + _allotments.Code.ToString(), new Font(Font.FontFamily.HELVETICA, 6f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 1 });
+                _thead.AddCell(new PdfPCell(new Paragraph(allotment_total > 0 ? allotment_total.ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 1 });
+                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 1 });
+                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 1 });
+                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 1 });
+                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = 1 });
+
             }
+
+
+
             doc.Add(_thead);
             doc.Close();
         }
