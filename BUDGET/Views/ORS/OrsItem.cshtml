@@ -3,11 +3,11 @@
     ViewBag.Title = "ORS";
 }
 
-<div style="width: 100%;overflow: hidden;"  id="ors_table" data-get="@Url.RouteUrl("get_ors_ps")" data-save="@Url.RouteUrl("save_ors_ps")" data-delete="@Url.RouteUrl("delete_ors_ps")" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-allotments="@Url.Action("GetFundSource","ORS",new { ID = ViewBag.allotments })" data-requesting_head="@Url.Action("GetHeadRequestingHeads","Ors")" data-print_ors="@Url.Action("PrintOrsPS","ORSReports")" data-uacs_amount="@Url.Action("ORS_UACS","ORS")"></div>
+<div style="width: 100%;overflow: hidden;"  id="ors_table" data-get="@Url.RouteUrl("get_ors_ps")" data-save="@Url.RouteUrl("save_ors_ps")" data-delete="@Url.RouteUrl("delete_ors_ps")"  data-allotments="@Url.Action("GetFundSource","ORS",new { ID = ViewBag.allotments })" data-requesting_head="@Url.Action("GetHeadRequestingHeads","Ors")" data-print_ors="@Url.Action("PrintOrsPS","ORSReports")" data-uacs_amount="@Url.Action("ORS_UACS","ORS")"></div>
 
 @section scripts {
     <script>
-        var expense_codes = [];
+       
         var head_requesting = [];
         var fund_source = [];
         var container = document.getElementById("ors_table");
@@ -141,6 +141,7 @@
                    };
 
                    $.post(url, data, function (resdata) {
+
                    });
                    return true;
                } else {
@@ -160,13 +161,7 @@
            $("#loading").modal('show');
            resize();
            load_data();
-           $.get(expense_url, function (expense_res) {
-               if (expense_res.length > 0) {
-                   for (var i = 0; i < expense_res.length; i++) {
-                       expense_codes[i] = expense_res[i]["Code"];
-                   }
-               }
-           });
+          
            $.get(allotments_url, function (response) {
                if (response.length > 0) {
                    for (var i = 0; i < response.length; i++) {

@@ -12,6 +12,7 @@ using BUDGET.Models;
 using System.Globalization;
 namespace BUDGET.Controllers
 {
+    [Authorize]
     [OutputCache(Duration = 0)]
     public class ORSReportsController : Controller
     {

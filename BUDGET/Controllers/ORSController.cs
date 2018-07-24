@@ -232,7 +232,9 @@ namespace BUDGET.Controllers
         public JsonResult GetORSUacs(String ID)
         {
             Int32 id = Convert.ToInt32(ID);
-            var ors_uacs = (from list in db.ors_expense_codes join uacs in db.uacs on list.uacs equals uacs.Code where list.ors_obligation == id
+            var ors_uacs = (from list in db.ors_expense_codes
+                            join uacs in db.uacs on list.uacs equals uacs.Code
+                            where list.ors_obligation == id
                             select
                             new
                             {
@@ -242,6 +244,19 @@ namespace BUDGET.Controllers
                                 Amount = list.amount
                             }).ToList();
             return Json(ors_uacs, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetFundSourceUACS(String ID)
+        {
+            Int32 id = Convert.ToInt32(ID);
+
+            var fund_source_uacs = (from uacs in db.uacs
+                                    select new
+                                    {
+                                        Code = uacs.Code
+                                    }).ToList();
+
+            return Json(fund_source_uacs, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult SaveOrsObligation(FormCollection collection)
@@ -268,19 +283,25 @@ namespace BUDGET.Controllers
                     {
                         if (sb.expense_code != null)
                         {
+
                             Object uacs_obj = sb.expense_code;
                             String uacs = uacs_obj.ToString();
 
                             var uacs_exist = (from exist in db.ors_expense_codes where exist.uacs == uacs && exist.ors_obligation == id select exist).ToList();
-                            if(uacs_exist.Count <= 0)
+
+                            if (uacs_exist.Count <= 0)
                             {
+
                                 ORS_EXPENSE_CODES oec = new ORS_EXPENSE_CODES();
                                 oec.uacs = sb.expense_code;
                                 oec.ors_obligation = id;
                                 oec.amount = sb.amount;
                                 db.ors_expense_codes.Add(oec);
                                 try { db.SaveChanges(); } catch { }
+                               
+                                //var fund_source_uacs = (from _fsa in db.fsa )
                             }
+
                         }
                     }
                     catch { }
@@ -322,6 +343,7 @@ namespace BUDGET.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateOrsHeadRequest(FormCollection collection)
         {
+
             ors_head_request ohr = new ors_head_request();
             ohr.Name = collection.Get("name");
             ohr.Position = collection.Get("position");
