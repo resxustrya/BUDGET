@@ -298,8 +298,27 @@ namespace BUDGET.Controllers
                                 oec.amount = sb.amount;
                                 db.ors_expense_codes.Add(oec);
                                 try { db.SaveChanges(); } catch { }
-                               
-                                //var fund_source_uacs = (from _fsa in db.fsa )
+
+
+                                var fund_source_uacs = (from ors_oec in db.ors_expense_codes
+                                                        join ors in db.ors on ors_oec.ors_obligation equals ors.ID
+                                                        join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
+                                                        join allotments in db.allotments on ors_master.allotments equals allotments.ID
+                                                        join fundsource in db.fsh on allotments.ID.ToString() equals fundsource.allotment
+                                                        join _fsa in db.fsa on fundsource.ID.ToString() equals _fsa.fundsource
+                                                        where ors_oec.ID == oec.ID
+                                                        && ors.FundSource == fundsource.Code
+                                                        && oec.uacs == _fsa.expensecode
+                                                        select new
+                                                        {
+                                                            uacs = ors_oec.uacs,
+                                                            allotments = allotments.ID,
+                                                            fundsource = fundsource.ID
+                                                        }).FirstOrDefault();
+
+                                String uacs_res = fund_source_uacs.uacs;
+
+
                             }
 
                         }
