@@ -250,7 +250,6 @@ namespace BUDGET.DataHelpers
                         _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_LEFT });
                         //total realignment
 
-
                         _thead.AddCell(new PdfPCell(new Paragraph(_fsa_amount > 0 ? _fsa_amount.ToString("N",new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
 
 
@@ -299,7 +298,7 @@ namespace BUDGET.DataHelpers
                         //total as of this month
                         _thead.AddCell(new PdfPCell(new Paragraph(total_utilized_amount > 0 ? total_utilized_amount.ToString("N",new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
                         //total unobligated
-                        _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_LEFT });
+                        _thead.AddCell(new PdfPCell(new Paragraph((_fsa_amount - total_utilized_amount).ToString("N", new CultureInfo("en-US")), new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
                         //remarks
                         _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_LEFT });
 
@@ -406,26 +405,122 @@ namespace BUDGET.DataHelpers
                         
                         foreach (var _saa_amt in saa_amt)
                         {
+                            Double _fsa_amount = _saa_amt.Amount;
                             _thead.AddCell(new PdfPCell(new Paragraph(_saa_amt.Title.ToString().ToUpper(), new Font(Font.FontFamily.HELVETICA, 7f, Font.ITALIC))) { HorizontalAlignment = Element.ALIGN_LEFT, PaddingLeft = 25f });
                             _thead.AddCell(new PdfPCell(new Paragraph(_saa_amt.ExpenseCode.ToString(), new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_CENTER });
                             _thead.AddCell(new PdfPCell(new Paragraph(_saa_amt.Amount.ToString("N", new CultureInfo("en-US")), new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
 
+                            var realignments_from = (from realignment in db.realignment
+                                                     join _rel_fsh in db.fsh on realignment.fundsource equals _rel_fsh.ID.ToString()
+                                                     join _rel_allotment in db.allotments on _rel_fsh.allotment equals _rel_allotment.ID.ToString()
+                                                     where realignment.uacs_from == _saa_amt.ExpenseCode
+                                                     && realignment.fundsource == _saa_amt.ID.ToString()
+                                                     && _rel_allotment.ID == _allotments.ID
+                                                     select new
+                                                     {
+                                                         Amount = realignment.amount
+                                                     }).ToList();
 
 
-                            //realignment
-                            _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_LEFT });
+
+                            Double total_realignment = 0;
+                            String total_realignment_str = "";
+
+                            if (realignments_from.Count > 0)
+                            {
+                                foreach (var amount in realignments_from)
+                                {
+                                    total_realignment += amount.Amount;
+                                }
+                                _fsa_amount -= total_realignment;
+                                total_realignment_str = total_realignment > 0 ? "(" + total_realignment.ToString("N", new CultureInfo("en-US")) + ")" : "";
+                            }
+                            else
+                            {
+                                var realignments_to = (from realignment in db.realignment
+                                                       join _rel_fsh in db.fsh on realignment.fundsource equals _rel_fsh.ID.ToString()
+                                                       join _rel_allotment in db.allotments on _rel_fsh.allotment equals _rel_allotment.ID.ToString()
+                                                       where realignment.uacs_to == _saa_amt.ExpenseCode
+                                                       && realignment.fundsource == _saa_amt.ID.ToString()
+                                                       && _rel_allotment.ID == _allotments.ID
+                                                       select new
+                                                       {
+                                                           Amount = realignment.amount
+                                                       }).ToList();
+
+
+                                foreach (var amount in realignments_to)
+                                {
+                                    total_realignment += amount.Amount;
+                                }
+                                _fsa_amount += total_realignment;
+                                total_realignment_str = total_realignment > 0 ? total_realignment.ToString("N", new CultureInfo("en-US")) : "";
+                            }
+
+
+
+                            //realignments
+
+                            _thead.AddCell(new PdfPCell(new Paragraph(total_realignment_str, new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
                             //realignment to
-                            _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
+
+                            _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_LEFT });
                             //total realignment
-                            _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-                            //Month
-                            _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-                            //As of month
-                            _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-                            //unobligated
-                            _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
+
+
+                            _thead.AddCell(new PdfPCell(new Paragraph(_fsa_amount > 0 ? _fsa_amount.ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+
+
+
+                            var uacs_amounts = (from ors_uacs in db.ors_expense_codes
+                                                join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
+                                                join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
+                                                join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
+                                                where ors.Date >= date1 && ors.Date <= date2 &&
+                                                ors.FundSource == _fsh_saa.Code &&
+                                                ors_uacs.uacs == _saa_amt.ExpenseCode
+                                                select new
+                                                {
+                                                    Amount = ors_uacs.amount
+                                                }).ToList();
+
+                            Double month_total = 0;
+                            foreach (var amount in uacs_amounts)
+                            {
+                                month_total += amount.Amount;
+                            }
+
+
+
+                            //total for the month
+                            _thead.AddCell(new PdfPCell(new Paragraph(month_total > 0 ? month_total.ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+
+                            var total_utilized = (from ors_uacs in db.ors_expense_codes
+                                                  join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
+                                                  join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
+                                                  join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
+                                                  where ors.FundSource == _fsh_saa .Code &&
+                                                  ors_uacs.uacs == _saa_amt.ExpenseCode
+                                                  select new
+                                                  {
+                                                      Amount = ors_uacs.amount
+                                                  }).ToList();
+
+                            Double total_utilized_amount = 0;
+                            foreach (var amount in total_utilized)
+                            {
+                                total_utilized_amount += amount.Amount;
+                            }
+
+
+                            //total as of this month
+                            _thead.AddCell(new PdfPCell(new Paragraph(total_utilized_amount > 0 ? total_utilized_amount.ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                            //total unobligated
+                            _thead.AddCell(new PdfPCell(new Paragraph( (_fsa_amount - total_utilized_amount).ToString("N",new CultureInfo("en-US")) , new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
                             //remarks
-                            _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
+                            _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_LEFT });
+
+                            total += _saa_amt.Amount;
                         }
                     }
                 }
