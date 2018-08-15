@@ -15,7 +15,7 @@ namespace BUDGET.DataHelpers
         private BudgetDB db = new BudgetDB();
         public void GenerateORSMOOE(String id)
         {
-            String filename = "ors.pdf";
+            String filename = id + "ors.pdf";
             Document doc = new Document(PageSize.A4);
             try
             {

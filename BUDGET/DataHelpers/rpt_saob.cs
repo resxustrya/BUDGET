@@ -277,23 +277,29 @@ namespace BUDGET.DataHelpers
                         //total for the month
                         _thead.AddCell(new PdfPCell(new Paragraph(month_total > 0 ? month_total.ToString("N",new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
 
+                        
                         var total_utilized = (from ors_uacs in db.ors_expense_codes
                                             join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
                                             join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
                                             join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
-                                            where ors.FundSource == _fsh.Code &&
+                                            where ors.FundSource == _fsh.Code
+                                            && ors.Date <= date2 &&
                                             ors_uacs.uacs == _fsa.ExpenseCode
+
                                             select new
                                             {
                                                 Amount = ors_uacs.amount
                                             }).ToList();
+                                            
+
+
+
 
                         Double total_utilized_amount = 0;
                         foreach (var amount in total_utilized)
                         {
                             total_utilized_amount += amount.Amount;
                         }
-
 
                         //total as of this month
                         _thead.AddCell(new PdfPCell(new Paragraph(total_utilized_amount > 0 ? total_utilized_amount.ToString("N",new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });

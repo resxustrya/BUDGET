@@ -28,7 +28,7 @@ namespace BUDGET.Controllers
             
             var ors_uacs = db.ors_expense_codes.Where(p => p.ors_obligation == ors.ID).ToList();
 
-            String filename = "ors.pdf";
+            String filename = id + "ors.pdf";
             Document doc = new Document(PageSize.A4);
             try
             {
