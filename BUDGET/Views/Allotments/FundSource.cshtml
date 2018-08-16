@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<FundSourceHdr>
 @{
+    BudgetDB db = new BudgetDB();
+    var ors_heads = db.ors_head_request.ToList();
     ViewBag.Title = "Index";
 }
 
@@ -23,19 +25,30 @@
                         <tr>
                             <th>Title</th>
                             <th>Title Code</th>
+                            <th>ORS Head</th>
                             <th>Action</th>
                             <th>Realignment</th>
                         </tr>
                         @foreach (FundSourceHdr data in Model)
                         {
                             <tr>
-                                <td style="font-size:1em;">@data.SourceTitle</td>
-                                <td style="font-size:1em;">@data.Code</td>
-                                <td>
-                                    <a href="@Url.Action("EditFundSource","Allotments", new { id = data.ID })" class="btn btn-info"><span class="glyphicon glyphicon-edit"></span> Edit</a>
-                                    <a href="@Url.Action("DeleteFundSource","Allotments",new { id = data.ID })" class="btn btn-danger" onclick="return confirm('Do you want to delete this budget');"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+                                <td class="col-md-4">@data.SourceTitle</td>
+                                <td class="col-md-2">@data.Code</td>
+                                <td class="col-md-4">
+                                    <select name="ors_head" data-fsh="@data.ID" id="ors_head" class="form-control" onchange="ors_head(this);" data-url="@Url.Action("ORS_HEAD","Allotments")">
+                                        <option value="" selected disabled>Select an ORS Head</option>
+
+                                        @foreach (ors_head_request ors_head in ors_heads)
+                                        {
+                                            <option value="@ors_head.ID" @(data.ors_head == ors_head.ID ? "selected" : "" )>@ors_head.Name</option>
+                                        }
+                                    </select>
                                 </td>
-                                <td><a href="@Url.Action("Realignment","Allotments", new { fundsource = data.ID })" class="btn btn-info"><span class="glyphicon glyphicon-transfer"></span> Funds Realignment</a></td>
+                                <td class="col-md-5">
+                                    <a href="@Url.Action("EditFundSource","Allotments", new { id = data.ID })" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+                                    <a href="@Url.Action("DeleteFundSource","Allotments",new { id = data.ID })" class="btn btn-danger btn-sm" onclick="return confirm('Do you want to delete this budget');"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+                                </td>
+                                <td class="col-md-4"><a href="@Url.Action("Realignment","Allotments", new { fundsource = data.ID })" class="btn btn-info"><span class="glyphicon glyphicon-transfer"></span> Funds Realignment</a></td>
                             </tr>
                         }
                     </table>
@@ -45,6 +58,21 @@
     </div>
 </div>
 
+@section scripts {
+    <script>
+        function ors_head(el) {
+            var fsh = $(el).data('fsh');
+            var ors_head = $(el).val();
+            var url = $(el).data('url');
+            var data = {
+                fsh: fsh,
+                ors_head : ors_head
+            };
+            $.post(url, data, function (res) {
+            });
+        }
+    </script>
+}
 @section footer{
     @Html.Partial("footer")
 }

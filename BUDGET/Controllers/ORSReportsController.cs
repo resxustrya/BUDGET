@@ -65,6 +65,8 @@ namespace BUDGET.Controllers
             logo_cell.Padding = 5f;
             table.AddCell(logo_cell);
 
+
+
             Font arial_font_10 = FontFactory.GetFont("Arial", 8, Font.BOLD, BaseColor.BLACK);
 
             var table2 = new PdfPTable(1);
@@ -226,6 +228,7 @@ namespace BUDGET.Controllers
             table_row_8.AddCell(new PdfPCell(new Paragraph("Certified:", new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))));
 
 
+
             table_row_8.AddCell(new PdfPCell(new Paragraph("")) { FixedHeight = 50f,Border = 13 });
             table_row_8.AddCell(new PdfPCell(new Paragraph("Charges to appropriation/ allotment necessary, lawful and under my direct supervision; and supporting documents valid, proper and legal \n", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { FixedHeight = 50f, Border = 13 });
             table_row_8.AddCell(new PdfPCell(new Paragraph("")) { FixedHeight = 50f, Border = 13 });
@@ -243,18 +246,30 @@ namespace BUDGET.Controllers
             table_row_8.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 6f, Font.BOLD))) { Border = 14 });
 
 
-            var ors_requesting_head = db.ors_head_request.Where(p => p.Name == ors.head_requesting_office).FirstOrDefault();
+            //var ors_requesting_head = db.ors_head_request.Where(p => p.Name == ors.head_requesting_office).FirstOrDefault();
+
+            var ors_fsh = (from list in db.ors
+                           join ors_master in db.orsmaster on list.ors_id equals ors_master.ID
+                           join fsh in db.fsh on ors_master.allotments.ToString() equals fsh.allotment
+                           where fsh.Code == ors.FundSource && fsh.allotment == ors_master.allotments.ToString()
+                           && list.ID.ToString() == id
+                           select new
+                           {
+                               ors_head = fsh.ors_head
+                           }).FirstOrDefault();
+
+            var ors_head = db.ors_head_request.Where(p => p.ID.ToString() == ors_fsh.ors_head.ToString()).FirstOrDefault();
 
             table_row_8.AddCell(new PdfPCell(new Paragraph("Printed Name :", new Font(Font.FontFamily.HELVETICA, 6f, Font.BOLD))));
             //HEAD REQUESTING OFFICE / AUTHORIZED REPRESENTATIVE
-            table_row_8.AddCell(new PdfPCell(new Paragraph(ors_requesting_head.Name, new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER });
+            table_row_8.AddCell(new PdfPCell(new Paragraph(ors_head.Name, new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER });
             table_row_8.AddCell(new PdfPCell(new Paragraph("Printed Name", new Font(Font.FontFamily.HELVETICA, 6f, Font.BOLD))));
             table_row_8.AddCell(new PdfPCell(new Paragraph("LEONORA A. ANIEL", new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER });
 
 
             table_row_8.AddCell(new PdfPCell(new Paragraph("Position :", new Font(Font.FontFamily.HELVETICA, 6f, Font.BOLD))));
             //HEAD REQUESTING OFFICE / AUTHORIZED REPRESENTATIVE
-            table_row_8.AddCell(new PdfPCell(new Paragraph(ors_requesting_head.Position, new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER });
+            table_row_8.AddCell(new PdfPCell(new Paragraph(ors_head.Position, new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER });
             table_row_8.AddCell(new PdfPCell(new Paragraph("Position", new Font(Font.FontFamily.HELVETICA, 6f, Font.BOLD))));
             table_row_8.AddCell(new PdfPCell(new Paragraph("BUDGET OFFICER III", new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER });
 
@@ -365,6 +380,27 @@ namespace BUDGET.Controllers
             return fsResult;
         }
 
+        [HttpGet]
+        public ActionResult ORS_PAGE()
+        {
+            var orslist = (from list in db.orsmaster where list.Year == GlobalData.Year select list).ToList();
+            return PartialView(orslist);
+        }
         
+        [HttpPost]
+        public ActionResult ORS_PAGE(FormCollection collection)
+        {
+            string[] page = null;
+            string pages = collection.Get("page");
+            try
+            {
+                
+                page = pages.Split('-');
+                page[0] = page[0].Trim();
+                page[1] = page[1].Trim();
+            }
+            catch { }
+            return View();
+        }
     }
 }

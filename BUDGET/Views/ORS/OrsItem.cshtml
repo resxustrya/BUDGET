@@ -3,30 +3,27 @@
     ViewBag.Title = "ORS";
 }
 
-<div style="width: 100%;overflow: hidden;"  id="ors_table" data-get="@Url.RouteUrl("get_ors_ps")" data-save="@Url.RouteUrl("save_ors_ps")" data-delete="@Url.RouteUrl("delete_ors_ps")"  data-allotments="@Url.Action("GetFundSource","ORS",new { ID = ViewBag.allotments })" data-requesting_head="@Url.Action("GetHeadRequestingHeads","Ors")" data-print_ors="@Url.Action("PrintOrsPS","ORSReports")" data-uacs_amount="@Url.Action("ORS_UACS","ORS")"></div>
+<div style="width: 100%;overflow: hidden;"  id="ors_table" data-get="@Url.RouteUrl("get_ors_ps")" data-save="@Url.RouteUrl("save_ors_ps")" data-delete="@Url.RouteUrl("delete_ors_ps")"  data-allotments="@Url.Action("GetFundSource","ORS",new { ID = ViewBag.allotments })" data-print_ors="@Url.Action("PrintOrsPS","ORSReports")" data-uacs_amount="@Url.Action("ORS_UACS","ORS")"></div>
 
 @section scripts {
     <script>
-       
-        var head_requesting = [];
+        
         var fund_source = [];
         var container = document.getElementById("ors_table");
         var table;
         var valid = true;
         var expense_url = $("#ors_table").data('expense');
-        var obligated = ['OBLIGATED'];
-
         var allotments_url = $("#ors_table").data('allotments');
-        var url_head_requesting = $("#ors_table").data('requesting_head');
         //35 cols
        table = new Handsontable(container, {
            startRows: 50,
-           startCols: 25,
+           startCols: 17,
            manualColumnResize: true,
            rowHeaders: true,
-           colWidths: [1,1,1,100, 200, 200, 200, 300, 300, 700, 1, 100, 200,200, 200,1, 1, 1, 1, 1,200,200,200,200,200],
+           colWidths: [1,1,140, 200, 200, 200, 300, 300, 700, 100,200,200,200,200,200,200,200],
            colHeaders: true,
-           filters :true,
+           filters: true,
+           stretchH: 'all',
            dropdownMenu: true,
            contextMenu: {
                items: {
@@ -39,7 +36,6 @@
                            var id = tempdata[fromRow][0];
                            if (id) {
                                var url = $("#ors_table").data('print_ors') + "/" + id;
-                               
                                window.location.href = url;
                            }
                        }
@@ -75,30 +71,22 @@
            fillHandle: {
                autoInsertRow: false,
            },
-           colHeaders: ['<b>ID</b>','<b>ROW#</b>','STATUS', '<b>DATE</b/>', '<b>DV</b>', '<b>PO#</b>', '<b>PR#</b>', '<b>PAYEE</b>', '<b>ADDRESS</b>', '<b>PARTICULARS</b>', '<b>ORS NO</b>', '<b>LINE #</b>', '<b>FUND SOURCE</b>', '<b>GROSS</b>','<b>Requesting Office Head</b>','<b>AE</b>', '<b>AF</b>', '<b>AG</b>', '<b>AH</b>', '<b>AI</b>','<b>CREATED BY</b>','<b>Date Received</b>','<b>Time Received</b>','<b>Date Released</b>','<b>Time Released</b>'],
+           colHeaders: ['<b>ID</b>','<b>ROW#</b>','<b>DATE</b/>', '<b>DV</b>', '<b>PO#</b>', '<b>PR#</b>', '<b>PAYEE</b>', '<b>ADDRESS</b>', '<b>PARTICULARS</b>', '<b>ORS NO</b>','<b>FUND SOURCE</b>', '<b>GROSS</b>','<b>CREATED BY</b>','<b>Date Received</b>','<b>Time Received</b>','<b>Date Released</b>','<b>Time Released</b>',''],
            columns: [
                {},
                {},
-               {
-                   type: 'dropdown',
-                   source: obligated
-               },
                {
                    type: 'date',
                    dateFormat: 'MM/DD/YYYY',
                    correctFormat: true,
                    defaultDate: Date.now()
-               }, {}, {}, {}, {}, {}, {}, {},{},
+               }, {}, {}, {}, {}, {}, {}, {},
                {
                    type: 'dropdown',
                    source: fund_source
                },
                {},
-               {
-                   type :'dropdown',
-                   source: head_requesting
-               },
-                {}, {}, {}, {}, {},{},
+               {},
                {
                    type : 'date',
                    dateFormat : 'MM/DD/YYYY',
@@ -120,11 +108,11 @@
                    type: 'time',
                    timeFormat: 'HH:mm:ss',
                    correctFormat: true
-               }
+               }, {}
            ],
            cells: function (r, c, prop) {
                var cellProperties = {};
-               if (c === 0 || c === 1) cellProperties.readOnly = true;
+               if (c === 0 || c === 1 || c == 9 || c == 11 || c == 12) cellProperties.readOnly = true;
                return cellProperties;
            },
            beforeRemoveRow: function (index, column) {
@@ -161,7 +149,7 @@
            $("#loading").modal('show');
            resize();
            load_data();
-          
+
            $.get(allotments_url, function (response) {
                if (response.length > 0) {
                    for (var i = 0; i < response.length; i++) {
@@ -169,16 +157,8 @@
                    }
                }
            });
-           
-           $.get(url_head_requesting, function (response) {
-               if (response.length > 0) {
-                   for (var i = 0; i < response.length; i++) {
-                       head_requesting[i] = response[i]["head"];
-                   }
-               }
-           });
-        });
 
+       });
        $(window).bind('keydown', function (event) {
            if (event.ctrlKey || event.metaKey) {
                switch (String.fromCharCode(event.which).toLowerCase())
@@ -191,56 +171,21 @@
                            var orsps = [];
                            var data = table.getData();
                            for (var i = 0; i < data.length; i++) {
-                               /*
-                               data[i][0] = data[i][0] ? data[i][0] : null;
-                               data[i][1] = data[i][1] ? data[i][1] : null;
-                               data[i][2] = data[i][2] ? data[i][2] : null;
-                               data[i][3] = data[i][3] ? data[i][3] : null;
-                               data[i][4] = data[i][4] ? data[i][4] : null;
-                               data[i][5] = data[i][5] ? data[i][5] : null;
-                               data[i][6] = data[i][6] ? data[i][6] : null;
-                               data[i][7] = data[i][7] ? data[i][7] : null;
-                               data[i][8] = data[i][8] ? data[i][8] : null;
-                               data[i][9] = data[i][9] ? data[i][9] : null;
-                               data[i][10] = data[i][10] ? data[i][10] : null;
-                               data[i][11] = data[i][11] ? data[i][11] : null;
-                               data[i][12] = data[i][12] ? data[i][12] : null;
-                               data[i][13] = data[i][13] ? data[i][13] : null;
-                               data[i][13] = data[i][13] ? data[i][13] : null;
-                               data[i][14] = data[i][14] ? data[i][14] : null;
-                               data[i][15] = data[i][15] ? data[i][15] : null;
-                               data[i][16] = data[i][16] ? data[i][16] : null;
-                               data[i][17] = data[i][17] ? data[i][17] : null;
-                               data[i][18] = data[i][18] ? data[i][18] : null;
-                               data[i][19] = data[i][19] ? data[i][19] : null;
-                               data[i][20] = data[i][20] ? data[i][20] : null;
-                               data[i][21] = data[i][21] ? data[i][21] : null;
-                               data[i][21] = data[i][22] ? data[i][22] : null;
-                               */
                                orsps[i] = {
                                    "ID": data[i][0],
                                    "Row": (i + 1),
-                                   "is_obligated" : data[i][2],
-                                   "Date": data[i][3],
-                                   "DB": data[i][4],
-                                   "PO": data[i][5],
-                                   "PR": data[i][6],
-                                   "PAYEE": data[i][7],
-                                   "Adress": data[i][8],
-                                   "Particulars": data[i][9],
-                                   "ORS_NO": data[i][10],
-                                   "FundSource": data[i][12],
-                                   "Gross": data[i][13],
-                                   "head_requesting" : data[i][14],
-                                   "AE": data[i][15],
-                                   "AF": data[i][16],
-                                   "AG": data[i][17],
-                                   "AH": data[i][18],
-                                   "AI": data[i][19],
-                                   "DateReceived" : data[i][21],
-                                   "TimeReceived": data[i][22],
-                                   "DateReleased": data[i][23],
-                                   "TimeReleased": data[i][24]
+                                   "Date": data[i][2],
+                                   "DB": data[i][3],
+                                   "PO": data[i][4],
+                                   "PR": data[i][5],
+                                   "PAYEE": data[i][6],
+                                   "Adress": data[i][7],
+                                   "Particulars": data[i][8],
+                                   "FundSource": data[i][10],
+                                   "DateReceived" : data[i][13],
+                                   "TimeReceived": data[i][14],
+                                   "DateReleased": data[i][15],
+                                   "TimeReleased": data[i][16]
                                }
                            }
                            var data = {
@@ -248,15 +193,7 @@
                            };
 
                             $.post(url, data, function (resdata) {
-                                if (resdata.length > 0) {
-                                    var tabledata = [];
-                                    var total;
-
-                                    for (var i = 0; i < resdata.length; i++) {
-                                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['is_obligated'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['hear_requesting_office'], resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
-                                    }
-                                    table.loadData(tabledata);
-                                }
+                                load_data();
                                 document.body.style.cursor = 'default';
                             });
                        } else {
@@ -279,13 +216,13 @@
                var tabledata = [];
                if (resdata.length > 0) {
                    for (var i = 0; i < resdata.length; i++) {
-                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['is_obligated'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['ORS_NO'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['hear_requesting_office'], resdata[i]['AE'], resdata[i]['AF'], resdata[i]['AG'], resdata[i]['AH'], resdata[i]['AI'], resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased']);
+                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['Row'],resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased'],'');
                    }
                    $("#loading").modal('hide');
                    table.loadData(tabledata);
                } else {
                    for (var i = 0; i < 50; i++) {
-                       tabledata[i] = new Array(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                       tabledata[i] = new Array(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
                    }
                    $("#loading").modal('hide');
                    table.loadData(tabledata);

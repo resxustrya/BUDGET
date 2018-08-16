@@ -433,6 +433,10 @@
     <Compile Include="Migrations\201807120105422_added_culomn2.Designer.cs">
       <DependentUpon>201807120105422_added_culomn2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808160234305_ors_head_in_fsh.cs" />
+    <Compile Include="Migrations\201808160234305_ors_head_in_fsh.Designer.cs">
+      <DependentUpon>201808160234305_ors_head_in_fsh.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -748,6 +752,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Budgets\Year.cshtml" />
     <Content Include="Views\Reports\DownloadSaobSheet2.cshtml" />
+    <Content Include="Views\ORSReports\ORS_PAGE.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -910,6 +915,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807120105422_added_culomn2.resx">
       <DependentUpon>201807120105422_added_culomn2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808160234305_ors_head_in_fsh.resx">
+      <DependentUpon>201808160234305_ors_head_in_fsh.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -554,5 +554,18 @@ namespace BUDGET.Controllers
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
+        public JsonResult ORS_HEAD(FormCollection collection)
+        {
+            try
+            {
+                Int32 ID = Convert.ToInt32(collection.Get("fsh"));
+                var fsh = db.fsh.Where(p => p.ID == ID).FirstOrDefault();
+                fsh.ors_head = Convert.ToInt32(collection.Get("ors_head"));
+                db.SaveChanges();
+            }
+            catch { }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
     }
 }

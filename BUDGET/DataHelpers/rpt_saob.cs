@@ -193,6 +193,7 @@ namespace BUDGET.DataHelpers
                         _thead.AddCell(new PdfPCell(new Paragraph(_fsa.ExpenseCode.ToString(), new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_CENTER });
                         _thead.AddCell(new PdfPCell(new Paragraph(_fsa.Amount.ToString("N",new CultureInfo("en-US")), new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
 
+
                         var realignments_from = (from realignment in db.realignment
                                                  join _rel_fsh in db.fsh on realignment.fundsource equals _rel_fsh.ID.ToString()
                                                  join _rel_allotment in db.allotments on _rel_fsh.allotment equals _rel_allotment.ID.ToString()

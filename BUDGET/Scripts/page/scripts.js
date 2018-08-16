@@ -83,6 +83,19 @@
             $('.loading').hide();
         });
     });
+
+    $("#ors_page").click(function () {
+        $("#page_modal").modal('show');
+        $('.loading').show();
+        $('.modal_body').html('');
+        var url = $(this).data('url');
+
+        $.get(url, function (res) {
+            $('.modal_body').html(res);
+            $('.loading').hide();
+        });
+    });
+
 });
 
 
@@ -98,7 +111,6 @@ function getBaseUrl() {
 }
 
 
-
 $(window).resize(function () {
     resize();
 });
@@ -108,4 +120,3 @@ function resize() {
     var h = d_h - 115;
     $("#ors_table").height(h);
 }
-    

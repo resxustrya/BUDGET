@@ -46,12 +46,11 @@ namespace BUDGET.Controllers
         {
             Int32 ors_id = Convert.ToInt32(GlobalData.ors_id);
             var orsps = (from list in db.ors where list.ors_id == ors_id
-                      orderby list.Row ascending
+                      orderby list.FundSource ascending
                       select new
                       {
                           ID = list.ID,
                           Row = list.Row,
-                          is_obligated = list.is_obligated,
                           Date = list.Date1,
                           DB = list.DB,
                           PO = list.PO,
@@ -59,20 +58,13 @@ namespace BUDGET.Controllers
                           PAYEE = list.PAYEE,
                           Adress = list.Adress,
                           Particulars = list.Particulars,
-                          ORS_NO = list.ORS_NO,
                           FundSource = list.FundSource,
                           Gross = (from ors_uacs in db.ors_expense_codes where ors_uacs.ors_obligation == list.ID select ors_uacs.amount).DefaultIfEmpty(0).Sum(),
-                          AE = list.AE,
-                          AF = list.AF,
-                          AG = list.AG,
-                          AH = list.AH,
-                          AI = list.AI,
                           Created_By = list.Created_By,
                           DateReceived = list.DateReceived,
                           TimeReceived = list.TimeReceived,
                           DateReleased = list.DateReleased,
                           TimeReleased = list.TimeReleased,
-                          hear_requesting_office = list.head_requesting_office
                       }).ToList();
             return Json(orsps, JsonRequestBehavior.AllowGet);
         }
@@ -119,13 +111,7 @@ namespace BUDGET.Controllers
                     ors.PAYEE = sb.PAYEE;
                     ors.Adress = sb.Adress;
                     ors.Particulars = sb.Particulars;
-                    ors.ORS_NO = sb.ORS_NO;
                     ors.FundSource = sb.FundSource;
-                    ors.AE = sb.AE;
-                    ors.AF = sb.AF;
-                    ors.AG = sb.AG;
-                    ors.AH = sb.AH;
-                    ors.AI = sb.AI;
                     ors.DateReceived = sb.DateReceived;
                     ors.TimeReceived = sb.TimeReceived;
                     ors.DateReleased = sb.DateReleased;
@@ -143,7 +129,6 @@ namespace BUDGET.Controllers
                         {
                             ORS ors = new ORS();
                             ors.ors_id = Convert.ToInt32(GlobalData.ors_id);
-                            ors.is_obligated = "OBLIGATED"; 
                             ors.Row = sb.Row;
 
                             Object date = sb.Date;
@@ -157,15 +142,12 @@ namespace BUDGET.Controllers
                             ors.PAYEE = sb.PAYEE;
                             ors.Adress = sb.Adress;
                             ors.Particulars = sb.Particulars;
-                            ors.ORS_NO = sb.ORS_NO;
+                            
                             ors.FundSource = sb.FundSource;
-                            ors.AE = sb.AE;
-                            ors.AF = sb.AF;
-                            ors.AG = sb.AG;
-                            ors.AH = sb.AH;
-                            ors.AI = sb.AI;
+                            
                             ors.Created_By = User.Identity.GetUserName();
                             
+
                             ors.DateReceived = sb.DateReceived;
                             ors.TimeReceived = sb.TimeReceived;
                             ors.DateReleased = sb.DateReleased;

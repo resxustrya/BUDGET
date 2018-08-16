@@ -17,5 +17,6 @@ namespace BUDGET
         public String allotment { get; set; }
         public String desc { get; set; }
         public String type { get; set; }
+        public Int32 ors_head { get; set; }
     }
 }

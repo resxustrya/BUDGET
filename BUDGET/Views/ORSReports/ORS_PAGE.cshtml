@@ -1,0 +1,34 @@
+﻿
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>ORS Reports</h3>
+            <form role="form" action="@Url.Action("ORS_PAGE","ORSReports")" method="post">
+                @Html.AntiForgeryToken()
+                <table>
+                    <tr>
+                        <td>Select ORS</td>
+                        <td>
+                            <select name="ors" class="form-control">
+                                @foreach (ORSMaster orsmaster in Model)
+                                {
+                                    <option value="@orsmaster.ID">@orsmaster.Title</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Page</td>
+                        <td><input type="text" name="page" required class="form-control" placeholder="Exp. 1-20" /></td>
+                    </tr>
+                    
+                    <tr>
+                        <td></td>
+                        <td><button type="submit" class="btn btn-success btn-lg"> <span class="glyphicon glyphicon-print"></span> Print</button></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
