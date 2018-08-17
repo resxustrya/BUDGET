@@ -69,12 +69,7 @@ namespace BUDGET.Controllers
             return Json(orsps, JsonRequestBehavior.AllowGet);
         }
 
-        public Double GetGross(Int32 id)
-        {
-            Double total = 0.00;
-            total = (from ors_uacs in db.ors_expense_codes where ors_uacs.ors_obligation == id select ors_uacs.amount).Sum();
-            return total;
-        }
+        
         public JsonResult GetHeadRequestingHeads()
         {
             var head_requesting_head = (from list in db.ors_head_request
@@ -84,6 +79,7 @@ namespace BUDGET.Controllers
                                         }).ToList();
             return Json(head_requesting_head, JsonRequestBehavior.AllowGet);
         }
+
         [Route("save/ors/ps",Name = "save_ors_ps")]
         public JsonResult SaveORPS(String data)
         {

@@ -7,18 +7,6 @@
                 @Html.AntiForgeryToken()
                 <table>
                     <tr>
-                        <td>Select source fund</td>
-                        <td>
-                            <select name="allotment" class="form-control">
-                                <option value="">--- Select a budget source fund</option>
-                                @foreach (Allotments allotments in Model)
-                                {
-                                    <option value="@allotments.ID">@allotments.Code</option>
-                                }
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
                         <td>Date From</td>
                         <td><input type="date" name="date_from" required class="form-control" /></td>
                     </tr>

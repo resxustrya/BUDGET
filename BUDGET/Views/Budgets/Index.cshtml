@@ -5,43 +5,54 @@
     ViewBag.Title = "Index";
 }
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <h2>Yearly Budget Referrence</h2>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <a href="@Url.Action("Create","Budgets")" class="btn btn-success btn-sm">Create New</a>
-                    }
-                    
+
+
+<div class="modal show" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <img src="@Url.Content("~/Content/img/ro7.png")" height="150" width="150" />
                 </div>
-                <div class="panel-body">
-                    <table class="table table-bordered">
-                        <tr>
-                            <th width="100" class="text-center">Year</th>
-                            <th class="text-center">Created By</th>
-                            <th class="text-center">Actions</th>
-                        </tr>
-                        @foreach (YearBudget yb in Model)
-                        {
-                            <tr>
-                                <td class="text-center"><span style="color:coral;font-size:small;font-weight:bolder;">@yb.Year Budget</span></td>
-                                <td><strong>@yb.CreatedBy</strong></td>
-                                <td>
-                                    <a href="@Url.Action("Year","Budgets",new { id = yb.ID })" class="btn btn-success">USE</a>
-                                    <a href="#" class="btn btn-info">UPDATE</a>
-                                    <a href="#" class="btn btn-danger">CANCEL</a>
-                                </td>
-                            </tr>
-                        }
-                    </table>
-                    <div class="pagination">
-                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
-                        of @Model.PageCount
-                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
-                    </div>  
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h3>DOH RO7</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <table class="table">
+                                @foreach (YearBudget yb in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a href="@Url.Action("Year","Budgets",new { id = yb.ID })" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> @yb.Year Budget</a>
+                                            @if (User.IsInRole("Admin"))
+                                            {
+                                                <a href="@Url.Action("DeleteYear","Budgets")" class="btn btn-danger">Delete</a>
+                                            }
+                                            
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                            <div class="pagination">
+                                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+                                of @Model.PageCount
+                                @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a href="@Url.Action("Create","Budgets")" class="btn btn-success btn-sm">Create New</a>
+                                }
+                                <br />
+                                <a href="@Url.Action("LogOff","Account")">Logout</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,4 +1,9 @@
 ﻿$(document).ready(function () {
+
+    $(document).on('focus', ':input', function () {
+        $(this).attr('autocomplete', 'off');
+    });
+
     $("#gaa_upload").click(function () {
         $("#page_modal").modal('show');
         $('.loading').show();
@@ -9,7 +14,6 @@
             $('.modal_body').html(res);
             $('.loading').hide();
         });
-        
     });
 
     $("#upload_prex").click(function () {

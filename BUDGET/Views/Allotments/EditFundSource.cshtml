@@ -41,6 +41,7 @@
                                         <td>PREXC CODE</td>
                                         <td>
                                             <select name="prexcode" class="form-control" id="prexcode">
+                                                <option value="">SELECT PREXC CODE</option>
                                                 @foreach (PREXC p in prexc)
                                                 {
                                                     <option value="@p.Code1" @( p.Code1 == Model.prexc ? " selected" : " " )>@p.Desc</option>
