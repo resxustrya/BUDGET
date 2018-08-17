@@ -136,7 +136,7 @@ namespace BUDGET.Controllers
                     prexc.Code2 = sb.Code2;
                     try { db.SaveChanges(); } catch { }
                 }
-                int l = 0;
+               
                 catch (Exception ex)
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());

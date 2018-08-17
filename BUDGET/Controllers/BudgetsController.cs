@@ -52,5 +52,14 @@ namespace BUDGET.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        public ActionResult DeleteYear(String id)
+        {
+            Int32 ID = Convert.ToInt32(id);
+            var year = db.yearbudget.Where(p => p.ID == ID).FirstOrDefault();
+            db.yearbudget.Remove(year);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }
