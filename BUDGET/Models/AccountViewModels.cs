@@ -48,11 +48,11 @@ namespace BUDGET
 
     public class LoginViewModel
     {
-        [Required]
+        [Required(ErrorMessage ="You must enter your username")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "You must enter your password")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }

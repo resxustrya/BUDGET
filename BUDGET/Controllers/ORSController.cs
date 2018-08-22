@@ -154,6 +154,8 @@ namespace BUDGET.Controllers
                             db.ors.Add(ors);
                             try { db.SaveChanges(); } catch { }
 
+
+
                             Notifications notifications = new Notifications();
 
                             notifications.Message = "added a new ors obligation in";
@@ -190,6 +192,10 @@ namespace BUDGET.Controllers
                 int ID = Convert.ToInt32(ors.ID);
 
                 var del_ors = db.ors.Where(p => p.ID == ID).FirstOrDefault();
+
+                var ors_uacs = db.ors_expense_codes.Where(p => p.ors_obligation == del_ors.ID).ToList();
+                db.ors_expense_codes.RemoveRange(ors_uacs);
+                
                 db.ors.Remove(del_ors);
                 db.SaveChanges();
             }

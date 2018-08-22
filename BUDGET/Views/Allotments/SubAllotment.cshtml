@@ -1,7 +1,9 @@
-﻿
-@{
-    ViewBag.Title = "Sub-Allotment";
+﻿@{
+    BudgetDB db = new BudgetDB();
+    var ors_heads = db.ors_head_request.ToList();
+    ViewBag.Title = "Sub - Allotment";
 }
+
 
 
 <div class="container">
@@ -25,16 +27,28 @@
                             <th>Title</th>
                             <th>PREXC Code</th>
                             <th>Action</th>
+                            <th>ORS Head</th>
                             <th>Realignment</th>
                         </tr>
                         @foreach(FundSourceHdr fsh in Model)
                         {
                             <tr>
-                                <td>@fsh.SourceTitle</td>
-                                <td>@fsh.prexc</td>
-                                <td>
-                                    <a href="@Url.Action("EditSubAllotment","Allotments", new { ID = fsh.ID})" class="btn btn-info"><span class="glyphicon glyphicon-edit"></span> Edit</a>
-                                    <a href="@Url.Action("DeleteSubAllotment","Allotments", new { ID = fsh.ID })" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?')"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+                                <td class="col-md-4">@fsh.SourceTitle</td>
+                                <td class="col-md-2">@fsh.prexc</td>
+
+                                <td class="col-md-3">
+                                    <a href="@Url.Action("EditSubAllotment","Allotments", new { ID = fsh.ID})" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+                                    <a href="@Url.Action("DeleteSubAllotment","Allotments", new { ID = fsh.ID })" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item?')"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+                                </td>
+                                <td class="col-md-5">
+                                    <select name="ors_head" data-fsh="@fsh.ID" id="ors_head" class="form-control" onchange="ors_head(this);" data-url="@Url.Action("ORS_HEAD","Allotments")">
+                                        <option value="" selected disabled>Select an ORS Head</option>
+
+                                        @foreach (ors_head_request ors_head in ors_heads)
+                                        {
+                                            <option value="@ors_head.ID" @(fsh.ors_head == ors_head.ID ? "selected" : "" )>@ors_head.Name</option>
+                                        }
+                                    </select>
                                 </td>
                                 <td><a href="@Url.Action("Realignment","Allotments", new { fundsource = fsh.ID })" class="btn btn-info"><span class="glyphicon glyphicon-transfer"></span> Funds Realignment</a></td>
                             </tr>
@@ -45,6 +59,22 @@
         </div>
     </div>
 </div>
+
+@section scripts {
+    <script>
+        function ors_head(el) {
+            var fsh = $(el).data('fsh');
+            var ors_head = $(el).val();
+            var url = $(el).data('url');
+            var data = {
+                fsh: fsh,
+                ors_head : ors_head
+            };
+            $.post(url, data, function (res) {
+            });
+        }
+    </script>
+}
 @section footer{
     @Html.Partial("footer")
 }

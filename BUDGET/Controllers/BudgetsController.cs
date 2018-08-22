@@ -53,6 +53,7 @@ namespace BUDGET.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles ="Administrator")]
         public ActionResult DeleteYear(String id)
         {
             Int32 ID = Convert.ToInt32(id);

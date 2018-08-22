@@ -472,11 +472,10 @@ namespace BUDGET.DataHelpers
                             //realignment to
 
                             _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_LEFT });
-                            //total realignment
+                            //total after realignment
 
 
                             _thead.AddCell(new PdfPCell(new Paragraph(_fsa_amount > 0 ? _fsa_amount.ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-
 
 
                             var uacs_amounts = (from ors_uacs in db.ors_expense_codes
