@@ -178,8 +178,8 @@
            };
            setTimeout(function () {
                $.post(url, data, function (res) {
-                   $(".panel-body").html(res);
                    $("#loading_modal").modal('hide');
+                   window.location.href = res;
                });
            }, 1000);
        });

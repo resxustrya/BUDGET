@@ -98,7 +98,7 @@ namespace BUDGET.Controllers
             int id = Convert.ToInt32(ID);
             var allotment = db.allotments.Where(p => p.ID == id).FirstOrDefault();
             GlobalData.allotment = allotment.ID.ToString();
-            var fundsources = (from list in db.fsh where list.allotment == allotment.ID.ToString() select list).ToList();
+            var fundsources = (from list in db.fsh where list.allotment == allotment.ID.ToString() && list.type == "REG" select list).ToList();
             ViewBag.Message = @GlobalData.Year + " Budget Fund Source for " + allotment.Code;
             return View(fundsources);
         }
@@ -107,7 +107,7 @@ namespace BUDGET.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult CreateFundSource(FormCollection collection)
+        public String CreateFundSource(FormCollection collection)
         {
             FundSourceHdr fsh = new FundSourceHdr();
             fsh.prexc = collection.Get("prexcode");
@@ -120,7 +120,8 @@ namespace BUDGET.Controllers
             db.SaveChanges();
             String data = collection.Get("data");
             SaveFundSourceExpese(fsh.ID.ToString(), data);
-            return PartialView("_Ok");
+
+            return Url.Action("EditFundSource", "Allotments", new { id = fsh.ID });
         }
         [HttpGet]
         public ActionResult EditFundSource(String id)
@@ -200,17 +201,15 @@ namespace BUDGET.Controllers
                             {
                                 FundSourceAmount fsa = new FundSourceAmount();
                                 fsa.expensecode = sb.expense_code;
-                                fsa.amount = Convert.ToDouble(sb.amount);
+                                try { fsa.amount = Convert.ToDouble(sb.amount); } catch { fsa.amount = 0.00; }
                                 fsa.fundsource = fundsource;
                                 db.fsa.Add(fsa);
                                 try { db.SaveChanges(); } catch { }
                             }
                         }
-
                     }
                     catch { }
                 }
-
             }
             return true;
             
@@ -297,7 +296,7 @@ namespace BUDGET.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult CreateSubAllotment(FormCollection collection)
+        public String CreateSubAllotment(FormCollection collection)
         {
             FundSourceHdr fsh = new FundSourceHdr();
             fsh.prexc = collection.Get("prexcode");
@@ -312,7 +311,7 @@ namespace BUDGET.Controllers
             String data = collection.Get("data");
             SaveSubAllotmentsAmount(fsh.ID.ToString(), data);
             ViewBag.Message = "Sub-allotment entry successfully created";
-            return PartialView("_PartialSubAllotment");
+            return Url.Action("EditSubAllotment", "Allotments", new { id = fsh.ID });
         }
         public ActionResult EditSubAllotment(String ID)
         {
@@ -339,7 +338,7 @@ namespace BUDGET.Controllers
         }
         
         [HttpPost]
-        public ActionResult EditSubAllotment(FormCollection collection)
+        public String EditSubAllotment(FormCollection collection)
         {
             Int32 id = Convert.ToInt32(collection.Get("ID"));
             var fsh = db.fsh.Where(p => p.ID == id && p.type == "SUB").FirstOrDefault();
@@ -352,8 +351,8 @@ namespace BUDGET.Controllers
 
             String data = collection.Get("data");
             SaveSubAllotmentsAmount(fsh.ID.ToString(), data);
-            ViewBag.Message = "Sub-allotment entry successfully edited";
-            return PartialView("_PartialSubAllotment");
+            
+            return Url.Action("EditSubAllotment", "Allotments", new { id = fsh.ID });
         }
 
 
@@ -386,7 +385,7 @@ namespace BUDGET.Controllers
                             {
                                 FundSourceAmount fsa = new FundSourceAmount();
                                 fsa.expensecode = sb.expense_code;
-                                fsa.amount = Convert.ToDouble(sb.amount);
+                                try { fsa.amount = Convert.ToDouble(sb.amount); } catch { fsa.amount = 0.00; }
                                 fsa.fundsource = fsh;
                                 db.fsa.Add(fsa);
                                 try { db.SaveChanges(); } catch { }
