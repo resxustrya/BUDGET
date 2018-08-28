@@ -67,19 +67,19 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-get="@Url.RouteUrl("get_fund_source_expense")" data-delete="@Url.RouteUrl("delete_fund_source_amount")" data-id="@Model.ID"></div>
+                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-get="@Url.RouteUrl("get_fund_source_expense")" data-delete="@Url.RouteUrl("delete_fund_source_amount")" data-id="@Model.ID" data-suballotment="@Url.Action("ExpenseSuballotment","Allotments")" data-realignment="@Url.Action("ExpenseRealignment","Allotments")"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
 
 @section footer{
     @Html.Partial("footer")
 }
+
 
 @section scripts {
     <script>
@@ -96,7 +96,7 @@
            colWidths: [1, 200, 300, 300],
            stretchH: 'all',
            colHeaders: true,
-           contextMenu: ['row_above','row_below','remove_row','copy'],
+          
            manualColumnMove: true,
            fillHandle: {
                autoInsertRow: false,
@@ -105,6 +105,65 @@
            columns : [
               {}, { type: 'dropdown', source: expense_codes }, {}, {}
            ],
+           contextMenu: {
+               items: {
+                   "Allotment": {
+                       name: 'Allotment',
+                       callback: function (key, options) {
+                           var selection = this.getSelectedRange();
+                           var fromRow = Math.min(selection.from.row, selection.to.row);
+                           var tempdata = this.getData();
+                           var uacs = tempdata[fromRow][1];
+                           
+                           if (uacs) {
+                               var fundsource = $("#table").data('id');
+                               var url = $("#table").data('suballotment');
+
+                               $("#ors_modal").modal({
+                                   backdrop: 'static',
+                                   keyboard: false,
+                                   show: true
+                               });
+                               $(".ors_body").html('');
+                               $(".loading").show();
+                               $.get(url ,{ fundsource : fundsource, uacs : uacs }, function (res) {
+                                   $(".ors_body").html(res);
+                                   $(".loading").hide();
+                               });
+                           }
+                       }
+                   },
+                   "Realignment" : {
+                       name: 'Realignment',
+                       callback: function (key, options) {
+                           var selection = this.getSelectedRange();
+                           var fromRow = Math.min(selection.from.row, selection.to.row);
+                           var tempdata = this.getData();
+                           var uacs = tempdata[fromRow][1];
+                           if (uacs) {
+                               
+                               var url = $("#table").data('realignment');
+                               var fundsource = $("#table").data('id');
+
+                               $("#ors_modal").modal({
+                                   backdrop: 'static',
+                                   keyboard: false,
+                                   show: true
+                               });
+
+                               $(".ors_body").html('');
+                               $(".loading").show();
+                               $.get(url,  function (res) {
+                                   $(".ors_body").html(res);
+                                   $(".loading").hide();
+                               });
+                           }
+                       }
+                   },
+                   "row_below": {}, "remove_row": {},
+
+               }
+           },
            cells: function (r, c, prop) {
                var cellProperties = {};
                if (c === 0 || c === 2) cellProperties.readOnly = true;
@@ -185,7 +244,8 @@
                data: JSON.stringify(expense)
            };
            $.post(save_url, data, function (res) {
-               $(".panel-body").html(res);
+               //$(".panel-body").html(res);
+               window.location.href = res;
                $("#loading_modal").modal('hide');
            });
        });

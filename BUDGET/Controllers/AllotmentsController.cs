@@ -130,8 +130,9 @@ namespace BUDGET.Controllers
             var fsh = db.fsh.Where(p => p.ID == ID).FirstOrDefault();
             return View(fsh);
         }
+
         [HttpPost]
-        public ActionResult SaveEditFundSource(FormCollection collection)
+        public String SaveEditFundSource(FormCollection collection)
         {
             Int32 id = Convert.ToInt32(collection.Get("ID"));
             var fsh = db.fsh.Where(p => p.ID == id).FirstOrDefault();
@@ -142,8 +143,10 @@ namespace BUDGET.Controllers
             db.SaveChanges();
             String data = collection.Get("data");
             SaveFundSourceExpese(id.ToString(), data);
-            return PartialView("_Ok");
+            return Url.Action("EditFundSource", "Allotments", new { id = fsh.ID });
         }
+
+
         public ActionResult DeleteFundSource(String ID)
         {
             Int32 id = Convert.ToInt32(ID);
@@ -565,6 +568,10 @@ namespace BUDGET.Controllers
             }
             catch { }
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult ExpenseSuballotment(String fundsource, String uacs)
+        {
+            return PartialView();
         }
     }
 }

@@ -434,10 +434,20 @@
     <Compile Include="Migrations\201808160234305_ors_head_in_fsh.Designer.cs">
       <DependentUpon>201808160234305_ors_head_in_fsh.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808280248094_expensecodeallotment.cs" />
+    <Compile Include="Migrations\201808280248094_expensecodeallotment.Designer.cs">
+      <DependentUpon>201808280248094_expensecodeallotment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808280613030_expenseallotmentexpensecodes.cs" />
+    <Compile Include="Migrations\201808280613030_expenseallotmentexpensecodes.Designer.cs">
+      <DependentUpon>201808280613030_expenseallotmentexpensecodes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
     <Compile Include="Models\BudgetDbContext.cs" />
+    <Compile Include="Models\ExpenseCodeAllotment.cs" />
+    <Compile Include="Models\ExpenseAllotmentExpenseCodes.cs" />
     <Compile Include="Models\FundSourceAmount.cs" />
     <Compile Include="Models\FundSourceHdr.cs" />
     <Compile Include="Models\FundSourceViewModel.cs" />
@@ -751,6 +761,7 @@
     <Content Include="Views\Reports\DownloadSaobSheet2.cshtml" />
     <Content Include="Views\ORSReports\ORS_PAGE.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Allotments\ExpenseSuballotment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -916,6 +927,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808160234305_ors_head_in_fsh.resx">
       <DependentUpon>201808160234305_ors_head_in_fsh.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808280248094_expensecodeallotment.resx">
+      <DependentUpon>201808280248094_expensecodeallotment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808280613030_expenseallotmentexpensecodes.resx">
+      <DependentUpon>201808280613030_expenseallotmentexpensecodes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
