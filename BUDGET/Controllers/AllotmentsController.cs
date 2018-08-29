@@ -22,6 +22,8 @@ namespace BUDGET.Controllers
             var allotments = (from list in db.allotments where list.year == GlobalData.Year select list).ToList();
             return View(allotments);
         }
+
+
         public ActionResult Create()
         {
             return View();
@@ -35,6 +37,7 @@ namespace BUDGET.Controllers
             allotments.year = GlobalData.Year;
             db.allotments.Add(allotments);
             db.SaveChanges();
+
 
             ORSMaster orsmaster = new ORSMaster();
             orsmaster.Title = collection.Get("code");
@@ -571,7 +574,65 @@ namespace BUDGET.Controllers
         }
         public ActionResult ExpenseSuballotment(String fundsource, String uacs)
         {
+            var fsh = db.fsh.Where(p => p.ID.ToString() == fundsource).FirstOrDefault();
+            var expensecode = db.uacs.Where(p => p.Code == uacs).FirstOrDefault();
+
+            ViewBag.Title = fsh.Code;
+            ViewBag.UACS = expensecode.Title;
+            ViewBag.fundsource = fundsource;
+            ViewBag.uacs = uacs;
             return PartialView();
+        }
+        [HttpPost]
+        public JsonResult SaveExpenseSubAllotment(FormCollection collection)
+        {
+
+            ExpenseCodeAllotment eca = new ExpenseCodeAllotment();
+            eca.fundsource = Convert.ToInt32(collection.Get("fundsource"));
+            eca.from_uacs = collection.Get("uacs");
+            eca.description = collection.Get("desccription");
+            db.expensecodeallotment.Add(eca);
+            db.SaveChanges();
+
+            List<Object> list = JsonConvert.DeserializeObject<List<Object>>(collection.Get("data"));
+            
+            Int32 id = 0;
+            foreach (Object s in list)
+            {
+                try
+                {
+                    dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
+                    id = Convert.ToInt32(sb.ID);
+                    var fsa = db.expense_suballotment_expensecode.Where(p => p.ID == id ).FirstOrDefault();
+                   //fsa.expensecode = sb.expense_code;
+                    fsa.amount = Convert.ToDouble(sb.amount);
+                    try { db.SaveChanges(); } catch { }
+                }
+                catch (Exception ex)
+                {
+                    dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
+                    try
+                    {
+                        if (sb.expense_code != null)
+                        {
+                            Object uacs_obj = sb.expense_code;
+                            String uacs = uacs_obj.ToString();
+                            var expense_exist = (from exist in db.fsa where exist.expensecode == uacs && exist.fundsource == collection.Get("fundsource") select exist).ToList();
+                            if (expense_exist.Count <= 0)
+                            {
+                                FundSourceAmount fsa = new FundSourceAmount();
+                                fsa.expensecode = sb.expense_code;
+                                try { fsa.amount = Convert.ToDouble(sb.amount); } catch { fsa.amount = 0.00; }
+                                fsa.fundsource = collection.Get("fundsource");
+                                db.fsa.Add(fsa);
+                                try { db.SaveChanges(); } catch { }
+                            }
+                        }
+                    }
+                    catch { }
+                }
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -14,18 +14,11 @@
                     <i class="fa fa-bar-chart-o fa-fw"></i> Create Budget Source
                     <div class="pull-right">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                Actions
-                                <span class="caret"></span>
+                            <button type="button" class="btn btn-success btn-xs" data-toggle="dropdown" aria-expanded="false" id="submit">
+                                <span class="glyphicon glyphicon-save"></span>
+                                Save
                             </button>
-                            <ul class="dropdown-menu pull-right" role="menu">
-                                <li>
-                                    <a href="javascript:void(0)" id="submit">Save</a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("FundSource","Allotments",new { id = GlobalData.allotment })">Exit</a>
-                                </li>
-                            </ul>
+                            <a href="@Url.Action("FundSource","Allotments",new { id = GlobalData.allotment })" class="btn btn-danger btn-xs">Exit</a>
                         </div>
                     </div>
                 </div>
