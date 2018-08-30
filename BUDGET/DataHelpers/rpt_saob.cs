@@ -29,7 +29,9 @@ namespace BUDGET.DataHelpers
             var output = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/rpt_saob/saob.pdf"), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
             
+
             doc.Open();
+
 
 
             PdfPTable header_table = new PdfPTable(3);

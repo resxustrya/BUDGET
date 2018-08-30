@@ -21,18 +21,18 @@
                         @foreach(Allotments data in Model)
                         {
                             <tr>
-                                <td style="font-size:1em;">@data.Title</td>
-                                <td style="font-size:1em;">@data.Code</td>
+                                <td><span style="color:#071D47;font-weight:bold;">@data.Title</span></td>
+                                <td><span style="color:#071D47;font-weight:bold;">@data.Code</span></td>
                                 <td>
                                     
-                                    <a href="@Url.Action("EditBudget","Allotments", new { id = data.ID })" class="btn btn-info"><span class="glyphicon glyphicon-edit"></span> Edit</a>
-                                    <a href="@Url.Action("Delete","Allotments",new { id = data.ID })" class="btn btn-danger" onclick="return confirm('Do you want to delete this budget');"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+                                    <a href="@Url.Action("EditBudget","Allotments", new { id = data.ID })" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> <span class="text-info">Edit</span></a>
+                                    <a href="@Url.Action("Delete","Allotments",new { id = data.ID })" class="btn btn-default text-danger" onclick="return confirm('Do you want to delete this budget');"><span class="glyphicon glyphicon-trash"></span> <span class="text-danger">Delete</span></a>
                                 </td>
                                 <td>
-                                    <a href="@Url.Action("FundSource","Allotments",new { id = data.ID })" class="btn btn-success"><span class="glyphicon glyphicon-arrow-right"></span> Fund Source</a>
+                                    <a href="@Url.Action("FundSource","Allotments",new { id = data.ID })" class="btn btn-default text-success"><span class="glyphicon glyphicon-arrow-right"></span> Fund Source</a>
                                 </td>
                                 <td>
-                                    <a href="@Url.Action("SubAllotment","Allotments", new { allotment = data.ID })" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Sub-Allotment</a>
+                                    <a href="@Url.Action("SubAllotment","Allotments", new { allotment = data.ID })" class="btn btn-default text-primary"><span class="glyphicon glyphicon-plus"></span> Sub-Allotment</a>
                                 </td>
                             </tr>
                         }

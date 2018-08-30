@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using BUDGET.Models;
 using BUDGET.Filters;
 using Newtonsoft.Json;
+using System.Threading;
 namespace BUDGET.Controllers
 {
     [Authorize(Roles = "Admin")]
@@ -103,8 +104,11 @@ namespace BUDGET.Controllers
             GlobalData.allotment = allotment.ID.ToString();
             var fundsources = (from list in db.fsh where list.allotment == allotment.ID.ToString() && list.type == "REG" select list).ToList();
             ViewBag.Message = @GlobalData.Year + " Budget Fund Source for " + allotment.Code;
+            ORS ors = new ORS();
+            
             return View(fundsources);
         }
+        
         public ActionResult CreateFundSource()
         {
             return View();
@@ -163,20 +167,23 @@ namespace BUDGET.Controllers
         [Route("get/fundsource/expense",Name = "get_fund_source_expense")]
         public JsonResult GetFundSourceExpense(String fsh)
         {
+            
             var fsa = (from list in db.fsa
+                       group list by list.ID into g
                        join expensecode
-                        in db.uacs on list.expensecode equals expensecode.Code
-                       where list.fundsource == fsh
+                        in db.uacs on g.FirstOrDefault().expensecode equals expensecode.Code
+                       where g.FirstOrDefault().fundsource == fsh
                        select new
                        {
-                           ID = list.ID,
-                           ExpenseCode = list.expensecode,
+                           ID = g.FirstOrDefault().ID,
+                           ExpenseCode = g.FirstOrDefault().expensecode,
                            Title = expensecode.Title,
-                           Amount = list.amount
-                       }
-                       );
+                           Amount = g.FirstOrDefault().amount
+                       });
+           
             return Json(fsa, JsonRequestBehavior.AllowGet);
         }
+
         [Route("save/fundsource/expense",Name ="save_fundsource_expese")]
         public Boolean SaveFundSourceExpese(String fundsource, String data)
         {
@@ -202,16 +209,14 @@ namespace BUDGET.Controllers
                         {
                             Object uacs_obj = sb.expense_code;
                             String uacs = uacs_obj.ToString();
-                            var expense_exist = (from exist in db.fsa where exist.expensecode == uacs && exist.fundsource == fundsource select exist).ToList();
-                            if(expense_exist.Count <= 0)
-                            {
-                                FundSourceAmount fsa = new FundSourceAmount();
-                                fsa.expensecode = sb.expense_code;
-                                try { fsa.amount = Convert.ToDouble(sb.amount); } catch { fsa.amount = 0.00; }
-                                fsa.fundsource = fundsource;
-                                db.fsa.Add(fsa);
-                                try { db.SaveChanges(); } catch { }
-                            }
+                            
+                            FundSourceAmount fsa = new FundSourceAmount();
+                            fsa.expensecode = sb.expense_code;
+                            try { fsa.amount = Convert.ToDouble(sb.amount); } catch { fsa.amount = 0.00; }
+                            fsa.fundsource = fundsource;
+                            db.fsa.Add(fsa);
+                            try { db.SaveChanges(); } catch { }
+                            
                         }
                     }
                     catch { }
@@ -319,6 +324,7 @@ namespace BUDGET.Controllers
             ViewBag.Message = "Sub-allotment entry successfully created";
             return Url.Action("EditSubAllotment", "Allotments", new { id = fsh.ID });
         }
+
         public ActionResult EditSubAllotment(String ID)
         {
             Int32 id = Convert.ToInt32(ID);
@@ -578,7 +584,7 @@ namespace BUDGET.Controllers
             var expensecode = db.uacs.Where(p => p.Code == uacs).FirstOrDefault();
 
             ViewBag.Title = fsh.Code;
-            ViewBag.UACS = expensecode.Title;
+            ViewBag.UACS_CODE = expensecode.Title;
             ViewBag.fundsource = fundsource;
             ViewBag.uacs = uacs;
             return PartialView();
@@ -634,5 +640,7 @@ namespace BUDGET.Controllers
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
+
+        
     }
 }

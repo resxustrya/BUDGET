@@ -9,6 +9,8 @@ using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
 using BUDGET.Filters;
 using PagedList;
+using System.Threading.Tasks;
+
 namespace BUDGET.Controllers
 {
     
@@ -41,35 +43,37 @@ namespace BUDGET.Controllers
             ViewBag.allotments = ors.allotments;
             return View();
         }
-        [Route("get/ors/ps",Name = "get_ors_ps")]
+        [Route("get/ors/ps", Name = "get_ors_ps")]
         public JsonResult GetOrsPS()
         {
             Int32 ors_id = Convert.ToInt32(GlobalData.ors_id);
-            var orsps = (from list in db.ors where list.ors_id == ors_id
-                      orderby list.FundSource ascending
-                      select new
-                      {
-                          ID = list.ID,
-                          Row = list.Row,
-                          Date = list.Date1,
-                          DB = list.DB,
-                          PO = list.PO,
-                          PR = list.PR,
-                          PAYEE = list.PAYEE,
-                          Adress = list.Adress,
-                          Particulars = list.Particulars,
-                          FundSource = list.FundSource,
-                          Gross = (from ors_uacs in db.ors_expense_codes where ors_uacs.ors_obligation == list.ID select ors_uacs.amount).DefaultIfEmpty(0).Sum(),
-                          Created_By = list.Created_By,
-                          DateReceived = list.DateReceived,
-                          TimeReceived = list.TimeReceived,
-                          DateReleased = list.DateReleased,
-                          TimeReleased = list.TimeReleased,
-                      }).ToList();
+            var orsps = (from list in db.ors
+                         where list.ors_id == ors_id
+                         orderby list.FundSource ascending
+                         select new
+                         {
+                             ID = list.ID,
+                             Row = list.Row,
+                             Date = list.Date1,
+                             DB = list.DB,
+                             PO = list.PO,
+                             PR = list.PR,
+                             PAYEE = list.PAYEE,
+                             Adress = list.Adress,
+                             Particulars = list.Particulars,
+                             FundSource = list.FundSource,
+                             Gross = (from ors_uacs in db.ors_expense_codes where ors_uacs.ors_obligation == list.ID select ors_uacs.amount).DefaultIfEmpty(0).Sum(),
+                             Created_By = list.Created_By,
+                             DateReceived = list.DateReceived,
+                             TimeReceived = list.TimeReceived,
+                             DateReleased = list.DateReleased,
+                             TimeReleased = list.TimeReleased,
+                         }).ToList();
+            
             return Json(orsps, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public JsonResult GetHeadRequestingHeads()
         {
             var head_requesting_head = (from list in db.ors_head_request

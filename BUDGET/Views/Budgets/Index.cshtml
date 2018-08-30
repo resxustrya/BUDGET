@@ -39,10 +39,12 @@
                                     </tr>
                                 }
                             </table>
+                            
                             <div class="pagination">
-                                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
-                                of @Model.PageCount
-                                @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+                                @if (Model.PageCount >= Model.PageSize)
+                                {
+                                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+                                }
 
                                 @if (User.IsInRole("Admin"))
                                 {
