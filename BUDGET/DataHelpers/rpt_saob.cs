@@ -126,6 +126,7 @@ namespace BUDGET.DataHelpers
             Double total = 0.00;
 
 
+
             _thead.SpacingAfter = 100f;
 
             var allotments = db.allotments.Where(p => p.year == GlobalData.Year).ToList();

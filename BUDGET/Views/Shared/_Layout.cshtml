@@ -36,6 +36,9 @@
         #ors_modal .modal-dialog {
             width :70%;
         }
+        .alert-rex {
+            background-color:#FAFCFE;
+        }
     </style>
     <script>
         function numberWithCommas(x) {
@@ -50,7 +53,6 @@
     
     @Html.Partial("nav_header")
     @RenderBody()
-    
     @Html.Partial("modals")
     @RenderSection("footer",required: false)
     <!-- Begin page content -->

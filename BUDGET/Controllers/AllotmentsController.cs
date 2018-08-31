@@ -580,6 +580,7 @@ namespace BUDGET.Controllers
         }
         public ActionResult ExpenseSuballotment(String fundsource, String uacs)
         {
+               
             var fsh = db.fsh.Where(p => p.ID.ToString() == fundsource).FirstOrDefault();
             var expensecode = db.uacs.Where(p => p.Code == uacs).FirstOrDefault();
 
@@ -589,6 +590,7 @@ namespace BUDGET.Controllers
             ViewBag.uacs = uacs;
             return PartialView();
         }
+
         [HttpPost]
         public JsonResult SaveExpenseSubAllotment(FormCollection collection)
         {
@@ -599,6 +601,8 @@ namespace BUDGET.Controllers
             eca.description = collection.Get("desccription");
             db.expensecodeallotment.Add(eca);
             db.SaveChanges();
+
+
 
             List<Object> list = JsonConvert.DeserializeObject<List<Object>>(collection.Get("data"));
             

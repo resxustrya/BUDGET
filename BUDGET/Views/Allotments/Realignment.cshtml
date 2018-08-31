@@ -3,24 +3,18 @@
 }
 
 
-<div class="panel panel-success">
-    <div class="panel-heading">
-        <i class="glyphicon glyphicon-transfer"></i> FundSource Realignment
-        <div class="pull-right">
-            <div class="btn-group">
-                <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id="submit"><span class="glyphicon glyphicon-save"></span> Save</button>
-                <a class="btn btn-danger btn-xs">Exit</a>
-            </div>
+<div class="alert">
+    <div class="alert alert-rex">
+        <h3><i class="glyphicon glyphicon-transfer"></i> FundSource Realignment</h3>
+        
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id="submit"><span class="glyphicon glyphicon-save"></span> Save</button>
+            <a class="btn btn-danger btn-xs">Exit</a>
         </div>
-    </div>
-    <!-- /.panel-heading -->
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-md-12">
-                <h4>@ViewBag.Head</h4>
-                <div id="table" data-expense="@Url.Action("GetFundSourceUacs","Allotments",new { fundsource = ViewBag.fundsource })" data-save="@Url.Action("SaveRealignment","Allotments")" data-fundsource="@ViewBag.fundsource" data-get_realignments="@Url.Action("GetRealignments","Allotments", new { fundsource = ViewBag.fundsource })" data-delete="@Url.Action("DeleteRealignment","Allotments")"></div>
-            </div>
-        </div>
+        
+        <h4>@ViewBag.Head</h4>
+        <div id="table" data-expense="@Url.Action("GetFundSourceUacs","Allotments",new { fundsource = ViewBag.fundsource })" data-save="@Url.Action("SaveRealignment","Allotments")" data-fundsource="@ViewBag.fundsource" data-get_realignments="@Url.Action("GetRealignments","Allotments", new { fundsource = ViewBag.fundsource })" data-delete="@Url.Action("DeleteRealignment","Allotments")"></div>
+       
     </div>
 </div>
  
