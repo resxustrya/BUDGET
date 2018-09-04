@@ -121,17 +121,19 @@ namespace BUDGET.DataHelpers
             Double total = 0.00;
 
 
-            var allotments_row_totals = new List<KeyValuePair<String,Dictionary<String,Double>>>();
-            
+           // var allotments_rows_totals = new Dictionary<String,Dictionary<String>();
+            //allotments_rows_totals["PS"]
+            //allotments_rows_totals.Add("PS",)
+
 
             _thead.SpacingAfter = 100f;
-
             var allotments = db.allotments.Where(p => p.year == GlobalData.Year).ToList();
             Double allotment_total = 0;
             foreach(Allotments _allotments in allotments)
             {
 
                 
+
                 allotment_total = 0;
                 _thead.AddCell(new PdfPCell(new Paragraph(_allotments.Title.ToUpper(), new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
                 _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
@@ -144,7 +146,7 @@ namespace BUDGET.DataHelpers
                 _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
                 _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
                
-                
+
 
                 var fsh = db.fsh.Where(p => p.allotment == _allotments.ID.ToString() && p.type == "REG").ToList();
                 foreach(FundSourceHdr _fsh in fsh)
@@ -584,11 +586,11 @@ namespace BUDGET.DataHelpers
                     }
                 }
             }
-            /*
 
-            foreach(KeyValuePair<String,Dictionary<String,Double>>  d in allotments_row_totals)
-            {
-                _thead.AddCell(new PdfPCell(new Paragraph(d.Key.ToString(), new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT, PaddingLeft = 20f });
+
+           // foreach(KeyValuePair<String,Dictionary<String,Double>>  d in allotments_row_totals)
+           // {
+                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT, PaddingLeft = 20f });
                 _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
                 _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
                 _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
@@ -599,9 +601,9 @@ namespace BUDGET.DataHelpers
                 _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
                 _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
 
-            }
+          //  }
 
-            */
+            
             doc.Add(_thead);
             doc.Close();
         }
