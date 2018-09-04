@@ -49,37 +49,20 @@ namespace BUDGET
                 }
             }
 
-            // creating Creating Manager role    
-            if (!roleManager.RoleExists("Manager"))
+            if (!roleManager.RoleExists("Cashier"))
             {
                 var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-                role.Name = "Manager";
+                role.Name = "Cashier";
                 roleManager.Create(role);
-
             }
 
-
-            // creating Creating Employee role    
-            if (!roleManager.RoleExists("Employee"))
-            {
-                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-                role.Name = "Employee";
-                roleManager.Create(role);
-
-            }
             if (!roleManager.RoleExists("Encoder"))
             {
                 var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
                 role.Name = "Encoder";
                 roleManager.Create(role);
             }
-
-            if (!roleManager.RoleExists("Administrator"))
-            {
-                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-                role.Name = "Administrator";
-                roleManager.Create(role);
-            }
+           
         }
     }
 }

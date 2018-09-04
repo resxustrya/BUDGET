@@ -14,5 +14,6 @@ namespace BUDGET
 
         public String uacs { get; set; }
         public Double amount { get; set; }
+        public Double Disboursement { get; set; }
     }
 }

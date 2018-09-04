@@ -30,8 +30,8 @@
                 @foreach (FundSourceHdr data in Model)
                 {
                     <tr>
-                        <td style="color:#071D47;font-weight:bold;" class="col-md-2">@data.Code</td>
-                        <td style="color:#071D47;font-weight:bold;" class="col-md-4">@data.SourceTitle</td>
+                        <td class="col-md-2"><a style="color:#071D47;font-weight:bold;" href="@Url.Action("EditFundSource","Allotments", new { id = data.ID })">@data.Code</a></td>
+                        <td class="col-md-4"><a style="color:#071D47;font-weight:bold;" href="@Url.Action("EditFundSource","Allotments", new { id = data.ID })">@data.SourceTitle</a></td>
                         <td class="col-md-4">
                             <select name="ors_head" data-fsh="@data.ID" id="ors_head" class="form-control" onchange="ors_head(this);" data-url="@Url.Action("ORS_HEAD","Allotments")">
                                 <option value="" selected disabled>Select an ORS Head</option>

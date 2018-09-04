@@ -140,8 +140,7 @@ namespace BUDGET.Controllers
                         ors.ors_id = 1003;
                         ors.Date_Added = DateTime.Now.Date;
                         ors.dateadded = DateTime.Now.Date.ToString();
-                        ors.FundSource = "STO-OPERATIONS";
-                        ors.head_requesting_office = "DR. EMILIA MONICIMPO";
+                        ors.FundSource = "PHM";
                         ors.Created_By = "doh7budget";
                         db.ors.Add(ors);
                         db.SaveChanges();

@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 namespace BUDGET.Controllers
 {
     
-    [CustomAuthorize(Roles ="Admin,Encoder")]
     [YearlyFilter]
     [NoCache]
     [OutputCache(NoStore = true, Duration = 0)]
@@ -27,13 +26,14 @@ namespace BUDGET.Controllers
         {
             return View();
         }
-        [Route("ors/ps", Name = "ors_ps")]
 
+        [Route("ors/ps", Name = "ors_ps")]
         public ActionResult ORPS()
         {
             ViewBag.Menu = GlobalData.Year + " ORS Personnel Services";
             return View();
         }
+        [CustomAuthorize(Roles = "Admin,Encoder,Cashier")]
         public ActionResult OrsItem(String id)
         {
             Int32 ID = Convert.ToInt32(id);
@@ -43,6 +43,7 @@ namespace BUDGET.Controllers
             ViewBag.allotments = ors.allotments;
             return View();
         }
+        [CustomAuthorize(Roles = "Admin,Encoder,Cashier")]
         [Route("get/ors/ps", Name = "get_ors_ps")]
         public JsonResult GetOrsPS()
         {
@@ -73,18 +74,8 @@ namespace BUDGET.Controllers
             return Json(orsps, JsonRequestBehavior.AllowGet);
         }
 
-
-        public JsonResult GetHeadRequestingHeads()
-        {
-            var head_requesting_head = (from list in db.ors_head_request
-                                        select new
-                                        {
-                                            head = list.Name
-                                        }).ToList();
-            return Json(head_requesting_head, JsonRequestBehavior.AllowGet);
-        }
-
         [Route("save/ors/ps",Name = "save_ors_ps")]
+        [CustomAuthorize(Roles = "Admin,Encoder")]
         public JsonResult SaveORPS(String data)
         {
             List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
@@ -159,30 +150,22 @@ namespace BUDGET.Controllers
                             try { db.SaveChanges(); } catch { }
 
 
+                            var ors_master = db.orsmaster.Where(p => p.ID.ToString() == GlobalData.ors_id).FirstOrDefault();
+                            
 
                             Notifications notifications = new Notifications();
-
-                            notifications.Message = "added a new ors obligation in";
+                            notifications.Module = "ORS, " + ors_master.Title;
                             notifications.User = User.Identity.GetUserName();
-                            notifications.Module = "ORS";
-
-                            var action = (from ors_list in db.ors
-                                          join ors_master in db.orsmaster on ors_list.ors_id equals ors_master.ID
-                                          select new
-                                          {
-                                              Title = ors_master.Title
-                                          }).First();
-
-                            notifications.Action = action.Title.ToString();
-
+                            notifications.Action = " added a new ors obligation in";
+                            notifications.DateAdded = DateTime.Now;
                             db.notifications.Add(notifications);
+                            
                             db.SaveChanges();
                         }
                         
                     }
                     catch { }
                 }
-
             }
             return GetOrsPS();
         }
@@ -208,7 +191,7 @@ namespace BUDGET.Controllers
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
-        
+        [CustomAuthorize(Roles = "Admin,Encoder,Cashier")]
         public PartialViewResult  ORS_UACS(String ID)
         {
             Int32 id = Convert.ToInt32(ID);
@@ -217,6 +200,7 @@ namespace BUDGET.Controllers
             return PartialView(ors);
         }
 
+        [CustomAuthorize(Roles = "Admin,Encoder,Cashier")]
         public JsonResult GetORSUacs(String ID)
         {
             Int32 id = Convert.ToInt32(ID);
@@ -229,7 +213,8 @@ namespace BUDGET.Controllers
                                 ID = list.ID,
                                 ExpenseCode = list.uacs,
                                 Title = uacs.Title,
-                                Amount = list.amount
+                                Amount = list.amount,
+                                Disbursement = list.Disboursement
                             }).ToList();
             return Json(ors_uacs, JsonRequestBehavior.AllowGet);
         }
@@ -247,6 +232,8 @@ namespace BUDGET.Controllers
             return Json(fund_source_uacs, JsonRequestBehavior.AllowGet);
         }
 
+
+        [CustomAuthorize(Roles = "Admin,Encoder,Cashier")]
         public JsonResult SaveOrsObligation(FormCollection collection)
         {
             Int32 id = Convert.ToInt32(collection.Get("ID"));
@@ -260,8 +247,18 @@ namespace BUDGET.Controllers
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     line_id = Convert.ToInt32(sb.ID);
                     var ors_uacs = db.ors_expense_codes.Where(p => p.ID == line_id).FirstOrDefault();
-                    ors_uacs.uacs = sb.expense_code;
-                    ors_uacs.amount = sb.amount;
+
+                    if (User.IsInRole("Admin,Encoder"))
+                    {
+                        ors_uacs.uacs = sb.expense_code;
+                        ors_uacs.amount = sb.amount;
+                        ors_uacs.Disboursement = sb.Disbursement;
+                    }
+                    else if (User.IsInRole("Cashier"))
+                    {
+                        ors_uacs.Disboursement = sb.Disbursement;
+                    }
+                    
                     try { db.SaveChanges(); } catch { }
                 }
                 catch (Exception ex)
@@ -269,46 +266,51 @@ namespace BUDGET.Controllers
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     try
                     {
-                        if (sb.expense_code != null)
+                        if (User.IsInRole("Admin,Encoder"))
                         {
-
-                            Object uacs_obj = sb.expense_code;
-                            String uacs = uacs_obj.ToString();
-
-                            var uacs_exist = (from exist in db.ors_expense_codes where exist.uacs == uacs && exist.ors_obligation == id select exist).ToList();
-
-                            if (uacs_exist.Count <= 0)
+                            if (sb.expense_code != null)
                             {
 
-                                ORS_EXPENSE_CODES oec = new ORS_EXPENSE_CODES();
-                                oec.uacs = sb.expense_code;
-                                oec.ors_obligation = id;
-                                oec.amount = sb.amount;
-                                db.ors_expense_codes.Add(oec);
-                                try { db.SaveChanges(); } catch { }
+                                Object uacs_obj = sb.expense_code;
+                                String uacs = uacs_obj.ToString();
 
+                                var uacs_exist = (from exist in db.ors_expense_codes where exist.uacs == uacs && exist.ors_obligation == id select exist).ToList();
 
-                                var ors_allotments = (from ors in db.ors
-                                                      join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
-                                                      join allotments in db.allotments on ors_master.allotments equals allotments.ID
-                                                      where ors.ID == id
-                                                      select new
-                                                      {
-                                                          _allotment = allotments.ID,
-                                                          fundsource_id = (from _fsh in db.fsh where _fsh.allotment == allotments.ID.ToString() && _fsh.Code == ors.FundSource select _fsh.ID).FirstOrDefault()
-                                                      }).FirstOrDefault();
-
-
-                                var ors_fundsource_uacs = (from _fsa in db.fsa where _fsa.fundsource == ors_allotments.fundsource_id.ToString() && _fsa.expensecode == oec.uacs select _fsa.ID).ToList();
-                                
-                                if(ors_fundsource_uacs.Count <= 0)
+                                if (uacs_exist.Count <= 0)
                                 {
-                                    FundSourceAmount new_fsa = new FundSourceAmount();
-                                    new_fsa.expensecode = oec.uacs;
-                                    new_fsa.amount = 0;
-                                    new_fsa.fundsource = ors_allotments.fundsource_id.ToString();
-                                    db.fsa.Add(new_fsa);
-                                    db.SaveChanges();
+
+                                    ORS_EXPENSE_CODES oec = new ORS_EXPENSE_CODES();
+                                    oec.uacs = sb.expense_code;
+                                    oec.ors_obligation = id;
+                                    oec.amount = sb.amount;
+                                    oec.Disboursement = sb.Disbursement;
+                                    db.ors_expense_codes.Add(oec);
+                                    try { db.SaveChanges(); } catch { }
+
+
+
+                                    var ors_allotments = (from ors in db.ors
+                                                          join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
+                                                          join allotments in db.allotments on ors_master.allotments equals allotments.ID
+                                                          where ors.ID == id
+                                                          select new
+                                                          {
+                                                              _allotment = allotments.ID,
+                                                              fundsource_id = (from _fsh in db.fsh where _fsh.allotment == allotments.ID.ToString() && _fsh.Code == ors.FundSource select _fsh.ID).FirstOrDefault()
+                                                          }).FirstOrDefault();
+
+
+                                    var ors_fundsource_uacs = (from _fsa in db.fsa where _fsa.fundsource == ors_allotments.fundsource_id.ToString() && _fsa.expensecode == oec.uacs select _fsa.ID).ToList();
+
+                                    if (ors_fundsource_uacs.Count <= 0)
+                                    {
+                                        FundSourceAmount new_fsa = new FundSourceAmount();
+                                        new_fsa.expensecode = oec.uacs;
+                                        new_fsa.amount = 0;
+                                        new_fsa.fundsource = ors_allotments.fundsource_id.ToString();
+                                        db.fsa.Add(new_fsa);
+                                        db.SaveChanges();
+                                    }
                                 }
                             }
                         }
@@ -320,6 +322,7 @@ namespace BUDGET.Controllers
             return GetORSUacs(id.ToString());
         }
         [HttpPost]
+        [CustomAuthorize(Roles = "Admin,Encoder")]
         public JsonResult DeleteUacs(FormCollection collection)
         {
             String ID = collection.Get("ID");

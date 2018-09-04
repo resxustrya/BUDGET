@@ -15,7 +15,7 @@ namespace BUDGET
             
             PdfPTable _thead_page_break = new PdfPTable(10);
             _thead_page_break.WidthPercentage = 100f;
-            float[] _columnWidths = { 130, 30, 40, 40, 40, 40, 40, 40, 40, 30 };
+            float[] _columnWidths = { 130, 30, 40, 40, 40, 40, 40, 40, 40, 40 };
             _thead_page_break.SetWidths(_columnWidths);
             _thead_page_break.TotalWidth = document.PageSize.Width - document.LeftMargin - document.RightMargin; //this centers [table]
 
@@ -27,7 +27,7 @@ namespace BUDGET
             _thead_page_break.AddCell(new PdfPCell(new Paragraph("REALIGNMENT", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, Colspan = 3 });
             _thead_page_break.AddCell(new PdfPCell(new Paragraph("OBLIGATIONS INCURRED", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, Colspan = 2 });
             _thead_page_break.AddCell(new PdfPCell(new Paragraph("UNOBLIGATED BALANCE OF ALLOTMENT", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, Rowspan = 4 });
-            _thead_page_break.AddCell(new PdfPCell(new Paragraph("REMARKS", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, Rowspan = 4 });
+            _thead_page_break.AddCell(new PdfPCell(new Paragraph("DISBURSEMENTS", new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER, Rowspan = 4 });
 
 
             //SECOND ROW

@@ -14,7 +14,7 @@ namespace BUDGET.DataHelpers
     public class rpt_saob
     {
         BudgetDB db = new BudgetDB();
-        
+
         public void generate_saob(String date_from, String date_to)
         {
             try
@@ -28,15 +28,13 @@ namespace BUDGET.DataHelpers
             Document doc = new Document(PageSize.LEGAL.Rotate());
             var output = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/rpt_saob/saob.pdf"), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
-            
 
             doc.Open();
 
 
-
             PdfPTable header_table = new PdfPTable(3);
             header_table.WidthPercentage = 100f;
-            float[] _header_columnWidths = { 50,100,50 };
+            float[] _header_columnWidths = { 50, 100, 50 };
             header_table.SetWidths(_header_columnWidths);
 
             Image logo1 = Image.GetInstance(System.Web.HttpContext.Current.Server.MapPath("~/Content/img/ro7.png"));
@@ -47,28 +45,26 @@ namespace BUDGET.DataHelpers
             DateTime date1 = Convert.ToDateTime(date_from);
             DateTime date2 = Convert.ToDateTime(date_to);
 
+
             Paragraph p1 = new Paragraph("DEPARTMENT OF HEALTH - REGIONAL OFFICE VII");
             Paragraph p2 = new Paragraph("STATEMENT OF ALLOTMENT, OBLIGATIONS AND BALANCES");
 
-
             Paragraph p3 = new Paragraph("As of " + date1.ToString("MMMM") + " " + date1.ToString("dd") + " - " + date2.ToString("MMMM") + " " + date2.ToString("dd") + " " + date2.ToString("yyyy"));
 
-
-
             header_table.AddCell(new PdfPCell(p1) { HorizontalAlignment = Element.ALIGN_CENTER, Border = 0 });
-            
+
 
             Image logo2 = Image.GetInstance(System.Web.HttpContext.Current.Server.MapPath("~/Content/img/ro7.png"));
             logo2.ScaleAbsolute(60f, 60f);
 
-            header_table.AddCell(new PdfPCell(logo2) { Rowspan = 3, HorizontalAlignment = Element.ALIGN_CENTER , Border = 0});
+            header_table.AddCell(new PdfPCell(logo2) { Rowspan = 3, HorizontalAlignment = Element.ALIGN_CENTER, Border = 0 });
 
-            header_table.AddCell(new PdfPCell(p2) { HorizontalAlignment = Element.ALIGN_CENTER ,Border = 0});
-            header_table.AddCell(new PdfPCell(p3) { HorizontalAlignment = Element.ALIGN_CENTER ,Border = 0});
+            header_table.AddCell(new PdfPCell(p2) { HorizontalAlignment = Element.ALIGN_CENTER, Border = 0 });
+            header_table.AddCell(new PdfPCell(p3) { HorizontalAlignment = Element.ALIGN_CENTER, Border = 0 });
 
-            //doc.Add(header_table);
+            doc.Add(header_table);
 
-           // doc.NewPage();
+             doc.NewPage();
 
             PdfPTable footer = new PdfPTable(3);
 
@@ -107,25 +103,25 @@ namespace BUDGET.DataHelpers
             footer.AddCell(new PdfPCell(new Paragraph("Budget Officer III")) { Border = 0 });
             footer.AddCell(new PdfPCell(new Paragraph("Director IV")) { Border = 0 });
 
-           // doc.Add(footer);
+            doc.Add(footer);
 
-
-            //doc.NewPage();
-
+            doc.NewPage();
 
 
             PdfPtableEvents events = new PdfPtableEvents();
             writer.PageEvent = events;
             events.setHeaderMonth(date1.ToString("MMMM"));
 
+
             PdfPTable _thead = new PdfPTable(10);
             _thead.WidthPercentage = 100f;
-            float[] columnWidths = { 130,30,40,40,40,40,40,40,40,30};
+            float[] columnWidths = { 130, 30, 40, 40, 40, 40, 40, 40, 40, 40 };
             _thead.SetWidths(columnWidths);
-            
+
             Double total = 0.00;
 
 
+            var allotments_row_totals = new Dictionary<String, Dictionary<String, Double>>();
 
             _thead.SpacingAfter = 100f;
 
@@ -133,6 +129,8 @@ namespace BUDGET.DataHelpers
             Double allotment_total = 0;
             foreach(Allotments _allotments in allotments)
             {
+                allotments_row_totals[_allotments.Code] = new Dictionary<string, double>();
+                
                 allotment_total = 0;
                 _thead.AddCell(new PdfPCell(new Paragraph(_allotments.Title.ToUpper(), new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
                 _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
@@ -145,6 +143,7 @@ namespace BUDGET.DataHelpers
                 _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
                 _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
                
+                
 
                 var fsh = db.fsh.Where(p => p.allotment == _allotments.ID.ToString() && p.type == "REG").ToList();
                 foreach(FundSourceHdr _fsh in fsh)
@@ -212,6 +211,7 @@ namespace BUDGET.DataHelpers
                                                  {
                                                      Amount = realignment.amount
                                                  }).ToList();
+
 
 
                         Double total_realignment = 0;
@@ -323,8 +323,24 @@ namespace BUDGET.DataHelpers
                         unobligated_balance_allotment += (_fsa_amount - total_utilized_amount);
                         //total unobligated
                         _thead.AddCell(new PdfPCell(new Paragraph((_fsa_amount - total_utilized_amount).ToString("N", new CultureInfo("en-US")), new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                        //remarks
-                        _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_LEFT });
+                        //disbursements
+
+                        var ors_disbursements = (from ors_uacs in db.ors_expense_codes
+                                                 join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
+                                                 join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
+                                                 join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
+                                                 where ors.Date >= date1 && ors.Date <= date2 &&
+                                                 ors.FundSource == _fsh.Code &&
+                                                 allotments_hdr.ID == _allotments.ID &&
+                                                 ors_uacs.uacs == _fsa.ExpenseCode
+                                                 select new
+                                                 {
+                                                     Disbursements = ors_uacs.Disboursement
+                                                 }).FirstOrDefault();
+
+
+
+                        _thead.AddCell(new PdfPCell(new Paragraph(ors_disbursements != null && ors_disbursements.Disbursements > 0 ? ors_disbursements.Disbursements.ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_CENTER });
 
                         total += _fsa.Amount;
                     }
@@ -564,7 +580,27 @@ namespace BUDGET.DataHelpers
                     }
                 }
             }
+
+
             
+            /*
+
+            foreach(var d in allotments_totals)
+            {
+                _thead.AddCell(new PdfPCell(new Paragraph(d.Key.ToString(), new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT, PaddingLeft = 20f });
+                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
+                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                _thead.AddCell(new PdfPCell(new Paragraph(d.Value.ToString("N", new CultureInfo("en-US")), new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
+                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
+                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
+
+            }
+            */
+
             doc.Add(_thead);
             doc.Close();
         }

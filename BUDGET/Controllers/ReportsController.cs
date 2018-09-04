@@ -9,7 +9,8 @@ using BUDGET.Models;
 using BUDGET.Filters;
 namespace BUDGET.Controllers
 {
-    [Authorize]
+
+    [CustomAuthorize(Roles = "Admin,Encoder")]
     [NoCache]
     [OutputCache(NoStore = true, Duration = 0)]
     public class ReportsController : Controller
@@ -29,14 +30,20 @@ namespace BUDGET.Controllers
             rpt_saob rpt = new rpt_saob();
             String date_from = collection.Get("date_from");
             String date_to = collection.Get("date_to");
+            
+
             rpt.generate_saob(date_from,date_to);
             var fileStream = new FileStream(Server.MapPath("~/rpt_saob/saob.pdf"),
                                      FileMode.Open,
                                      FileAccess.Read
                                    );
+            
             var fsResult = new FileStreamResult(fileStream, "application/pdf");
+
             return fsResult;
         }
+
+
 
         public ActionResult DownloadSaobSheet2()
         {

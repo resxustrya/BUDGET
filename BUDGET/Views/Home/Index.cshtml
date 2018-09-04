@@ -32,7 +32,7 @@
                         <div class="list-group">
                             @foreach (var notification in Model.notifications)
                             {
-                                <a href="#" class="list-group-item"><b>@notification.User</b> @notification.Message <b>@notification.Module</b> via <b>@notification.Action</b></a>
+                                <a href="#" class="list-group-item">[ @notification.DateAdded.ToShortDateString() ] <b>@notification.User</b> @notification.Message @notification.Action <b>@notification.Module</b></a>
                             }
                         </div>
                     </div>
