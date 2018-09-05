@@ -602,7 +602,7 @@ namespace BUDGET.DataHelpers
                                 month_total += amount.Amount;
                             }
 
-
+                            Double sample = 0.00;
 
                             //total for the month
                             _thead.AddCell(new PdfPCell(new Paragraph(month_total > 0 ? month_total.ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
