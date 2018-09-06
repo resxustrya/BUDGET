@@ -405,6 +405,7 @@ namespace BUDGET.DataHelpers
                     unobligated_sub_total += unobligated_balance_allotment;
                     disbursement_sub_total += disbursements;
 
+                    Double hahahehe = 0.00;
 
                     _thead.AddCell(new PdfPCell(new Paragraph("SUBTOTAL " + _allotments.Code.ToUpper() + " " + _fsh.SourceTitle.ToUpper(), new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT, PaddingLeft = 20f });
                     _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
