@@ -170,6 +170,7 @@ namespace BUDGET.Controllers
             return GetOrsPS();
         }
 
+        [CustomAuthorize(Roles = "Admin,Encoder")]
         [Route("delete/ors/ps",Name = "delete_ors_ps")]
         public ActionResult DeleteORSPS(String data)
         {
