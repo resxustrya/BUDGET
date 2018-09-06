@@ -249,7 +249,7 @@ namespace BUDGET.Controllers
                     line_id = Convert.ToInt32(sb.ID);
                     var ors_uacs = db.ors_expense_codes.Where(p => p.ID == line_id).FirstOrDefault();
 
-                    if (User.IsInRole("Admin,Encoder"))
+                    if (User.IsInRole("Admin") || User.IsInRole("Encoder"))
                     {
                         ors_uacs.uacs = sb.expense_code;
                         ors_uacs.amount = sb.amount;
@@ -267,7 +267,7 @@ namespace BUDGET.Controllers
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     try
                     {
-                        if (User.IsInRole("Admin,Encoder"))
+                        if (User.IsInRole("Admin") || User.IsInRole("Cashier"))
                         {
                             if (sb.expense_code != null)
                             {
@@ -284,8 +284,9 @@ namespace BUDGET.Controllers
                                     oec.uacs = sb.expense_code;
                                     oec.ors_obligation = id;
                                     oec.amount = sb.amount;
-                                    oec.Disboursement = sb.Disbursement;
+                                    try { oec.Disboursement = Convert.ToDouble(sb.Disbursement); } catch { oec.Disboursement = 0.00; }
                                     db.ors_expense_codes.Add(oec);
+
                                     try { db.SaveChanges(); } catch { }
 
 
@@ -316,7 +317,7 @@ namespace BUDGET.Controllers
                             }
                         }
                     }
-                    catch { }
+                    catch (Exception innerex) { }
                 }
             }
             
