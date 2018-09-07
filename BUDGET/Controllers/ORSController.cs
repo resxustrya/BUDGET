@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace BUDGET.Controllers
 {
-    
+
     [YearlyFilter]
     [NoCache]
     [OutputCache(NoStore = true, Duration = 0)]
@@ -36,6 +36,8 @@ namespace BUDGET.Controllers
         [CustomAuthorize(Roles = "Admin,Encoder,Cashier")]
         public ActionResult OrsItem(String id)
         {
+            String query = Request.QueryString["q"] ?? "";
+            Session["query"] = query;
             Int32 ID = Convert.ToInt32(id);
             var ors = (from list in db.orsmaster where list.ID == ID && list.Year == GlobalData.Year select list).FirstOrDefault();
             GlobalData.ors_id = ors.ID.ToString();
@@ -43,10 +45,13 @@ namespace BUDGET.Controllers
             ViewBag.allotments = ors.allotments;
             return View();
         }
+
+
         [CustomAuthorize(Roles = "Admin,Encoder,Cashier")]
         [Route("get/ors/ps", Name = "get_ors_ps")]
         public JsonResult GetOrsPS()
         {
+            String query = Session["query"].ToString().ToLower();
             Int32 ors_id = Convert.ToInt32(GlobalData.ors_id);
             var orsps = (from list in db.ors
                          where list.ors_id == ors_id
@@ -70,7 +75,22 @@ namespace BUDGET.Controllers
                              DateReleased = list.DateReleased,
                              TimeReleased = list.TimeReleased,
                          }).ToList();
-            
+            /*
+            try
+            {
+                if (query.Length > 0)
+                {
+                    var query_list = (from p in orsps where (p.DB.ToLower() + p.PO.ToLower() + p.PR.ToLower() + p.PAYEE.ToLower() + p.Adress.ToLower() + p.Particulars.ToLower() + p.FundSource.ToLower()).Contains(query) select p).ToList();
+                    if (query_list.Count > 0)
+                    {
+                        return Json(query_list, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }catch(Exception outerex)
+            {
+                return Json(outerex.Message, JsonRequestBehavior.AllowGet);
+            }
+            */
             return Json(orsps, JsonRequestBehavior.AllowGet);
         }
 
@@ -170,6 +190,7 @@ namespace BUDGET.Controllers
             return GetOrsPS();
         }
 
+
         [CustomAuthorize(Roles = "Admin,Encoder")]
         [Route("delete/ors/ps",Name = "delete_ors_ps")]
         public ActionResult DeleteORSPS(String data)
@@ -227,7 +248,7 @@ namespace BUDGET.Controllers
             var fund_source_uacs = (from uacs in db.uacs
                                     select new
                                     {
-                                        Code = uacs.Code
+                                        Code = uacs.Title
                                     }).ToList();
 
             return Json(fund_source_uacs, JsonRequestBehavior.AllowGet);

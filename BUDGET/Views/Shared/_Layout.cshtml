@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity
+@{
+    BudgetDB db = new BudgetDB();
+    var allotments = (from list in db.allotments where list.year == GlobalData.Year select list).ToList();
+    var orslist = (from list in db.orsmaster where list.Year == GlobalData.Year select list).ToList();
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -51,7 +58,129 @@
 </head>
 <body style="background-color:#E5E7E9;">
     
-    @Html.Partial("nav_header")
+
+
+    
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0;background-color:white;min-height: 20px;">
+        <div class="navbar-header" style="background-color:white;">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="@Url.Action("Index","Home")" style="color:#F8F9F9;background-color:#7DCEA0;">DOH 7 Budget</a>
+        </div>
+        <ul class="nav navbar-top-links navbar-left" style="background-color:white;color:#000;">
+            @if (Session["year"] != null)
+            {
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <span class="glyphicon glyphicon-tasks"> </span>
+                        <b>ORS <i class="fa fa-caret-down"></i></b>
+                    </a>
+                    <ul class="dropdown-menu dropdown-tasks">
+                        @if (orslist.Count > 0)
+                        {
+                            foreach (ORSMaster orsmaster in orslist)
+                            {
+                                <li><a href="@Url.Action("OrsItem","Ors",new { ID = orsmaster.ID })"><span class="glyphicon glyphicon-share-alt"></span> @orsmaster.Title</a></li>
+                            }
+                        }
+                        else
+                        {
+                            <li><a href="javascript:void(0);">No ORS</a></li>
+                        }
+                    </ul>
+                </li>
+                if (User.IsInRole("Admin"))
+                {
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <span class="glyphicon glyphicon-upload"> </span>
+                            <b>Upload Documents <i class="fa fa-caret-down"></i></b>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a href="javascript:void(0);" id="upload_prex" data-url="@Url.Action("UploadPrexc", "Uploads")">
+                                    <span class="glyphicon glyphicon-share-alt"></span>
+                                    Upload PREXC
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" id="upload_orsmooe" data-url="@Url.Action("UploadORSMooe","Uploads")">
+                                    <span class="glyphicon glyphicon-share-alt"></span>
+                                    Upload ORS MOOE
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- /.dropdown-alerts -->
+                    </li>
+                }
+                if (User.IsInRole("Admin") || User.IsInRole("Encoder"))
+                {
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <span class="glyphicon glyphicon-print"> </span>
+                            <b>Budget Reports <i class="fa fa-caret-down"></i></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="javascript:void(0)" id="saob" data-url="@Url.Action("DownloadSaob","Reports")"><span class="glyphicon glyphicon-share-alt"></span> STATEMENT OF ALLOTMENT, OBLIGATIONS AND BALANCES (SHEET 1)</a></li>
+                            <li><a href="javascript:void(0)" id="saobsheet2" data-url="@Url.Action("DownloadSaobSheet2","Reports")"><span class="glyphicon glyphicon-share-alt"></span> STATEMENT OF ALLOTMENT, OBLIGATIONS AND BALANCES (SHEET 2)</a></li>
+                            <li><a href="javascript:void(0)" id="ors_page" data-url="@Url.Action("ORS_PAGE","ORSReports")"><span class="glyphicon glyphicon-share-alt"></span> ORS Page Printing</a></li>
+                        </ul>
+                    </li>
+                }
+
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <span class="glyphicon glyphicon-floppy-disk"> </span>
+                        <b>Master Data <i class="fa fa-caret-down"> </i> </b>
+                    </a>
+                    <ul class="dropdown-menu dropdown-tasks">
+                        <li><a href="@Url.Action("ExpenseCodes","ExpenseCodes")"> <span class="glyphicon glyphicon-share-alt"></span> UACS Expense Codes</a></li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li><a href="@Url.Action("Prexc","ExpenseCodes")"><span class="glyphicon glyphicon-share-alt"></span> Fund Source | PREXC</a></li>
+                            <li><a href="@Url.Action("Index","Allotments")"><span class="glyphicon glyphicon-share-alt"></span> @GlobalData.Year Budget Allotments</a></li>
+                            <li><a href="@Url.Action("ors_head_request_office","ORS")"><span class="glyphicon glyphicon-share-alt"></span> ORS Head Requesting Head</a></li>
+                        }
+
+                        <li><a href="@Url.Action("Index","Budgets")"><span class="glyphicon glyphicon-share-alt"></span> Yearly Budget Reference</a></li>
+                    </ul>
+                </li>
+            }
+
+            <!-- /.dropdown -->
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-user fa-fw"></i>  @User.Identity.GetUserName() <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li>
+                            <a href="@Url.Action("Index","UserAccount")"><i class="fa fa-user fa-fw"></i>User Management</a>
+                        </li>
+                    }
+
+                    <li>
+                        <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="@Url.Action("Logoff","Account")"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                    </li>
+                </ul>
+                <!-- /.dropdown-user -->
+            </li>
+            <li><strong style="font-size:13px;font-family:sans-serif;">@ViewBag.Menu</strong></li>
+            <!-- /.dropdown -->
+        </ul>
+        @RenderSection("search_form", required: false)
+        <!-- /.navbar-header -->
+    </nav>
+
     @RenderBody()
     @Html.Partial("modals")
     @RenderSection("footer",required: false)
