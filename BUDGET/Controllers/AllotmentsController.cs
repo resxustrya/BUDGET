@@ -16,13 +16,14 @@ namespace BUDGET.Controllers
     public class AllotmentsController : Controller
     {
         BudgetDB db = new BudgetDB();
-        // GET: Allotments
+        // GET: Allotmentss
         
         public ActionResult Index()
         {
             var allotments = (from list in db.allotments where list.year == GlobalData.Year select list).ToList();
             return View(allotments);
         }
+
 
         public ActionResult Create()
         {
@@ -48,6 +49,7 @@ namespace BUDGET.Controllers
             
             return RedirectToAction("Index");
         }
+
 
         public ActionResult EditBudget(String ID)
         {
