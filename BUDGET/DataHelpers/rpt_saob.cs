@@ -431,7 +431,7 @@ namespace BUDGET.DataHelpers
 
                 //  ALLOTMENT RECEIVED TOTAL
 
-                _thead.AddCell(new PdfPCell(new Paragraph("TOTAL " + _allotments.Code.ToUpper().ToString(), new Font(Font.FontFamily.HELVETICA, 11f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT});
+                _thead.AddCell(new PdfPCell(new Paragraph("TOTAL " + _allotments.Code.ToUpper().ToString(), new Font(Font.FontFamily.HELVETICA, 11f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER});
                 //EXPENSE CODES
                 _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 10f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
 
@@ -637,6 +637,7 @@ namespace BUDGET.DataHelpers
                                 _fsa_amount += total_realignment;
                                 total_realignment_str = total_realignment > 0 ? total_realignment.ToString("N", new CultureInfo("en-US")) : "";
                             }
+
 
                             // REALIGNMENTS
 

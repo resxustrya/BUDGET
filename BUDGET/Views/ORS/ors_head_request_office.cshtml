@@ -6,13 +6,12 @@
 }
 
 
-
 <div class="container">
     <div class="row">
         <div class="col-md-12">
             <h2>List of ORS Head Requesting Office /Authorized Representative </h2>
             <div class="panel panel-default">
-                <div class="panel-heading"><a href="@Url.Action("CreateOrsHeadRequest","ORS")" class="btn btn-success btn-sm">Create New</a></div>
+                <div class="panel-heading"><a data-add="@Url.Action("CreateOrsHeadRequest","ORS")" class="btn btn-success btn-sm" onclick="create(this);">Create New</a></div>
                 <div class="panel-body">
                     <table class="table table-bordered">
                         <tr>
@@ -26,8 +25,8 @@
                                 <td>@yb.Name</td>
                                 <td>@yb.Position</td>
                                 <td>
-                                    <a href="#" class="btn btn-info">UPDATE</a>
-                                    <a href="#" class="btn btn-danger">CANCEL</a>
+                                    <a data-update="@Url.Action("UpdateOrsHeadRequest","ORS",new { ID = yb.ID })" onclick="update(this);" class="btn btn-info">UPDATE</a>
+                                    <a href="@Url.Action("DeleteORSHeadRequest","ORS", new { ID = yb.ID })" onclick="return confirm('Are you sure you want to delete this entry ?');" class="btn btn-danger">CANCEL</a>
                                 </td>
                             </tr>
                         }
@@ -46,4 +45,31 @@
 
 @section footer{
     @Html.Partial("footer")
+}
+
+@section scripts{
+    <script>
+        function create(el)
+        {
+            $("#page_modal").modal('show');
+            $(".modal_body").html('');
+            $(".loading").show();
+            var url = $(el).data('add');
+            $.get(url, function (res) {
+                $(".modal_body").html(res);
+                $(".loading").hide();
+            });
+        }
+        function update(el)
+        {
+            $("#page_modal").modal('show');
+            $(".modal_body").html('');
+            $(".loading").show();
+            var url = $(el).data('update');
+            $.get(url, function (res) {
+                $(".modal_body").html(res);
+                $(".loading").hide();
+            });
+        }
+    </script>
 }

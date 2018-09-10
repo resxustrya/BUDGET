@@ -369,10 +369,11 @@ namespace BUDGET.Controllers
             var ors_request = (from list in db.ors_head_request select list).ToList();
             return View(ors_request.ToPagedList(pageIndex, pageSize));
         }
+
         [HttpGet]
         public ActionResult CreateOrsHeadRequest()
         {
-            return View();
+            return PartialView();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -383,6 +384,31 @@ namespace BUDGET.Controllers
             ohr.Name = collection.Get("name");
             ohr.Position = collection.Get("position");
             db.ors_head_request.Add(ohr);
+            db.SaveChanges();
+            return RedirectToAction("ors_head_request_office");
+        }
+        [HttpGet]
+        public ActionResult UpdateOrsHeadRequest(String ID)
+        {
+            var ors_head = db.ors_head_request.Where(p => p.ID.ToString() == ID).FirstOrDefault();
+            Session["ORS_HEAD"] = ID;
+            return PartialView(ors_head);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateOrsHeadRequest(FormCollection collection)
+        {
+            String ID = Session["ORS_HEAD"].ToString();
+            var ors_head = db.ors_head_request.Where(p => p.ID.ToString() == ID).FirstOrDefault();
+            ors_head.Name = collection.Get("name");
+            ors_head.Position = collection.Get("position");
+            db.SaveChanges();
+            return RedirectToAction("ors_head_request_office");
+        }
+        public ActionResult DeleteORSHeadRequest(String ID)
+        {
+            var ors_head = db.ors_head_request.Where(p => p.ID.ToString() == ID).FirstOrDefault();
+            db.ors_head_request.Remove(ors_head);
             db.SaveChanges();
             return RedirectToAction("ors_head_request_office");
         }

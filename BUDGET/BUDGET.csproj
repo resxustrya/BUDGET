@@ -767,6 +767,7 @@
     <Content Include="Views\ORSReports\ORS_PAGE.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Allotments\ExpenseSuballotment.cshtml" />
+    <Content Include="Views\ORS\UpdateOrsHeadRequest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

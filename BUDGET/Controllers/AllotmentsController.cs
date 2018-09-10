@@ -24,7 +24,6 @@ namespace BUDGET.Controllers
             return View(allotments);
         }
 
-
         public ActionResult Create()
         {
             return View();

@@ -1,27 +1,25 @@
 ﻿
-@{
-    ViewBag.Title = "CreateOrsHeadRequest";
-}
+@model ors_head_request
 
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <h2>Create new entry</h2>
-            <form action="@Url.Action("CreateOrsHeadRequest","ORS")" method="post">
+            <h2>Update entry</h2>
+            <form action="@Url.Action("UpdateOrsHeadRequest","ORS")" method="post">
                 @Html.AntiForgeryToken()
                 <table class="table">
                     <tr>
                         <td>Name</td>
-                        <td><input type="text" name="name" class="form-control" required /></td>
+                        <td><input type="text" name="name" class="form-control" required value="@Model.Name" /></td>
                     </tr>
                     <tr>
                         <td>Position</td>
-                        <td><input type="text" name="position" class="form-control" required /></td>
+                        <td><input type="text" name="position" class="form-control" required value="@Model.Position" /></td>
                     </tr>
                     <tr>
                         <td></td>
                         <td>
-                            <input type="submit" class="btn btn-success" name="submit" value="Submit" />
+                            <input type="submit" class="btn btn-success" name="submit" value="Save Changes" />
                             <a href="@Url.Action("ors_head_request_office","ORS")" class="btn btn-warning">Cancel</a>
                         </td>
                     </tr>
