@@ -466,7 +466,7 @@ namespace BUDGET.DataHelpers
                 //UNOBLIGATED BALANCE ALLOTMENT
                 _thead.AddCell(new PdfPCell(new Paragraph(unobligated_sub_total > 0 ? unobligated_sub_total.ToString("N", new CultureInfo("en-US")) : "" , new Font(Font.FontFamily.HELVETICA, 10f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
                 //DISBURSEMENTS
-                _thead.AddCell(new PdfPCell(new Paragraph(disbursement_sub_total > 0 ? disbursement_sub_total.ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 10f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                _thead.AddCell(new PdfPCell(new Paragraph(disbursement_sub_total > 0 ? disbursement_sub_total.ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 10f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER });
 
 
                 
@@ -743,7 +743,6 @@ namespace BUDGET.DataHelpers
                         sub_dic_allotment_received.Add("DISBURSEMENTS", sub_disbursement_grand_total);
 
 
-                        
                         sub_allotments_row_totals.Add(_allotments.Code, sub_dic_allotment_received);
 
 
@@ -767,8 +766,6 @@ namespace BUDGET.DataHelpers
                         _thead.AddCell(new PdfPCell(new Paragraph(sub_unobligated_sub_total > 0 ? sub_unobligated_sub_total.ToString("N", new CultureInfo("en-US")) : "" , new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
                         // SUB ALLOTMENT DISBURSEMENTS SUBTOTAL
                         _thead.AddCell(new PdfPCell(new Paragraph(sub_disbursement_sub_total > 0 ? sub_disbursement_sub_total.ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER });
-
-                        
 
                     }
                 }

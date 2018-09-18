@@ -242,7 +242,7 @@
 @section search_form{
     <form class="navbar-form navbar-left pull-right" role="search">
         <div class="form-group">
-            <input type="text" name="q" class="form-control" placeholder="Search">
+            <input type="text" name="q" class="form-control" placeholder="Search" value="@Session["query"].ToString()">
         </div>
         <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-search"></span> Search</button>
     </form>

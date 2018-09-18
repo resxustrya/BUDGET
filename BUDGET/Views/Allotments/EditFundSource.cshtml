@@ -7,19 +7,19 @@
     ViewBag.Title = ViewBag.Menu;
 }
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
+<div class="alert">
+    <div class="col-md-12">
+        <div class="alert alert-rex">
             <div class="panel panel-warning" style="margin-top:10px;">
                 <div class="panel-heading">
                     <i class="fa fa-bar-chart-o fa-fw"></i> Edit Budget Source
                     <div class="pull-right">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-success btn-xs"  aria-expanded="false" id="submit">
+                            <button type="button" class="btn btn-success btn-xs" aria-expanded="false" id="submit">
                                 <span class="glyphicon glyphicon-save"></span>
                                 Save Changes
                             </button>
-                            <a href="@Url.Action("FundSource","Allotments",new { id = GlobalData.allotment })" class="btn btn-danger btn-xs">Exit</a>
+                            <a href="@Url.Action("FundSource", "Allotments", new { id = GlobalData.allotment })" class="btn btn-danger btn-xs">Exit</a>
                         </div>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <form action="@Url.Action("SaveEditFundSource","Allotments")" method="post" id="source_form">
+                            <form action="@Url.Action("SaveEditFundSource", "Allotments")" method="post" id="source_form">
                                 @Html.AntiForgeryToken()
                                 <table class="table">
                                     <tr>
@@ -60,14 +60,27 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-get="@Url.RouteUrl("get_fund_source_expense")" data-delete="@Url.RouteUrl("delete_fund_source_amount")" data-id="@Model.ID" data-suballotment="@Url.Action("ExpenseSuballotment","Allotments")" data-realignment="@Url.Action("ExpenseRealignment","Allotments")"></div>
+                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-get="@Url.RouteUrl("get_fund_source_expense")" data-delete="@Url.RouteUrl("delete_fund_source_amount")" data-id="@Model.ID" data-suballotment="@Url.Action("ExpenseSuballotment", "Allotments")" data-realignment="@Url.Action("ExpenseRealignment", "Allotments")"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        </div>
     </div>
 </div>
+
+@if (Session["saved"] != null && Session["saved"].ToString() == "saved")
+{
+    <script>
+        Lobibox.notify('success', {
+            rounded: true,
+            size: 'mini',
+            msg: 'Changes was saved.'
+        });
+    </script>
+    Session["saved"] = null;
+}
 
 @section footer{
     @Html.Partial("footer")

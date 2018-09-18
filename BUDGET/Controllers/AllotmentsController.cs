@@ -84,7 +84,7 @@ namespace BUDGET.Controllers
                     db.orsmaster.Remove(orsmaster);
                 }
                 catch { }
-               
+                
 
                 var fsh = db.fsh.Where(p => p.allotment == ID.ToString()).ToList();
                 foreach(FundSourceHdr f in fsh)
@@ -151,6 +151,7 @@ namespace BUDGET.Controllers
             db.SaveChanges();
             String data = collection.Get("data");
             SaveFundSourceExpese(id.ToString(), data);
+            Session["saved"] = "saved";
             return Url.Action("EditFundSource", "Allotments", new { id = fsh.ID });
         }
 
@@ -165,10 +166,10 @@ namespace BUDGET.Controllers
             db.SaveChanges();
             return RedirectToAction("FundSource", new { id = GlobalData.allotment });
         }
+
         [Route("get/fundsource/expense",Name = "get_fund_source_expense")]
         public JsonResult GetFundSourceExpense(String fsh)
         {
-            
             var fsa = (from list in db.fsa
                        group list by list.ID into g
                        join expensecode
@@ -319,9 +320,9 @@ namespace BUDGET.Controllers
             fsh.type = "SUB";
             db.fsh.Add(fsh);
             db.SaveChanges();
-
             String data = collection.Get("data");
             SaveSubAllotmentsAmount(fsh.ID.ToString(), data);
+
             ViewBag.Message = "Sub-allotment entry successfully created";
             return Url.Action("EditSubAllotment", "Allotments", new { id = fsh.ID });
         }

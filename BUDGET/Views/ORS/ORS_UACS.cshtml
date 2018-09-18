@@ -55,7 +55,7 @@
             startRows: 50,
             startCols: 5,
             rowHeaders: true,
-            colWidths: [1, 200, 300, 200,200],
+            colWidths: [1, 350, 200, 200,200,200,200],
             stretchH: 'all',
             colHeaders: true,
             contextMenu: ['row_above', 'row_below', 'remove_row', 'copy'],
@@ -64,9 +64,9 @@
                 autoInsertRow: false,
             },
             viewportColumnRenderingOffset: 20,
-            colHeaders: ['ID', 'UACS', 'Title', 'Amount','Disbursement'],
+            colHeaders: ['ID', 'UACS', 'UACS Code', 'Amount','Disbursement','Net Amt.','Tax'],
             columns: [
-                {}, { type: 'autocomplete', source: fundsource_uacs, strick: true, allowInvalid: false }, {}, {}, {}
+                {}, { type: 'autocomplete', source: fundsource_uacs, strick: true, allowInvalid: false }, {}, {}, {}, {}, {}
             ],
             cells: function (r, c, prop) {
                 var cellProperties = {};

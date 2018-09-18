@@ -34,7 +34,8 @@ namespace BUDGET
                       "~/Content/handson/pikaday.css",
                       "~/Content/handson/handsontable.css",
                       "~/Content/scrollstyle.css",
-                      "~/Content/Site.css"
+                      "~/Content/Site.css",
+                      "~/Content/lobibox/lobibox.min.css"
                       ));
 
             
@@ -45,7 +46,8 @@ namespace BUDGET
                       "~/Content/handson/moment.js",
                       "~/Content/handson/pikaday.js",
                       "~/Content/handson/languages.js",
-                      "~/Content/handson/handsontable.js"));
+                      "~/Content/handson/handsontable.js",
+                      "~/Scripts/lobibox/lobibox.min.js"));
 
         }
     }

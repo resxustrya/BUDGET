@@ -75,22 +75,67 @@ namespace BUDGET.Controllers
                              DateReleased = list.DateReleased,
                              TimeReleased = list.TimeReleased,
                          }).ToList();
-            /*
-            try
+
+            
+            if (query.Length > 0)
             {
-                if (query.Length > 0)
+                try
                 {
-                    var query_list = (from p in orsps where (p.DB.ToLower() + p.PO.ToLower() + p.PR.ToLower() + p.PAYEE.ToLower() + p.Adress.ToLower() + p.Particulars.ToLower() + p.FundSource.ToLower()).Contains(query) select p).ToList();
+                    var query_list = (from p in orsps where p.DB.ToLower().Contains(query) select p).ToList();
+                    if (query_list.Count > 0)
+                    {
+                        return Json(query_list, JsonRequestBehavior.AllowGet);
+                    }
+                } catch { }
+
+                try
+                {
+                    var query_list = (from p in orsps where p.PO.ToLower().Contains(query) select p).ToList();
                     if (query_list.Count > 0)
                     {
                         return Json(query_list, JsonRequestBehavior.AllowGet);
                     }
                 }
-            }catch(Exception outerex)
-            {
-                return Json(outerex.Message, JsonRequestBehavior.AllowGet);
+                catch { }
+                try
+                {
+                    var query_list = (from p in orsps where p.PR.ToLower().Contains(query) select p).ToList();
+                    if (query_list.Count > 0)
+                    {
+                        return Json(query_list, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    var query_list = (from p in orsps where p.Adress.ToLower().Contains(query) select p).ToList();
+                    if (query_list.Count > 0)
+                    {
+                        return Json(query_list, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    var query_list = (from p in orsps where p.PAYEE.ToLower().Contains(query) select p).ToList();
+                    if (query_list.Count > 0)
+                    {
+                        return Json(query_list, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                catch { }
+                try
+                {
+                    var query_list = (from p in orsps where p.Particulars.ToLower().Contains(query) select p).ToList();
+                    if (query_list.Count > 0)
+                    {
+                        return Json(query_list, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                catch { }
             }
-            */
             return Json(orsps, JsonRequestBehavior.AllowGet);
         }
 

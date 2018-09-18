@@ -15,7 +15,7 @@
     <meta name="author" content="">
     <link rel="icon" href="@Url.Content("~/Content/img/favicon.png")" type="image/x-icon">
     <title>@ViewBag.Title</title>
-    
+    @Scripts.Render("~/bundles/jquery")
     <!-- Bootstrap Core CSS -->
     @Scripts.Render("~/sb-admin-js")
     @Styles.Render("~/Content/css")
@@ -185,7 +185,7 @@
     @Html.Partial("modals")
     @RenderSection("footer",required: false)
     <!-- Begin page content -->
-    @Scripts.Render("~/bundles/jquery")
+    
     @Scripts.Render("~/bundles/bootstrap")
     <!-- SB ADMIN SCRIPTS -->
     @RenderSection("scripts", required: false)
