@@ -322,8 +322,7 @@ namespace BUDGET.Controllers
             db.SaveChanges();
             String data = collection.Get("data");
             SaveSubAllotmentsAmount(fsh.ID.ToString(), data);
-
-            ViewBag.Message = "Sub-allotment entry successfully created";
+            Session["saved"] = "saved";
             return Url.Action("EditSubAllotment", "Allotments", new { id = fsh.ID });
         }
 
@@ -603,8 +602,6 @@ namespace BUDGET.Controllers
             eca.description = collection.Get("desccription");
             db.expensecodeallotment.Add(eca);
             db.SaveChanges();
-
-
 
             List<Object> list = JsonConvert.DeserializeObject<List<Object>>(collection.Get("data"));
             
