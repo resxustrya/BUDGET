@@ -101,7 +101,7 @@ namespace BUDGET
 
                     var fsa = (from list in db.fsa
                                join expensecode
-                                in db.uacs on list.expensecode equals expensecode.Code
+                                in db.uacs on list.expense_title equals expensecode.Code
                                where list.fundsource == _fsh.ID.ToString()
                                select new
                                {
@@ -152,7 +152,7 @@ namespace BUDGET
 
                         var saa_amt = (from list in db.fsa
                                        join expensecode
-                                        in db.uacs on list.expensecode equals expensecode.Code
+                                        in db.uacs on list.expense_title equals expensecode.Code
                                        where list.fundsource == _fsh_saa.ID.ToString()
                                        select new
                                        {

@@ -24,7 +24,6 @@ namespace BUDGET.Controllers
             return View(allotments);
         }
 
-
         public ActionResult Create()
         {
             return View();
@@ -117,6 +116,7 @@ namespace BUDGET.Controllers
         [HttpPost]
         public String CreateFundSource(FormCollection collection)
         {
+            
             FundSourceHdr fsh = new FundSourceHdr();
             fsh.prexc = collection.Get("prexcode");
             fsh.SourceTitle = collection.Get("source_title");
@@ -128,8 +128,8 @@ namespace BUDGET.Controllers
             db.SaveChanges();
             String data = collection.Get("data");
             SaveFundSourceExpese(fsh.ID.ToString(), data);
-
             return Url.Action("EditFundSource", "Allotments", new { id = fsh.ID });
+            
         }
         [HttpGet]
         public ActionResult EditFundSource(String id)
@@ -168,18 +168,18 @@ namespace BUDGET.Controllers
         }
 
         [Route("get/fundsource/expense",Name = "get_fund_source_expense")]
+
         public JsonResult GetFundSourceExpense(String fsh)
         {
             var fsa = (from list in db.fsa
                        group list by list.ID into g
                        join expensecode
-                        in db.uacs on g.FirstOrDefault().expensecode equals expensecode.Code
+                        in db.uacs on g.FirstOrDefault().expense_title equals expensecode.Title
                        where g.FirstOrDefault().fundsource == fsh
                        select new
                        {
                            ID = g.FirstOrDefault().ID,
-                           ExpenseCode = g.FirstOrDefault().expensecode,
-                           Title = expensecode.Title,
+                           ExpenseCode = g.FirstOrDefault().expense_title,
                            Amount = g.FirstOrDefault().amount
                        });
            
@@ -198,7 +198,7 @@ namespace BUDGET.Controllers
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     id = Convert.ToInt32(sb.ID);
                     var fsa = db.fsa.Where(p => p.ID == id && p.fundsource == fundsource).FirstOrDefault();
-                    fsa.expensecode = sb.expense_code;
+                    fsa.expense_title = sb.expense_title;
                     fsa.amount = Convert.ToDouble(sb.amount);
                     try { db.SaveChanges(); } catch { }
                 }
@@ -207,26 +207,23 @@ namespace BUDGET.Controllers
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     try
                     {
-                        if (sb.expense_code != null)
+                        if (sb.expense_title != null)
                         {
-                            Object uacs_obj = sb.expense_code;
-                            String uacs = uacs_obj.ToString();
-                            
                             FundSourceAmount fsa = new FundSourceAmount();
-                            fsa.expensecode = sb.expense_code;
+                            fsa.expense_title = Convert.ToString(sb.expense_title);
                             try { fsa.amount = Convert.ToDouble(sb.amount); } catch { fsa.amount = 0.00; }
                             fsa.fundsource = fundsource;
                             db.fsa.Add(fsa);
                             try { db.SaveChanges(); } catch { }
-                            
                         }
                     }
                     catch { }
                 }
             }
             return true;
-            
         }
+
+
         [Route("delete/fundsource/amount",Name ="delete_fund_source_amount")]
         public JsonResult DeleteFundSourceAmount(String data)
         {
@@ -308,6 +305,7 @@ namespace BUDGET.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public String CreateSubAllotment(FormCollection collection)
         {
@@ -338,12 +336,12 @@ namespace BUDGET.Controllers
         {
             var fsa = (from list in db.fsa
                        join expensecode
-                        in db.uacs on list.expensecode equals expensecode.Code
+                        in db.uacs on list.expense_title equals expensecode.Title
                        where list.fundsource == fsh
                        select new
                        {
                            ID = list.ID,
-                           ExpenseCode = list.expensecode,
+                           ExpenseCode = expensecode.Code,
                            Title = expensecode.Title,
                            Amount = list.amount
                        }).ToList();
@@ -363,11 +361,9 @@ namespace BUDGET.Controllers
             db.SaveChanges();
 
             String data = collection.Get("data");
-            SaveSubAllotmentsAmount(fsh.ID.ToString(), data);
-            
+            SaveFundSourceExpese(fsh.ID.ToString(), data);
             return Url.Action("EditSubAllotment", "Allotments", new { id = fsh.ID });
         }
-
 
         public void SaveSubAllotmentsAmount(String fsh, String data)
         {
@@ -380,7 +376,7 @@ namespace BUDGET.Controllers
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     id = Convert.ToInt32(sb.ID);
                     var fsa = db.fsa.Where(p => p.ID == id && p.fundsource == fsh).FirstOrDefault();
-                    fsa.expensecode = sb.expense_code;
+                    fsa.expense_title = sb.expense_title;
                     fsa.amount = Convert.ToDouble(sb.amount);
                     try { db.SaveChanges(); } catch { }
                 }
@@ -393,11 +389,11 @@ namespace BUDGET.Controllers
                         {
                             Object uacs_obj = sb.expense_code;
                             String uacs = uacs_obj.ToString();
-                            var expense_exist = (from exist in db.fsa where exist.expensecode == uacs && exist.fundsource == fsh select exist).ToList();
+                            var expense_exist = (from exist in db.fsa where exist.expense_title == uacs && exist.fundsource == fsh select exist).ToList();
                             if (expense_exist.Count <= 0)
                             {
                                 FundSourceAmount fsa = new FundSourceAmount();
-                                fsa.expensecode = sb.expense_code;
+                                fsa.expense_title = sb.expense_code;
                                 try { fsa.amount = Convert.ToDouble(sb.amount); } catch { fsa.amount = 0.00; }
                                 fsa.fundsource = fsh;
                                 db.fsa.Add(fsa);
@@ -462,7 +458,7 @@ namespace BUDGET.Controllers
         {
             var _fsa = (from list in db.fsa where list.fundsource == fundsource select new
             {
-                uacs = list.expensecode
+                uacs = list.expense_title
             }).ToList();
             return Json(_fsa, JsonRequestBehavior.AllowGet);
         }
@@ -535,7 +531,7 @@ namespace BUDGET.Controllers
         {
             var realignments = (from _realignment in db.realignment
                                 join _fsa in db.fsa on _realignment.fundsource equals _fsa.fundsource
-                                where _realignment.fundsource == fundSource && _realignment.uacs_from == _fsa.expensecode
+                                where _realignment.fundsource == fundSource && _realignment.uacs_from == _fsa.expense_title
                                 select new
                                 {
                                     ID = _realignment.ID,
@@ -626,11 +622,11 @@ namespace BUDGET.Controllers
                         {
                             Object uacs_obj = sb.expense_code;
                             String uacs = uacs_obj.ToString();
-                            var expense_exist = (from exist in db.fsa where exist.expensecode == uacs && exist.fundsource == collection.Get("fundsource") select exist).ToList();
+                            var expense_exist = (from exist in db.fsa where exist.expense_title == uacs && exist.fundsource == collection.Get("fundsource") select exist).ToList();
                             if (expense_exist.Count <= 0)
                             {
                                 FundSourceAmount fsa = new FundSourceAmount();
-                                fsa.expensecode = sb.expense_code;
+                                fsa.expense_title = sb.expense_title;
                                 try { fsa.amount = Convert.ToDouble(sb.amount); } catch { fsa.amount = 0.00; }
                                 fsa.fundsource = collection.Get("fundsource");
                                 db.fsa.Add(fsa);

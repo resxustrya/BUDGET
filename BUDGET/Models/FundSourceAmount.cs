@@ -10,7 +10,8 @@ namespace BUDGET
     {
        [Key]
         public Int32 ID { get; set; }
-        public String expensecode { get; set; }
+        public String expense_title { get; set; }
+        public String expense_code { get; set; }
         public Double amount { get; set; }
         public String fundsource { get; set; }
     }

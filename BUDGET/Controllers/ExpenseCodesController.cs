@@ -83,15 +83,15 @@ namespace BUDGET.Controllers
         {
             return "";
         }
-        [Authorize(Roles = "Admin")]
-        [Route("get/expense/codes/number",Name = "get_expense_codes_number")]
+        
+        [Route("get/expense/codes/title",Name = "get_expense_codes_title")]
         public JsonResult GetExpenseCodeNumber()
         {
             var uacs = (from list in db.uacs
                         orderby list.Line ascending
                         select new
                         {
-                            Code = list.Code
+                            Expense = list.Title
                         }).ToList();
             return Json(uacs, JsonRequestBehavior.AllowGet);
         }

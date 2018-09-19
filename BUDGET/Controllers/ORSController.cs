@@ -135,6 +135,16 @@ namespace BUDGET.Controllers
                     }
                 }
                 catch { }
+
+                try
+                {
+                    var query_list = (from p in orsps where p.FundSource.ToLower().Contains(query) select p).ToList();
+                    if (query_list.Count > 0)
+                    {
+                        return Json(query_list, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                catch { }
             }
             return Json(orsps, JsonRequestBehavior.AllowGet);
         }
@@ -368,12 +378,12 @@ namespace BUDGET.Controllers
                                                           }).FirstOrDefault();
 
 
-                                    var ors_fundsource_uacs = (from _fsa in db.fsa where _fsa.fundsource == ors_allotments.fundsource_id.ToString() && _fsa.expensecode == oec.uacs select _fsa.ID).ToList();
+                                    var ors_fundsource_uacs = (from _fsa in db.fsa where _fsa.fundsource == ors_allotments.fundsource_id.ToString() && _fsa.expense_title == oec.uacs select _fsa.ID).ToList();
 
                                     if (ors_fundsource_uacs.Count <= 0)
                                     {
                                         FundSourceAmount new_fsa = new FundSourceAmount();
-                                        new_fsa.expensecode = oec.uacs;
+                                        new_fsa.expense_title = oec.uacs;
                                         new_fsa.amount = 0;
                                         new_fsa.fundsource = ors_allotments.fundsource_id.ToString();
                                         db.fsa.Add(new_fsa);

@@ -60,7 +60,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-get="@Url.RouteUrl("get_fund_source_expense")" data-delete="@Url.RouteUrl("delete_fund_source_amount")" data-id="@Model.ID" data-suballotment="@Url.Action("ExpenseSuballotment", "Allotments")" data-realignment="@Url.Action("ExpenseRealignment", "Allotments")"></div>
+                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_title")" data-get="@Url.RouteUrl("get_fund_source_expense")" data-delete="@Url.RouteUrl("delete_fund_source_amount")" data-id="@Model.ID" data-suballotment="@Url.Action("ExpenseSuballotment", "Allotments")" data-realignment="@Url.Action("ExpenseRealignment", "Allotments")"></div>
                         </div>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
         Lobibox.notify('success', {
             rounded: true,
             size: 'mini',
-            msg: 'Changes was saved.'
+            msg: 'Changes saved.'
         });
     </script>
     Session["saved"] = null;
@@ -99,17 +99,16 @@
            startCols: 4,
            manualColumnResize: true,
            rowHeaders: true,
-           colWidths: [1, 200, 300, 300],
+           colWidths: [1, 300, 300],
            stretchH: 'all',
            colHeaders: true,
-          
            manualColumnMove: true,
            fillHandle: {
                autoInsertRow: false,
            },
-           colHeaders: ['ID','UACS','Title','Amount'],
+           colHeaders: ['ID', 'Expenses','Amount'],
            columns : [
-              {}, { type: 'dropdown', source: expense_codes }, {}, {}
+              {}, { type: 'autocomplete', source: expense_codes, strick: true, allowInvalid: false }, {}
            ],
            contextMenu: {
                items: {
@@ -172,7 +171,7 @@
            },
            cells: function (r, c, prop) {
                var cellProperties = {};
-               if (c === 0 || c === 2) cellProperties.readOnly = true;
+               if (c === 0) cellProperties.readOnly = true;
                return cellProperties;
            },
            beforeRemoveRow: function (index, column) {
@@ -191,7 +190,6 @@
                    items = table.getData();
                    console.log(items.length);
                    if (items.length <= 0) {
-                       alert("Creating new row");
                        var tabledata = [];
                        tabledata[0] = new Array(null, null, null, null);
                        table.loadData(tabledata);
@@ -199,6 +197,7 @@
                });
            }
        });
+
        $(document).ready(function () {
            var fsh = $("#table").data('id');
            var data = {
@@ -210,7 +209,7 @@
                    var tabledata = [];
                    var total;
                    for (var i = 0; i < resdata.length; i++) {
-                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseCode'], resdata[i]['Title'], numberWithCommas(resdata[i]['Amount']));
+                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseCode'],  numberWithCommas(resdata[i]['Amount']));
                    }
                    table.loadData(tabledata);
                }
@@ -219,7 +218,7 @@
            $.get(expense_url, function (expense_res) {
                if (expense_res.length > 0) {
                    for (var i = 0; i < expense_res.length; i++) {
-                       expense_codes[i] = expense_res[i]["Code"];
+                       expense_codes[i] = expense_res[i]["Expense"];
                    }
                }
            });
@@ -237,8 +236,8 @@
            for (var i = 0; i < tabledata.length; i++) {
                expense[i] = {
                    "ID": tabledata[i][0],
-                   "expense_code": tabledata[i][1],
-                   "amount": tabledata[i][3]
+                   "expense_title": tabledata[i][1],
+                   "amount": tabledata[i][2]
                };
            }
            var data = {

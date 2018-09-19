@@ -58,7 +58,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-save="@Url.RouteUrl("save_fundsource_expese")"></div>
+                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_title")" data-save="@Url.RouteUrl("save_fundsource_expese")"></div>
                         </div>
                     </div>
                 </div>
@@ -79,10 +79,10 @@
        var expense_url = $("#table").data('expense');
        table = new Handsontable(container, {
            startRows: 50,
-           startCols: 4,
+           startCols: 3,
            manualColumnResize: true,
            rowHeaders: true,
-           colWidths: [1, 200, 300, 300],
+           colWidths: [1, 300,300],
            stretchH: 'all',
            colHeaders: true,
            contextMenu: ['row_above','row_below','remove_row','copy'],
@@ -90,9 +90,9 @@
            fillHandle: {
                autoInsertRow: false,
            },
-           colHeaders: ['ID','UACS','Title','Amount'],
+           colHeaders: ['ID','Expenses','Amount'],
            columns : [
-              {}, { type: 'dropdown', source: expense_codes }, {}, {}
+              {}, { type: 'autocomplete', source: expense_codes, strick: true, allowInvalid: false }, {}
            ],
            cells: function (r, c, prop) {
                var cellProperties = {};
@@ -119,7 +119,7 @@
            $.get(expense_url, function (expense_res) {
                if (expense_res.length > 0) {
                    for (var i = 0; i < expense_res.length; i++) {
-                       expense_codes[i] = expense_res[i]["Code"];
+                       expense_codes[i] = expense_res[i]["Expense"];
                    }
                }
            });
@@ -139,10 +139,12 @@
            {
                expense[i] = {
                    "ID": tabledata[i][0],
-                   "expense_code": tabledata[i][1],
-                   "amount": tabledata[i][3]
+                   "expense_title": tabledata[i][1],
+                   "amount": tabledata[i][2]
                };
            }
+           
+
            var data = {
                prexcode: prexc,
                source_title: source_title,

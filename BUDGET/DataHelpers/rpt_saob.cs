@@ -229,12 +229,12 @@ namespace BUDGET.DataHelpers
 
                     var fsa = (from list in db.fsa
                                join expensecode
-                                in db.uacs on list.expensecode equals expensecode.Code
+                                in db.uacs on list.expense_title equals expensecode.Code
                                where list.fundsource == _fsh.ID.ToString()
                                select new
                                {
                                    ID = list.ID,
-                                   ExpenseCode = list.expensecode,
+                                   ExpenseCode = list.expense_title,
                                    Title = expensecode.Title,
                                    Amount = list.amount
                                }
@@ -564,12 +564,12 @@ namespace BUDGET.DataHelpers
 
                         var saa_amt = (from list in db.fsa
                                        join expensecode
-                                        in db.uacs on list.expensecode equals expensecode.Code
+                                        in db.uacs on list.expense_title equals expensecode.Code
                                        where list.fundsource == _fsh_saa.ID.ToString()
                                        select new
                                        {
                                            ID = list.ID,
-                                           ExpenseCode = list.expensecode,
+                                           ExpenseCode = list.expense_title,
                                            Title = expensecode.Title,
                                            Amount = list.amount
                                        }

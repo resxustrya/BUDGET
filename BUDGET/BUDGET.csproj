@@ -447,6 +447,10 @@
     <Compile Include="Migrations\201809030530314_disbursement.Designer.cs">
       <DependentUpon>201809030530314_disbursement.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809190318132_expense_title.cs" />
+    <Compile Include="Migrations\201809190318132_expense_title.Designer.cs">
+      <DependentUpon>201809190318132_expense_title.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -944,6 +948,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809030530314_disbursement.resx">
       <DependentUpon>201809030530314_disbursement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809190318132_expense_title.resx">
+      <DependentUpon>201809190318132_expense_title.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
