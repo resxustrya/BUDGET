@@ -13,5 +13,6 @@ namespace BUDGET
         public Int32 ID { get; set; }
         public Int32 Year { get; set; }
         public String CreatedBy { get; set; }
+        public Int32 active { get; set; }
     }
 }

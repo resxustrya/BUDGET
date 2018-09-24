@@ -22,7 +22,7 @@ namespace BUDGET.Controllers
             int pageSize = 10;
             int pageIndex = 1;
             pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
-            var yearlybudget = from yb in db.yearbudget orderby yb.Year descending select yb;
+            var yearlybudget = from yb in db.yearbudget where yb.active == 1 orderby yb.Year descending select yb;
             return View(yearlybudget.ToPagedList(pageIndex,pageSize));
         }
         public ActionResult Year(String id)
@@ -30,12 +30,11 @@ namespace BUDGET.Controllers
             Int32 ID = Convert.ToInt32(id);
             var year = db.yearbudget.Where(p => p.ID == ID).FirstOrDefault();
             GlobalData.Year = year.Year.ToString();
-            
             Session["year"] = year.ID;
-
             return PartialView();
             
         }
+
         [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
@@ -48,17 +47,19 @@ namespace BUDGET.Controllers
             YearBudget yb = new YearBudget();
             yb.Year = Convert.ToInt32(collection["year"].ToString());
             yb.CreatedBy = User.Identity.GetUserName();
+            yb.active = 1;
             db.yearbudget.Add(yb);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles ="Administrator")]
+
+        [Authorize(Roles ="Admin")]
         public ActionResult DeleteYear(String id)
         {
             Int32 ID = Convert.ToInt32(id);
             var year = db.yearbudget.Where(p => p.ID == ID).FirstOrDefault();
-            db.yearbudget.Remove(year);
+            year.active = 0;
             db.SaveChanges();
             return RedirectToAction("Index");
         }

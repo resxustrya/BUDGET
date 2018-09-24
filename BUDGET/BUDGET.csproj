@@ -451,6 +451,26 @@
     <Compile Include="Migrations\201809190318132_expense_title.Designer.cs">
       <DependentUpon>201809190318132_expense_title.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809240119427_status_update.cs" />
+    <Compile Include="Migrations\201809240119427_status_update.Designer.cs">
+      <DependentUpon>201809240119427_status_update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809240537253_active.cs" />
+    <Compile Include="Migrations\201809240537253_active.Designer.cs">
+      <DependentUpon>201809240537253_active.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809240544471_active1.cs" />
+    <Compile Include="Migrations\201809240544471_active1.Designer.cs">
+      <DependentUpon>201809240544471_active1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809240603383_active2.cs" />
+    <Compile Include="Migrations\201809240603383_active2.Designer.cs">
+      <DependentUpon>201809240603383_active2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809240736399_remove_active.cs" />
+    <Compile Include="Migrations\201809240736399_remove_active.Designer.cs">
+      <DependentUpon>201809240736399_remove_active.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -951,6 +971,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809190318132_expense_title.resx">
       <DependentUpon>201809190318132_expense_title.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809240119427_status_update.resx">
+      <DependentUpon>201809240119427_status_update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809240537253_active.resx">
+      <DependentUpon>201809240537253_active.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809240544471_active1.resx">
+      <DependentUpon>201809240544471_active1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809240603383_active2.resx">
+      <DependentUpon>201809240603383_active2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809240736399_remove_active.resx">
+      <DependentUpon>201809240736399_remove_active.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

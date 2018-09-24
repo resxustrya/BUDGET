@@ -15,5 +15,6 @@ namespace BUDGET
         public String Year { get; set; }
         public Int32 allotments { get; set; }
         public String TitlCode { get; set; }
+        public Int32 active { get; set; }
     }
 }

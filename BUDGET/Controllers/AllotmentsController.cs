@@ -20,7 +20,7 @@ namespace BUDGET.Controllers
         
         public ActionResult Index()
         {
-            var allotments = (from list in db.allotments where list.year == GlobalData.Year select list).ToList();
+            var allotments = (from list in db.allotments where list.active == 1 && list.year == GlobalData.Year select list).ToList();
             return View(allotments);
         }
 
@@ -34,6 +34,7 @@ namespace BUDGET.Controllers
             Allotments allotments = new Allotments();
             allotments.Title = collection.Get("Title");
             allotments.Code = collection.Get("code");
+            allotments.active = 1;
             allotments.year = GlobalData.Year;
             db.allotments.Add(allotments);
             db.SaveChanges();
@@ -43,6 +44,7 @@ namespace BUDGET.Controllers
             orsmaster.Title = collection.Get("code");
             orsmaster.allotments = allotments.ID;
             orsmaster.Year = GlobalData.Year;
+            orsmaster.active = 1;
             db.orsmaster.Add(orsmaster);
             db.SaveChanges();
             
@@ -76,33 +78,29 @@ namespace BUDGET.Controllers
             {
                 int ID = Convert.ToInt32(id);
                 var del_allot = db.allotments.Where(p => p.ID == ID).FirstOrDefault();
-                db.allotments.Remove(del_allot);
+                del_allot.active = 0;
+
                 try
                 {
                     var orsmaster = (from ors in db.orsmaster where ors.allotments == ID select ors).FirstOrDefault();
-                    db.orsmaster.Remove(orsmaster);
+                    orsmaster.active = 0;
                 }
                 catch { }
                 
-
-                var fsh = db.fsh.Where(p => p.allotment == ID.ToString()).ToList();
-                foreach(FundSourceHdr f in fsh)
-                {
-                    var fsa = db.fsa.Where(p => p.fundsource == f.ID.ToString()).ToList();
-                    db.fsa.RemoveRange(fsa);
-                }
-                db.fsh.RemoveRange(fsh);
+                db.Database.ExecuteSqlCommand("UPDATE FundSourceHdrs SET active = 0 WHERE allotment ='" + ID.ToString() + "'");
                 db.SaveChanges();
             }
             catch { }
+
             return RedirectToAction("Index");
         }
+
         public ActionResult FundSource(String ID)
         {
             int id = Convert.ToInt32(ID);
             var allotment = db.allotments.Where(p => p.ID == id).FirstOrDefault();
             GlobalData.allotment = allotment.ID.ToString();
-            var fundsources = (from list in db.fsh where list.allotment == allotment.ID.ToString() && list.type == "REG" select list).ToList();
+            var fundsources = (from list in db.fsh where list.allotment == allotment.ID.ToString() && list.type == "REG" && list.active == 1 select list).ToList();
             ViewBag.Message = @GlobalData.Year + " Budget Fund Source for " + allotment.Code;
             ORS ors = new ORS();
             
@@ -124,12 +122,13 @@ namespace BUDGET.Controllers
             fsh.Code = collection.Get("title_code");
             fsh.type = "REG";
             fsh.allotment = GlobalData.allotment;
+            fsh.active = 1;
             db.fsh.Add(fsh);
             db.SaveChanges();
             String data = collection.Get("data");
             SaveFundSourceExpese(fsh.ID.ToString(), data);
+            Session["saved"] = "saved";
             return Url.Action("EditFundSource", "Allotments", new { id = fsh.ID });
-            
         }
         [HttpGet]
         public ActionResult EditFundSource(String id)
@@ -160,9 +159,7 @@ namespace BUDGET.Controllers
         {
             Int32 id = Convert.ToInt32(ID);
             var fsh = db.fsh.Where(p => p.ID == id).FirstOrDefault();
-            db.fsh.Remove(fsh);
-            var fsa = db.fsa.Where(p => p.fundsource == id.ToString()).ToList();
-            db.fsa.RemoveRange(fsa);
+            fsh.active = 0;
             db.SaveChanges();
             return RedirectToAction("FundSource", new { id = GlobalData.allotment });
         }
