@@ -11,7 +11,6 @@ namespace BUDGET
     {
         public Int32 ID { get; set; }
         public Int32 ors_obligation { get; set; }
-
         public String uacs { get; set; }
         public Double amount { get; set; }
         public Double Disboursement { get; set; }

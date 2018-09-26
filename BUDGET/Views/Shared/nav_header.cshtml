@@ -1,17 +1,11 @@
 ﻿@using Microsoft.AspNet.Identity
 @{ 
     BudgetDB db = new BudgetDB();
-    var allotments = (from list in db.allotments where list.year == GlobalData.Year select list).ToList();
-    var orslist = (from list in db.orsmaster where list.Year == GlobalData.Year select list).ToList();
+    var orslist = (from list in db.orsmaster join allotments in db.allotments on list.allotments equals allotments.ID where allotments.active == 1 && allotments.year == GlobalData.Year select list).ToList();
 }
+
 <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0;background-color:white;min-height: 20px;">
     <div class="navbar-header" style="background-color:white;">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
         <a class="navbar-brand" href="@Url.Action("Index","Home")" style="color:#F8F9F9;background-color:#7DCEA0;">DOH 7 Budget</a>
     </div>
         <ul class="nav navbar-top-links navbar-left" style="background-color:white;color:#000;">

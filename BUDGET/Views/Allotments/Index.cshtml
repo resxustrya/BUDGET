@@ -8,14 +8,17 @@
     <div class="col-md-12">
         <div class="alert alert-rex">
             <h2>@GlobalData.Year Budget Allotments</h2>
-            <a href="@Url.Action("Create","Allotments")" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add new Allotment</a>
-            <br />
-            <table class="table text-center">
+            <table class="table">
                 <tr>
-                    <th class="text-center">Allotment Code</th>
-                    <th class="text-center">Allotment Title</th>
-                    <th class="text-center">For Fund Source</th>
-                    <th class="text-center">For Sub-Allotment</th>
+                    <td><a href="@Url.Action("Create","Allotments")" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add new</a></td>
+                </tr>
+            </table>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Allotment Code</th>
+                    <th>Allotment Title</th>
+                    <th>For Fund Source</th>
+                    <th>For Sub-Allotment</th>
                     <th class="text-center">*</th>
                 </tr>
                 @foreach (Allotments data in Model)
@@ -24,7 +27,7 @@
                         <td><span style="color:#071D47;font-weight:bold;">@data.Code</span></td>
                         <td><span style="color:#071D47;font-weight:bold;">@data.Title</span></td>
                         <td>
-                            <a href="@Url.Action("FundSource","Allotments",new { id = data.ID })" class="btn btn-default text-success"><span class="glyphicon glyphicon-arrow-right"></span> Fund Source</a>
+                            <a href="@Url.Action("FundSource","Allotments",new { id = data.ID })" class="btn btn-default text-success"><span class="glyphicon glyphicon-arrow-right"></span> List of fund source</a>
                         </td>
                         <td>
                             <a href="@Url.Action("SubAllotment","Allotments", new { allotment = data.ID })" class="btn btn-default text-primary"><span class="glyphicon glyphicon-plus"></span> Sub-Allotment</a>

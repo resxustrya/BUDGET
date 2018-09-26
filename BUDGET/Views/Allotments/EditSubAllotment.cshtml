@@ -7,26 +7,20 @@
     ViewBag.Title = ViewBag.Menu;
 }
 
-<div class="container">
-    <div class="row">
+
+<div class="alert">
+    <div class="alert alert-rex">
         <div class="col-md-12">
             <div class="panel panel-info" style="margin-top:10px;">
                 <div class="panel-heading">
                     <i class="fa fa-bar-chart-o fa-fw"></i> Edit Sub-Allotment
                     <div class="pull-right">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                Actions
-                                <span class="caret"></span>
+                            <button type="button" class="btn btn-success btn-xs" data-toggle="dropdown" aria-expanded="false" id="submit">
+                                <span class="glyphicon glyphicon-save"></span>
+                                Save
                             </button>
-                            <ul class="dropdown-menu pull-right" role="menu">
-                                <li>
-                                    <a href="javascript:void(0)" id="submit">Save</a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("FundSource","Allotments",new { id = GlobalData.allotment })">Exit</a>
-                                </li>
-                            </ul>
+                            <a href="@Url.Action("FundSource","Allotments",new { id = GlobalData.allotment })" class="btn btn-danger btn-xs">Exit</a>
                         </div>
                     </div>
                 </div>
@@ -66,14 +60,13 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_number")" data-get="@Url.RouteUrl("get_saaamt")" data-saaamt="@Model.ID" data-delete="@Url.Action("DeleteSaaAmt","Allotments")"></div>
+                            <div id="table" data-expense="@Url.RouteUrl("get_expense_codes_title")" data-get="@Url.RouteUrl("get_saaamt")" data-saaamt="@Model.ID" data-delete="@Url.Action("DeleteSaaAmt","Allotments")"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
 
 @section footer{
@@ -92,7 +85,7 @@
            startCols: 4,
            manualColumnResize: true,
            rowHeaders: true,
-           colWidths: [1, 200, 300, 300],
+           colWidths: [1, 300, 300],
            stretchH: 'all',
            colHeaders: true,
            contextMenu: ['row_above','row_below','remove_row','copy'],
@@ -100,9 +93,9 @@
            fillHandle: {
                autoInsertRow: false,
            },
-           colHeaders: ['ID','UACS','Title','Amount'],
-           columns : [
-              {}, { type: 'dropdown', source: expense_codes }, {}, {}
+           colHeaders: ['ID', 'Expenses', 'Amount'],
+           columns: [
+              {}, { type: 'autocomplete', source: expense_codes, strick: true, allowInvalid: false }, {}
            ],
            cells: function (r, c, prop) {
                var cellProperties = {};
@@ -121,7 +114,6 @@
                    data: JSON.stringify(ps)
                };
                $.post(url, data, function (resdata) {
-
                });
            }
        });
@@ -129,7 +121,7 @@
            $.get(expense_url, function (expense_res) {
                if (expense_res.length > 0) {
                    for (var i = 0; i < expense_res.length; i++) {
-                       expense_codes[i] = expense_res[i]["Code"];
+                       expense_codes[i] = expense_res[i]["Expense"];
                    }
                }
            });
@@ -144,7 +136,7 @@
                    var tabledata = [];
                    var total;
                    for (var i = 0; i < resdata.length; i++) {
-                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseCode'], resdata[i]['Title'], numberWithCommas(resdata[i]['Amount']));
+                       tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Expense'], numberWithCommas(resdata[i]['Amount']));
                    }
                    table.loadData(tabledata);
                }
@@ -164,8 +156,8 @@
            {
                expense[i] = {
                    "ID": tabledata[i][0],
-                   "expense_code": tabledata[i][1],
-                   "amount" : tabledata[i][3]
+                   "expense_title": tabledata[i][1],
+                   "amount" : tabledata[i][2]
                };
            }
            var data = {

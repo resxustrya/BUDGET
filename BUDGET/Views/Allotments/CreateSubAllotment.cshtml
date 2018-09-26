@@ -32,6 +32,7 @@
                                         <td>PREXC CODE</td>
                                         <td>
                                             <select name="prexcode" class="form-control" id="prexcode">
+                                                <option value="" selected>Select Prexe Code</option>
                                                 @foreach (PREXC p in prexc)
                                                 {
                                                     <option value="@p.Code1">@p.Desc</option>
@@ -40,11 +41,11 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Title</td>
+                                        <td>Fund source name / Particulars</td>
                                         <td><input type="text" name="source_title" placeholder="Fund Source Title" class="form-control" required id="source_title" /></td>
                                     </tr>
                                     <tr>
-                                        <td>Title Code</td>
+                                        <td>Fund Source Code</td>
                                         <td><input type="text" name="title_code" placeholder="Title Code" class="form-control" required id="title_code" /></td>
                                     </tr>
                                     <tr>
@@ -124,7 +125,7 @@
                    }
                }
            });
-       });
+       }); 
 
        $("#submit").click(function () {
            $("#loading_modal").modal('show');

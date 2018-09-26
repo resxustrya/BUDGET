@@ -154,7 +154,6 @@ namespace BUDGET.Controllers
             return Url.Action("EditFundSource", "Allotments", new { id = fsh.ID });
         }
 
-
         public ActionResult DeleteFundSource(String ID)
         {
             Int32 id = Convert.ToInt32(ID);
@@ -164,8 +163,8 @@ namespace BUDGET.Controllers
             return RedirectToAction("FundSource", new { id = GlobalData.allotment });
         }
 
-        [Route("get/fundsource/expense",Name = "get_fund_source_expense")]
 
+        [Route("get/fundsource/expense",Name = "get_fund_source_expense")]
         public JsonResult GetFundSourceExpense(String fsh)
         {
             var fsa = (from list in db.fsa
@@ -286,8 +285,7 @@ namespace BUDGET.Controllers
         public ActionResult SubAllotment(String allotment)
         {
             Session.Add("allotment", allotment);
-            var saahdr = db.fsh.Where(p => p.allotment == allotment && p.type == "SUB").ToList();
-
+            var saahdr = db.fsh.Where(p => p.allotment == allotment && p.type == "SUB" && p.active == 1).ToList();
             var details = (from alt in db.allotments
                            join fsh in db.fsh on alt.ID.ToString() equals fsh.allotment
                            select new
@@ -313,6 +311,7 @@ namespace BUDGET.Controllers
             fsh.Code = collection.Get("title_code");
             fsh.desc = collection.Get("description");
             fsh.type = "SUB";
+            fsh.active = 1;
             db.fsh.Add(fsh);
             db.SaveChanges();
             String data = collection.Get("data");
@@ -324,7 +323,7 @@ namespace BUDGET.Controllers
         public ActionResult EditSubAllotment(String ID)
         {
             Int32 id = Convert.ToInt32(ID);
-            var fsh = db.fsh.Where(p => p.ID == id && p.type == "SUB").FirstOrDefault();
+            var fsh = db.fsh.Where(p => p.ID == id && p.type == "SUB" && p.active == 1).FirstOrDefault();
             return View(fsh);
         }
 
@@ -338,8 +337,7 @@ namespace BUDGET.Controllers
                        select new
                        {
                            ID = list.ID,
-                           ExpenseCode = expensecode.Code,
-                           Title = expensecode.Title,
+                           Expense = list.expense_title,
                            Amount = list.amount
                        }).ToList();
             return Json(fsa, JsonRequestBehavior.AllowGet);
@@ -382,15 +380,15 @@ namespace BUDGET.Controllers
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     try
                     {
-                        if (sb.expense_code != null)
+                        if (sb.expense_title != null)
                         {
-                            Object uacs_obj = sb.expense_code;
+                            Object uacs_obj = sb.expense_title;
                             String uacs = uacs_obj.ToString();
                             var expense_exist = (from exist in db.fsa where exist.expense_title == uacs && exist.fundsource == fsh select exist).ToList();
                             if (expense_exist.Count <= 0)
                             {
                                 FundSourceAmount fsa = new FundSourceAmount();
-                                fsa.expense_title = sb.expense_code;
+                                fsa.expense_title = sb.expense_title;
                                 try { fsa.amount = Convert.ToDouble(sb.amount); } catch { fsa.amount = 0.00; }
                                 fsa.fundsource = fsh;
                                 db.fsa.Add(fsa);
@@ -409,7 +407,6 @@ namespace BUDGET.Controllers
             {
                 dynamic obj = JsonConvert.DeserializeObject<dynamic>(data);
                 int ID = Convert.ToInt32(obj.ID);
-
                 var saa_amt = db.fsa.Where(p => p.ID == ID).FirstOrDefault();
                 db.fsa.Remove(saa_amt);
                 db.SaveChanges();
@@ -425,16 +422,10 @@ namespace BUDGET.Controllers
         {
             Int32 id = Convert.ToInt32(ID);
             var fsh = db.fsh.Where(p => p.ID == id && p.type == "SUB").FirstOrDefault();
-            db.fsh.Remove(fsh);
-
-            var fsa = db.fsa.Where(p => p.fundsource == id.ToString()).ToList();
-            db.fsa.RemoveRange(fsa);
-
+            fsh.active = 0;
             db.SaveChanges();
-
             return RedirectToAction("SubAllotment", "Allotments", new { allotment = Session["allotment"].ToString()});
         }
-        
 
         public ActionResult Realignment(String fundsource)
         {

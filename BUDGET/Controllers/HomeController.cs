@@ -18,7 +18,7 @@ namespace BUDGET
         {
             HomeViewModel model = new HomeViewModel();
             model.notifications = db.notifications.ToList();
-            model.orsmaster = db.orsmaster.Where(p => p.Year == GlobalData.Year).ToList();
+            model.orsmaster = db.orsmaster.Where(p => p.Year == GlobalData.Year && p.active == 1).ToList();
             return View(model);
         }
     }
