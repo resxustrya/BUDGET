@@ -20,9 +20,8 @@ namespace BUDGET.Controllers
         BudgetDB db = new BudgetDB();
         
         // GET: ORSReports
-        public ActionResult  PrintOrsPS(String id)
+        public ActionResult PrintOrs(String id)
         {
-            
             Int32 ID = Convert.ToInt32(id);
             var ors = db.ors.Where(p => p.ID == ID).FirstOrDefault();
             

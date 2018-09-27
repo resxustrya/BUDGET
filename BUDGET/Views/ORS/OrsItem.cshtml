@@ -3,7 +3,7 @@
     ViewBag.Title = "ORS";
 }
 
-<div style="width: 100%;overflow: hidden;"  id="ors_table" data-get="@Url.RouteUrl("get_ors_ps")" data-save="@Url.RouteUrl("save_ors_ps")" data-delete="@Url.RouteUrl("delete_ors_ps")"  data-allotments="@Url.Action("GetFundSource","ORS",new { ID = ViewBag.allotments })" data-print_ors="@Url.Action("PrintOrsPS","ORSReports")" data-uacs_amount="@Url.Action("ORS_UACS","ORS")"></div>
+<div style="width: 100%;overflow: hidden;"  id="ors_table" data-get="@Url.RouteUrl("get_ors_ps")" data-save="@Url.RouteUrl("save_ors_ps")" data-delete="@Url.RouteUrl("delete_ors_ps")"  data-allotments="@Url.Action("GetFundSource","ORS",new { ID = ViewBag.allotments })" data-print_ors="@Url.Action("PrintOrs","ORSReports")" data-uacs_amount="@Url.Action("ORS_UACS","ORS")"></div>
 
 @section scripts {
     <script>
@@ -37,6 +37,12 @@
                            if (id) {
                                var url = $("#ors_table").data('print_ors') + "/" + id;
                                window.location.href = url;
+                           } else {
+                               Lobibox.alert("warning", //AVAILABLE TYPES: "error", "info", "success", "warning"
+                               {
+                                   msg: "This row is not yet saved. Press Ctrl + S to save",
+                                   title: "Print ORS"
+                               });
                            }
                        }
                    },
@@ -60,6 +66,12 @@
                                $.get(url, function (res) {
                                    $(".ors_body").html(res);
                                    $(".loading").hide();
+                               });
+                           } else {
+                               Lobibox.alert("warning", //AVAILABLE TYPES: "error", "info", "success", "warning"
+                               {
+                                    msg: "This row is not yet saved. Press Ctrl + S to save",
+                                    title: "UACS Amount Entry / Disbmt"
                                });
                            }
                        }
