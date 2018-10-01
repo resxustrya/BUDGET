@@ -471,6 +471,10 @@
     <Compile Include="Migrations\201809240736399_remove_active.Designer.cs">
       <DependentUpon>201809240736399_remove_active.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809280619024_change_column.cs" />
+    <Compile Include="Migrations\201809280619024_change_column.Designer.cs">
+      <DependentUpon>201809280619024_change_column.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -986,6 +990,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809240736399_remove_active.resx">
       <DependentUpon>201809240736399_remove_active.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809280619024_change_column.resx">
+      <DependentUpon>201809280619024_change_column.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

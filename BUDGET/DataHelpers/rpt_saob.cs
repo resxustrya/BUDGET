@@ -229,13 +229,13 @@ namespace BUDGET.DataHelpers
 
                     var fsa = (from list in db.fsa
                                join expensecode
-                                in db.uacs on list.expense_title equals expensecode.Code
+                                in db.uacs on list.expense_title equals expensecode.Title
                                where list.fundsource == _fsh.ID.ToString()
                                select new
                                {
                                    ID = list.ID,
-                                   ExpenseCode = list.expense_title,
-                                   Title = expensecode.Title,
+                                   ExpenseTitle = list.expense_title,
+                                   ExpenseCode = expensecode.Code,
                                    Amount = list.amount
                                }
                        ).ToList();
@@ -243,7 +243,7 @@ namespace BUDGET.DataHelpers
                     foreach (var _fsa in fsa)
                     {
                         Double _fsa_amount = _fsa.Amount;
-                        _thead.AddCell(new PdfPCell(new Paragraph(_fsa.Title.ToString().ToUpper(), new Font(Font.FontFamily.HELVETICA, 7f, Font.ITALIC))) { HorizontalAlignment = Element.ALIGN_LEFT, PaddingLeft = 25f });
+                        _thead.AddCell(new PdfPCell(new Paragraph(_fsa.ExpenseTitle.ToString().ToUpper(), new Font(Font.FontFamily.HELVETICA, 7f, Font.ITALIC))) { HorizontalAlignment = Element.ALIGN_LEFT, PaddingLeft = 25f });
                         _thead.AddCell(new PdfPCell(new Paragraph(_fsa.ExpenseCode.ToString(), new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_CENTER });
                         _thead.AddCell(new PdfPCell(new Paragraph(_fsa.Amount.ToString("N",new CultureInfo("en-US")), new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
 
@@ -279,7 +279,7 @@ namespace BUDGET.DataHelpers
                             var realignments_to = (from realignment in db.realignment
                                                    join _rel_fsh in db.fsh on realignment.fundsource equals _rel_fsh.ID.ToString()
                                                    join _rel_allotment in db.allotments on _rel_fsh.allotment equals _rel_allotment.ID.ToString()
-                                                   where realignment.uacs_to == _fsa.ExpenseCode
+                                                   where realignment.uacs_to == _fsa.ExpenseTitle
                                                    && realignment.fundsource == _fsh.ID.ToString()
                                                    && _rel_allotment.ID == _allotments.ID
                                                    select new
@@ -315,7 +315,7 @@ namespace BUDGET.DataHelpers
                                             where ors.Date >= date1 && ors.Date <= date2 &&
                                             ors.FundSource == _fsh.Code &&
                                             allotments_hdr.ID == _allotments.ID &&
-                                            ors_uacs.uacs == _fsa.ExpenseCode                                           
+                                            ors_uacs.uacs == _fsa.ExpenseTitle
                                             select new
                                             {
                                                 Amount = ors_uacs.amount
@@ -345,9 +345,9 @@ namespace BUDGET.DataHelpers
                                             where ors.FundSource == _fsh.Code
                                             && ors.Date <= date2 &&
                                             allotments_hdr.ID == _allotments.ID &&
-                                            ors_uacs.uacs == _fsa.ExpenseCode
+                                            ors_uacs.uacs == _fsa.ExpenseTitle
 
-                                            select new
+                                              select new
                                             {
                                                 Amount = ors_uacs.amount
                                             }).ToList();
@@ -377,10 +377,10 @@ namespace BUDGET.DataHelpers
                                                  where ors.Date >= date1 && ors.Date <= date2 &&
                                                  ors.FundSource == _fsh.Code &&
                                                  allotments_hdr.ID == _allotments.ID &&
-                                                 ors_uacs.uacs == _fsa.ExpenseCode
+                                                 ors_uacs.uacs == _fsa.ExpenseTitle
                                                  select new
                                                  {
-                                                     Disbursements = ors_uacs.Disboursement
+                                                     Disbursements = ors_uacs.TaxAmount + ors_uacs.NetAmount
                                                  }).ToList();
 
                         Double uacs_disbursement_total = 0.00;
@@ -398,7 +398,6 @@ namespace BUDGET.DataHelpers
                         total += _fsa.Amount;
                     }
                     allotment_total += total;
-
 
                     allotment_received_sub_total += total;
                     after_realignment_sub_total += realignment_subtotal;
@@ -710,7 +709,7 @@ namespace BUDGET.DataHelpers
                                                          ors_uacs.uacs == _saa_amt.ExpenseCode
                                                          select new
                                                          {
-                                                             Disbursements = ors_uacs.Disboursement
+                                                             Disbursements = ors_uacs.TaxAmount + ors_uacs.NetAmount
                                                          }).FirstOrDefault();
 
                             if(sub_ors_disbursements != null && sub_ors_disbursements.Disbursements > 0)

@@ -64,7 +64,7 @@
                 autoInsertRow: false,
             },
             viewportColumnRenderingOffset: 20,
-            colHeaders: ['ID', 'Expense Code','Amount','Disbursement','Net Amt.','Tax'],
+            colHeaders: ['ID', 'Expense Code','Amount','Disbursement','Net Amt.','Tax Amt.'],
             columns: [
                 {}, { type: 'autocomplete', source: fundsource_uacs, strick: true, allowInvalid: false }, {}, {}, {}, {}
             ],
@@ -99,7 +99,7 @@
                     var tabledata = [];
                     var total;
                     for (var i = 0; i < resdata.length; i++) {
-                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseCode'], resdata[i]['Title'], numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']));
+                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseTitle'], numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']),numberWithCommas(resdata[i]['NetAmount']),numberWithCommas(resdata[i]['TaxAmount']));
                     }
                     table_uacs.loadData(tabledata);
                 }
@@ -124,10 +124,12 @@
                     expense[i] = {
                         "ID": tabledata[i][0],
                         "expense_title": tabledata[i][1],
-                        "amount": tabledata[i][3],
-                        "Disbursement": tabledata[i][4]
+                        "amount": tabledata[i][2],
+                        "NetAmount": tabledata[i][4],
+                        "TaxAmount" : tabledata[i][5]
                     };
                 }
+
                 var data = {
                     ID: ors_obligation,
                     data: JSON.stringify(expense)
@@ -138,7 +140,7 @@
                         var tabledata = [];
                         var total;
                         for (var i = 0; i < resdata.length; i++) {
-                            tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseCode'], resdata[i]['Title'], numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']));
+                            tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseTitle'], numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']), numberWithCommas(resdata[i]['NetAmount']), numberWithCommas(resdata[i]['TaxAmount']));
                         }
                         table_uacs.loadData(tabledata);
                     }

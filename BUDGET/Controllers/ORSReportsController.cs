@@ -18,20 +18,20 @@ namespace BUDGET.Controllers
     {
         ORSReporting rpt_ors = new ORSReporting();
         BudgetDB db = new BudgetDB();
-        
+
         // GET: ORSReports
         public ActionResult PrintOrs(String id)
         {
+
             Int32 ID = Convert.ToInt32(id);
             var ors = db.ors.Where(p => p.ID == ID).FirstOrDefault();
-            
             var ors_uacs = db.ors_expense_codes.Where(p => p.ors_obligation == ors.ID).ToList();
 
-            String filename = id + "ors.pdf";
+            String filename = "ors.pdf";
             Document doc = new Document(PageSize.A4);
             try
             {
-               // System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("~/rpt_ors/" + filename));
+                //System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("~/rpt_ors/" + filename));
             }
             catch
             { }
@@ -39,7 +39,6 @@ namespace BUDGET.Controllers
             var output = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/rpt_ors/" + filename), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
             doc.Open();
-
 
 
             Paragraph header_text = new Paragraph("OBLIGATION REQUEST AND STATUS");
@@ -158,7 +157,7 @@ namespace BUDGET.Controllers
             Double total_amt = 0.00;
             String str_amt = "";
             String uacs = "";
-            foreach(var u in ors_uacs)
+            foreach (var u in ors_uacs)
             {
                 uacs += u.uacs + "\n";
                 str_amt += u.amount.ToString("N", new CultureInfo("en-US")) + "\n";
@@ -216,7 +215,7 @@ namespace BUDGET.Controllers
 
 
             PdfPTable table_row_8 = new PdfPTable(4);
-            float[] w_table_row_8 = { 5,20,5,20 };
+            float[] w_table_row_8 = { 5, 20, 5, 20 };
             table_row_8.WidthPercentage = 100f;
             table_row_8.SetWidths(w_table_row_8);
 
@@ -228,7 +227,7 @@ namespace BUDGET.Controllers
 
 
 
-            table_row_8.AddCell(new PdfPCell(new Paragraph("")) { FixedHeight = 50f,Border = 13 });
+            table_row_8.AddCell(new PdfPCell(new Paragraph("")) { FixedHeight = 50f, Border = 13 });
             table_row_8.AddCell(new PdfPCell(new Paragraph("Charges to appropriation/ allotment necessary, lawful and under my direct supervision; and supporting documents valid, proper and legal \n", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { FixedHeight = 50f, Border = 13 });
             table_row_8.AddCell(new PdfPCell(new Paragraph("")) { FixedHeight = 50f, Border = 13 });
             table_row_8.AddCell(new PdfPCell(new Paragraph("Allotment available and obligated for the purpose/adjustment necessary as indicated above \n", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))) { FixedHeight = 50f, Border = 13 });
@@ -261,7 +260,7 @@ namespace BUDGET.Controllers
 
             table_row_8.AddCell(new PdfPCell(new Paragraph("Printed Name :", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))));
             //HEAD REQUESTING OFFICE / AUTHORIZED REPRESENTATIVE
-            table_row_8.AddCell(new PdfPCell(new Paragraph(ors_head.Name, new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER });
+            table_row_8.AddCell(new PdfPCell(new Paragraph(ors_head != null ? ors_head.Name : "", new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER });
             table_row_8.AddCell(new PdfPCell(new Paragraph("Printed Name", new Font(Font.FontFamily.HELVETICA, 6f, Font.NORMAL))));
             table_row_8.AddCell(new PdfPCell(new Paragraph("LEONORA A. ANIEL", new Font(Font.FontFamily.HELVETICA, 7f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER });
 
@@ -385,15 +384,15 @@ namespace BUDGET.Controllers
             var orslist = (from list in db.orsmaster where list.Year == GlobalData.Year select list).ToList();
             return PartialView(orslist);
         }
-        
+
         [HttpPost]
         public ActionResult ORS_PAGE(FormCollection collection)
         {
-            
+
             string[] page = null;
             string pages = collection.Get("page");
-           
-                
+
+
             page = pages.Split('-');
             page[0] = page[0].Trim();
             page[1] = page[1].Trim();
@@ -407,8 +406,8 @@ namespace BUDGET.Controllers
 
             var ors_list = (from list in db.ors where list.Row >= page1 && list.Row <= page2 && list.ors_id == ors_id orderby list.Row ascending select list).ToList();
 
-           
-            String filename =  "pages.pdf";
+
+            String filename = "pages.pdf";
             Document doc = new Document(PageSize.A4);
             try
             {
@@ -420,7 +419,7 @@ namespace BUDGET.Controllers
             var output = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/rpt_ors/" + filename), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
             doc.Open();
-            foreach(ORS ors in ors_list)
+            foreach (ORS ors in ors_list)
             {
 
                 var ors_uacs = db.ors_expense_codes.Where(p => p.ors_obligation == ors.ID).ToList();
@@ -630,14 +629,14 @@ namespace BUDGET.Controllers
                 //var ors_requesting_head = db.ors_head_request.Where(p => p.Name == ors.head_requesting_office).FirstOrDefault();
 
                 var ors_fsh = (from list in db.ors
-                                join ors_master in db.orsmaster on list.ors_id equals ors_master.ID
-                                join fsh in db.fsh on ors_master.allotments.ToString() equals fsh.allotment
-                                where fsh.Code == ors.FundSource && fsh.allotment == ors_master.allotments.ToString()
-                                && list.ID == ors.ID
-                                select new
-                                {
-                                    ors_head = fsh.ors_head
-                                }).FirstOrDefault();
+                               join ors_master in db.orsmaster on list.ors_id equals ors_master.ID
+                               join fsh in db.fsh on ors_master.allotments.ToString() equals fsh.allotment
+                               where fsh.Code == ors.FundSource && fsh.allotment == ors_master.allotments.ToString()
+                               && list.ID == ors.ID
+                               select new
+                               {
+                                   ors_head = fsh.ors_head
+                               }).FirstOrDefault();
 
                 var ors_head = db.ors_head_request.Where(p => p.ID.ToString() == ors_fsh.ors_head.ToString()).FirstOrDefault();
 
@@ -751,9 +750,9 @@ namespace BUDGET.Controllers
                 doc.Add(table_row_14);
 
                 doc.NewPage();
-                
+
             }
-            
+
             doc.Close();
 
             var fileStream = new FileStream(Server.MapPath("~/rpt_ors/" + filename),

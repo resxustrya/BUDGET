@@ -149,6 +149,7 @@ namespace BUDGET.Controllers
             return Json(orsps, JsonRequestBehavior.AllowGet);
         }
 
+
         [Route("save/ors/ps",Name = "save_ors_ps")]
         [CustomAuthorize(Roles = "Admin,Encoder")]
         public JsonResult SaveORPS(String data)
@@ -245,7 +246,6 @@ namespace BUDGET.Controllers
             return GetOrsPS();
         }
 
-
         [CustomAuthorize(Roles = "Admin,Encoder")]
         [Route("delete/ors/ps",Name = "delete_ors_ps")]
         public ActionResult DeleteORSPS(String data)
@@ -282,16 +282,17 @@ namespace BUDGET.Controllers
         {
             Int32 id = Convert.ToInt32(ID);
             var ors_uacs = (from list in db.ors_expense_codes
-                            join uacs in db.uacs on list.uacs equals uacs.Code
+                            join uacs in db.uacs on list.uacs equals uacs.Title
                             where list.ors_obligation == id
                             select
                             new
                             {
                                 ID = list.ID,
-                                ExpenseCode = list.uacs,
-                                Title = uacs.Title,
+                                ExpenseTitle = list.uacs,
                                 Amount = list.amount,
-                                Disbursement = list.Disboursement
+                                Disbursement = list.NetAmount + list.TaxAmount,
+                                NetAmount = list.NetAmount,
+                                TaxAmount = list.TaxAmount
                             }).ToList();
             return Json(ors_uacs, JsonRequestBehavior.AllowGet);
         }
@@ -327,13 +328,15 @@ namespace BUDGET.Controllers
 
                     if (User.IsInRole("Admin") || User.IsInRole("Encoder"))
                     {
-                        ors_uacs.uacs = sb.expense_code;
+                        ors_uacs.uacs = sb.expense_title;
                         ors_uacs.amount = sb.amount;
-                        ors_uacs.Disboursement = sb.Disbursement;
+                        ors_uacs.NetAmount = sb.NetAmount;
+                        ors_uacs.TaxAmount = sb.TaxAmount;
                     }
                     else if (User.IsInRole("Cashier"))
                     {
-                        ors_uacs.Disboursement = sb.Disbursement;
+                        ors_uacs.NetAmount = sb.NetAmount;
+                        ors_uacs.TaxAmount = sb.TaxAmount;
                     }
                     
                     try { db.SaveChanges(); } catch { }
@@ -345,10 +348,10 @@ namespace BUDGET.Controllers
                     {
                         if (User.IsInRole("Admin") || User.IsInRole("Cashier"))
                         {
-                            if (sb.expense_code != null)
+                            if (sb.expense_title != null)
                             {
 
-                                Object uacs_obj = sb.expense_code;
+                                Object uacs_obj = sb.expense_title;
                                 String uacs = uacs_obj.ToString();
 
                                 var uacs_exist = (from exist in db.ors_expense_codes where exist.uacs == uacs && exist.ors_obligation == id select exist).ToList();
@@ -357,15 +360,14 @@ namespace BUDGET.Controllers
                                 {
 
                                     ORS_EXPENSE_CODES oec = new ORS_EXPENSE_CODES();
-                                    oec.uacs = sb.expense_code;
+                                    oec.uacs = sb.expense_title;
                                     oec.ors_obligation = id;
                                     oec.amount = sb.amount;
-                                    try { oec.Disboursement = Convert.ToDouble(sb.Disbursement); } catch { oec.Disboursement = 0.00; }
+                                    try { oec.TaxAmount = Convert.ToDouble(sb.TaxAmount); } catch { oec.TaxAmount = 0.00; }
+                                    try { oec.NetAmount = Convert.ToDouble(sb.NetAmount); } catch { oec.NetAmount = 0.00; }
                                     db.ors_expense_codes.Add(oec);
 
                                     try { db.SaveChanges(); } catch { }
-
-
 
                                     var ors_allotments = (from ors in db.ors
                                                           join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
@@ -376,7 +378,6 @@ namespace BUDGET.Controllers
                                                               _allotment = allotments.ID,
                                                               fundsource_id = (from _fsh in db.fsh where _fsh.allotment == allotments.ID.ToString() && _fsh.Code == ors.FundSource select _fsh.ID).FirstOrDefault()
                                                           }).FirstOrDefault();
-
 
                                     var ors_fundsource_uacs = (from _fsa in db.fsa where _fsa.fundsource == ors_allotments.fundsource_id.ToString() && _fsa.expense_title == oec.uacs select _fsa.ID).ToList();
 

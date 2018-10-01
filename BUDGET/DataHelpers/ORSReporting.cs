@@ -15,7 +15,7 @@ namespace BUDGET.DataHelpers
         private BudgetDB db = new BudgetDB();
         public void GenerateORSMOOE(String id)
         {
-            String filename = id + "ors.pdf";
+            String filename = "ors.pdf";
             Document doc = new Document(PageSize.A4);
             try
             {
@@ -28,7 +28,6 @@ namespace BUDGET.DataHelpers
             var writer = PdfWriter.GetInstance(doc, output);
             doc.Open();
 
-            
 
             Paragraph header_text = new Paragraph("OBLIGATION REQUEST AND STATUS");
             
