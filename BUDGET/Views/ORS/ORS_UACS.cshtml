@@ -50,7 +50,6 @@
         var table_uacs;
         var valid = true;
         
-
         table_uacs = new Handsontable(container_uacs, {
             startRows: 50,
             startCols: 6,
@@ -58,8 +57,8 @@
             colWidths: [1, 350, 200, 200,200,200],
             stretchH: 'all',
             colHeaders: true,
+            filters: true,
             contextMenu: ['row_above', 'row_below', 'remove_row', 'copy'],
-            manualColumnMove: true,
             fillHandle: {
                 autoInsertRow: false,
             },
@@ -84,13 +83,22 @@
                     };
 
                     $.post(url, data, function (resdata) {
-                        alert(resdata);
                     });
                     return true;
                 } else {
                     return false;
                 }
-            }
+            },
+            afterValidate: function (isValid, value, row, prop, source) {
+                if (!isValid) {
+                    valid = false;
+                    Lobibox.alert("warning", //AVAILABLE TYPES: "error", "info", "success", "warning"
+                    {
+                        msg: "There was an invalid data.",
+                        title: "ORS UACS"
+                    });
+                } else { valid = true; }
+            },
         });
         $(document).ready(function () {
             var url = $("#table_uacs").data('get');

@@ -30,10 +30,10 @@
       
        table = new Handsontable(container, {
            startRows: 50,
-           startCols: 6,
+           startCols: 4,
            manualColumnResize: true,
            rowHeaders: true,
-           colWidths: [1, 200,200,200,200,200],
+           colWidths: [1, 200,200,200],
            stretchH: 'all',
            colHeaders: true,
            contextMenu: ['row_above','row_below','remove_row','copy'],
@@ -41,13 +41,13 @@
            fillHandle: {
                autoInsertRow: false,
            },
-           colHeaders: ['ID', 'Realignment From (UACS)','Title','Realign To (UACS)','Title','Realignment Amount'],
+           colHeaders: ['ID', 'Realignment From (UACS)','Realign To (UACS)','Realignment Amount'],
            columns : [
-              {}, { type: 'dropdown', source: expense_codes },{},{ type: 'dropdown', source: expense_codes },{}, {}
+              {}, { type: 'autocomplete', source: expense_codes, strick: true, allowInvalid: false }, { type: 'autocomplete', source: expense_codes, strick: true, allowInvalid: false }, {}
            ],
            cells: function (r, c, prop) {
                var cellProperties = {};
-               if (c === 0 || c === 2 || c === 4) cellProperties.readOnly = true;
+               if (c === 0) cellProperties.readOnly = true;
                return cellProperties;
            },
            beforeRemoveRow: function (index, column) {
@@ -81,7 +81,7 @@
                if (realignments.length > 0) {
                    var tabledata = [];
                    for (var i = 0; i < realignments.length; i++) {
-                       tabledata[i] = new Array(realignments[i]["ID"], realignments[i]["uacs_from"],realignments[i]["uacs_from_title"], realignments[i]["uacs_to"],realignments[i]["uacs_to_title"],realignments[i]["realignment_amt"]);
+                       tabledata[i] = new Array(realignments[i]["ID"], realignments[i]["uacs_from"],realignments[i]["uacs_to"],realignments[i]["realignment_amt"]);
                    }
                    table.loadData(tabledata);
                }
@@ -109,12 +109,11 @@
                 if (realignments.length > 0) {
                     var tabledata = [];
                     for (var i = 0; i < realignments.length; i++) {
-                        tabledata[i] = new Array(realignments[i]["ID"], realignments[i]["uacs_from"], realignments[i]["uacs_from_title"], realignments[i]["uacs_to"], realignments[i]["uacs_to_title"], realignments[i]["realignment_amt"]);
+                        tabledata[i] = new Array(realignments[i]["ID"], realignments[i]["uacs_from"], realignments[i]["uacs_to"], realignments[i]["realignment_amt"]);
                     }
                     table.loadData(tabledata);
                 }
             });
-           
        });
     </script>
 }

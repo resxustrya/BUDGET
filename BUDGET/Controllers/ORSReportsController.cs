@@ -25,13 +25,13 @@ namespace BUDGET.Controllers
 
             Int32 ID = Convert.ToInt32(id);
             var ors = db.ors.Where(p => p.ID == ID).FirstOrDefault();
-            var ors_uacs = db.ors_expense_codes.Where(p => p.ors_obligation == ors.ID).ToList();
 
             String filename = "ors.pdf";
             Document doc = new Document(PageSize.A4);
+
             try
             {
-                //System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("~/rpt_ors/" + filename));
+                System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("~/rpt_ors/" + filename));
             }
             catch
             { }
@@ -157,6 +157,16 @@ namespace BUDGET.Controllers
             Double total_amt = 0.00;
             String str_amt = "";
             String uacs = "";
+
+            var ors_uacs = (from uacs_list in db.ors_expense_codes
+                            join expensecodes in db.uacs on uacs_list.uacs equals expensecodes.Title
+                            where uacs_list.ors_obligation == ors.ID
+                            select new
+                            {
+                                uacs = expensecodes.Code,
+                                amount = uacs_list.amount
+                            }).ToList();
+
             foreach (var u in ors_uacs)
             {
                 uacs += u.uacs + "\n";
@@ -422,7 +432,7 @@ namespace BUDGET.Controllers
             foreach (ORS ors in ors_list)
             {
 
-                var ors_uacs = db.ors_expense_codes.Where(p => p.ors_obligation == ors.ID).ToList();
+                
                 Paragraph header_text = new Paragraph("OBLIGATION REQUEST AND STATUS");
 
                 header_text.Font = FontFactory.GetFont("Arial", 10, Font.BOLD, BaseColor.BLACK);
@@ -539,6 +549,15 @@ namespace BUDGET.Controllers
                 Double total_amt = 0.00;
                 String str_amt = "";
                 String uacs = "";
+
+                var ors_uacs = (from uacs_list in db.ors_expense_codes
+                                join expensecodes in db.uacs on uacs_list.uacs equals expensecodes.Title
+                                where uacs_list.ors_obligation == ors.ID
+                                select new
+                                {
+                                    uacs = expensecodes.Code,
+                                    amount = uacs_list.amount
+                                }).ToList();
                 foreach (var u in ors_uacs)
                 {
                     uacs += u.uacs + "\n";
@@ -752,8 +771,17 @@ namespace BUDGET.Controllers
                 doc.NewPage();
 
             }
-
-            doc.Close();
+            try
+            {
+                doc.Close();
+            }
+            catch
+            {
+                doc = null;
+                output = null;
+                writer = null;
+            }
+            
 
             var fileStream = new FileStream(Server.MapPath("~/rpt_ors/" + filename),
                                         FileMode.Open,
