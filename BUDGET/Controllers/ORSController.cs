@@ -55,7 +55,7 @@ namespace BUDGET.Controllers
             Int32 ors_id = Convert.ToInt32(GlobalData.ors_id);
             var orsps = (from list in db.ors
                          where list.ors_id == ors_id
-                         orderby list.FundSource ascending
+                         orderby list.FundSource, list.Row ascending
                          select new
                          {
                              ID = list.ID,
@@ -157,17 +157,15 @@ namespace BUDGET.Controllers
             List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
             Int32 id = 0;
             Int32 ors_id = Convert.ToInt32(GlobalData.ors_id);
+            Int32 rowCount = 0;
             foreach (Object s in list)
-            {   
+            {
                 try
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     
                     id = Convert.ToInt32(sb.ID);
-
                     var ors = db.ors.Where(p => p.ID == id).Where(p => p.ors_id == ors_id ).FirstOrDefault();
-                    ors.Row = sb.Row;
-                   
                     Object date = sb.Date;
                     ors.Date1 = date.ToString();
                     DateTime datetime = Convert.ToDateTime(date.ToString());
@@ -194,27 +192,25 @@ namespace BUDGET.Controllers
                     {
                         if(sb.Date != null && sb.Particulars != null && sb.PAYEE != null)
                         {
+                            String fundsource = (String)sb.FundSource;
+                            var last_ors = (from ors_list in db.ors where ors_list.ors_id.ToString() == GlobalData.ors_id && ors_list.FundSource == fundsource orderby ors_list.Row descending select new { Row = ors_list.Row }).FirstOrDefault();
+                            rowCount = last_ors != null && last_ors.Row > 0 ? last_ors.Row : 0;
+
                             ORS ors = new ORS();
                             ors.ors_id = Convert.ToInt32(GlobalData.ors_id);
-                            ors.Row = sb.Row;
-
+                            ors.Row = ++rowCount;
                             Object date = sb.Date;
                             ors.Date1 = date.ToString();
                             DateTime datetime = Convert.ToDateTime(date.ToString());
                             ors.Date = datetime;
-
                             ors.DB = sb.DB;
                             ors.PO = sb.PO;
                             ors.PR = sb.PR;
                             ors.PAYEE = sb.PAYEE;
                             ors.Adress = sb.Adress;
                             ors.Particulars = sb.Particulars;
-                            
                             ors.FundSource = sb.FundSource;
-                            
                             ors.Created_By = User.Identity.GetUserName();
-                            
-
                             ors.DateReceived = sb.DateReceived;
                             ors.TimeReceived = sb.TimeReceived;
                             ors.DateReleased = sb.DateReleased;
@@ -225,18 +221,19 @@ namespace BUDGET.Controllers
                             db.ors.Add(ors);
                             try { db.SaveChanges(); } catch { }
 
-
-                            var ors_master = db.orsmaster.Where(p => p.ID.ToString() == GlobalData.ors_id).FirstOrDefault();
+                            try
+                            {
+                                var ors_master = db.orsmaster.Where(p => p.ID.ToString() == GlobalData.ors_id).FirstOrDefault();
+                                Notifications notifications = new Notifications();
+                                notifications.Module = "ORS, " + ors_master.Title;
+                                notifications.User = User.Identity.GetUserName();
+                                notifications.Action = " added a new ors obligation in";
+                                notifications.DateAdded = DateTime.Now;
+                                db.notifications.Add(notifications);
+                                db.SaveChanges();
+                            }
+                            catch { }
                             
-
-                            Notifications notifications = new Notifications();
-                            notifications.Module = "ORS, " + ors_master.Title;
-                            notifications.User = User.Identity.GetUserName();
-                            notifications.Action = " added a new ors obligation in";
-                            notifications.DateAdded = DateTime.Now;
-                            db.notifications.Add(notifications);
-                            
-                            db.SaveChanges();
                         }
                         
                     }

@@ -7,7 +7,6 @@
 
 @section scripts {
     <script>
-        
         var fund_source = [];
         var container = document.getElementById("ors_table");
         var table;
@@ -16,7 +15,7 @@
         var allotments_url = $("#ors_table").data('allotments');
         //35 cols
        table = new Handsontable(container, {
-           startRows: 50,
+           startRows:1,
            startCols: 17,
            rowHeaders: true,
            colWidths: [1,1,140, 200, 200, 200, 300, 300, 700, 100,200,200,200,200,200,200,200],
@@ -54,7 +53,6 @@
                            var id = tempdata[fromRow][0];
                            if (id) {
                                var url = $("#ors_table").data('uacs_amount') + "/" + id;
-                               
                                $("#ors_modal").modal({
                                    backdrop: 'static',
                                    keyboard: false,
@@ -67,7 +65,7 @@
                                    $(".loading").hide();
                                });
                            } else {
-                               Lobibox.alert("warning", //AVAILABLE TYPES: "error", "info", "success", "warning"
+                               Lobibox.alert("warning",
                                {
                                     msg: "This row is not yet saved. Press Ctrl + S to save",
                                     title: "UACS Amount Entry / Disbmt"
@@ -181,34 +179,52 @@
                            var url = $("#ors_table").data('save');
                            var orsps = [];
                            var data = table.getData();
+                           var ok = false;
                            for (var i = 0; i < data.length; i++) {
-                               orsps[i] = {
-                                   "ID": data[i][0],
-                                   "Row": (i + 1),
-                                   "Date": data[i][2],
-                                   "DB": data[i][3],
-                                   "PO": data[i][4],
-                                   "PR": data[i][5],
-                                   "PAYEE": data[i][6],
-                                   "Adress": data[i][7],
-                                   "Particulars": data[i][8],
-                                   "FundSource": data[i][10],
-                                   "DateReceived" : data[i][13],
-                                   "TimeReceived": data[i][14],
-                                   "DateReleased": data[i][15],
-                                   "TimeReleased": data[i][16]
+                               if (data[i][10]) {
+                                   orsps[i] = {
+                                       "ID": data[i][0],
+                                       "Date": data[i][2],
+                                       "DB": data[i][3],
+                                       "PO": data[i][4],
+                                       "PR": data[i][5],
+                                       "PAYEE": data[i][6],
+                                       "Adress": data[i][7],
+                                       "Particulars": data[i][8],
+                                       "FundSource": data[i][10],
+                                       "DateReceived": data[i][13],
+                                       "TimeReceived": data[i][14],
+                                       "DateReleased": data[i][15],
+                                       "TimeReleased": data[i][16]
+                                   }
+                                   ok = true;
+                               } else {
+                                   ok = false;
                                }
                            }
-                           var data = {
-                               data: JSON.stringify(orsps)
-                           };
+                           if (ok) {
+                               var data = {
+                                   data: JSON.stringify(orsps)
+                               };
 
-                            $.post(url, data, function (resdata) {
-                                load_data();
-                                document.body.style.cursor = 'default';
-                            });
+                               $.post(url, data, function (resdata) {
+                                   load_data();
+                                   document.body.style.cursor = 'default';
+                               });
+                           } else {
+                               Lobibox.alert("warning", //AVAILABLE TYPES: "error", "info", "success", "warning"
+                               {
+                                   msg: "There might be row that has no fund source selected. Please select a fund source for that row.",
+                                   title: "Fund Source"
+                               });
+                               document.body.style.cursor = 'default';
+                           }
                        } else {
-                           alert("Failed to save because theres an ivalid data inputed. See the color red in each rows to indentify errors.");
+                           Lobibox.alert("warning", //AVAILABLE TYPES: "error", "info", "success", "warning"
+                            {
+                                msg: "Failed to save because theres an ivalid data inputed. See the color red in each rows to indentify errors.",
+                                title: ""
+                            });
                        }
 
                    break;
@@ -230,22 +246,16 @@
                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['Row'],resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased'],'');
                    }
                    $("#loading").modal('hide');
-                   table.loadData(tabledata);
                } else {
-                   for (var i = 0; i < 50; i++) {
-                       tabledata[i] = new Array(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-                   }
+                   tabledata[0] = new Array(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
                    $("#loading").modal('hide');
-                   table.loadData(tabledata);
                }
-
                $("#loading").modal('hide');
+               table.loadData(tabledata);
            });
        }
-      
     </script>
 }
-
 @section footer{
     @Html.Partial("footer")
 }

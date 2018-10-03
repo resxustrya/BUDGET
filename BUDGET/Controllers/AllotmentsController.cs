@@ -163,7 +163,6 @@ namespace BUDGET.Controllers
             return RedirectToAction("FundSource", new { id = GlobalData.allotment });
         }
 
-
         [Route("get/fundsource/expense",Name = "get_fund_source_expense")]
         public JsonResult GetFundSourceExpense(String fsh)
         {
@@ -205,12 +204,17 @@ namespace BUDGET.Controllers
                     {
                         if (sb.expense_title != null)
                         {
-                            FundSourceAmount fsa = new FundSourceAmount();
-                            fsa.expense_title = Convert.ToString(sb.expense_title);
-                            try { fsa.amount = Convert.ToDouble(sb.amount); } catch { fsa.amount = 0.00; }
-                            fsa.fundsource = fundsource;
-                            db.fsa.Add(fsa);
-                            try { db.SaveChanges(); } catch { }
+                            String uacs = (String)sb.expense_title;
+                            var expense_exist = (from exist in db.fsa where exist.expense_title == uacs && exist.fundsource == fundsource  select exist).ToList();
+                            if (expense_exist.Count <= 0)
+                            {
+                                FundSourceAmount fsa = new FundSourceAmount();
+                                fsa.expense_title = uacs;
+                                try { fsa.amount = Convert.ToDouble(sb.amount); } catch { fsa.amount = 0.00; }
+                                fsa.fundsource = fundsource;
+                                db.fsa.Add(fsa);
+                                try { db.SaveChanges(); } catch { }
+                            }
                         }
                     }
                     catch { }
@@ -218,7 +222,6 @@ namespace BUDGET.Controllers
             }
             return true;
         }
-
 
         [Route("delete/fundsource/amount",Name ="delete_fund_source_amount")]
         public JsonResult DeleteFundSourceAmount(String data)
@@ -483,7 +486,6 @@ namespace BUDGET.Controllers
                             var realignment_exist = (from exist in db.realignment where exist.uacs_from == uacs_from && exist.uacs_to == uacs_to select exist).ToList();
                             if (realignment_exist.Count <= 0)
                             {
-                                
                                 Realignment realignment = new Realignment();
                                 realignment.uacs_from = uacs_from;
                                 realignment.uacs_to = uacs_to;
@@ -525,9 +527,7 @@ namespace BUDGET.Controllers
                                 {
                                     ID = _realignment.ID,
                                     uacs_from = _realignment.uacs_from,
-                                    uacs_from_title = (from uacs in db.uacs where uacs.Code == _realignment.uacs_from select uacs.Title).FirstOrDefault(),
                                     uacs_to = _realignment.uacs_to,
-                                    uacs_to_title = (from uacs in db.uacs where uacs.Code == _realignment.uacs_to select uacs.Title).FirstOrDefault(),
                                     realignment_amt = _realignment.amount
                                 }).ToList();
 

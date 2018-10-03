@@ -187,9 +187,7 @@
                    data: JSON.stringify(ps)
                };
                $.post(url, data, function (resdata) {
-                   alert("Row was removed.");
                    items = table.getData();
-                   console.log(items.length);
                    if (items.length <= 0) {
                        var tabledata = [];
                        tabledata[0] = new Array(null, null, null, null);

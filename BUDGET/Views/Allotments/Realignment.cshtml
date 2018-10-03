@@ -67,6 +67,7 @@
            }
        });
 
+        
        var expense_url = $("#table").data('expense');
        var realignment_url = $("#table").data('get_realignments')
        $(document).ready(function () {
@@ -77,11 +78,12 @@
                    }
                }
            });
+
            $.get(realignment_url, function (realignments) {
                if (realignments.length > 0) {
                    var tabledata = [];
                    for (var i = 0; i < realignments.length; i++) {
-                       tabledata[i] = new Array(realignments[i]["ID"], realignments[i]["uacs_from"],realignments[i]["uacs_to"],realignments[i]["realignment_amt"]);
+                       tabledata[i] = new Array(realignments[i]["ID"], realignments[i]["uacs_from"], realignments[i]["uacs_to"], numberWithCommas(realignments[i]["realignment_amt"]));
                    }
                    table.loadData(tabledata);
                }
@@ -95,23 +97,29 @@
                realignment[i] = {
                    "ID": tabledata[i][0],
                    "uacs_from": tabledata[i][1],
-                   "uacs_to" : tabledata[i][3],
-                   "amount": tabledata[i][5]
+                   "uacs_to" : tabledata[i][2],
+                   "amount": tabledata[i][3]
                };
            }
+
            var data = {
                fundsource: $("#table").data('fundsource'),
                data: JSON.stringify(realignment)
            };
            
-            var url = $("#table").data('save');
+           var url = $("#table").data('save');
             $.post(url, data, function (realignments) {
                 if (realignments.length > 0) {
                     var tabledata = [];
                     for (var i = 0; i < realignments.length; i++) {
-                        tabledata[i] = new Array(realignments[i]["ID"], realignments[i]["uacs_from"], realignments[i]["uacs_to"], realignments[i]["realignment_amt"]);
+                        tabledata[i] = new Array(realignments[i]["ID"], realignments[i]["uacs_from"], realignments[i]["uacs_to"], numberWithCommas(realignments[i]["realignment_amt"]));
                     }
                     table.loadData(tabledata);
+                    Lobibox.notify('success', {
+                        rounded: true,
+                        size: 'mini',
+                        msg: 'Changes saved.'
+                    });
                 }
             });
        });
