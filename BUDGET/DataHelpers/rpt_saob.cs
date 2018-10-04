@@ -24,7 +24,6 @@ namespace BUDGET.DataHelpers
             catch
             { }
 
-
             Document doc = new Document(PageSize.LEGAL.Rotate());
             var output = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/rpt_saob/saob.pdf"), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
@@ -178,7 +177,7 @@ namespace BUDGET.DataHelpers
 
 
                 allotment_total = 0;
-                _thead.AddCell(new PdfPCell(new Paragraph(_allotments.Title.ToUpper(), new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
+                _thead.AddCell(new PdfPCell(new Paragraph(_allotments.Title.ToUpper(), new Font(Font.FontFamily.HELVETICA, 11f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
                 _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
                 _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
                 _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
@@ -251,7 +250,7 @@ namespace BUDGET.DataHelpers
                         var realignments_from = (from realignment in db.realignment
                                                  join _rel_fsh in db.fsh on realignment.fundsource equals _rel_fsh.ID.ToString()
                                                  join _rel_allotment in db.allotments on _rel_fsh.allotment equals _rel_allotment.ID.ToString()
-                                                 where realignment.uacs_from == _fsa.ExpenseCode
+                                                 where realignment.uacs_from == _fsa.ExpenseTitle
                                                  && realignment.fundsource == _fsh.ID.ToString()
                                                  && _rel_allotment.ID == _allotments.ID
                                                  select new
@@ -568,7 +567,8 @@ namespace BUDGET.DataHelpers
                                        select new
                                        {
                                            ID = list.ID,
-                                           ExpenseCode = list.expense_title,
+                                           ExpenseTitle = list.expense_title,
+                                           ExpenseCode = expensecode.Code,
                                            Title = expensecode.Title,
                                            Amount = list.amount
                                        }
@@ -593,7 +593,7 @@ namespace BUDGET.DataHelpers
                             var realignments_from = (from realignment in db.realignment
                                                      join _rel_fsh in db.fsh on realignment.fundsource equals _rel_fsh.ID.ToString()
                                                      join _rel_allotment in db.allotments on _rel_fsh.allotment equals _rel_allotment.ID.ToString()
-                                                     where realignment.uacs_from == _saa_amt.ExpenseCode
+                                                     where realignment.uacs_from == _saa_amt.ExpenseTitle
                                                      && realignment.fundsource == _fsh_saa.ID.ToString()
                                                      && _rel_allotment.ID == _allotments.ID
                                                      select new
@@ -619,7 +619,7 @@ namespace BUDGET.DataHelpers
                                 var realignments_to = (from realignment in db.realignment
                                                        join _rel_fsh in db.fsh on realignment.fundsource equals _rel_fsh.ID.ToString()
                                                        join _rel_allotment in db.allotments on _rel_fsh.allotment equals _rel_allotment.ID.ToString()
-                                                       where realignment.uacs_to == _saa_amt.ExpenseCode
+                                                       where realignment.uacs_to == _saa_amt.ExpenseTitle
                                                        && realignment.fundsource == _fsh_saa.ID.ToString()
                                                        && _rel_allotment.ID == _allotments.ID
                                                        select new

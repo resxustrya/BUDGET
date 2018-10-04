@@ -169,7 +169,17 @@
        });
        
        $(window).bind('keydown', function (event) {
-           if (event.ctrlKey || event.metaKey) {
+
+           if (event.ctrlKey && event.keyCode == 82) {
+               
+               var table_data = table.getData();
+               table_data.push(new Array(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null));
+               table.loadData(table_data);
+                
+               event.preventDefault();
+               return;
+           }
+           else if (event.ctrlKey || event.metaKey) {
                switch (String.fromCharCode(event.which).toLowerCase())
                {
                    case 's':

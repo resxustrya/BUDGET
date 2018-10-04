@@ -10,11 +10,19 @@
                     <tr>
                         <td>Select ORS</td>
                         <td>
-                            <select name="ors" class="form-control">
+                            <select name="ors" class="form-control" onchange="getFS(this);" data-url="@Url.Action("getFS","ORSReports")">
+                                <option value="" selected disabled>Select Value</option>
                                 @foreach (ORSMaster orsmaster in Model)
                                 {
-                                    <option value="@orsmaster.ID">@orsmaster.Title</option>
+                                    <option value="@orsmaster.allotments">@orsmaster.Title</option>
                                 }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Fund Source</td>
+                        <td>
+                            <select name="fundsource" id="fundsource" class="form-control" >
                             </select>
                         </td>
                     </tr>
@@ -32,3 +40,11 @@
         </div>
     </div>
 </div>
+<script>
+    function getFS(el) {
+        var ors = $(el).val();
+        $.get($(el).data('url'), {ors : ors}, function (res) {
+            $("#fundsource").html(res);
+        });
+    }
+</script>

@@ -522,6 +522,7 @@
     <Content Include="Content\handson\moment.js" />
     <Content Include="Content\handson\pikaday.css" />
     <Content Include="Content\handson\pikaday.js" />
+    <Content Include="Content\img\ajax-loader.gif" />
     <Content Include="Content\img\banner.png" />
     <Content Include="Content\img\doh.png" />
     <Content Include="Content\img\favicon.png" />
