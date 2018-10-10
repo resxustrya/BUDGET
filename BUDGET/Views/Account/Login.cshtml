@@ -2,17 +2,14 @@
 @using BUDGET.Models
 @model LoginViewModel
 
-
 <div class="modal show" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-           
             @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form", @class = "" }))
             {
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <img src="@Url.Content("~/Content/img/ro7.png")" height="150" width="150" />
-                       
                     </div>
                 </div>
                 <div class="row">

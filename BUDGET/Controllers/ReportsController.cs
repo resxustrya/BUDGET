@@ -43,6 +43,16 @@ namespace BUDGET.Controllers
             return fsResult;
         }
 
+        public ActionResult DownloadExcel()
+        {
+
+            var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            SaobExcel saobexcel = new SaobExcel();
+            saobexcel.CreateExcel();
+            var filesStream = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/saob.xlsx"),FileMode.Open);
+            var fsr = new FileStreamResult(filesStream, contentType);
+            return fsr;
+        }
 
 
         public ActionResult DownloadSaobSheet2()

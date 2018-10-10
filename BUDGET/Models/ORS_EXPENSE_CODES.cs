@@ -15,5 +15,7 @@ namespace BUDGET
         public Double amount { get; set; }
         public Double NetAmount { get; set; }
         public Double TaxAmount { get; set; }
+        public String Checklist { get; set; }
+        public DateTime DateDisburset { get; set; }
     }
 }

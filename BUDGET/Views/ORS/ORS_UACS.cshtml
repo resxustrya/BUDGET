@@ -28,7 +28,6 @@
                                 <td>@Model.PR</td>
                             </tr>
                         }
-                        
                     </table>
                 </div>
             </div>
@@ -69,7 +68,7 @@
             ],
             cells: function (r, c, prop) {
                 var cellProperties = {};
-                if (c === 0 || c === 3  @(User.IsInRole("Cashier") ? " || c === 0 c === 1 || c === 2" : "") ) cellProperties.readOnly = true;
+                if (c === 0 || c === 3  @(User.IsInRole("Cashier") ? " || c === 0 || c === 1 || c === 2" : "") ) cellProperties.readOnly = true;
                 return cellProperties;
             },
             beforeRemoveRow: function (index, column) {

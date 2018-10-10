@@ -7,12 +7,15 @@
 
 @section scripts {
     <script>
+
+        
         var fund_source = [];
         var container = document.getElementById("ors_table");
         var table;
         var valid = true;
         var expense_url = $("#ors_table").data('expense');
         var allotments_url = $("#ors_table").data('allotments');
+
         //35 cols
        table = new Handsontable(container, {
            startRows:1,
