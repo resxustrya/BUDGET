@@ -691,6 +691,7 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="excel_reports\SAOB.xlsx" />
     <None Include="Properties\PublishProfiles\budget.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -811,7 +812,6 @@
     <Folder Include="Content\js\" />
     <Folder Include="Content\less\" />
     <Folder Include="Content\upload\" />
-    <Folder Include="excel_reports\" />
     <Folder Include="Views\Json\" />
   </ItemGroup>
   <ItemGroup>
