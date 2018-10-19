@@ -18,6 +18,9 @@ namespace BUDGET
             FileInfo excelFile = new FileInfo(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB.xlsx"));
             var excelApp = new Excel.Application();
             Excel.Workbook workbook = excelApp.Workbooks.Open(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB.xlsx"));
+            //workbook.SaveCopyAs(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB2.xlsx"));
+
+
             Excel.Worksheet worksheet = workbook.Sheets[1];
             Excel.Range range = worksheet.UsedRange;
            
@@ -88,8 +91,13 @@ namespace BUDGET
 
 
                 // DISPLAY ALLOTMENTS
-                worksheet.Cells[++startRow, 1] = _allotments.Title.ToUpper().ToString();
                 
+                ((Excel.Range)worksheet.Cells[startRow, 1]).Font.FontStyle = "TAHOMA";
+                ((Excel.Range)worksheet.Cells[startRow, 1]).Font.Size = 12;
+                ((Excel.Range)worksheet.Cells[startRow, 1]).Font.Bold = true;
+                worksheet.Cells[startRow, 1] = _allotments.Title.ToUpper().ToString();
+
+                startRow++;
 
                 var fsh = db.fsh.Where(p => p.allotment == _allotments.ID.ToString() && p.type == "REG").ToList();
                 foreach (FundSourceHdr _fsh in fsh)
@@ -103,10 +111,18 @@ namespace BUDGET
 
 
                     //DISPLAY PREXC CODE
-                    worksheet.Cells[++startRow, 1] = _fsh.prexc.ToUpper().ToString();
                     
+                    ((Excel.Range)worksheet.Cells[startRow, 1]).NumberFormat = "@";
+                    worksheet.Cells[startRow, 1] = _fsh.prexc.ToUpper().ToString();
+                    startRow++;
+
+
                     //DISPLAY FUNDSOURCE HEADER
-                    worksheet.Cells[++startRow, 1] = _fsh.SourceTitle.ToUpper().ToString();
+                    ((Excel.Range)worksheet.Cells[startRow, 1]).Font.FontStyle = "TAHOMA";
+                    ((Excel.Range)worksheet.Cells[startRow, 1]).Font.Size = 11;
+                    ((Excel.Range)worksheet.Cells[startRow, 1]).Font.Bold = true;
+                    worksheet.Cells[startRow, 1] = _fsh.SourceTitle.ToUpper().ToString();
+                    startRow++;
 
 
                     var fsa = (from list in db.fsa
@@ -126,12 +142,25 @@ namespace BUDGET
                     {
 
                         Double _fsa_amount = _fsa.Amount;
-                        
 
                         // DISPLAY FUNDSOURCE EXPENSE TITLE
+                        worksheet.Cells[startRow, 3] = _fsa.ExpenseTitle.ToUpper().ToString();
+
+
+
                         //DISPLAY EXPENSE CODE
+                        ((Excel.Range)worksheet.Cells[startRow, 11]).Font.FontStyle = "TAHOMA";
+                        ((Excel.Range)worksheet.Cells[startRow, 11]).Font.Bold = true;
+                        ((Excel.Range)worksheet.Cells[startRow, 11]).NumberFormat = "@";
+                        worksheet.Cells[startRow, 11] = _fsa.ExpenseCode.ToString();
+
                         //DISPLAY FUNDSOURCE AMMOUNT
 
+                        ((Excel.Range)worksheet.Cells[startRow, 13]).NumberFormat = "#,###.00";
+                        ((Excel.Range)worksheet.Cells[startRow, 13]).HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
+                        worksheet.Cells[startRow, 13] = _fsa.Amount.ToString();
+
+                        
                         var realignments_from = (from realignment in db.realignment
                                                  join _rel_fsh in db.fsh on realignment.fundsource equals _rel_fsh.ID.ToString()
                                                  join _rel_allotment in db.allotments on _rel_fsh.allotment equals _rel_allotment.ID.ToString()
@@ -182,16 +211,22 @@ namespace BUDGET
 
                         //realignments
 
-                       
+                        ((Excel.Range)worksheet.Cells[startRow, 14]).NumberFormat = "#,###.00";
+                        ((Excel.Range)worksheet.Cells[startRow, 14]).HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
+                        worksheet.Cells[startRow, 14] = total_realignment_str;
+
+
                         //realignment to
 
-                        
                         //total after realignment
                         realignment_subtotal += _fsa_amount;
+                        ((Excel.Range)worksheet.Cells[startRow, 16]).NumberFormat = "#,###.00";
+                        ((Excel.Range)worksheet.Cells[startRow, 16]).HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
+                        worksheet.Cells[startRow, 16] = _fsa_amount.ToString();
+
+
+
                         
-
-
-
                         var uacs_amounts = (from ors_uacs in db.ors_expense_codes
                                             join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
                                             join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
@@ -218,8 +253,11 @@ namespace BUDGET
 
 
                         //total for the month
-                       
 
+                        realignment_subtotal += _fsa_amount;
+                        ((Excel.Range)worksheet.Cells[startRow, 19]).NumberFormat = "#,###.00";
+                        ((Excel.Range)worksheet.Cells[startRow, 19]).HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
+                        worksheet.Cells[startRow, 19] = month_total > 0 ? month_total.ToString() : "";
 
 
                         var total_utilized = (from ors_uacs in db.ors_expense_codes
@@ -244,14 +282,22 @@ namespace BUDGET
                             total_utilized_amount += amount.Amount;
                         }
                         total_asof_the_month += total_utilized_amount;
+
                         //total as of this month
-                       
+
+                        ((Excel.Range)worksheet.Cells[startRow, 30]).NumberFormat = "#,###.00";
+                        ((Excel.Range)worksheet.Cells[startRow, 30]).HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
+                        worksheet.Cells[startRow, 30] = total_utilized_amount > 0 ? total_utilized_amount.ToString() : "";
 
                         //unobligated computation - subtotal per fund source
 
                         unobligated_balance_allotment += (_fsa_amount - total_utilized_amount);
                         //total unobligated
-                       
+
+                        ((Excel.Range)worksheet.Cells[startRow, 31]).NumberFormat = "#,###.00";
+                        ((Excel.Range)worksheet.Cells[startRow, 31]).HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
+                        worksheet.Cells[startRow, 31] = (_fsa_amount - total_utilized_amount).ToString("N", new CultureInfo("en-US"));
+
                         //disbursements
 
                         var ors_disbursements = (from ors_uacs in db.ors_expense_codes
@@ -277,7 +323,13 @@ namespace BUDGET
                             //disbursement_sub_total += ors_disbursements.Disbursements;
                         }
                         disbursements += uacs_disbursement_total;
-                        
+
+                        ((Excel.Range)worksheet.Cells[startRow, 32]).NumberFormat = "#,###.00";
+                        ((Excel.Range)worksheet.Cells[startRow, 32]).HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
+                        worksheet.Cells[startRow, 32] = uacs_disbursement_total > 0 ? uacs_disbursement_total.ToString("N", new CultureInfo("en-US")) : "";
+
+                        startRow++;
+
 
                         total += _fsa.Amount;
                     }
@@ -708,14 +760,7 @@ namespace BUDGET
 
             */
 
-
-
-
-
-
-
-
-
+            
 
             GC.Collect();
             GC.WaitForPendingFinalizers();

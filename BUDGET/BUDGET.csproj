@@ -695,6 +695,7 @@
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="excel_reports\SAOB.xlsx" />
+    <Content Include="excel_reports\SAOB2.xlsx" />
     <None Include="Properties\PublishProfiles\budget.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

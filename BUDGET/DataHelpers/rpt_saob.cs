@@ -296,7 +296,7 @@ namespace BUDGET.DataHelpers
                         }
                         
                         //realignments
-
+                         
                         _thead.AddCell(new PdfPCell(new Paragraph(total_realignment_str, new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
                         //realignment to
 
@@ -361,13 +361,12 @@ namespace BUDGET.DataHelpers
                         total_asof_the_month += total_utilized_amount;
                         //total as of this month
                         _thead.AddCell(new PdfPCell(new Paragraph(total_utilized_amount > 0 ? total_utilized_amount.ToString("N",new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                       
                         //unobligated computation - subtotal per fund source
                         
                         unobligated_balance_allotment += (_fsa_amount - total_utilized_amount);
                         //total unobligated
                         _thead.AddCell(new PdfPCell(new Paragraph((_fsa_amount - total_utilized_amount).ToString("N", new CultureInfo("en-US")), new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                        //disbursements
+                       
 
                         var ors_disbursements = (from ors_uacs in db.ors_expense_codes
                                                  join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
@@ -392,6 +391,7 @@ namespace BUDGET.DataHelpers
                             //disbursement_sub_total += ors_disbursements.Disbursements;
                         }
                         disbursements += uacs_disbursement_total;
+                        //disbursements
                         _thead.AddCell(new PdfPCell(new Paragraph(uacs_disbursement_total > 0 ? uacs_disbursement_total.ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_CENTER });
 
                         total += _fsa.Amount;
