@@ -7,20 +7,45 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Globalization;
+using OfficeOpenXml;
 
 namespace BUDGET
 {
     public class SaobExcel
     {
+        public void ExcelEPP()
+        {
+            FileInfo newFile = new FileInfo(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB.xlsx"));
+
+            ExcelPackage pck = new ExcelPackage(newFile);
+            ExcelWorksheet worksheet = pck.Workbook.Worksheets[1];
+
+            worksheet.Cells["A17"].Value = "PERSONNEL SERVICES";
+
+            pck.Save();
+
+        }
+        
         public void CreateExcel(String date_from, String date_to)
         {
             BudgetDB db = new BudgetDB();
+            /*
             FileInfo excelFile = new FileInfo(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB.xlsx"));
+            try
+            {
+                FileInfo tempExcel = new FileInfo(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB2.xlsx"));
+                tempExcel.Delete();
+                excelFile.CopyTo(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB2.xlsx"));
+            }
+            catch
+            {
+                excelFile.CopyTo(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB2.xlsx"));
+            }
+            */
             var excelApp = new Excel.Application();
-            Excel.Workbook workbook = excelApp.Workbooks.Open(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB.xlsx"));
-            //workbook.SaveCopyAs(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB2.xlsx"));
 
-
+            Excel.Workbook workbook = excelApp.Workbooks.Open(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB2.xlsx"));
+            
             Excel.Worksheet worksheet = workbook.Sheets[1];
             Excel.Range range = worksheet.UsedRange;
            
@@ -760,7 +785,6 @@ namespace BUDGET
 
             */
 
-            
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -768,7 +792,6 @@ namespace BUDGET
             Marshal.ReleaseComObject(worksheet);
             workbook.Close();
             Marshal.ReleaseComObject(workbook);
-
             excelApp.Quit();
             Marshal.ReleaseComObject(excelApp);
 

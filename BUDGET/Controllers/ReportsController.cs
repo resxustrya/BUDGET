@@ -30,28 +30,27 @@ namespace BUDGET.Controllers
             rpt_saob rpt = new rpt_saob();
             String date_from = collection.Get("date_from");
             String date_to = collection.Get("date_to");
-            
+            FileStreamResult fsResult = null;
+            if (collection.Get("format") == "pdf")
+            {
+                rpt.generate_saob(date_from, date_to);
+                var fileStream = new FileStream(Server.MapPath("~/rpt_saob/saob.pdf"),
+                                         FileMode.Open,
+                                         FileAccess.Read
+                                       );
 
-            rpt.generate_saob(date_from,date_to);
-            var fileStream = new FileStream(Server.MapPath("~/rpt_saob/saob.pdf"),
-                                     FileMode.Open,
-                                     FileAccess.Read
-                                   );
-            
-            var fsResult = new FileStreamResult(fileStream, "application/pdf");
-
+                fsResult = new FileStreamResult(fileStream, "application/pdf");
+            }
+            else
+            {
+                var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                SaobExcel saobexcel = new SaobExcel();
+                saobexcel.ExcelEPP();
+                //saobexcel.CreateExcel(date_from,date_to);
+                var filesStream = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB.xlsx"), FileMode.Open);
+                fsResult = new FileStreamResult(filesStream, contentType);
+            }
             return fsResult;
-        }
-
-        public ActionResult DownloadExcel()
-        {
-
-            var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            SaobExcel saobexcel = new SaobExcel();
-            saobexcel.CreateExcel("10/01/2018","10/30/2018");
-            var filesStream = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB.xlsx"),FileMode.Open);
-            var fsr = new FileStreamResult(filesStream, contentType);
-            return fsr;
         }
 
 

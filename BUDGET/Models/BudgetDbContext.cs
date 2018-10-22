@@ -28,5 +28,6 @@ namespace BUDGET
         public DbSet<Notifications> notifications { get; set; }
         public DbSet<ExpenseCodeAllotment> expensecodeallotment { get; set; }
         public DbSet<ExpenseAllotmentExpenseCodes> expense_suballotment_expensecode { get; set; }
+        public DbSet<ExcelFilename> excelfilename { get; set; }
     }
 }
