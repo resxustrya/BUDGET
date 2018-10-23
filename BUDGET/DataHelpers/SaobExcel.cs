@@ -18,9 +18,7 @@ namespace BUDGET
 
             ExcelPackage pck = new ExcelPackage(newFile);
             ExcelWorksheet worksheet = pck.Workbook.Worksheets[1];
-
             
-
             pck.Save();
 
         }
@@ -388,6 +386,41 @@ namespace BUDGET
                     worksheet.Cells[startRow, 13].Style.Numberformat.Format = "#,##0.00";
                     worksheet.Cells[startRow, 13].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                     worksheet.Cells[startRow, 13].Value = total.ToString("N", new CultureInfo("en-US"));
+
+
+                    worksheet.Cells[startRow, 16].Style.Font.Name = "TAHOMA";
+                    worksheet.Cells[startRow, 16].Style.Font.Bold = true;
+                    worksheet.Cells[startRow, 16].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells[startRow, 16].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    worksheet.Cells[startRow, 16].Value = realignment_subtotal.ToString("N", new CultureInfo("en-US"));
+
+
+                    worksheet.Cells[startRow, 19].Style.Font.Name = "TAHOMA";
+                    worksheet.Cells[startRow, 19].Style.Font.Bold = true;
+                    worksheet.Cells[startRow, 19].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells[startRow, 19].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    worksheet.Cells[startRow, 19].Value = total_for_the_month.ToString("N", new CultureInfo("en-US"));
+
+                    worksheet.Cells[startRow, 30].Style.Font.Name = "TAHOMA";
+                    worksheet.Cells[startRow, 30].Style.Font.Bold = true;
+                    worksheet.Cells[startRow, 30].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells[startRow, 30].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    worksheet.Cells[startRow, 30].Value = total_asof_the_month.ToString("N", new CultureInfo("en-US"));
+
+
+                    worksheet.Cells[startRow, 31].Style.Font.Name = "TAHOMA";
+                    worksheet.Cells[startRow, 31].Style.Font.Bold = true;
+                    worksheet.Cells[startRow, 31].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells[startRow, 31].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    worksheet.Cells[startRow, 31].Value = unobligated_balance_allotment.ToString("N", new CultureInfo("en-US"));
+
+
+                    worksheet.Cells[startRow, 32].Style.Font.Name = "TAHOMA";
+                    worksheet.Cells[startRow, 32].Style.Font.Bold = true;
+                    worksheet.Cells[startRow, 32].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells[startRow, 32].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    worksheet.Cells[startRow, 32].Value = disbursements.ToString("N", new CultureInfo("en-US"));
+
 
                     worksheet.Cells[startRow,1,startRow,12].Merge = true;
 
