@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "Removed data access";
+}
+
+<div class="alert">
+    <div class="col-md-12">
+        <div class="alert alert-rex">
+            <table class="table table-bordered">
+                <tr style="background-color:#D5DBDB;">
+                    <th>Allotment Code</th>
+                    <th>Allotment Title</th>
+                    <th>For Fund Source</th>
+                    <th>For Sub-Allotment</th>
+                    <th class="text-center">*</th>
+                </tr>
+                @foreach (Allotments data in Model)
+                {
+                    <tr>
+                        <td><span style="color:#071D47;font-weight:bold;">@data.Code</span></td>
+                        <td><span style="color:#071D47;font-weight:bold;">@data.Title</span></td>
+                        <td>
+                            <a href="@Url.Action("FundSource","RemovedData",new { id = data.ID })" class="btn btn-default text-success"><span class="glyphicon glyphicon-arrow-right"></span> List of fund source</a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("SubAllotment","Allotments", new { allotment = data.ID })" class="btn btn-default text-primary"><span class="glyphicon glyphicon-plus"></span> Sub-Allotment</a>
+                        </td>
+                        <td>
+                            <input class="toggle_status" type="checkbox" @(data.active == 1 ? "checked='checked'" : "" )  data-toggle="toggle" data-on="Enabled" data-off="Disabled" data-onstyle="success" data-offstyle="danger" data-status="@data.active" data-allotment="@data.ID" data-url="@Url.Action("Allotment","RemovedData")">
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        $(function () {
+            $('.toggle_status').change(function () {
+                var allotment = $(this).data('allotment');
+                var status = $(this).data('status');
+                var url = $(this).data('url');
+                
+                if (status == 1)
+                    $(this).data('status', 0);
+                else
+                    $(this).data('status', 1);
+                    
+                $.post(url, { status: $(this).data('status'), allotment : allotment }, function () {
+
+                });
+
+            });
+        })
+    </script>    
+}
+
+@section footer{
+    @Html.Partial("footer")
+}

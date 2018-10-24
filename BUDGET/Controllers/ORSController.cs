@@ -40,7 +40,7 @@ namespace BUDGET.Controllers
             String query = Request.QueryString["q"] ?? "";
             Session["query"] = query;
             Int32 ID = Convert.ToInt32(id);
-            var ors = (from list in db.orsmaster where list.ID == ID && list.Year == GlobalData.Year select list).FirstOrDefault();
+            var ors = (from list in db.orsmaster where list.ID == ID && list.Year == GlobalData.Year && list.active == 1 select list).FirstOrDefault();
             GlobalData.ors_id = ors.ID.ToString();
             ViewBag.Menu = ors.Year + " | " + ors.Title;
             ViewBag.allotments = ors.allotments;
@@ -365,7 +365,7 @@ namespace BUDGET.Controllers
                                     try { oec.NetAmount = Convert.ToDouble(sb.NetAmount); } catch { oec.NetAmount = 0.00; }
                                     db.ors_expense_codes.Add(oec);
 
-                                    try { db.SaveChanges(); } catch { }
+                                    db.SaveChanges();
 
                                     var ors_allotments = (from ors in db.ors
                                                           join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID

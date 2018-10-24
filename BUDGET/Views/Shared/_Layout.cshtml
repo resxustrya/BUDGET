@@ -2,7 +2,7 @@
 @{
     BudgetDB db = new BudgetDB();
     var allotments = (from list in db.allotments where list.year == GlobalData.Year select list).ToList();
-    var orslist = (from list in db.orsmaster where list.Year == GlobalData.Year select list).ToList();
+    var orslist = (from list in db.orsmaster where list.Year == GlobalData.Year && list.active == 1 select list ).ToList();
 }
 
 <!DOCTYPE html>
@@ -163,11 +163,10 @@
                         <li>
                             <a href="@Url.Action("Index","UserAccount")"><i class="fa fa-user fa-fw"></i>User Management</a>
                         </li>
+                        <li>
+                            <a href="@Url.Action("Index","RemovedData")"><span class="glyphicon glyphicon-trash"></span> Removed Data Access</a>
+                        </li>
                     }
-
-                    <li>
-                        <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                    </li>
                     <li class="divider"></li>
                     <li>
                         <a href="@Url.Action("Logoff","Account")"><i class="fa fa-sign-out fa-fw"></i> Logout</a>

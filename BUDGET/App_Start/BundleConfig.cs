@@ -22,7 +22,8 @@ namespace BUDGET
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js",
-                      "~/Scripts/page/scripts.js"));
+                      "~/Scripts/page/scripts.js",
+                      "~/Scripts/toggle.js"));
 
 
             bundles.Add(new StyleBundle("~/login/css").Include(

@@ -242,6 +242,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ORSController.cs" />
     <Compile Include="Controllers\ORSReportsController.cs" />
+    <Compile Include="Controllers\RemovedDataController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\UploadsController.cs" />
     <Compile Include="Controllers\UserAccountController.cs" />
@@ -486,6 +487,10 @@
     <Compile Include="Migrations\201810220338190_excel_file.Designer.cs">
       <DependentUpon>201810220338190_excel_file.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810240828455_remove_cols.cs" />
+    <Compile Include="Migrations\201810240828455_remove_cols.Designer.cs">
+      <DependentUpon>201810240828455_remove_cols.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -721,6 +726,7 @@
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\page\scripts.js" />
+    <Content Include="Scripts\toggle.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
@@ -810,6 +816,8 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Allotments\ExpenseSuballotment.cshtml" />
     <Content Include="Views\ORS\UpdateOrsHeadRequest.cshtml" />
+    <Content Include="Views\RemovedData\Index.cshtml" />
+    <Content Include="Views\RemovedData\FundSource.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1020,6 +1028,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201810220338190_excel_file.resx">
       <DependentUpon>201810220338190_excel_file.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810240828455_remove_cols.resx">
+      <DependentUpon>201810240828455_remove_cols.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
