@@ -563,7 +563,7 @@ namespace BUDGET.DataHelpers
 
                         var saa_amt = (from list in db.fsa
                                        join expensecode
-                                        in db.uacs on list.expense_title equals expensecode.Code
+                                        in db.uacs on list.expense_title equals expensecode.Title
                                        where list.fundsource == _fsh_saa.ID.ToString()
                                        select new
                                        {
@@ -578,6 +578,7 @@ namespace BUDGET.DataHelpers
 
                         foreach (var _saa_amt in saa_amt)
                         {
+
                             Double _fsa_amount = _saa_amt.Amount;
                             Double sub_disbursements = 0.00;
                             // ALLOTMENT TITLE
@@ -658,7 +659,7 @@ namespace BUDGET.DataHelpers
                                                 join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
                                                 where ors.Date >= date1 && ors.Date <= date2 &&
                                                 ors.FundSource == _fsh_saa.Code &&
-                                                ors_uacs.uacs == _saa_amt.ExpenseCode
+                                                ors_uacs.uacs == _saa_amt.ExpenseTitle
                                                 select new
                                                 {
                                                     Amount = ors_uacs.amount

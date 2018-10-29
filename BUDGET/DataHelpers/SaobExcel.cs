@@ -87,10 +87,27 @@ namespace BUDGET
              */
 
 
+            worksheet.Cells[12, 19].Value = date2.ToString("MMMM");
+            worksheet.Cells[12,30].Value = "As of " +date2.ToString("MMMM");
+
             Double allotment_total = 0;
             var allotments = db.allotments.Where(p => p.year == GlobalData.Year && p.active == 1).ToList();
 
-            foreach (Allotments _allotments in allotments)
+            /*
+            var allotments = (from allotment in db.allotments
+                              join fundsource in db.fsh on allotment.ID.ToString() equals fundsource.allotment
+                              where allotment.year == GlobalData.Year &&
+                              allotment.active == 1 &&
+                              allotment.ID.ToString() == fundsource.allotment
+                              select new
+                              {
+                                  ID = allotment.ID,
+                                  Code = allotment.Code,
+                                  Year = allotment.year,
+                                  Title = allotment.Title
+                              }).ToList();
+            */
+            foreach (var _allotments in allotments)
             {
 
                 allotment_received_sub_total = 0.00;
@@ -140,7 +157,7 @@ namespace BUDGET
 
                     //DISPLAY FUNDSOURCE HEADER
                     worksheet.Cells[startRow, 1].Style.Font.Name = "TAHOMA";
-                    worksheet.Cells[startRow, 1].Style.Font.Size = 11;
+                    worksheet.Cells[startRow, 1].Style.Font.Size = 10;
                     worksheet.Cells[startRow, 1].Style.Font.Bold = true;
                     worksheet.Cells[startRow, 1].Value = _fsh.SourceTitle.ToUpper().ToString();
                     startRow++;
@@ -166,8 +183,6 @@ namespace BUDGET
 
                         // DISPLAY FUNDSOURCE EXPENSE TITLE
                         worksheet.Cells[startRow, 3].Value = _fsa.ExpenseTitle.ToUpper().ToString();
-
-
 
                         //DISPLAY EXPENSE CODE
                         
@@ -359,6 +374,7 @@ namespace BUDGET
                     as_of_month_sub_total += total_asof_the_month;
                     unobligated_sub_total += unobligated_balance_allotment;
                     disbursement_sub_total += disbursements;
+
 
                     // DISPLAY SUBTOTAL ROW 
                     /*
@@ -698,7 +714,7 @@ namespace BUDGET
                                                 join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
                                                 where ors.Date >= date1 && ors.Date <= date2 &&
                                                 ors.FundSource == _fsh_saa.Code &&
-                                                ors_uacs.uacs == _saa_amt.ExpenseCode
+                                                ors_uacs.uacs == _saa_amt.ExpenseTitle
                                                 select new
                                                 {
                                                     Amount = ors_uacs.amount
@@ -722,7 +738,7 @@ namespace BUDGET
                                                   join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
                                                   join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
                                                   where ors.FundSource == _fsh_saa.Code &&
-                                                  ors_uacs.uacs == _saa_amt.ExpenseCode
+                                                  ors_uacs.uacs == _saa_amt.ExpenseTitle
                                                   select new
                                                   {
                                                       Amount = ors_uacs.amount
@@ -755,7 +771,7 @@ namespace BUDGET
                                                          join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
                                                          where ors.Date >= date1 && ors.Date <= date2 &&
                                                          ors.FundSource == _fsh_saa.Code &&
-                                                         ors_uacs.uacs == _saa_amt.ExpenseCode
+                                                         ors_uacs.uacs == _saa_amt.ExpenseTitle
                                                          select new
                                                          {
                                                              Disbursements = ors_uacs.TaxAmount + ors_uacs.NetAmount
@@ -832,6 +848,7 @@ namespace BUDGET
                         worksheet.Cells[startRow, 16].Style.Font.Bold = true;
                         worksheet.Cells[startRow, 16].Value = sub_allotment_total_after_realignment_sub_total > 0 ? sub_allotment_total_after_realignment_sub_total.ToString("N", new CultureInfo("en-US")) : "";
 
+
                         // SUB ALLOTMENT CURRENT MONTH SUBTOTAL
                         //_thead.AddCell(new PdfPCell(new Paragraph(sub_current_month_sub_total > 0 ? sub_current_month_sub_total.ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
                         // SUB ALLOTMENT AS OF THIS MONTH SUBTOTAL
@@ -864,27 +881,27 @@ namespace BUDGET
                     }
                 }
             }
+            // INCREMENT startRow to add blank row before displaying grand totals
+            startRow++;
 
-            /*
-
-            // BLANK ROW
-            _thead.AddCell(new PdfPCell(new Paragraph(" ", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-            _thead.AddCell(new PdfPCell(new Paragraph(" ", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-            _thead.AddCell(new PdfPCell(new Paragraph(" ", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-            _thead.AddCell(new PdfPCell(new Paragraph(" ", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-            _thead.AddCell(new PdfPCell(new Paragraph(" ", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-            _thead.AddCell(new PdfPCell(new Paragraph(" ", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-            _thead.AddCell(new PdfPCell(new Paragraph(" ", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-            _thead.AddCell(new PdfPCell(new Paragraph(" ", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-            _thead.AddCell(new PdfPCell(new Paragraph(" ", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-            _thead.AddCell(new PdfPCell(new Paragraph(" ", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER });
-
-            */
             // DISPLAY ALL ALLOTMENT GRAND TOTAL
 
 
             foreach (var d in allotments_row_totals.Keys)
             {
+
+                worksheet.Cells[startRow, 2].Style.Font.Name = "TAHOMA";
+                worksheet.Cells[startRow, 2].Style.Font.Size = 12;
+                worksheet.Cells[startRow, 2].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 2].Value = "TOTAL " + d;
+
+
+                worksheet.Cells[startRow, 13].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 13].Style.Font.Size = 12;
+                worksheet.Cells[startRow, 13].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 13].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 13].Value = allotments_row_totals[d]["ALLOTMENT_RECEIVED"] > 0 ? allotments_row_totals[d]["ALLOTMENT_RECEIVED"].ToString("N", new CultureInfo("en-US")) : "";
+
                 /*
                 _thead.AddCell(new PdfPCell(new Paragraph("TOTAL " + d, new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT, PaddingLeft = 20f });
                 _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
@@ -897,10 +914,11 @@ namespace BUDGET
                 _thead.AddCell(new PdfPCell(new Paragraph(allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"] > 0 ? allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
                 _thead.AddCell(new PdfPCell(new Paragraph(allotments_row_totals[d]["DISBURSEMENTS"] > 0 ? allotments_row_totals[d]["DISBURSEMENTS"].ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER });
                 */
+                startRow++;
+
             }
 
             // DISPLAY ALL SUB ALLOTMENT GRAND TOTAL
-
 
             foreach (var d in sub_allotments_row_totals.Keys)
             {

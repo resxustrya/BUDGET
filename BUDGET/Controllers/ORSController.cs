@@ -56,7 +56,6 @@ namespace BUDGET.Controllers
             Int32 ors_id = Convert.ToInt32(GlobalData.ors_id);
             var orsps = (from list in db.ors
                          where list.ors_id == ors_id
-                         orderby list.FundSource, list.Row ascending
                          select new
                          {
                              ID = list.ID,
