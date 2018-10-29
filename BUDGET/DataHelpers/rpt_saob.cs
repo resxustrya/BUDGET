@@ -398,6 +398,7 @@ namespace BUDGET.DataHelpers
                     }
                     allotment_total += total;
 
+
                     allotment_received_sub_total += total;
                     after_realignment_sub_total += realignment_subtotal;
                     current_month_sub_total += total_for_the_month;
