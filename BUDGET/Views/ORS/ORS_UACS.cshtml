@@ -51,9 +51,9 @@
         
         table_uacs = new Handsontable(container_uacs, {
             startRows: 50,
-            startCols: 6,
+            startCols: 7,
             rowHeaders: true,
-            colWidths: [1, 350, 200, 200,200,200],
+            colWidths: [1, 350, 200, 200,200,200,200],
             stretchH: 'all',
             colHeaders: true,
             filters: true,
@@ -62,15 +62,16 @@
                 autoInsertRow: false,
             },
             viewportColumnRenderingOffset: 20,
-            colHeaders: ['ID', 'Expense Code','Amount','Disbursement','Net Amt.','Tax Amt.'],
+            colHeaders: ['ID', 'Expense Code','Amount','Disbursement','Net Amt.','Tax Amt.','Others'],
             columns: [
-                {}, { type: 'autocomplete', source: fundsource_uacs, strick: true, allowInvalid: false }, {}, {}, {}, {}
+                {}, { type: 'autocomplete', source: fundsource_uacs, strick: true, allowInvalid: false }, {}, {}, {}, {}, {}
             ],
             cells: function (r, c, prop) {
                 var cellProperties = {};
                 if (c === 0 || c === 3  @(User.IsInRole("Cashier") ? " || c === 0 || c === 1 || c === 2" : "") ) cellProperties.readOnly = true;
                 return cellProperties;
             },
+
             beforeRemoveRow: function (index, column) {
                 if (confirm("Are you sure you want to delete this item") == true) {
                     var items = this.getData();
@@ -106,7 +107,7 @@
                     var tabledata = [];
                     var total;
                     for (var i = 0; i < resdata.length; i++) {
-                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseTitle'], numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']),numberWithCommas(resdata[i]['NetAmount']),numberWithCommas(resdata[i]['TaxAmount']));
+                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseTitle'], numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']), numberWithCommas(resdata[i]['NetAmount']), numberWithCommas(resdata[i]['TaxAmount']), numberWithCommas(resdata[i]['Others']));
                     }
                     table_uacs.loadData(tabledata);
                 }
@@ -121,6 +122,7 @@
             });
         });
 
+
         $("#submit_ors_save").click(function () {
             var ors_obligation = $("#table_uacs").data('ors_obligation');
 
@@ -133,7 +135,8 @@
                         "expense_title": tabledata[i][1],
                         "amount": tabledata[i][2],
                         "NetAmount": tabledata[i][4],
-                        "TaxAmount" : tabledata[i][5]
+                        "TaxAmount": tabledata[i][5],
+                        "Others" : tabledata[i][6]
                     };
                 }
 
@@ -147,7 +150,7 @@
                         var tabledata = [];
                         var total;
                         for (var i = 0; i < resdata.length; i++) {
-                            tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseTitle'], numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']), numberWithCommas(resdata[i]['NetAmount']), numberWithCommas(resdata[i]['TaxAmount']));
+                            tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseTitle'], numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']), numberWithCommas(resdata[i]['NetAmount']), numberWithCommas(resdata[i]['TaxAmount']), numberWithCommas(resdata[i]['Others']));
                         }
                         table_uacs.loadData(tabledata);
                     }

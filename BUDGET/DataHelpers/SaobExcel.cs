@@ -22,7 +22,6 @@ namespace BUDGET
             pck.Save();
 
         }
-        
         public void CreateExcel(String date_from, String date_to)
         {
             BudgetDB db = new BudgetDB();
@@ -343,7 +342,7 @@ namespace BUDGET
                                                  ors_uacs.uacs == _fsa.ExpenseTitle
                                                  select new
                                                  {
-                                                     Disbursements = ors_uacs.TaxAmount + ors_uacs.NetAmount
+                                                     Disbursements = ors_uacs.TaxAmount + ors_uacs.NetAmount + ors_uacs.Others
                                                  }).ToList();
 
                         Double uacs_disbursement_total = 0.00;
@@ -774,7 +773,7 @@ namespace BUDGET
                                                          ors_uacs.uacs == _saa_amt.ExpenseTitle
                                                          select new
                                                          {
-                                                             Disbursements = ors_uacs.TaxAmount + ors_uacs.NetAmount
+                                                             Disbursements = ors_uacs.TaxAmount + ors_uacs.NetAmount + ors_uacs.Others
                                                          }).FirstOrDefault();
 
                             if (sub_ors_disbursements != null && sub_ors_disbursements.Disbursements > 0)
@@ -816,7 +815,6 @@ namespace BUDGET
 
 
                         sub_allotments_row_totals.Add(_allotments.Code, sub_dic_allotment_received);
-
 
                         
                         // SUB ALLOTMENT ALLOTMENT TITLE

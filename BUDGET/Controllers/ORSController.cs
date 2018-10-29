@@ -287,9 +287,10 @@ namespace BUDGET.Controllers
                                 ID = list.ID,
                                 ExpenseTitle = list.uacs,
                                 Amount = list.amount,
-                                Disbursement = list.NetAmount + list.TaxAmount,
+                                Disbursement = list.NetAmount + list.TaxAmount + list.Others,
                                 NetAmount = list.NetAmount,
-                                TaxAmount = list.TaxAmount
+                                TaxAmount = list.TaxAmount,
+                                Others = list.Others
                             }).ToList();
             return Json(ors_uacs, JsonRequestBehavior.AllowGet);
         }
@@ -329,11 +330,13 @@ namespace BUDGET.Controllers
                         ors_uacs.amount = sb.amount;
                         ors_uacs.NetAmount = sb.NetAmount;
                         ors_uacs.TaxAmount = sb.TaxAmount;
+                        ors_uacs.Others = sb.Others;
                     }
                     else if (User.IsInRole("Cashier"))
                     {
                         ors_uacs.NetAmount = sb.NetAmount;
                         ors_uacs.TaxAmount = sb.TaxAmount;
+                        ors_uacs.Others = sb.Others;
                     }
                     
                     try { db.SaveChanges(); } catch { }
@@ -362,6 +365,7 @@ namespace BUDGET.Controllers
                                     oec.amount = sb.amount;
                                     try { oec.TaxAmount = Convert.ToDouble(sb.TaxAmount); } catch { oec.TaxAmount = 0.00; }
                                     try { oec.NetAmount = Convert.ToDouble(sb.NetAmount); } catch { oec.NetAmount = 0.00; }
+                                    try { oec.Others = Convert.ToDouble(sb.Others); } catch { oec.Others = 0.00; }
                                     db.ors_expense_codes.Add(oec);
 
                                     db.SaveChanges();

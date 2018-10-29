@@ -491,6 +491,10 @@
     <Compile Include="Migrations\201810240828455_remove_cols.Designer.cs">
       <DependentUpon>201810240828455_remove_cols.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810290827331_added_others.cs" />
+    <Compile Include="Migrations\201810290827331_added_others.Designer.cs">
+      <DependentUpon>201810290827331_added_others.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -1031,6 +1035,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201810240828455_remove_cols.resx">
       <DependentUpon>201810240828455_remove_cols.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810290827331_added_others.resx">
+      <DependentUpon>201810290827331_added_others.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
