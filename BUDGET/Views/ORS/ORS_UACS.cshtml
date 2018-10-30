@@ -37,10 +37,18 @@
                 </div>
             </div>
             <div class="row">
-                <p style="font-size:1.2em;margin-top:5px;">Total Amount: </p>
-            </div>
-            <div class="row">
-                <p style="font-size:1.2em;margin-bottom:0px;">Dibursements :</p>
+                <table class="table">
+                    <tr>
+                        <td class="col-sm-1"><p style="font-size:1.2em;margin-top:5px;">Total Amount</p></td>
+                        <td class="col-sm-1"><p style="font-size:1.2em;margin-top:5px;">:</p></td>
+                        <td class="col-sm-3"><p style="font-size:1.2em;margin-top:5px;" id="uacs_total"></p></td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-1"><p style="font-size:1.2em;margin-bottom:0px;">Dibursements</p></td>
+                        <td class="col-sm-1"><p style="font-size:1.2em;margin-bottom:0px;">:</p></td>
+                        <td class="col-sm-1"><p style="font-size:1.2em;margin-bottom:0px;" id="uacs_disbursment" ></p></td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
@@ -112,10 +120,16 @@
                 if (resdata.length > 0) {
                     var tabledata = [];
                     var total;
+                    var uacs_total = 0;
+                    var uacs_disbursment = 0;
                     for (var i = 0; i < resdata.length; i++) {
                         tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseTitle'], numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']), numberWithCommas(resdata[i]['NetAmount']), numberWithCommas(resdata[i]['TaxAmount']), numberWithCommas(resdata[i]['Others']));
+                        uacs_total += resdata[i]['Amount'];
+                        uacs_disbursment += resdata[i]['NetAmount'] + resdata[i]['TaxAmount'] + resdata[i]['Others'];
                     }
                     table_uacs.loadData(tabledata);
+                    $("#uacs_total").text(uacs_total);
+                    $("#uacs_disbursment").text(uacs_disbursment);
                 }
             });
 
@@ -155,10 +169,18 @@
                     if (resdata.length > 0) {
                         var tabledata = [];
                         var total;
+                        var uacs_total = 0;
+                        var uacs_disbursment = 0;
                         for (var i = 0; i < resdata.length; i++) {
                             tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseTitle'], numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']), numberWithCommas(resdata[i]['NetAmount']), numberWithCommas(resdata[i]['TaxAmount']), numberWithCommas(resdata[i]['Others']));
+                            uacs_total += resdata[i]['Amount'];
+                            uacs_disbursment += resdata[i]['NetAmount'] + resdata[i]['TaxAmount'] + resdata[i]['Others'];
                         }
                         table_uacs.loadData(tabledata);
+                        uacs_total = uacs_total > 0 ? numberWithCommas(uacs_total) : "0.00";
+                        uacs_disbursment = uacs_disbursment > 0 ? numberWithCommas(uacs_disbursment) : "0.00";
+                        $("#uacs_total").text(uacs_total);
+                        $("#uacs_disbursment").text(uacs_disbursment);
                     }
                 });
             }
