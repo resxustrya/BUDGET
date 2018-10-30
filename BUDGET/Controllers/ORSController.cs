@@ -69,6 +69,7 @@ namespace BUDGET.Controllers
                              Particulars = list.Particulars,
                              FundSource = list.FundSource,
                              Gross = (from ors_uacs in db.ors_expense_codes where ors_uacs.ors_obligation == list.ID select ors_uacs.amount).DefaultIfEmpty(0).Sum(),
+                             Disbursement = (from ors_uacs in db.ors_expense_codes where ors_uacs.ors_obligation == list.ID select ors_uacs.TaxAmount + ors_uacs.NetAmount + ors_uacs.Others).DefaultIfEmpty(0).Sum(),
                              Created_By = list.Created_By,
                              DateReceived = list.DateReceived,
                              TimeReceived = list.TimeReceived,

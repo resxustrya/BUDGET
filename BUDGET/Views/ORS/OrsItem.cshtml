@@ -252,12 +252,14 @@
        {
            var url = $("#ors_table").data('get');
            var grand_total = 0;
+           var disbursements = 0;
            $.get(url, function (resdata) {
                var tabledata = [];
                if (resdata.length > 0) {
                    for (var i = 0; i < resdata.length; i++) {
                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Row'], resdata[i]['Date'], resdata[i]['DB'], resdata[i]['PO'], resdata[i]['PR'], resdata[i]['PAYEE'], resdata[i]['Adress'], resdata[i]['Particulars'], resdata[i]['Row'], resdata[i]['FundSource'], numberWithCommas(resdata[i]['Gross']), resdata[i]['Created_By'], resdata[i]['DateReceived'], resdata[i]['TimeReceived'], resdata[i]['DateReleased'], resdata[i]['TimeReleased'], '');
                        grand_total += resdata[i]['Gross'];
+                       disbursements += resdata[i]['Disbursement'];
                    }
                    $("#loading").modal('hide');
                } else {
@@ -268,6 +270,8 @@
                table.loadData(tabledata);
                grand_total = grand_total > 0 ? numberWithCommas(grand_total) : "0.00";
                $("#total_ors").text("TOTAL : " + grand_total);
+               disbursements = disbursements > 0 ? numberWithCommas(disbursements) : "0.00";
+               $("#disbursement").text("DISBURSMENT : " + disbursements);
            });
        }
     </script>
