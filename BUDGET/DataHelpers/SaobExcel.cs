@@ -900,6 +900,40 @@ namespace BUDGET
                 worksheet.Cells[startRow, 13].Style.Numberformat.Format = "#,##0.00";
                 worksheet.Cells[startRow, 13].Value = allotments_row_totals[d]["ALLOTMENT_RECEIVED"] > 0 ? allotments_row_totals[d]["ALLOTMENT_RECEIVED"].ToString("N", new CultureInfo("en-US")) : "";
 
+                worksheet.Cells[startRow, 16].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 16].Style.Font.Size = 12;
+                worksheet.Cells[startRow, 16].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 16].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 16].Value = allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"] > 0 ? allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"].ToString("N", new CultureInfo("en-US")) : "";
+
+
+                worksheet.Cells[startRow, 19].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 19].Style.Font.Size = 12;
+                worksheet.Cells[startRow, 19].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 19].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 19].Value = allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"] > 0 ? allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
+
+
+                worksheet.Cells[startRow, 30].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 30].Style.Font.Size = 12;
+                worksheet.Cells[startRow, 30].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 30].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 30].Value = allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"] > 0 ? allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
+
+                worksheet.Cells[startRow, 31].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 31].Style.Font.Size = 12;
+                worksheet.Cells[startRow, 31].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 31].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 31].Value = allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"] > 0 ? allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
+
+
+                worksheet.Cells[startRow, 32].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 32].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 32].Style.Font.Size = 11;
+                worksheet.Cells[startRow, 32].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 32].Value = allotments_row_totals[d]["DISBURSEMENTS"] > 0 ? allotments_row_totals[d]["DISBURSEMENTS"].ToString("N", new CultureInfo("en-US")) : "";
+
+
                 /*
                 _thead.AddCell(new PdfPCell(new Paragraph("TOTAL " + d, new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT, PaddingLeft = 20f });
                 _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
@@ -916,10 +950,58 @@ namespace BUDGET
 
             }
 
-            // DISPLAY ALL SUB ALLOTMENT GRAND TOTAL
+            
 
             foreach (var d in sub_allotments_row_totals.Keys)
             {
+
+                worksheet.Cells[startRow, 2].Style.Font.Name = "TAHOMA";
+                worksheet.Cells[startRow, 2].Style.Font.Size = 12;
+                worksheet.Cells[startRow, 2].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 2].Value = "TOTAL SAA " + d;
+
+
+                worksheet.Cells[startRow, 13].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 13].Style.Font.Size = 12;
+                worksheet.Cells[startRow, 13].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 13].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 13].Value = sub_allotments_row_totals[d]["ALLOTMENT_RECEIVED"] > 0 ? sub_allotments_row_totals[d]["ALLOTMENT_RECEIVED"].ToString("N", new CultureInfo("en-US")) : "";
+
+                worksheet.Cells[startRow, 16].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 16].Style.Font.Size = 12;
+                worksheet.Cells[startRow, 16].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 16].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 16].Value = sub_allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"] > 0 ? sub_allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"].ToString("N", new CultureInfo("en-US")) : "";
+
+
+                worksheet.Cells[startRow, 19].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 19].Style.Font.Size = 12;
+                worksheet.Cells[startRow, 19].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 19].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 19].Value = sub_allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"] > 0 ? sub_allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
+
+
+                worksheet.Cells[startRow, 30].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 30].Style.Font.Size = 12;
+                worksheet.Cells[startRow, 30].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 30].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 30].Value = sub_allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"] > 0 ? sub_allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
+
+                worksheet.Cells[startRow, 31].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 31].Style.Font.Size = 12;
+                worksheet.Cells[startRow, 31].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 31].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 31].Value = sub_allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"] > 0 ? sub_allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
+
+
+                worksheet.Cells[startRow, 32].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 32].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 32].Style.Font.Size = 11;
+                worksheet.Cells[startRow, 32].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 32].Value = sub_allotments_row_totals[d]["DISBURSEMENTS"] > 0 ? sub_allotments_row_totals[d]["DISBURSEMENTS"].ToString("N", new CultureInfo("en-US")) : "";
+
+                startRow++;
+
                 /*
                 _thead.AddCell(new PdfPCell(new Paragraph("TOTAL SAA " + d, new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT, PaddingLeft = 20f });
                 _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
@@ -933,10 +1015,6 @@ namespace BUDGET
                 _thead.AddCell(new PdfPCell(new Paragraph(sub_allotments_row_totals[d]["DISBURSEMENTS"] > 0 ? sub_allotments_row_totals[d]["DISBURSEMENTS"].ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER });
                 */
             }
-            
-
-            
-
 
             pck.Save();
 
