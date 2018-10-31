@@ -73,6 +73,8 @@ namespace BUDGET
              *  SUB TOTAL VARIABLES
              * 
             */
+
+
             Double allotment_received_sub_total = 0.00;
             Double after_realignment_sub_total = 0.00;
             Double current_month_sub_total = 0.00;
