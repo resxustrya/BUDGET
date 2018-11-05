@@ -175,9 +175,11 @@
                 <!-- /.dropdown-user -->
             </li>
             <li><strong style="font-size:13px;font-family:sans-serif;">@ViewBag.Menu</strong></li>
+            
             <!-- /.dropdown -->
         </ul>
         @RenderSection("search_form", required: false)
+        @RenderSection("sort_options",required: false)
         <!-- /.navbar-header -->
     </nav>
 

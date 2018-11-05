@@ -29,32 +29,45 @@
                         <div class="col-md-12">
                             <form action="@Url.Action("SaveEditFundSource", "Allotments")" method="post" id="source_form">
                                 @Html.AntiForgeryToken()
-                                <table class="table">
-                                    <tr>
-                                        <td>PREXC CODE</td>
-                                        <td>
-                                            <select name="prexcode" class="form-control" id="prexcode">
-                                                <option value="">SELECT PREXC CODE</option>
-                                                @foreach (PREXC p in prexc)
-                                                {
-                                                    <option value="@p.Code1" @( p.Code1 == Model.prexc ? " selected" : " " )>@p.Desc</option>
-                                                }
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Title</td>
-                                        <td><input type="text" name="source_title" id="source_title" placeholder="Fund Source Title" class="form-control" value="@Model.SourceTitle" required /></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Title Code</td>
-                                        <td><input type="text" name="title_code" id="title_code" placeholder="Title Code" class="form-control" value="@Model.Code" required /></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Description</td>
-                                        <td><input type="text" name="description" id="description" placeholder="Description" class="form-control" value="@Model.desc" required" /></td>
-                                    </tr>
-                                </table>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <table class="table">
+                                            <tr>
+                                                <td>PREXC CODE</td>
+                                                <td>
+                                                    <select name="prexcode" class="form-control" id="prexcode">
+                                                        <option value="">SELECT PREXC CODE</option>
+                                                        @foreach (PREXC p in prexc)
+                                                        {
+                                                            <option value="@p.Code1" @( p.Code1 == Model.prexc ? " selected" : " " )>@p.Desc</option>
+                                                        }
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Title</td>
+                                                <td><input type="text" name="source_title" id="source_title" placeholder="Fund Source Title" class="form-control" value="@Model.SourceTitle" required /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Description</td>
+                                                <td><input type="text" name="description" id="description" placeholder="Description" class="form-control" value="@Model.desc" required" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <table class="table">
+                                            <tr>
+                                                <td>Title Code</td>
+                                                <td><input type="text" name="title_code" id="title_code" placeholder="Title Code" class="form-control" value="@Model.Code" required /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Responsibility Number</td>
+                                                <td><input type="text" name="responsibility_number" placeholder="Responsibility Number" class="form-control" value="@Model.Responsibility_Number" required id="responsibility_number" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                
                             </form>
                         </div>
                     </div>
@@ -230,6 +243,7 @@
            var description = $("input[name='description']").val();
            var save_url = $("#source_form").attr('action');
            var title_code = $("#title_code").val();
+           var responsibility_number = $("#responsibility_number").val();
            var tabledata = table.getData();
            var expense = [];
            for (var i = 0; i < tabledata.length; i++) {
@@ -239,12 +253,14 @@
                    "amount": tabledata[i][2]
                };
            }
+
            var data = {
                ID : ID,
                prexcode: prexc,
                source_title: source_title,
                description: description,
-               title_code : title_code,
+               title_code: title_code,
+               responsibility_number : responsibility_number,
                data: JSON.stringify(expense)
            };
            $.post(save_url, data, function (res) {

@@ -120,6 +120,7 @@ namespace BUDGET.Controllers
             fsh.SourceTitle = collection.Get("source_title");
             fsh.desc = collection.Get("description");
             fsh.Code = collection.Get("title_code");
+            fsh.Responsibility_Number = collection.Get("responsibility_number");
             fsh.type = "REG";
             fsh.allotment = GlobalData.allotment;
             fsh.active = 1;
@@ -147,6 +148,8 @@ namespace BUDGET.Controllers
             fsh.prexc = collection.Get("prexcode");
             fsh.desc = collection.Get("description");
             fsh.Code = collection.Get("title_code");
+            fsh.Responsibility_Number = collection.Get("responsibility_number");
+            
             db.SaveChanges();
             String data = collection.Get("data");
             SaveFundSourceExpese(id.ToString(), data);

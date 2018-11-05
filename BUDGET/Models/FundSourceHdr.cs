@@ -18,6 +18,7 @@ namespace BUDGET
         public String desc { get; set; }
         public String type { get; set; }
         public Int32 ors_head { get; set; }
+        public String Responsibility_Number { get; set; }
         public Int32 active { get; set; }
     }
 }

@@ -3,16 +3,11 @@
     ViewBag.Title = "Index";
 }
 
-
 <div class="alert">
     <div class="col-md-12">
         <div class="alert alert-rex">
             <h2>@GlobalData.Year Budget Allotments</h2>
-            <table class="table">
-                <tr>
-                    <td><a href="@Url.Action("Create","Allotments")" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add new</a></td>
-                </tr>
-            </table>
+            <a href="@Url.Action("Create","Allotments")" class="btn btn-success pull-right" style="margin-bottom:10px;"><span class="glyphicon glyphicon-plus" ></span> Add new</a>
             <table class="table table-bordered">
                 <tr style="background-color:#D5DBDB;">
                     <th>Allotment Code</th>

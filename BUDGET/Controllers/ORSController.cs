@@ -56,6 +56,7 @@ namespace BUDGET.Controllers
             Int32 ors_id = Convert.ToInt32(GlobalData.ors_id);
             var orsps = (from list in db.ors
                          where list.ors_id == ors_id
+                         orderby list.Date_Added ascending
                          select new
                          {
                              ID = list.ID,
@@ -159,6 +160,7 @@ namespace BUDGET.Controllers
             Int32 id = 0;
             Int32 ors_id = Convert.ToInt32(GlobalData.ors_id);
             Int32 rowCount = 0;
+            String DateFormat = "yyyy-MM-dd HH:mm:ss";
             foreach (Object s in list)
             {
                 try
@@ -170,6 +172,7 @@ namespace BUDGET.Controllers
                     Object date = sb.Date;
                     ors.Date1 = date.ToString();
                     DateTime datetime = Convert.ToDateTime(date.ToString());
+                    ors.Row = sb.Row;
                     ors.Date = datetime;
                     ors.DB = sb.DB;
                     ors.PO = sb.PO;
@@ -194,12 +197,12 @@ namespace BUDGET.Controllers
                         if(sb.Date != null && sb.Particulars != null && sb.PAYEE != null)
                         {
                             String fundsource = (String)sb.FundSource;
-                            var last_ors = (from ors_list in db.ors where ors_list.ors_id.ToString() == GlobalData.ors_id && ors_list.FundSource == fundsource orderby ors_list.Row descending select new { Row = ors_list.Row }).FirstOrDefault();
-                            rowCount = last_ors != null && last_ors.Row > 0 ? last_ors.Row : 0;
+                            //var last_ors = (from ors_list in db.ors where ors_list.ors_id.ToString() == GlobalData.ors_id && ors_list.FundSource == fundsource orderby ors_list.Row descending select new { Row = ors_list.Row }).FirstOrDefault();
+                            //rowCount = last_ors != null && last_ors.Row > 0 ? last_ors.Row : 0;
 
                             ORS ors = new ORS();
                             ors.ors_id = Convert.ToInt32(GlobalData.ors_id);
-                            ors.Row = ++rowCount;
+                            ors.Row = sb.Row;
                             Object date = sb.Date;
                             ors.Date1 = date.ToString();
                             DateTime datetime = Convert.ToDateTime(date.ToString());
@@ -216,8 +219,8 @@ namespace BUDGET.Controllers
                             ors.TimeReceived = sb.TimeReceived;
                             ors.DateReleased = sb.DateReleased;
                             ors.TimeReleased = sb.TimeReleased;
-                            ors.Date_Added = DateTime.Now.Date;
-                            ors.dateadded = DateTime.Now.Date.ToString();
+                            ors.Date_Added = DateTime.Now;
+                            ors.dateadded = DateTime.Now.ToString(DateFormat);
                             ors.head_requesting_office = sb.head_requesting;
                             db.ors.Add(ors);
                             try { db.SaveChanges(); } catch { }
