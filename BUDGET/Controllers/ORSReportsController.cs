@@ -86,13 +86,13 @@ namespace BUDGET.Controllers
             Font column3_font = FontFactory.GetFont("Arial", 8, Font.BOLD, BaseColor.BLACK);
 
             table3.AddCell(new PdfPCell(new Paragraph("No :", arial_font_10)) { Padding = 6f, Border = 0 });
-            table3.AddCell(new PdfPCell(new Paragraph("02011101-20180", column3_font)) { Border = 2, Padding = 6f, HorizontalAlignment = Element.ALIGN_CENTER, PaddingRight = 5 });
+            table3.AddCell(new PdfPCell(new Paragraph(ors.Date.ToShortDateString() + ors.ID, column3_font)) { Border = 2, Padding = 6f, HorizontalAlignment = Element.ALIGN_CENTER, PaddingRight = 5 });
 
             table3.AddCell(new PdfPCell(new Paragraph("Date :", arial_font_10)) { Padding = 6f, Border = 0 });
             table3.AddCell(new PdfPCell(new Paragraph(ors.Date.ToShortDateString(), column3_font)) { Border = 2, Padding = 6f, HorizontalAlignment = Element.ALIGN_CENTER, PaddingRight = 5 });
 
             table3.AddCell(new PdfPCell(new Paragraph("Fund :", arial_font_10)) { Padding = 6f, Border = 0 });
-            table3.AddCell(new PdfPCell(new Paragraph("02101101", column3_font)) { Padding = 6f, Border = 2, HorizontalAlignment = Element.ALIGN_CENTER, PaddingRight = 5 });
+            table3.AddCell(new PdfPCell(new Paragraph("", column3_font)) { Padding = 6f, Border = 2, HorizontalAlignment = Element.ALIGN_CENTER, PaddingRight = 5 });
 
             table3.AddCell(new PdfPCell(new Paragraph("", arial_font_10)) { Padding = 6f, Border = 0 });
             table3.AddCell(new PdfPCell(new Paragraph("", column3_font)) { Padding = 6f, Border = 2, HorizontalAlignment = Element.ALIGN_CENTER, PaddingRight = 5, PaddingBottom = 4 });
@@ -157,6 +157,9 @@ namespace BUDGET.Controllers
             String str_amt = "";
             String uacs = "";
             Double disbursements = 0.00;
+
+
+
             var ors_uacs = (from uacs_list in db.ors_expense_codes
                             join expensecodes in db.uacs on uacs_list.uacs equals expensecodes.Title
                             where uacs_list.ors_obligation == ors.ID
@@ -165,15 +168,18 @@ namespace BUDGET.Controllers
                                 uacs = expensecodes.Code,
                                 amount = uacs_list.amount,
                                 net_amt = uacs_list.NetAmount,
-                                tax_amt = uacs_list.TaxAmount
+                                tax_amt = uacs_list.TaxAmount,
+                                others = uacs_list.Others
                             }).ToList();
+
+            //var FundSourceDetails = (from details in db.ors )
 
             foreach (var u in ors_uacs)
             {
                 uacs += u.uacs + "\n";
                 str_amt += u.amount.ToString("N", new CultureInfo("en-US")) + "\n";
                 total_amt += u.amount;
-                disbursements += u.net_amt + u.tax_amt;
+                disbursements += u.net_amt + u.tax_amt + u.others;
             }
 
 
