@@ -20,13 +20,6 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Fund Source</td>
-                        <td>
-                            <select name="fundsource" id="fundsource" class="form-control" >
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
                         <td>Page</td>
                         <td><input type="text" name="page" required class="form-control" placeholder="Exp. 1-20" /></td>
                     </tr>
@@ -40,11 +33,3 @@
         </div>
     </div>
 </div>
-<script>
-    function getFS(el) {
-        var ors = $(el).val();
-        $.get($(el).data('url'), {ors : ors}, function (res) {
-            $("#fundsource").html(res);
-        });
-    }
-</script>
