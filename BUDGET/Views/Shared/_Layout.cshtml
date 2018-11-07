@@ -46,6 +46,10 @@
         .alert-rex {
             background-color:#FAFCFE;
         }
+        .table input.form-control, textarea.form-control, select.form-control {
+            font-family:sans-serif;
+            font-weight :bold;
+        }
     </style>
     <script>
         function numberWithCommas(x) {
@@ -57,10 +61,7 @@
     </script>
 </head>
 <body style="background-color:#E5E7E9;">
-    
-
-
-    
+<div class="wrapper">   
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0;background-color:white;min-height: 20px;">
         <div class="navbar-header" style="background-color:white;">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -187,7 +188,7 @@
     @Html.Partial("modals")
     @RenderSection("footer",required: false)
     <!-- Begin page content -->
-    
+</div>    
     @Scripts.Render("~/bundles/bootstrap")
     <!-- SB ADMIN SCRIPTS -->
     @RenderSection("scripts", required: false)

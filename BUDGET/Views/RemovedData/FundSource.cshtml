@@ -12,14 +12,18 @@
                     <th class="text-center">Fund Source Code</th>
                     <th class="text-center">Fund Source Title</th>
                     <th class="text-center">Action</th>
+                    <th class="text-center">Permanently Delete</th>
                 </tr>
                 @foreach (FundSourceHdr data in Model)
                 {
                     <tr>
-                        <td class="col-md-2"><a style="color:#071D47;font-weight:bold;" href="@Url.Action("EditFundSource","Allotments", new { id = data.ID })">@data.Code</a></td>
-                        <td class="col-md-4"><a style="color:#071D47;font-weight:bold;" href="@Url.Action("EditFundSource","Allotments", new { id = data.ID })">@data.SourceTitle</a></td>
+                        <td class="col-md-2"><a style="color:#071D47;font-weight:bold;">@data.Code</a></td>
+                        <td class="col-md-4"><a style="color:#071D47;font-weight:bold;">@data.SourceTitle</a></td>
                         <td class="col-md-5">
                             <input class="toggle_status" type="checkbox" @(data.active == 1 ? "checked='checked'" : "" ) data-toggle="toggle" data-on="Enabled" data-off="Disabled" data-onstyle="success" data-offstyle="danger" data-status="@data.active" data-fundsource="@data.ID" data-url="@Url.Action("FundSource","RemovedData")">
+                        </td>
+                        <td class="col-md-5">
+                            <a href="@Url.Action("DeleteFundSource","RemovedData", new { ID = data.ID })" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Delete</a>
                         </td>
                     </tr>
                 }

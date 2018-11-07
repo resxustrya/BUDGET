@@ -39,7 +39,7 @@
                                                         <option value="">SELECT PREXC CODE</option>
                                                         @foreach (PREXC p in prexc)
                                                         {
-                                                            <option value="@p.Code1" @( p.Code1 == Model.prexc ? " selected" : " " )>@p.Desc</option>
+                                                            <option value="@p.Code1" @( p.Code1 == Model.prexc ? " selected" : " " )>@p.Desc (@p.Code1)</option>
                                                         }
                                                     </select>
                                                 </td>
@@ -50,7 +50,7 @@
                                             </tr>
                                             <tr>
                                                 <td>Description</td>
-                                                <td><input type="text" name="description" id="description" placeholder="Description" class="form-control" value="@Model.desc" required" /></td>
+                                                <td><textarea type="text" name="description" id="description" placeholder="Description" class="form-control">@Model.desc</textarea></td>
                                             </tr>
                                         </table>
                                     </div>
@@ -241,7 +241,7 @@
            var ID = $("#table").data('id');
            var prexc = $("#prexcode").val();
            var source_title = $("#source_title").val();
-           var description = $("input[name='description']").val();
+           var description = $("#description").val();
            var save_url = $("#source_form").attr('action');
            var title_code = $("#title_code").val();
            var responsibility_number = $("#responsibility_number").val();

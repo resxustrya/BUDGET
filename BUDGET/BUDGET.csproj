@@ -797,7 +797,6 @@
     <Content Include="Views\ORS\OrsItem.cshtml" />
     <Content Include="Views\Allotments\EditOrs.cshtml" />
     <Content Include="Views\Allotments\EditBudget.cshtml" />
-    <Content Include="Views\Allotments\CreateFundSource.cshtml" />
     <Content Include="Views\Allotments\EditFundSource.cshtml" />
     <Content Include="Views\Allotments\_Ok.cshtml" />
     <Content Include="Views\ORS\ORS_UACS.cshtml" />
@@ -809,7 +808,6 @@
     <Content Include="Views\Shared\footer.cshtml" />
     <Content Include="Views\Reports\DownloadSaob.cshtml" />
     <Content Include="Views\Allotments\SubAllotment.cshtml" />
-    <Content Include="Views\Allotments\CreateSubAllotment.cshtml" />
     <Content Include="Views\Allotments\EditSubAllotment.cshtml" />
     <Content Include="Views\Allotments\_PartialSubAllotment.cshtml" />
     <Content Include="Views\Allotments\Realignment.cshtml" />
@@ -826,6 +824,8 @@
     <Content Include="Views\ORS\UpdateOrsHeadRequest.cshtml" />
     <Content Include="Views\RemovedData\Index.cshtml" />
     <Content Include="Views\RemovedData\FundSource.cshtml" />
+    <Content Include="Views\Allotments\CreateSubAllotment.cshtml" />
+    <Content Include="Views\Allotments\CreateFundSource.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

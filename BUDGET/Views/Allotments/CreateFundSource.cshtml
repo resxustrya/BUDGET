@@ -35,9 +35,9 @@
                                                 <td>
                                                     <select name="prexcode" class="form-control" id="prexcode">
                                                         <option value="" selected>SELECT PREXC CODE</option>
-                                                        @foreach (PREXC p in prexc)
+                                                        @foreach (var p in prexc)
                                                         {
-                                                            <option value="@p.Code1">@p.Desc</option>
+                                                            <option value="@p.Code1">@p.Desc (@p.Code1)</option>
                                                         }
                                                     </select>
                                                 </td>
@@ -49,7 +49,7 @@
                                             
                                             <tr>
                                                 <td>Description</td>
-                                                <td><textarea type="text" name="description" placeholder="Description" class="form-control" required></textarea></td>
+                                                <td><textarea type="text" name="description" id="description"  placeholder="Description" class="form-control" required></textarea></td>
                                             </tr>
                                         </table>
                                     </div>
@@ -143,7 +143,7 @@
            $("#loading_modal").modal('show');
            var prexc = $("#prexcode").val();
            var source_title = $("#source_title").val();
-           var description = $("input[name='description']").val();
+           var description = $("#description").val();
            var title_code = $("#title_code").val();
            var responsibility_number = $("#responsibility_number").val();
            var url = $("#source_form").prop('action');

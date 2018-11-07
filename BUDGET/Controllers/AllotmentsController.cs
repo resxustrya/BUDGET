@@ -71,7 +71,7 @@ namespace BUDGET.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-
+            
         public ActionResult Delete(String id)
         {
             try
@@ -303,6 +303,7 @@ namespace BUDGET.Controllers
             ViewBag.Header = "Sub-Allotment for " + details.Allotment;
             return View(saahdr);
         }
+        [HttpGet]
         public ActionResult CreateSubAllotment()
         {
             return View();
@@ -317,6 +318,7 @@ namespace BUDGET.Controllers
             fsh.SourceTitle = collection.Get("source_title");
             fsh.Code = collection.Get("title_code");
             fsh.desc = collection.Get("description");
+            fsh.Responsibility_Number = collection.Get("responsibility_number");
             fsh.type = "SUB";
             fsh.active = 1;
             db.fsh.Add(fsh);
@@ -361,6 +363,7 @@ namespace BUDGET.Controllers
             fsh.SourceTitle = collection.Get("source_title");
             fsh.Code = collection.Get("title_code");
             fsh.desc = collection.Get("description");
+            fsh.Responsibility_Number = collection.Get("responsibility_number");
             db.SaveChanges();
 
             String data = collection.Get("data");

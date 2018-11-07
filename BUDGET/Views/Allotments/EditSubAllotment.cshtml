@@ -30,31 +30,43 @@
                         <div class="col-md-12">
                             <form action="@Url.Action("EditSubAllotment","Allotments")" method="post" id="source_form">
                                 <input type="hidden" name="id" value="@Model.ID" />
-                                <table class="table">
-                                    <tr>
-                                        <td>PREXC CODE</td>
-                                        <td>
-                                            <select name="prexcode" class="form-control" id="prexcode">
-                                                @foreach (PREXC p in prexc)
-                                                {
-                                                    <option value="@p.Code1" @( p.Code1 == Model.prexc ? " selected" : " " )>@p.Desc</option>
-                                                }
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Title</td>
-                                        <td><input type="text" name="source_title" placeholder="Fund Source Title" class="form-control" value="@Model.SourceTitle" required id="source_title" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Title Code</td>
-                                        <td><input type="text" name="title_code" placeholder="Title Code" class="form-control" value="@Model.Code" required id="title_code" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Description</td>
-                                        <td><input type="text" name="description" placeholder="Sub-Allotment for" class="form-control" value="@Model.desc" required /></td>
-                                    </tr>
-                                </table>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <table class="table">
+                                            <tr>
+                                                <td>PREXC CODE</td>
+                                                <td>
+                                                    <select name="prexcode" class="form-control" id="prexcode">
+                                                        @foreach (PREXC p in prexc)
+                                                        {
+                                                            <option value="@p.Code1" @( p.Code1 == Model.prexc ? " selected" : " " )>@p.Desc (@p.Code1)</option>
+                                                        }
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Title</td>
+                                                <td><input type="text" name="source_title" placeholder="Fund Source Title" class="form-control" value="@Model.SourceTitle" required id="source_title" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Description</td>
+                                                <td><textarea type="text" name="description" id="description" placeholder="Sub-Allotment for" class="form-control"  required>@Model.desc</textarea></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <table class="table">
+                                            <tr>
+                                                <td>Title Code</td>
+                                                <td><input type="text" name="title_code" placeholder="Title Code" class="form-control" value="@Model.Code" required id="title_code" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Responsibility Number</td>
+                                                <td><input type="text" name="responsibility_number" placeholder="Responsibility Number" class="form-control" required id="responsibility_number" value="@Model.Responsibility_Number" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -147,9 +159,10 @@
            $("#loading_modal").modal('show');
            var prexc = $("#prexcode").val();
            var source_title = $("#source_title").val();
-           var description = $("input[name='description']").val();
+           var description = $("#description").val();
            var title_code = $("#title_code").val();
            var url = $("#source_form").prop('action');
+           var responsibility_number = $("#responsibility_number").val();
            var tabledata = table.getData();
            var expense = [];
            for (var i = 0; i < tabledata.length; i++)
@@ -165,7 +178,8 @@
                prexcode: prexc,
                source_title: source_title,
                description: description,
-               title_code : title_code,
+               title_code: title_code,
+               responsibility_number: responsibility_number,
                data: JSON.stringify(expense)
            };
            setTimeout(function () {

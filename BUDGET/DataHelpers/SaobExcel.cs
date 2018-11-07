@@ -18,15 +18,11 @@ namespace BUDGET
 
             ExcelPackage pck = new ExcelPackage(newFile);
             ExcelWorksheet worksheet = pck.Workbook.Worksheets[1];
-            
             pck.Save();
-
         }
         public void CreateExcel(String date_from, String date_to)
         {
             BudgetDB db = new BudgetDB();
-
-            
             FileInfo excelFile = new FileInfo(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB.xlsx"));
             try
             {
@@ -51,7 +47,7 @@ namespace BUDGET
             DateTime date2 = Convert.ToDateTime(date_to);
 
             Double total = 0.00;
-
+            Double percentage = 0.00;
 
             var allotments_row_totals = new Dictionary<String, Dictionary<String, Double>>();
             var sub_allotments_row_totals = new Dictionary<String, Dictionary<String, Double>>();
@@ -139,7 +135,8 @@ namespace BUDGET
 
                 startRow++;
 
-                var fsh = db.fsh.Where(p => p.allotment == _allotments.ID.ToString() && p.type == "REG").ToList();
+                var fsh = db.fsh.Where(p => p.allotment == _allotments.ID.ToString() && p.type == "REG" && p.active == 1).ToList();
+
                 foreach (FundSourceHdr _fsh in fsh)
                 {
                     total = 0;

@@ -41,6 +41,19 @@ namespace BUDGET
             db.Database.ExecuteSqlCommand("UPDATE FundSourceHdrs SET active = '" + collection.Get("status") + "' WHERE ID ='" + collection.Get("fundsource") + "'");
             db.SaveChanges();
         }
+        
+        public ActionResult DeleteFundSource(String ID)
+        {
+            var remove_fundsource = db.fsh.Where(p => p.ID.ToString() == ID).FirstOrDefault();
+            var delete_uacs = db.fsa.Where(p => p.fundsource == remove_fundsource.ID.ToString()).ToList();
+
+            db.fsh.Remove(remove_fundsource);
+            db.fsa.RemoveRange(delete_uacs);
+
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
 
     }
 }
