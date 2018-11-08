@@ -278,13 +278,11 @@ namespace BUDGET
                             month_total += amount.Amount;
                         }
 
-
                         total_for_the_month += month_total;
 
 
                         //total for the month
 
-                        realignment_subtotal += _fsa_amount;
 
                         worksheet.Cells[startRow, 19].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                         worksheet.Cells[startRow, 19].Style.Numberformat.Format = "#,##0.00";
@@ -361,9 +359,9 @@ namespace BUDGET
 
                         startRow++;
 
-
                         total += _fsa.Amount;
                     }
+
                     allotment_total += total;
 
                     allotment_received_sub_total += total;
@@ -512,6 +510,15 @@ namespace BUDGET
                 worksheet.Cells[startRow, 19].Style.Numberformat.Format = "#,##0.00";
                 worksheet.Cells[startRow, 19].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 worksheet.Cells[startRow, 19].Value = current_month_sub_total > 0 ? current_month_sub_total.ToString("N", new CultureInfo("en-US")) : "";
+
+
+                worksheet.Cells[startRow, 30].Style.Font.Name = "TAHOMA";
+                worksheet.Cells[startRow, 30].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 30].Style.Font.Size = 12;
+                worksheet.Cells[startRow, 30].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 30].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 30].Value = as_of_month_sub_total > 0 ? as_of_month_sub_total.ToString("N", new CultureInfo("en-US")) : "";
+
 
 
                 worksheet.Cells[startRow, 31].Style.Font.Name = "TAHOMA";
