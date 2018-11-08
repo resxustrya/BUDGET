@@ -53,13 +53,12 @@
                                 <div class="row">
                                     <div class="col-xs-12 text-right">
                                         @{
-                                            Double after_realignment = 100000;
-                                            Double AsOfCurrentDate = 40000;
-                                            //AllotmentBalance.AllotmentTotalRealignment(a.ID, out after_realignment, out AsOfCurrentDate);
+                                            Double after_realignment = 0.00;
+                                            Double AsOfCurrentDate = 0.00;
+                                            AllotmentBalance.AllotmentTotalRealignment(a.ID, out after_realignment, out AsOfCurrentDate);
 
                                             Double decrease = after_realignment - AsOfCurrentDate;
                                             Double percent = (decrease / ((after_realignment + AsOfCurrentDate) / 2)) * 100;
-                                            percent = 80;
                                         }
                                         <div>After Realignment : @after_realignment.ToString("N", new CultureInfo("en-US")) </div>
                                         <div>Disbursement as of  November : @AsOfCurrentDate.ToString("N", new CultureInfo("en-US")) </div>
@@ -68,7 +67,7 @@
                             </div>
                             <div class="panel-footer">
                                 <div class="progress">
-                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@percent" aria-valuemin="100" aria-valuemax="0" style="width:@(percent+"px")">
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@percent" aria-valuemin="100" aria-valuemax="0" style="width:@(percent+"%")">
                                         @percent %
                                     </div>
                                 </div>
