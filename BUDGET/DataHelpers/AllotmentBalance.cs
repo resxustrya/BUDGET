@@ -23,13 +23,11 @@ namespace BUDGET
             Double total_asof_the_month = 0.00;
             Double unobligated_balance_allotment = 0.00;
             Double disbursements = 0.00;
-
+            
             foreach (FundSourceHdr _fsh in fsh)
             {
 
                 total = 0;
-                
-
 
                 //DISPLAY PREXC CODE
 
@@ -46,6 +44,7 @@ namespace BUDGET
                            }
                    ).ToList();
                 total = 0;
+
                 foreach (var _fsa in fsa)
                 {
 
@@ -143,7 +142,6 @@ namespace BUDGET
                                           && ors.Date <= DateTime.Now &&
                                           allotments_hdr.ID == ID &&
                                           ors_uacs.uacs == _fsa.ExpenseTitle
-
                                           select new
                                           {
                                               Amount = ors_uacs.amount
@@ -165,22 +163,22 @@ namespace BUDGET
                     unobligated_balance_allotment += (_fsa_amount - total_utilized_amount);
                     //total unobligated
 
-                   
 
                     //disbursements
+                    DateTime date2 = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"));
 
                     var ors_disbursements = (from ors_uacs in db.ors_expense_codes
                                              join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
                                              join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
                                              join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
-                                             where ors.Date <= DateTime.Now &&
-                                             ors.FundSource == _fsh.Code &&
+                                             where ors.FundSource == _fsh.Code &&
                                              allotments_hdr.ID == ID &&
                                              ors_uacs.uacs == _fsa.ExpenseTitle
                                              select new
                                              {
                                                  Disbursements = ors_uacs.TaxAmount + ors_uacs.NetAmount + ors_uacs.Others
                                              }).ToList();
+
 
                     Double uacs_disbursement_total = 0.00;
                     if (ors_disbursements != null && ors_disbursements.Count > 0)
@@ -189,15 +187,12 @@ namespace BUDGET
                         {
                             uacs_disbursement_total += _ors_disbursements.Disbursements;
                         }
-                        //disbursement_sub_total += ors_disbursements.Disbursements;
                     }
                     disbursements += uacs_disbursement_total;
-
                     total += _fsa.Amount;
                 }
 
             }
-
 
             after_realignment = realignment_subtotal;
             AsOfCurrentDate = disbursements;

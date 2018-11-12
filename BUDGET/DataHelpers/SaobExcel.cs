@@ -47,7 +47,7 @@ namespace BUDGET
             DateTime date2 = Convert.ToDateTime(date_to);
 
             Double total = 0.00;
-            Double percentage = 0.00;
+            Double percent = 0.00;
 
             var allotments_row_totals = new Dictionary<String, Dictionary<String, Double>>();
             var sub_allotments_row_totals = new Dictionary<String, Dictionary<String, Double>>();
@@ -333,7 +333,7 @@ namespace BUDGET
                                                  join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
                                                  join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
                                                  join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
-                                                 where ors.Date >= date1 && ors.Date <= date2 &&
+                                                 where ors.Date <= date2 &&
                                                  ors.FundSource == _fsh.Code &&
                                                  allotments_hdr.ID == _allotments.ID &&
                                                  ors_uacs.uacs == _fsa.ExpenseTitle
@@ -356,6 +356,18 @@ namespace BUDGET
                         worksheet.Cells[startRow, 32].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                         worksheet.Cells[startRow, 32].Style.Numberformat.Format = "#,##0.00";
                         worksheet.Cells[startRow, 32].Value = uacs_disbursement_total > 0 ? uacs_disbursement_total.ToString("N", new CultureInfo("en-US")) : "";
+
+
+
+                        // PERCENTAGE REMARKS
+                        percent = ((uacs_disbursement_total - _fsa_amount) / _fsa_amount) * 100;
+                        percent = Math.Round(Math.Abs(percent), 2);
+
+                        worksheet.Cells[startRow, 33].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                        worksheet.Cells[startRow, 33].Style.Numberformat.Format = "#,##0.00";
+                        worksheet.Cells[startRow, 33].Value = percent > 0 ? percent.ToString() + "%" : "";
+
+
 
                         startRow++;
 
@@ -430,6 +442,19 @@ namespace BUDGET
                     worksheet.Cells[startRow, 32].Style.Numberformat.Format = "#,##0.00";
                     worksheet.Cells[startRow, 32].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                     worksheet.Cells[startRow, 32].Value = disbursements.ToString("N", new CultureInfo("en-US"));
+
+                    // DISPLAY PERCENTAGE
+
+
+                    percent = ((disbursements - realignment_subtotal) / realignment_subtotal) * 100;
+                    percent = Math.Round(Math.Abs(percent), 2);
+
+
+                    worksheet.Cells[startRow, 33].Style.Font.Name = "TAHOMA";
+                    worksheet.Cells[startRow, 33].Style.Font.Bold = true;
+                    worksheet.Cells[startRow, 33].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells[startRow, 33].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    worksheet.Cells[startRow, 33].Value = percent > 0 ? percent.ToString() + "%" : "";
 
 
                     worksheet.Cells[startRow,1,startRow,12].Merge = true;
@@ -535,6 +560,19 @@ namespace BUDGET
                 worksheet.Cells[startRow, 32].Style.Numberformat.Format = "#,##0.00";
                 worksheet.Cells[startRow, 32].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 worksheet.Cells[startRow, 32].Value = disbursement_sub_total > 0 ? disbursement_sub_total.ToString("N", new CultureInfo("en-US")) : "";
+
+
+                // DISPLAY PERCENTAGE
+
+                percent = ((disbursement_sub_total - after_realignment_sub_total) / after_realignment_sub_total) * 100;
+                percent = Math.Round(Math.Abs(percent), 2);
+
+                worksheet.Cells[startRow, 33].Style.Font.Name = "TAHOMA";
+                worksheet.Cells[startRow, 33].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 33].Style.Font.Size = 12;
+                worksheet.Cells[startRow, 33].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 33].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 33].Value = percent > 0 ? percent.ToString()+ "%" : "";
 
 
                 startRow++;

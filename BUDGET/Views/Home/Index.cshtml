@@ -56,9 +56,9 @@
                                             Double after_realignment = 0.00;
                                             Double AsOfCurrentDate = 0.00;
                                             AllotmentBalance.AllotmentTotalRealignment(a.ID, out after_realignment, out AsOfCurrentDate);
-
-                                            Double decrease = after_realignment - AsOfCurrentDate;
-                                            Double percent = (decrease / ((after_realignment + AsOfCurrentDate) / 2)) * 100;
+                                            
+                                            Double percent = ((AsOfCurrentDate - after_realignment) / after_realignment) * 100;
+                                            percent = Math.Round(Math.Abs(percent),2);
                                         }
                                         <div>After Realignment : @after_realignment.ToString("N", new CultureInfo("en-US")) </div>
                                         <div>Disbursement as of  November : @AsOfCurrentDate.ToString("N", new CultureInfo("en-US")) </div>
@@ -67,14 +67,37 @@
                             </div>
                             <div class="panel-footer">
                                 <div class="progress">
-                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@percent" aria-valuemin="100" aria-valuemax="0" style="width:@(percent+"%")">
-                                        @percent %
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="width:@(percent+"%")">
+                                        @percent % 
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 }
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Fund Source</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    @foreach (Allotments a in Model.allotments)
+                    {
+                        <div class="panel panel-green">
+                            <div class="panel-heading">
+                                <p>@a.Code</p>
+                            </div>
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
         <div class="col-lg-4">
@@ -127,29 +150,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">Fund Source</h1>
-        </div>
-        <!-- /.col-lg-12 -->
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            @foreach (Allotments a in Model.allotments)
-            {
-                <div class="panel panel-green">
-                    <div class="panel-heading">
-                        <p>@a.Code</p>
-                    </div>
-                    <div class="panel-footer">
-                        <span class="pull-left">View Details</span>
-                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
+    
 </div>
 <!-- /#page-wrapper -->
 
