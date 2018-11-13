@@ -7,8 +7,6 @@
 
 @section scripts {
     <script>
-
-        
         var fund_source = [];
         var container = document.getElementById("ors_table");
         var table;
@@ -156,12 +154,10 @@
            },
        });
 
-
        $(document).ready(function () {
            $("#loading").modal('show');
            resize();
            load_data();
-
            $.get(allotments_url, function (response) {
                if (response.length > 0) {
                    for (var i = 0; i < response.length; i++) {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using BUDGET.Models;
 using BUDGET.DataHelpers;
 using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
@@ -11,7 +10,7 @@ using BUDGET.Filters;
 using PagedList;
 using System.Threading.Tasks;
 
-namespace BUDGET.Controllers
+namespace BUDGET
 {
 
     [YearlyFilter]
@@ -166,80 +165,85 @@ namespace BUDGET.Controllers
                 try
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
-                    
-                    id = Convert.ToInt32(sb.ID);
-                    var ors = db.ors.Where(p => p.ID == id).Where(p => p.ors_id == ors_id ).FirstOrDefault();
-                    Object date = sb.Date;
-                    ors.Date1 = date.ToString();
-                    DateTime datetime = Convert.ToDateTime(date.ToString());
-                    ors.Row = sb.Row;
-                    ors.Date = datetime;
-                    ors.DB = sb.DB;
-                    ors.PO = sb.PO;
-                    ors.PR = sb.PR;
-                    ors.PAYEE = sb.PAYEE;
-                    ors.Adress = sb.Adress;
-                    ors.Particulars = sb.Particulars;
-                    ors.FundSource = sb.FundSource;
-                    ors.DateReceived = sb.DateReceived;
-                    ors.TimeReceived = sb.TimeReceived;
-                    ors.DateReleased = sb.DateReleased;
-                    ors.TimeReleased = sb.TimeReleased;
-                    ors.head_requesting_office = sb.head_requesting;
+                    String fundsource = (String)sb.FundSource;
+                    var fundsource_exist = db.fsh.Where(p => p.allotment.ToString() == GlobalData.ors_id && p.Code == fundsource).ToList();
 
-                    try { db.SaveChanges(); } catch { }
+                    if(fundsource_exist.Count > 0)
+                    {
+                        id = Convert.ToInt32(sb.ID);
+                        var ors = db.ors.Where(p => p.ID == id).Where(p => p.ors_id == ors_id).FirstOrDefault();
+                        Object date = sb.Date;
+                        ors.Date1 = date.ToString();
+                        DateTime datetime = Convert.ToDateTime(date.ToString());
+                        ors.Row = sb.Row;
+                        ors.Date = datetime;
+                        ors.DB = sb.DB;
+                        ors.PO = sb.PO;
+                        ors.PR = sb.PR;
+                        ors.PAYEE = sb.PAYEE;
+                        ors.Adress = sb.Adress;
+                        ors.Particulars = sb.Particulars;
+                        ors.FundSource = sb.FundSource;
+                        ors.DateReceived = sb.DateReceived;
+                        ors.TimeReceived = sb.TimeReceived;
+                        ors.DateReleased = sb.DateReleased;
+                        ors.TimeReleased = sb.TimeReleased;
+                        ors.head_requesting_office = sb.head_requesting;
+
+                        try { db.SaveChanges(); } catch { }
+                    }
                 }
                 catch (Exception ex)
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     try
                     {
-                        if(sb.Date != null && sb.Particulars != null && sb.PAYEE != null)
+                        String fundsource = (String)sb.FundSource;
+                        var fundsource_exist = db.fsh.Where(p => p.allotment.ToString() == GlobalData.ors_id && p.Code == fundsource).ToList();
+
+                        if(fundsource_exist.Count > 0)
                         {
-                            String fundsource = (String)sb.FundSource;
-                            //var last_ors = (from ors_list in db.ors where ors_list.ors_id.ToString() == GlobalData.ors_id && ors_list.FundSource == fundsource orderby ors_list.Row descending select new { Row = ors_list.Row }).FirstOrDefault();
-                            //rowCount = last_ors != null && last_ors.Row > 0 ? last_ors.Row : 0;
-
-                            ORS ors = new ORS();
-                            ors.ors_id = Convert.ToInt32(GlobalData.ors_id);
-                            ors.Row = sb.Row;
-                            Object date = sb.Date;
-                            ors.Date1 = date.ToString();
-                            DateTime datetime = Convert.ToDateTime(date.ToString());
-                            ors.Date = datetime;
-                            ors.DB = sb.DB;
-                            ors.PO = sb.PO;
-                            ors.PR = sb.PR;
-                            ors.PAYEE = sb.PAYEE;
-                            ors.Adress = sb.Adress;
-                            ors.Particulars = sb.Particulars;
-                            ors.FundSource = sb.FundSource;
-                            ors.Created_By = User.Identity.GetUserName();
-                            ors.DateReceived = sb.DateReceived;
-                            ors.TimeReceived = sb.TimeReceived;
-                            ors.DateReleased = sb.DateReleased;
-                            ors.TimeReleased = sb.TimeReleased;
-                            ors.Date_Added = DateTime.Now;
-                            ors.dateadded = DateTime.Now.ToString(DateFormat);
-                            ors.head_requesting_office = sb.head_requesting;
-                            db.ors.Add(ors);
-                            try { db.SaveChanges(); } catch { }
-
-                            try
+                            if (sb.Date != null && sb.Particulars != null && sb.PAYEE != null)
                             {
-                                var ors_master = db.orsmaster.Where(p => p.ID.ToString() == GlobalData.ors_id).FirstOrDefault();
-                                Notifications notifications = new Notifications();
-                                notifications.Module = "ORS, " + ors_master.Title;
-                                notifications.User = User.Identity.GetUserName();
-                                notifications.Action = " added a new ors obligation in";
-                                notifications.DateAdded = DateTime.Now;
-                                db.notifications.Add(notifications);
-                                db.SaveChanges();
+                                ORS ors = new ORS();
+                                ors.ors_id = Convert.ToInt32(GlobalData.ors_id);
+                                ors.Row = sb.Row;
+                                Object date = sb.Date;
+                                ors.Date1 = date.ToString();
+                                DateTime datetime = Convert.ToDateTime(date.ToString());
+                                ors.Date = datetime;
+                                ors.DB = sb.DB;
+                                ors.PO = sb.PO;
+                                ors.PR = sb.PR;
+                                ors.PAYEE = sb.PAYEE;
+                                ors.Adress = sb.Adress;
+                                ors.Particulars = sb.Particulars;
+                                ors.FundSource = sb.FundSource;
+                                ors.Created_By = User.Identity.GetUserName();
+                                ors.DateReceived = sb.DateReceived;
+                                ors.TimeReceived = sb.TimeReceived;
+                                ors.DateReleased = sb.DateReleased;
+                                ors.TimeReleased = sb.TimeReleased;
+                                ors.Date_Added = DateTime.Now;
+                                ors.dateadded = DateTime.Now.ToString(DateFormat);
+                                ors.head_requesting_office = sb.head_requesting;
+                                db.ors.Add(ors);
+                                try { db.SaveChanges(); } catch { }
+
+                                try
+                                {
+                                    var ors_master = db.orsmaster.Where(p => p.ID.ToString() == GlobalData.ors_id).FirstOrDefault();
+                                    Notifications notifications = new Notifications();
+                                    notifications.Module = "ORS, " + ors_master.Title;
+                                    notifications.User = User.Identity.GetUserName();
+                                    notifications.Action = " added a new ors obligation in";
+                                    notifications.DateAdded = DateTime.Now;
+                                    db.notifications.Add(notifications);
+                                    db.SaveChanges();
+                                }
+                                catch { }
                             }
-                            catch { }
-                            
                         }
-                        
                     }
                     catch { }
                 }
@@ -320,47 +324,50 @@ namespace BUDGET.Controllers
             String data = collection.Get("data");
             Int32 line_id = 0;
             List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
+            
             foreach (Object s in list)
             {
                 try
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
-                    line_id = Convert.ToInt32(sb.ID);
-                    var ors_uacs = db.ors_expense_codes.Where(p => p.ID == line_id).FirstOrDefault();
-
-                    if (User.IsInRole("Admin") || User.IsInRole("Encoder"))
+                    String expenese_title = (String)sb.expense_title;
+                    var uacs = db.uacs.Where(p => p.Title == expenese_title).FirstOrDefault();
+                    if(uacs != null)
                     {
-                        ors_uacs.uacs = sb.expense_title;
+                        line_id = Convert.ToInt32(sb.ID);
+                        var ors_uacs = db.ors_expense_codes.Where(p => p.ID == line_id).FirstOrDefault();
 
-                        try { ors_uacs.amount = Convert.ToDouble(sb.amount); } catch { ors_uacs.amount = 0.00; }
-                        try { ors_uacs.NetAmount = Convert.ToDouble(sb.NetAmount); } catch { ors_uacs.NetAmount = 0.00; }
-                        try { ors_uacs.TaxAmount = Convert.ToDouble(sb.TaxAmount); } catch { ors_uacs.TaxAmount = 0.00; }
-                        try { ors_uacs.Others = Convert.ToDouble(sb.Others); } catch { ors_uacs.Others = 0.00; }
+                        if (User.IsInRole("Admin") || User.IsInRole("Encoder"))
+                        {
+                            ors_uacs.uacs = sb.expense_title;
+
+                            try { ors_uacs.amount = Convert.ToDouble(sb.amount); } catch { ors_uacs.amount = 0.00; }
+                            try { ors_uacs.NetAmount = Convert.ToDouble(sb.NetAmount); } catch { ors_uacs.NetAmount = 0.00; }
+                            try { ors_uacs.TaxAmount = Convert.ToDouble(sb.TaxAmount); } catch { ors_uacs.TaxAmount = 0.00; }
+                            try { ors_uacs.Others = Convert.ToDouble(sb.Others); } catch { ors_uacs.Others = 0.00; }
+                        }
+                        else if (User.IsInRole("Cashier"))
+                        {
+                            try { ors_uacs.NetAmount = Convert.ToDouble(sb.NetAmount); } catch { ors_uacs.NetAmount = 0.00; }
+                            try { ors_uacs.TaxAmount = Convert.ToDouble(sb.TaxAmount); } catch { ors_uacs.TaxAmount = 0.00; }
+                            try { ors_uacs.Others = Convert.ToDouble(sb.Others); } catch { ors_uacs.Others = 0.00; }
+                        }
+
+                        try { db.SaveChanges(); } catch { }
                     }
-                    else if (User.IsInRole("Cashier"))
-                    {
-                        try { ors_uacs.NetAmount = Convert.ToDouble(sb.NetAmount); } catch { ors_uacs.NetAmount = 0.00; }
-                        try { ors_uacs.TaxAmount = Convert.ToDouble(sb.TaxAmount); } catch { ors_uacs.TaxAmount = 0.00; }
-                        try { ors_uacs.Others = Convert.ToDouble(sb.Others); } catch { ors_uacs.Others = 0.00; }
-                    }
-                    
-                    try { db.SaveChanges(); } catch { }
                 }
                 catch (Exception ex)
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     try
                     {
-                        if (User.IsInRole("Admin") || User.IsInRole("Cashier"))
+                        String expenese_title = (String)sb.expense_title;
+                        var uacs = db.uacs.Where(p => p.Title == expenese_title).FirstOrDefault();
+                        if(uacs != null)
                         {
-                            if (sb.expense_title != null)
+                            if (User.IsInRole("Admin") || User.IsInRole("Cashier"))
                             {
-
-                                Object uacs_obj = sb.expense_title;
-                                String uacs = uacs_obj.ToString();
-
-                                var uacs_exist = (from exist in db.ors_expense_codes where exist.uacs == uacs && exist.ors_obligation == id select exist).ToList();
-
+                                var uacs_exist = (from exist in db.ors_expense_codes where exist.uacs == expenese_title && exist.ors_obligation == id select exist).ToList();
                                 if (uacs_exist.Count <= 0)
                                 {
 
@@ -403,7 +410,6 @@ namespace BUDGET.Controllers
                     catch (Exception innerex) { }
                 }
             }
-            
             return GetORSUacs(id.ToString());
         }
         [HttpPost]

@@ -995,7 +995,6 @@ namespace BUDGET
             }
 
             
-
             foreach (var d in sub_allotments_row_totals.Keys)
             {
 
