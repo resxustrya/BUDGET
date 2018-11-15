@@ -500,6 +500,14 @@
     <Compile Include="Migrations\201811050213222_new_culomn.Designer.cs">
       <DependentUpon>201811050213222_new_culomn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201811150827160_uacs_suballotment.cs" />
+    <Compile Include="Migrations\201811150827160_uacs_suballotment.Designer.cs">
+      <DependentUpon>201811150827160_uacs_suballotment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811150833585_add_col.cs" />
+    <Compile Include="Migrations\201811150833585_add_col.Designer.cs">
+      <DependentUpon>201811150833585_add_col.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -524,6 +532,7 @@
     <Compile Include="Models\ProductListViewModel.cs" />
     <Compile Include="Models\Realignment.cs" />
     <Compile Include="Models\UACS.cs" />
+    <Compile Include="Models\UACS_SubAllotment.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\YearBudget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1047,6 +1056,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811050213222_new_culomn.resx">
       <DependentUpon>201811050213222_new_culomn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811150827160_uacs_suballotment.resx">
+      <DependentUpon>201811150827160_uacs_suballotment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811150833585_add_col.resx">
+      <DependentUpon>201811150833585_add_col.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

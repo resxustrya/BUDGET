@@ -127,7 +127,7 @@
            contextMenu: {
                items: {
                    "Allotment": {
-                       name: 'Allotment',
+                       name: 'Sub-Allotment',
                        callback: function (key, options) {
                            var selection = this.getSelectedRange();
                            var fromRow = Math.min(selection.from.row, selection.to.row);
@@ -137,7 +137,6 @@
                            if (uacs) {
                                var fundsource = $("#table").data('id');
                                var url = $("#table").data('suballotment');
-
                                $("#ors_modal").modal({
                                    backdrop: 'static',
                                    keyboard: false,

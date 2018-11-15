@@ -573,9 +573,9 @@ namespace BUDGET.Controllers
         }
         public ActionResult ExpenseSuballotment(String fundsource, String uacs)
         {
-               
+            
             var fsh = db.fsh.Where(p => p.ID.ToString() == fundsource).FirstOrDefault();
-            var expensecode = db.uacs.Where(p => p.Code == uacs).FirstOrDefault();
+            var expensecode = db.uacs.Where(p => p.Title == uacs).FirstOrDefault();
 
             ViewBag.Title = fsh.Code;
             ViewBag.UACS_CODE = expensecode.Title;

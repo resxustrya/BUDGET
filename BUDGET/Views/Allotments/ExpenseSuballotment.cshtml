@@ -29,11 +29,10 @@
        var valid = true;
        var expense_url = $("expense_suballotment").data('expense');
        table = new Handsontable(container, {
-           startRows: 10,
            startCols: 4,
            manualColumnResize: true,
            rowHeaders: true,
-           colWidths: [1, 200, 300, 300],
+           colWidths: [1, 300, 200, 200],
            stretchH: 'all',
            colHeaders: true,
            contextMenu: ['row_above','row_below','remove_row','copy'],
@@ -41,9 +40,9 @@
            fillHandle: {
                autoInsertRow: false,
            },
-           colHeaders: ['ID','UACS','Title','Amount'],
+           colHeaders: ['ID','Expense Title','Expense Code','Amount'],
            columns : [
-              {}, { type: 'dropdown', source: expense_codes }, {}, {}
+              {}, {}, {}, {}
            ],
            cells: function (r, c, prop) {
                var cellProperties = {};
@@ -105,7 +104,8 @@
            {
                expense[i] = {
                    "ID": tabledata[i][0],
-                   "expense_code": tabledata[i][1],
+                   "ExpenseTitle": tabledata[i][1],
+                   "ExpenseCode" : tabledata[i][2],
                    "amount" : tabledata[i][3]
                };
            }

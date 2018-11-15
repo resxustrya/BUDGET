@@ -589,7 +589,6 @@ namespace BUDGET.Controllers
                 Double disbursements = 0.00;
 
 
-
                 var ors_uacs = (from uacs_list in db.ors_expense_codes
                                 join expensecodes in db.uacs on uacs_list.uacs equals expensecodes.Title
                                 where uacs_list.ors_obligation == ors.ID
@@ -837,13 +836,11 @@ namespace BUDGET.Controllers
                 writer = null;
             }
             
-
             var fileStream = new FileStream(Server.MapPath("~/rpt_ors/" + filename),
                                         FileMode.Open,
                                         FileAccess.Read
                                     );
             var fsResult = new FileStreamResult(fileStream, "application/pdf");
-
             return fsResult;
 
         }
