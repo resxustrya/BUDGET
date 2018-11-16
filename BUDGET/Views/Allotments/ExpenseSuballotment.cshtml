@@ -2,7 +2,7 @@
 
 <h4>Expense Code Sub-Allotment </h4>
 <h5><strong>@ViewBag.Title > @ViewBag.UACS_CODE</strong></h5>
-<form action="@Url.Action("ExpenseSuballotment","Allotments")" method="post">
+<form action="#" method="post">
     <div class="row">
         <div class="col-md-12">
             <table class="table">
@@ -66,14 +66,7 @@
            }
        });
        $(document).ready(function () {
-           $.get(expense_url, function (expense_res) {
-               if (expense_res.length > 0) {
-                   for (var i = 0; i < expense_res.length; i++) {
-                       expense_codes[i] = expense_res[i]["Code"];
-                   }
-               }
-           });
-
+           /*
            var saahdr = $("expense_suballotment").data('saaamt');
            var data = {
                fsh: saahdr
@@ -87,17 +80,18 @@
                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseCode'], resdata[i]['Title'], numberWithCommas(resdata[i]['Amount']));
                    }
                    table.loadData(tabledata);
+               } else {
+                   table.loadData(new Array(null,null,null,null));
                }
            });
+           */
        });
-
-       $("#submit").click(function () {
-           $("#loading_modal").modal('show');
-           var prexc = $("#prexcode").val();
-           var source_title = $("#source_title").val();
-           var description = $("input[name='description']").val();
-           var title_code = $("#title_code").val();
-           var url = $("#source_form").prop('action');
+       
+       $("#submit_ors_save").click(function () {
+           var description = $("input[name='description']");
+           var fundsource = $("#expense_suballotment").data('fundsource');
+           var expensetitle = $("#expense_suballotment").data('uacs');
+           var url = $("#expense_suballotment").data('SaveExpenseSubAllotment');
            var tabledata = table.getData();
            var expense = [];
            for (var i = 0; i < tabledata.length; i++)
@@ -110,18 +104,11 @@
                };
            }
            var data = {
-               ID : $("expense_suballotment").data('saaamt'),
-               prexcode: prexc,
-               source_title: source_title,
-               description: description,
-               title_code : title_code,
+               fundsource: fundsource,
+               description : description,
                data: JSON.stringify(expense)
            };
-           setTimeout(function () {
-               $.post(url, data, function (res) {
-                   $("#loading_modal").modal('hide');
-                   window.location.href = res;
-               });
-           }, 1000);
+           $.post(url, data, function (res) {
+           });
        });
 </script>

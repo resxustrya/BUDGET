@@ -508,13 +508,23 @@
     <Compile Include="Migrations\201811150833585_add_col.Designer.cs">
       <DependentUpon>201811150833585_add_col.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201811160106355_added_column3.cs" />
+    <Compile Include="Migrations\201811160106355_added_column3.Designer.cs">
+      <DependentUpon>201811160106355_added_column3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811160128524_adde_table_and_column.cs" />
+    <Compile Include="Migrations\201811160128524_adde_table_and_column.Designer.cs">
+      <DependentUpon>201811160128524_adde_table_and_column.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811160134082_uacs_sub_codes.cs" />
+    <Compile Include="Migrations\201811160134082_uacs_sub_codes.Designer.cs">
+      <DependentUpon>201811160134082_uacs_sub_codes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
     <Compile Include="Models\BudgetDbContext.cs" />
     <Compile Include="Models\ExcelFilename.cs" />
-    <Compile Include="Models\ExpenseCodeAllotment.cs" />
-    <Compile Include="Models\ExpenseAllotmentExpenseCodes.cs" />
     <Compile Include="Models\FundSourceAmount.cs" />
     <Compile Include="Models\FundSourceHdr.cs" />
     <Compile Include="Models\FundSourceViewModel.cs" />
@@ -533,6 +543,7 @@
     <Compile Include="Models\Realignment.cs" />
     <Compile Include="Models\UACS.cs" />
     <Compile Include="Models\UACS_SubAllotment.cs" />
+    <Compile Include="Models\UACS_SUB_CODES.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\YearBudget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1062,6 +1073,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811150833585_add_col.resx">
       <DependentUpon>201811150833585_add_col.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811160106355_added_column3.resx">
+      <DependentUpon>201811160106355_added_column3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811160128524_adde_table_and_column.resx">
+      <DependentUpon>201811160128524_adde_table_and_column.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811160134082_uacs_sub_codes.resx">
+      <DependentUpon>201811160134082_uacs_sub_codes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -584,17 +584,18 @@ namespace BUDGET.Controllers
             return PartialView();
         }
 
+        public ActionResult GetExpenseCodeAllotment(String fundsource ,String ExpenseTitle)
+        {
+            //var uacs_sub = (from list in db.uacs_sub_codes where)
+            return Json(true,JsonRequestBehavior.AllowGet);
+        }
+
+
         [HttpPost]
         public JsonResult SaveExpenseSubAllotment(FormCollection collection)
         {
 
-            ExpenseCodeAllotment eca = new ExpenseCodeAllotment();
-            eca.fundsource = Convert.ToInt32(collection.Get("fundsource"));
-            eca.from_uacs = collection.Get("uacs");
-            eca.description = collection.Get("desccription");
-            db.expensecodeallotment.Add(eca);
-            db.SaveChanges();
-
+           
             List<Object> list = JsonConvert.DeserializeObject<List<Object>>(collection.Get("data"));
             
             Int32 id = 0;
@@ -604,9 +605,9 @@ namespace BUDGET.Controllers
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     id = Convert.ToInt32(sb.ID);
-                    var fsa = db.expense_suballotment_expensecode.Where(p => p.ID == id ).FirstOrDefault();
+                   // var fsa = db.expense_suballotment_expensecode.Where(p => p.ID == id ).FirstOrDefault();
                    //fsa.expensecode = sb.expense_code;
-                    fsa.amount = Convert.ToDouble(sb.amount);
+                   // fsa.amount = Convert.ToDouble(sb.amount);
                     try { db.SaveChanges(); } catch { }
                 }
                 catch (Exception ex)
