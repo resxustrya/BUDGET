@@ -27,7 +27,6 @@ namespace BUDGET
                 excelFile.CopyTo(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB2.xlsx"));
             }
             
-            
             FileInfo newFile = new FileInfo(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB2.xlsx"));
 
             ExcelPackage pck = new ExcelPackage(newFile);
@@ -96,6 +95,7 @@ namespace BUDGET
                                   Title = allotment.Title
                               }).ToList();
             */
+
             foreach (var _allotments in allotments)
             {
 
