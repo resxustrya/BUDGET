@@ -194,29 +194,36 @@ namespace BUDGET.Controllers
                 try
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
-                    id = Convert.ToInt32(sb.ID);
-                    var fsa = db.fsa.Where(p => p.ID == id && p.fundsource == fundsource).FirstOrDefault();
-                    fsa.expense_title = sb.expense_title;
-                    fsa.amount = Convert.ToDouble(sb.amount);
-                    try { db.SaveChanges(); } catch { }
+                    if (UacsHelper.ExpenseExist(Convert.ToString(sb.expense_title)))
+                    {
+                        id = Convert.ToInt32(sb.ID);
+                        var fsa = db.fsa.Where(p => p.ID == id && p.fundsource == fundsource).FirstOrDefault();
+                        fsa.expense_title = sb.expense_title;
+                        fsa.amount = Convert.ToDouble(sb.amount);
+                        try { db.SaveChanges(); } catch { }
+                    }
+                    
                 }
                 catch (Exception ex)
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     try
                     {
-                        if (sb.expense_title != null)
+                        if (UacsHelper.ExpenseExist(Convert.ToString(sb.expense_title)))
                         {
-                            String uacs = (String)sb.expense_title;
-                            var expense_exist = (from exist in db.fsa where exist.expense_title == uacs && exist.fundsource == fundsource  select exist).ToList();
-                            if (expense_exist.Count <= 0)
+                            if (sb.expense_title != null)
                             {
-                                FundSourceAmount fsa = new FundSourceAmount();
-                                fsa.expense_title = uacs;
-                                try { fsa.amount = Convert.ToDouble(sb.amount); } catch { fsa.amount = 0.00; }
-                                fsa.fundsource = fundsource;
-                                db.fsa.Add(fsa);
-                                try { db.SaveChanges(); } catch { }
+                                String uacs = (String)sb.expense_title;
+                                var expense_exist = (from exist in db.fsa where exist.expense_title == uacs && exist.fundsource == fundsource select exist).ToList();
+                                if (expense_exist.Count <= 0)
+                                {
+                                    FundSourceAmount fsa = new FundSourceAmount();
+                                    fsa.expense_title = uacs;
+                                    try { fsa.amount = Convert.ToDouble(sb.amount); } catch { fsa.amount = 0.00; }
+                                    fsa.fundsource = fundsource;
+                                    db.fsa.Add(fsa);
+                                    try { db.SaveChanges(); } catch { }
+                                }
                             }
                         }
                     }
@@ -380,30 +387,37 @@ namespace BUDGET.Controllers
                 try
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
-                    id = Convert.ToInt32(sb.ID);
-                    var fsa = db.fsa.Where(p => p.ID == id && p.fundsource == fsh).FirstOrDefault();
-                    fsa.expense_title = sb.expense_title;
-                    fsa.amount = Convert.ToDouble(sb.amount);
-                    try { db.SaveChanges(); } catch { }
+                    if(UacsHelper.ExpenseExist(Convert.ToString(sb.expense_title)))
+                    {
+                        id = Convert.ToInt32(sb.ID);
+                        var fsa = db.fsa.Where(p => p.ID == id && p.fundsource == fsh).FirstOrDefault();
+                        fsa.expense_title = sb.expense_title;
+                        fsa.amount = Convert.ToDouble(sb.amount);
+                        try { db.SaveChanges(); } catch { }
+                    }
+                    
                 }
                 catch (Exception ex)
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     try
                     {
-                        if (sb.expense_title != null)
+                        if(UacsHelper.ExpenseExist(Convert.ToString(sb.expense_title)))
                         {
-                            Object uacs_obj = sb.expense_title;
-                            String uacs = uacs_obj.ToString();
-                            var expense_exist = (from exist in db.fsa where exist.expense_title == uacs && exist.fundsource == fsh select exist).ToList();
-                            if (expense_exist.Count <= 0)
+                            if (sb.expense_title != null)
                             {
-                                FundSourceAmount fsa = new FundSourceAmount();
-                                fsa.expense_title = sb.expense_title;
-                                try { fsa.amount = Convert.ToDouble(sb.amount); } catch { fsa.amount = 0.00; }
-                                fsa.fundsource = fsh;
-                                db.fsa.Add(fsa);
-                                try { db.SaveChanges(); } catch { }
+                                Object uacs_obj = sb.expense_title;
+                                String uacs = uacs_obj.ToString();
+                                var expense_exist = (from exist in db.fsa where exist.expense_title == uacs && exist.fundsource == fsh select exist).ToList();
+                                if (expense_exist.Count <= 0)
+                                {
+                                    FundSourceAmount fsa = new FundSourceAmount();
+                                    fsa.expense_title = sb.expense_title;
+                                    try { fsa.amount = Convert.ToDouble(sb.amount); } catch { fsa.amount = 0.00; }
+                                    fsa.fundsource = fsh;
+                                    db.fsa.Add(fsa);
+                                    try { db.SaveChanges(); } catch { }
+                                }
                             }
                         }
                     }
@@ -471,35 +485,41 @@ namespace BUDGET.Controllers
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     id = Convert.ToInt32(sb.ID);
-                    var realignment = db.realignment.Where(p => p.ID == id && p.fundsource == fundsource).FirstOrDefault();
-                    realignment.uacs_from = sb.uacs_from;
-                    realignment.uacs_to = sb.uacs_to;
-                    realignment.amount = Convert.ToDouble(sb.amount);
-                    try { db.SaveChanges(); } catch { }
+                    if(UacsHelper.ExpenseExist(Convert.ToString(sb.uacs_from)) && UacsHelper.ExpenseExist(Convert.ToString(sb.uacs_to)))
+                    {
+                        var realignment = db.realignment.Where(p => p.ID == id && p.fundsource == fundsource).FirstOrDefault();
+                        realignment.uacs_from = sb.uacs_from;
+                        realignment.uacs_to = sb.uacs_to;
+                        realignment.amount = Convert.ToDouble(sb.amount);
+                        try { db.SaveChanges(); } catch { }
+                    }
                 }
                 catch (Exception ex)
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     try
                     {
-                        if (sb.uacs_from != null && sb.uacs_to != null)
+                        if(UacsHelper.ExpenseExist(Convert.ToString(sb.uacs_from)) && UacsHelper.ExpenseExist(Convert.ToString(sb.uacs_to)))
                         {
-                            Object uacs_from_obj = sb.uacs_from;
-                            Object uacs_to_ojb = sb.uacs_to;
-
-                            String uacs_from = uacs_from_obj.ToString();
-                            String uacs_to = uacs_to_ojb.ToString();
-
-                            var realignment_exist = (from exist in db.realignment where exist.uacs_from == uacs_from && exist.uacs_to == uacs_to select exist).ToList();
-                            if (realignment_exist.Count <= 0)
+                            if (sb.uacs_from != null && sb.uacs_to != null)
                             {
-                                Realignment realignment = new Realignment();
-                                realignment.uacs_from = uacs_from;
-                                realignment.uacs_to = uacs_to;
-                                realignment.amount = Convert.ToDouble(sb.amount);
-                                realignment.fundsource = fundsource;
-                                db.realignment.Add(realignment);
-                                try { db.SaveChanges(); } catch { }
+                                Object uacs_from_obj = sb.uacs_from;
+                                Object uacs_to_ojb = sb.uacs_to;
+
+                                String uacs_from = uacs_from_obj.ToString();
+                                String uacs_to = uacs_to_ojb.ToString();
+
+                                var realignment_exist = (from exist in db.realignment where exist.uacs_from == uacs_from && exist.uacs_to == uacs_to select exist).ToList();
+                                if (realignment_exist.Count <= 0)
+                                {
+                                    Realignment realignment = new Realignment();
+                                    realignment.uacs_from = uacs_from;
+                                    realignment.uacs_to = uacs_to;
+                                    realignment.amount = Convert.ToDouble(sb.amount);
+                                    realignment.fundsource = fundsource;
+                                    db.realignment.Add(realignment);
+                                    try { db.SaveChanges(); } catch { }
+                                }
                             }
                         }
                     }
