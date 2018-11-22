@@ -202,7 +202,6 @@ namespace BUDGET.Controllers
                         fsa.amount = Convert.ToDouble(sb.amount);
                         try { db.SaveChanges(); } catch { }
                     }
-                    
                 }
                 catch (Exception ex)
                 {
