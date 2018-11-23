@@ -64,9 +64,10 @@ namespace BUDGET.Controllers
             Int32 id = Convert.ToInt32(collection.Get("ID"));
             var allotments = db.allotments.Where(p => p.ID == id).FirstOrDefault();
             allotments.Title = collection.Get("title");
+            allotments.Code = collection.Get("code");
 
             var orsmaster = db.orsmaster.Where(p => p.allotments == id).FirstOrDefault();
-            orsmaster.Title = collection.Get("title");
+            orsmaster.Title = collection.Get("code");
 
             db.SaveChanges();
             return RedirectToAction("Index");
@@ -655,7 +656,12 @@ namespace BUDGET.Controllers
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
-
-        
+        public void AllotmentSeries(FormCollection collection)
+        {
+            Int32 ID = Convert.ToInt32(collection.Get("allotment"));
+            var allotment = db.allotments.Where(p => p.ID ==ID).FirstOrDefault();
+            allotment.Code2 = collection.Get("number");
+            db.SaveChanges();
+        }
     }
 }

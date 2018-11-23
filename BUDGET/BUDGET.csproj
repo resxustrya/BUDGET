@@ -233,6 +233,7 @@
     <Compile Include="Controllers\AllotmentsController.cs" />
     <Compile Include="Controllers\BudgetAllotmentsController.cs" />
     <Compile Include="Controllers\BudgetsController.cs" />
+    <Compile Include="Controllers\BudgetSummaryController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ExpenseCodesController.cs" />
     <Compile Include="Controllers\FormsController.cs" />
@@ -520,6 +521,10 @@
     <Compile Include="Migrations\201811160134082_uacs_sub_codes.cs" />
     <Compile Include="Migrations\201811160134082_uacs_sub_codes.Designer.cs">
       <DependentUpon>201811160134082_uacs_sub_codes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811230806070_add_code2.cs" />
+    <Compile Include="Migrations\201811230806070_add_code2.Designer.cs">
+      <DependentUpon>201811230806070_add_code2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -849,6 +854,7 @@
     <Content Include="Views\RemovedData\FundSource.cshtml" />
     <Content Include="Views\Allotments\CreateSubAllotment.cshtml" />
     <Content Include="Views\Allotments\CreateFundSource.cshtml" />
+    <Content Include="Views\BudgetSummary\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1083,6 +1089,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811160134082_uacs_sub_codes.resx">
       <DependentUpon>201811160134082_uacs_sub_codes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811230806070_add_code2.resx">
+      <DependentUpon>201811230806070_add_code2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

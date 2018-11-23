@@ -20,7 +20,7 @@
                                 <span class="glyphicon glyphicon-save"></span>
                                 Save
                             </button>
-                            <a href="@Url.Action("FundSource","Allotments",new { id = GlobalData.allotment })" class="btn btn-danger btn-xs">Exit</a>
+                            <a href="@Url.Action("SubAllotment","Allotments",new { allotment = Session["allotment"].ToString() })" class="btn btn-danger btn-xs">Exit</a>
                         </div>
                     </div>
                 </div>

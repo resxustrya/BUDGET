@@ -643,7 +643,7 @@ namespace BUDGET
                         // _thead.AddCell(new PdfPCell(new Paragraph(_fsh_saa.desc, new Font(Font.FontFamily.HELVETICA, 7f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_LEFT, PaddingLeft = 15f });
                         worksheet.Cells[startRow, 2].Style.Font.Name = "TAHOMA";
                         worksheet.Cells[startRow, 2].Style.Font.Italic = true;
-                        worksheet.Cells[startRow, 2].Value = _fsh_saa.desc.ToUpper().ToString();
+                        worksheet.Cells[startRow, 2].Value = _fsh_saa.desc;
                         startRow++;
 
 
@@ -858,7 +858,7 @@ namespace BUDGET
                         sub_dic_allotment_received.Add("DISBURSEMENTS", sub_disbursement_grand_total);
 
 
-                        sub_allotments_row_totals.Add(_allotments.Code, sub_dic_allotment_received);
+                        sub_allotments_row_totals.Add(_allotments.Code +"-" + startRow, sub_dic_allotment_received);
 
                         
                         // SUB ALLOTMENT ALLOTMENT TITLE
@@ -1019,10 +1019,12 @@ namespace BUDGET
             foreach (var d in sub_allotments_row_totals.Keys)
             {
 
+                String[] title = Convert.ToString(d).Split('-');
+
                 worksheet.Cells[startRow, 2].Style.Font.Name = "TAHOMA";
                 worksheet.Cells[startRow, 2].Style.Font.Size = 12;
                 worksheet.Cells[startRow, 2].Style.Font.Bold = true;
-                worksheet.Cells[startRow, 2].Value = "TOTAL SAA " + d;
+                worksheet.Cells[startRow, 2].Value = "TOTAL SAA " + title[0].ToString() + title[1].ToString();
 
 
                 worksheet.Cells[startRow, 13].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;

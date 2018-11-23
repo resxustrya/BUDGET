@@ -15,7 +15,7 @@
                                 <span class="glyphicon glyphicon-save"></span>
                                 Save
                             </button>
-                            <a href="@Url.Action("FundSource","Allotments",new { id = GlobalData.allotment })" class="btn btn-danger btn-xs">Exit</a>
+                            <a href="@Url.Action("SubAllotment","Allotments",new { allotment = Session["allotment"].ToString() })" class="btn btn-danger btn-xs">Exit</a>
                         </div>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                                             
                                             <tr>
                                                 <td>Description</td>
-                                                <td><textarea type="text" name="description" placeholder="Sub-Allotment for" class="form-control" required></textarea></td>
+                                                <td><textarea type="text" name="description" id="description" placeholder="Sub-Allotment for" class="form-control" required></textarea></td>
                                             </tr>
                                         </table>
                                     </div>
@@ -141,7 +141,7 @@
            $("#loading_modal").modal('show');
            var prexc = $("#prexcode").val();
            var source_title = $("#source_title").val();
-           var description = $("input[name='description']").val();
+           var description = $("#description").val();
            var title_code = $("#title_code").val();
            var url = $("#source_form").prop('action');
            var responsibility_number = $("#responsibility_number").val();
