@@ -20,10 +20,13 @@
                         <td class="col-md-2"><a style="color:#071D47;font-weight:bold;">@data.Code</a></td>
                         <td class="col-md-4"><a style="color:#071D47;font-weight:bold;">@data.SourceTitle</a></td>
                         <td class="col-md-5">
-                            <input class="toggle_status" type="checkbox" @(data.active == 1 ? "checked='checked'" : "" ) data-toggle="toggle" data-on="Enabled" data-off="Disabled" data-onstyle="success" data-offstyle="danger" data-status="@data.active" data-fundsource="@data.ID" data-url="@Url.Action("FundSource","RemovedData")">
+                            <select id="status" class="form-control @(data.active == 1 ? " text-success" : " text-danger" )" data-fundsource="@data.ID" data-url="@Url.Action("FundSource","RemovedData")">
+                                <option @(data.active == 1 ? " selected" : "" ) value="1">Enabled</option>
+                                <option @(data.active == 0 ? " selected" : "" ) value="0">Disabled</option>
+                            </select>
                         </td>
                         <td class="col-md-5">
-                            <a href="@Url.Action("DeleteFundSource","RemovedData", new { ID = data.ID })" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+                            <a href="@Url.Action("DeleteFundSource","RemovedData", new { ID = data.ID })" class="btn btn-danger" onclick="return confirm('Are you sure you want continue this action ?');"><span class="glyphicon glyphicon-trash"></span> Delete</a>
                         </td>
                     </tr>
                 }
@@ -35,19 +38,13 @@
 @section scripts{
     <script>
         $(function () {
-            $('.toggle_status').change(function () {
+            $('#status').change(function () {
                 var fundsource = $(this).data('fundsource');
-                var status = $(this).data('status');
+                var status = $(this).val();
                 var url = $(this).data('url');
-
-                if (status == 1)
-                    $(this).data('status', 0);
-                else
-                    $(this).data('status', 1);
-
-                $.post(url, { status: $(this).data('status'), fundsource: fundsource }, function () {
+                
+                $.post(url, { status: status, fundsource: fundsource }, function () {
                 });
-
             });
         })
 </script>     

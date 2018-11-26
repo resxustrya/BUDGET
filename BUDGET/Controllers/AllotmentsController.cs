@@ -7,7 +7,8 @@ using BUDGET.Models;
 using BUDGET.Filters;
 using Newtonsoft.Json;
 using System.Threading;
-namespace BUDGET.Controllers
+
+namespace BUDGET
 {
     [Authorize(Roles = "Admin")]
     [YearlyFilter]
@@ -578,6 +579,7 @@ namespace BUDGET.Controllers
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
+       
         [HttpPost]
         public JsonResult ORS_HEAD(FormCollection collection)
         {

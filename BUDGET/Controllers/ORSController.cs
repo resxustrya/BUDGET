@@ -48,6 +48,7 @@ namespace BUDGET
 
 
         [CustomAuthorize(Roles = "Admin,Encoder,Cashier")]
+
         [Route("get/ors/ps", Name = "get_ors_ps")]
         public JsonResult GetOrsPS()
         {

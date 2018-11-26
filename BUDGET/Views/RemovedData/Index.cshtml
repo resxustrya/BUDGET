@@ -13,6 +13,7 @@
                     <th>For Fund Source</th>
                     <th>For Sub-Allotment</th>
                     <th class="text-center">*</th>
+                    <th class="text-center">Remove Permanently</th>
                 </tr>
                 @foreach (Allotments data in Model)
                 {
@@ -26,7 +27,13 @@
                             <a href="@Url.Action("SubAllotment","Allotments", new { allotment = data.ID })" class="btn btn-default text-primary"><span class="glyphicon glyphicon-plus"></span> Sub-Allotment</a>
                         </td>
                         <td>
-                            <input class="toggle_status" type="checkbox" @(data.active == 1 ? "checked='checked'" : "" )  data-toggle="toggle" data-on="Enabled" data-off="Disabled" data-onstyle="success" data-offstyle="danger" data-status="@data.active" data-allotment="@data.ID" data-url="@Url.Action("Allotment","RemovedData")">
+                            <select  id="status" class="form-control @(data.active == 1 ? " text-success" : " text-danger" )" data-allotment="@data.ID" data-url="@Url.Action("Allotment","RemovedData")">
+                                <option @(data.active == 1 ? " selected" : "" ) value="1">Enabled</option>
+                                <option @(data.active == 0 ? " selected" : "" ) value="0">Disabled</option>
+                            </select>
+                        </td>
+                        <td>
+                            <a class="btn btn-danger" href="@Url.Action("DeleteAllotment","RemovedData", new { ID = data.ID })" onclick="return confirm('Are you sure you want continue this action ?');">Delete</a>
                         </td>
                     </tr>
                 }
@@ -37,17 +44,12 @@
 @section scripts{
     <script>
         $(function () {
-            $('.toggle_status').change(function () {
+            $('#status').change(function () {
                 var allotment = $(this).data('allotment');
-                var status = $(this).data('status');
                 var url = $(this).data('url');
-                
-                if (status == 1)
-                    $(this).data('status', 0);
-                else
-                    $(this).data('status', 1);
+                var status = $(this).val();
                     
-                $.post(url, { status: $(this).data('status'), allotment : allotment }, function () {
+                $.post(url, { status: status, allotment : allotment }, function () {
 
                 });
 

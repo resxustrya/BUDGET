@@ -863,6 +863,7 @@
     <Folder Include="Content\less\" />
     <Folder Include="Content\upload\" />
     <Folder Include="Views\Json\" />
+    <Folder Include="Views\Opo\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

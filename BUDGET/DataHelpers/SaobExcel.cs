@@ -71,6 +71,18 @@ namespace BUDGET
 
 
             /*
+            * SUB GRAND TOTAL VARIABLES
+            * 
+            */
+
+            Double sub_allotment_received_grand_total = 0.00;
+            Double sub_allotment_total_after_realignment_grand_total = 0.00;
+            Double sub_current_month_grand_total = 0.00;
+            Double sub_as_of_month_grand_total = 0.00;
+            Double sub_unobligated_grand_total = 0.00;
+            Double sub_disbursement_grand_total = 0.00;
+
+            /*
              * ALLOTMENT SUBTOTAL VARIABLES
              */
 
@@ -572,19 +584,6 @@ namespace BUDGET
 
 
                 /*
-                 * SUB GRAND TOTAL VARIABLES
-                 * 
-                 */
-                
-                Double sub_allotment_received_grand_total = 0.00;
-                Double sub_allotment_total_after_realignment_grand_total = 0.00;
-                Double sub_current_month_grand_total = 0.00;
-                Double sub_as_of_month_grand_total = 0.00;
-                Double sub_unobligated_grand_total = 0.00;
-                Double sub_disbursement_grand_total = 0.00;
-
-
-                /*
                  *  SUB TOTAL VARIABLES
                  * 
                 */
@@ -848,21 +847,11 @@ namespace BUDGET
 
 
 
-                        var sub_dic_allotment_received = new Dictionary<String, Double>();
-
-                        sub_dic_allotment_received.Add("ALLOTMENT_RECEIVED", sub_allotment_received_grand_total);
-                        sub_dic_allotment_received.Add("TOTAL_AFTER_REALIGNMENT", sub_allotment_total_after_realignment_grand_total);
-                        sub_dic_allotment_received.Add("CURRENT_MONTH_GRAND_TOTAL", sub_current_month_grand_total);
-                        sub_dic_allotment_received.Add("AS_OF_MONTH_GRAND_TOTAL", sub_as_of_month_grand_total);
-                        sub_dic_allotment_received.Add("UNOBLIGATED_GRAND_TOTAL", sub_unobligated_grand_total);
-                        sub_dic_allotment_received.Add("DISBURSEMENTS", sub_disbursement_grand_total);
-
-
-                        sub_allotments_row_totals.Add(_allotments.Code +"-" + startRow, sub_dic_allotment_received);
-
                         
+
+
                         // SUB ALLOTMENT ALLOTMENT TITLE
-                       // _thead.AddCell(new PdfPCell(new Paragraph("SUBTOTAL " + _fsh_saa.Code.ToString().ToUpper(), new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT, PaddingLeft = 20f });
+                        // _thead.AddCell(new PdfPCell(new Paragraph("SUBTOTAL " + _fsh_saa.Code.ToString().ToUpper(), new Font(Font.FontFamily.HELVETICA, 8f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT, PaddingLeft = 20f });
                         worksheet.Cells[startRow, 1].Style.Font.Name = "TAHOMA";
                         worksheet.Cells[startRow, 1].Style.Font.Size = 11;
                         worksheet.Cells[startRow, 1].Style.Font.Bold = true;
@@ -931,6 +920,17 @@ namespace BUDGET
 
                         startRow++;
                     }
+
+                    var sub_dic_allotment_received = new Dictionary<String, Double>();
+
+                    sub_dic_allotment_received.Add("ALLOTMENT_RECEIVED", sub_allotment_received_grand_total);
+                    sub_dic_allotment_received.Add("TOTAL_AFTER_REALIGNMENT", sub_allotment_total_after_realignment_grand_total);
+                    sub_dic_allotment_received.Add("CURRENT_MONTH_GRAND_TOTAL", sub_current_month_grand_total);
+                    sub_dic_allotment_received.Add("AS_OF_MONTH_GRAND_TOTAL", sub_as_of_month_grand_total);
+                    sub_dic_allotment_received.Add("UNOBLIGATED_GRAND_TOTAL", sub_unobligated_grand_total);
+                    sub_dic_allotment_received.Add("DISBURSEMENTS", sub_disbursement_grand_total);
+
+                    sub_allotments_row_totals.Add(_allotments.Code, sub_dic_allotment_received);
                 }
             }
             // INCREMENT startRow to add blank row before displaying grand totals
@@ -998,19 +998,7 @@ namespace BUDGET
                 worksheet.Cells[startRow, 33].Value = percent > 0 ? percent + "%" : "";
 
 
-
-                /*
-                _thead.AddCell(new PdfPCell(new Paragraph("TOTAL " + d, new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT, PaddingLeft = 20f });
-                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-                _thead.AddCell(new PdfPCell(new Paragraph(allotments_row_totals[d]["ALLOTMENT_RECEIVED"] > 0 ? allotments_row_totals[d]["ALLOTMENT_RECEIVED"].ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-                _thead.AddCell(new PdfPCell(new Paragraph(allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"] > 0 ? allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"].ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                _thead.AddCell(new PdfPCell(new Paragraph(allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"] > 0 ? allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                _thead.AddCell(new PdfPCell(new Paragraph(allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"] > 0 ? allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                _thead.AddCell(new PdfPCell(new Paragraph(allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"] > 0 ? allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                _thead.AddCell(new PdfPCell(new Paragraph(allotments_row_totals[d]["DISBURSEMENTS"] > 0 ? allotments_row_totals[d]["DISBURSEMENTS"].ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER });
-                */
+                
                 startRow++;
 
             }
@@ -1019,12 +1007,10 @@ namespace BUDGET
             foreach (var d in sub_allotments_row_totals.Keys)
             {
 
-                String[] title = Convert.ToString(d).Split('-');
-
                 worksheet.Cells[startRow, 2].Style.Font.Name = "TAHOMA";
                 worksheet.Cells[startRow, 2].Style.Font.Size = 12;
                 worksheet.Cells[startRow, 2].Style.Font.Bold = true;
-                worksheet.Cells[startRow, 2].Value = "TOTAL SAA " + title[0].ToString() + title[1].ToString();
+                worksheet.Cells[startRow, 2].Value = "TOTAL SAA " + d;
 
 
                 worksheet.Cells[startRow, 13].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
@@ -1078,19 +1064,6 @@ namespace BUDGET
 
 
                 startRow++;
-
-                /*
-                _thead.AddCell(new PdfPCell(new Paragraph("TOTAL SAA " + d, new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT, PaddingLeft = 20f });
-                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-                _thead.AddCell(new PdfPCell(new Paragraph(sub_allotments_row_totals[d]["ALLOTMENT_RECEIVED"] > 0 ? sub_allotments_row_totals[d]["ALLOTMENT_RECEIVED"].ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-                _thead.AddCell(new PdfPCell(new Paragraph("", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_LEFT });
-                _thead.AddCell(new PdfPCell(new Paragraph(sub_allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"] > 0 ? sub_allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"].ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                _thead.AddCell(new PdfPCell(new Paragraph(sub_allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"] > 0 ? sub_allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                _thead.AddCell(new PdfPCell(new Paragraph(sub_allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"] > 0 ? sub_allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                _thead.AddCell(new PdfPCell(new Paragraph(sub_allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"] > 0 ? sub_allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                _thead.AddCell(new PdfPCell(new Paragraph(sub_allotments_row_totals[d]["DISBURSEMENTS"] > 0 ? sub_allotments_row_totals[d]["DISBURSEMENTS"].ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 9f, Font.BOLD))) { HorizontalAlignment = Element.ALIGN_CENTER });
-                */
             }
 
             pck.Save();

@@ -54,6 +54,20 @@ namespace BUDGET
 
             return RedirectToAction("Index");
         }
+        public ActionResult DeleteAllotment(String ID)
+        {
+            var delete_allotment = db.allotments.Where(p => p.ID.ToString() == ID).FirstOrDefault();
+            var delete_fundsource = db.fsh.Where(p => p.allotment == delete_allotment.ID.ToString()).ToList();
+            foreach(var fsh in delete_fundsource)
+            {
+                var remove_uacs = db.fsa.Where(p => p.fundsource == fsh.ID.ToString()).ToList();
+                db.fsa.RemoveRange(remove_uacs);
+            }
+            db.fsh.RemoveRange(delete_fundsource);
+            db.allotments.Remove(delete_allotment);
+            db.SaveChanges();
+            return RedirectToAction("Index");
 
+        }
     }
 }
