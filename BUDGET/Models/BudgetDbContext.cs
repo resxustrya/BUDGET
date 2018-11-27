@@ -18,7 +18,6 @@ namespace BUDGET
         public DbSet<YearBudget> yearbudget { get; set; }
         public DbSet<PREXC> prexc { get; set; }
         public DbSet<Allotments> allotments { get; set; }
-        public DbSet<ORSMaster> orsmaster { get; set; }
         public DbSet<ORS> ors { get; set; }
         public DbSet<FundSourceHdr> fsh { get; set; }
         public DbSet<FundSourceAmount> fsa { get; set; }

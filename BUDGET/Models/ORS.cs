@@ -10,7 +10,7 @@ namespace BUDGET
     {
         [Key]
         public Int32 ID { get; set; }
-        public Int32 ors_id { get; set; }
+        public Int32 allotment { get; set; }
         public Int32 Row { get; set; }
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }

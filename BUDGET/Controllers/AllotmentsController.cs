@@ -40,13 +40,6 @@ namespace BUDGET
             db.allotments.Add(allotments);
             db.SaveChanges();
 
-
-            ORSMaster orsmaster = new ORSMaster();
-            orsmaster.Title = collection.Get("code");
-            orsmaster.allotments = allotments.ID;
-            orsmaster.Year = GlobalData.Year;
-            orsmaster.active = 1;
-            db.orsmaster.Add(orsmaster);
             db.SaveChanges();
             
             return RedirectToAction("Index");
@@ -67,9 +60,6 @@ namespace BUDGET
             allotments.Title = collection.Get("title");
             allotments.Code = collection.Get("code");
 
-            var orsmaster = db.orsmaster.Where(p => p.allotments == id).FirstOrDefault();
-            orsmaster.Title = collection.Get("code");
-
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -82,13 +72,6 @@ namespace BUDGET
                 var del_allot = db.allotments.Where(p => p.ID == ID).FirstOrDefault();
                 del_allot.active = 0;
 
-                try
-                {
-                    var orsmaster = (from ors in db.orsmaster where ors.allotments == ID select ors).FirstOrDefault();
-                    orsmaster.active = 0;
-                }
-                catch { }
-                
                 db.Database.ExecuteSqlCommand("UPDATE FundSourceHdrs SET active = 0 WHERE allotment ='" + ID.ToString() + "'");
                 db.SaveChanges();
             }
@@ -252,50 +235,11 @@ namespace BUDGET
             return Json(true, JsonRequestBehavior.AllowGet);
         }
         
-        public ActionResult ORS()
-        {
-            var ors = (from list in db.orsmaster where list.Year == GlobalData.Year select list).ToList();
-            return View(ors);
-        }
         public ActionResult CreateOrs()
         {
             return View();
         }
-        [HttpPost]
-        public ActionResult CreateOrs(FormCollection collection)
-        {
-            ORSMaster orsmaster = new ORSMaster();
-            orsmaster.Title = collection.Get("title");
-            orsmaster.Year = GlobalData.Year;
-            db.orsmaster.Add(orsmaster);
-            db.SaveChanges();
-            return RedirectToAction("ORS");
-        }
-
-        public ActionResult DeleteOrs(String ID)
-        {
-            Int32 id = Convert.ToInt32(ID);
-            var orsmaster = db.orsmaster.Where(p => p.ID == id).FirstOrDefault();
-            db.orsmaster.Remove(orsmaster);
-            db.SaveChanges();
-            return RedirectToAction("ORS");
-        }
         
-        public ActionResult EditOrs(String ID)
-        {
-            Int32 id = Convert.ToInt32(ID);
-            var ors = db.orsmaster.Where(p => p.ID == id).FirstOrDefault();
-            return View(ors);
-        }
-        [HttpPost]
-        public ActionResult EditOrs(FormCollection collection)
-        {
-            Int32 ID = Convert.ToInt32(collection.Get("ID"));
-            var ors = db.orsmaster.Where(p => p.ID == ID).FirstOrDefault();
-            ors.Title = collection.Get("Title");
-            db.SaveChanges();
-            return RedirectToAction("ORS");
-        }
 
         public ActionResult SubAllotment(String allotment)
         {

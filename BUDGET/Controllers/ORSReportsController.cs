@@ -88,13 +88,13 @@ namespace BUDGET.Controllers
             Font column3_font = FontFactory.GetFont("Arial", 8, Font.BOLD, BaseColor.BLACK);
 
             table3.AddCell(new PdfPCell(new Paragraph("No :", arial_font_10)) { Padding = 6f, Border = 0 });
-            table3.AddCell(new PdfPCell(new Paragraph(rpt_ors.GetOrsCode(ors.ors_id.ToString()) + " - 01101101 - " + ors.Date.ToString("yyyy-MM") + " - " + ors.Row, column3_font)) { Border = 2, Padding = 6f, HorizontalAlignment = Element.ALIGN_CENTER, PaddingRight = 5 });
+            table3.AddCell(new PdfPCell(new Paragraph(rpt_ors.GetOrsCode(ors.allotment.ToString()) + " - 01101101 - " + ors.Date.ToString("yyyy-MM") + " - " + ors.Row, column3_font)) { Border = 2, Padding = 6f, HorizontalAlignment = Element.ALIGN_CENTER, PaddingRight = 5 });
 
             table3.AddCell(new PdfPCell(new Paragraph("Date :", arial_font_10)) { Padding = 6f, Border = 0 });
             table3.AddCell(new PdfPCell(new Paragraph(ors.Date.ToShortDateString(), column3_font)) { Border = 2, Padding = 6f, HorizontalAlignment = Element.ALIGN_CENTER, PaddingRight = 5 });
 
             table3.AddCell(new PdfPCell(new Paragraph("Fund :", arial_font_10)) { Padding = 6f, Border = 0 });
-            table3.AddCell(new PdfPCell(new Paragraph(rpt_ors.GetOrsCode(ors.ors_id.ToString()) + "-01101101", column3_font)) { Padding = 6f, Border = 2, HorizontalAlignment = Element.ALIGN_CENTER, PaddingRight = 5 });
+            table3.AddCell(new PdfPCell(new Paragraph(rpt_ors.GetOrsCode(ors.allotment.ToString()) + "-01101101", column3_font)) { Padding = 6f, Border = 2, HorizontalAlignment = Element.ALIGN_CENTER, PaddingRight = 5 });
 
             table3.AddCell(new PdfPCell(new Paragraph("", arial_font_10)) { Padding = 6f, Border = 0 });
             table3.AddCell(new PdfPCell(new Paragraph("", column3_font)) { Padding = 6f, Border = 2, HorizontalAlignment = Element.ALIGN_CENTER, PaddingRight = 5, PaddingBottom = 4 });
@@ -175,8 +175,8 @@ namespace BUDGET.Controllers
                             }).ToList();
 
             var FundSourceDetails = (from details in db.ors
-                                     join ors_master in db.orsmaster on details.ors_id equals ors_master.ID
-                                     join ors_fundsource in db.fsh on ors_master.allotments.ToString() equals ors_fundsource.allotment
+                                     join allotment in db.allotments on details.allotment equals allotment.ID
+                                     join ors_fundsource in db.fsh on allotment.ID.ToString() equals ors_fundsource.allotment
                                      where details.ID == ID &&
                                      ors_fundsource.Code == ors.FundSource
                                      select new
@@ -276,9 +276,9 @@ namespace BUDGET.Controllers
             //var ors_requesting_head = db.ors_head_request.Where(p => p.Name == ors.head_requesting_office).FirstOrDefault();
 
             var ors_fsh = (from list in db.ors
-                           join ors_master in db.orsmaster on list.ors_id equals ors_master.ID
-                           join fsh in db.fsh on ors_master.allotments.ToString() equals fsh.allotment
-                           where fsh.Code == ors.FundSource && fsh.allotment == ors_master.allotments.ToString()
+                           join allotment in db.allotments on list.allotment equals allotment.ID
+                           join fsh in db.fsh on allotment.ID.ToString() equals fsh.allotment
+                           where fsh.Code == ors.FundSource && fsh.allotment == allotment.ID.ToString()
                            && list.ID.ToString() == id
                            select new
                            {
@@ -357,7 +357,7 @@ namespace BUDGET.Controllers
 
             table_row_12.AddCell(new PdfPCell(new Paragraph(ors.Date.ToShortDateString(), FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100, Border = 13 });
             table_row_12.AddCell(new PdfPCell(new Paragraph("Obligation", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100, Border = 13 });
-            table_row_12.AddCell(new PdfPCell(new Paragraph(rpt_ors.GetOrsCode(ors.ors_id.ToString()) + " - 01101101 - " + ors.Date.ToString("yyyy-MM") + " - " + ors.Row, FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100 });
+            table_row_12.AddCell(new PdfPCell(new Paragraph(rpt_ors.GetOrsCode(ors.allotment.ToString()) + " - 01101101 - " + ors.Date.ToString("yyyy-MM") + " - " + ors.Row, FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100 });
             table_row_12.AddCell(new PdfPCell(new Paragraph(total_amt > 0 ? total_amt.ToString("N", new CultureInfo("en-US")) : "", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100 });
             table_row_12.AddCell(new PdfPCell(new Paragraph(disbursements > 0 ? disbursements.ToString("N", new CultureInfo("en-US")) : "", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100 });
             table_row_12.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100 });
@@ -422,7 +422,7 @@ namespace BUDGET.Controllers
         [HttpGet]
         public ActionResult ORS_PAGE()
         {
-            var orslist = (from list in db.orsmaster where list.Year == GlobalData.Year where list.active == 1 select list).ToList();
+            var orslist = (from list in db.allotments where list.year == GlobalData.Year where list.active == 1 select list).ToList();
             return PartialView(orslist);
         }
 
@@ -452,10 +452,10 @@ namespace BUDGET.Controllers
             Int32 page1 = Convert.ToInt32(page[0]);
             Int32 page2 = Convert.ToInt32(page[1]);
 
-            Int32 ors_id = Convert.ToInt32(collection.Get("ors"));
+            Int32 ors_allotment = Convert.ToInt32(collection.Get("ors"));
 
 
-            var ors_list = (from list in db.ors where list.Row >= page1 && list.Row <= page2 && list.ors_id == ors_id orderby list.Row ascending select list).ToList();
+            var ors_list = (from list in db.ors where list.Row >= page1 && list.Row <= page2 && list.allotment == ors_allotment orderby list.Row ascending select list).ToList();
 
 
             String filename = "pages.pdf";
@@ -518,7 +518,7 @@ namespace BUDGET.Controllers
                 Font column3_font = FontFactory.GetFont("Arial", 8, Font.BOLD, BaseColor.BLACK);
 
                 table3.AddCell(new PdfPCell(new Paragraph("No :", arial_font_10)) { Padding = 6f, Border = 0 });
-                table3.AddCell(new PdfPCell(new Paragraph(rpt_ors.GetOrsCode(ors.ors_id.ToString()) + " - 01101101 - " + ors.Date.ToString("yyyy-MM") + " - " + ors.Row, column3_font)) { Border = 2, Padding = 6f, HorizontalAlignment = Element.ALIGN_CENTER, PaddingRight = 5 });
+                table3.AddCell(new PdfPCell(new Paragraph(rpt_ors.GetOrsCode(ors.allotment.ToString()) + " - 01101101 - " + ors.Date.ToString("yyyy-MM") + " - " + ors.Row, column3_font)) { Border = 2, Padding = 6f, HorizontalAlignment = Element.ALIGN_CENTER, PaddingRight = 5 });
 
                 table3.AddCell(new PdfPCell(new Paragraph("Date :", arial_font_10)) { Padding = 6f, Border = 0 });
                 table3.AddCell(new PdfPCell(new Paragraph(ors.Date.ToShortDateString(), column3_font)) { Border = 2, Padding = 6f, HorizontalAlignment = Element.ALIGN_CENTER, PaddingRight = 5 });
@@ -604,8 +604,8 @@ namespace BUDGET.Controllers
                                 }).ToList();
 
                 var FundSourceDetails = (from details in db.ors
-                                         join ors_master in db.orsmaster on details.ors_id equals ors_master.ID
-                                         join ors_fundsource in db.fsh on ors_master.allotments.ToString() equals ors_fundsource.allotment
+                                         join allotment in db.allotments on details.allotment equals allotment.ID
+                                         join ors_fundsource in db.fsh on allotment.ID.ToString() equals ors_fundsource.allotment
                                          where details.ID == ID &&
                                          ors_fundsource.Code == ors.FundSource
                                          select new
@@ -705,9 +705,9 @@ namespace BUDGET.Controllers
                 //var ors_requesting_head = db.ors_head_request.Where(p => p.Name == ors.head_requesting_office).FirstOrDefault();
 
                 var ors_fsh = (from list in db.ors
-                               join ors_master in db.orsmaster on list.ors_id equals ors_master.ID
-                               join fsh in db.fsh on ors_master.allotments.ToString() equals fsh.allotment
-                               where fsh.Code == ors.FundSource && fsh.allotment == ors_master.allotments.ToString()
+                               join allotment in db.allotments on list.allotment equals allotment.ID
+                               join fsh in db.fsh on allotment.ID.ToString() equals fsh.allotment
+                               where fsh.Code == ors.FundSource && fsh.allotment == allotment.ID.ToString()
                                && list.ID.ToString() == ID.ToString()
                                select new
                                {
@@ -786,7 +786,7 @@ namespace BUDGET.Controllers
 
                 table_row_12.AddCell(new PdfPCell(new Paragraph(ors.Date.ToShortDateString(), FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100, Border = 13 });
                 table_row_12.AddCell(new PdfPCell(new Paragraph("Obligation", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100, Border = 13 });
-                table_row_12.AddCell(new PdfPCell(new Paragraph(rpt_ors.GetOrsCode(ors.ors_id.ToString()) + " - 01101101 - " + ors.Date.ToString("yyyy-MM") + " - " + ors.Row, FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100 });
+                table_row_12.AddCell(new PdfPCell(new Paragraph(rpt_ors.GetOrsCode(ors.allotment.ToString()) + " - 01101101 - " + ors.Date.ToString("yyyy-MM") + " - " + ors.Row, FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100 });
                 table_row_12.AddCell(new PdfPCell(new Paragraph(total_amt > 0 ? total_amt.ToString("N", new CultureInfo("en-US")) : "", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100 });
                 table_row_12.AddCell(new PdfPCell(new Paragraph(disbursements > 0 ? disbursements.ToString("N", new CultureInfo("en-US")) : "", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100 });
                 table_row_12.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100 });

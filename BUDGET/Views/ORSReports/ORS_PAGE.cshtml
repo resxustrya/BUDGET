@@ -12,9 +12,9 @@
                         <td>
                             <select name="ors" class="form-control" onchange="getFS(this);" data-url="@Url.Action("getFS","ORSReports")">
                                 <option value="" selected disabled>Select Value</option>
-                                @foreach (ORSMaster orsmaster in Model)
+                                @foreach (Allotments allotment in Model)
                                 {
-                                    <option value="@orsmaster.allotments">@orsmaster.Title</option>
+                                    <option value="@allotment.ID">@allotment.Code</option>
                                 }
                             </select>
                         </td>

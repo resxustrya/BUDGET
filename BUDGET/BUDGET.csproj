@@ -526,6 +526,10 @@
     <Compile Include="Migrations\201811230806070_add_code2.Designer.cs">
       <DependentUpon>201811230806070_add_code2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201811270324576_remove_table1.cs" />
+    <Compile Include="Migrations\201811270324576_remove_table1.Designer.cs">
+      <DependentUpon>201811270324576_remove_table1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -539,7 +543,6 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Notifications.cs" />
     <Compile Include="Models\ORS.cs" />
-    <Compile Include="Models\ORSMaster.cs" />
     <Compile Include="Models\ORS_EXPENSE_CODES.cs" />
     <Compile Include="Models\ors_head_request.cs" />
     <Compile Include="Models\PagingInfo.cs" />
@@ -820,7 +823,6 @@
     <Content Include="Views\Allotments\Create.cshtml" />
     <Content Include="Views\Allotments\FundSource.cshtml" />
     <Content Include="Views\Allotments\View.cshtml" />
-    <Content Include="Views\Allotments\ORS.cshtml" />
     <Content Include="Views\Allotments\CreateOrs.cshtml" />
     <Content Include="Views\ORS\OrsItem.cshtml" />
     <Content Include="Views\Allotments\EditOrs.cshtml" />
@@ -1093,6 +1095,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811230806070_add_code2.resx">
       <DependentUpon>201811230806070_add_code2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811270324576_remove_table1.resx">
+      <DependentUpon>201811270324576_remove_table1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

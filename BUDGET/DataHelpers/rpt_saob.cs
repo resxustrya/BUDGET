@@ -14,7 +14,7 @@ namespace BUDGET.DataHelpers
     public class rpt_saob
     {
         BudgetDB db = new BudgetDB();
-
+        
         public void generate_saob(String date_from, String date_to)
         {
             try
@@ -309,11 +309,10 @@ namespace BUDGET.DataHelpers
 
                         var uacs_amounts = (from ors_uacs in db.ors_expense_codes
                                             join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
-                                            join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
-                                            join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
+                                            join allotment in db.allotments on ors.allotment equals allotment.ID
                                             where ors.Date >= date1 && ors.Date <= date2 &&
                                             ors.FundSource == _fsh.Code &&
-                                            allotments_hdr.ID == _allotments.ID &&
+                                            allotment.ID == _allotments.ID &&
                                             ors_uacs.uacs == _fsa.ExpenseTitle
                                             select new
                                             {
@@ -339,11 +338,10 @@ namespace BUDGET.DataHelpers
 
                         var total_utilized = (from ors_uacs in db.ors_expense_codes
                                             join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
-                                            join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
-                                            join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
+                                            join allotment in db.allotments on ors.allotment equals allotment.ID
                                             where ors.FundSource == _fsh.Code
                                             && ors.Date <= date2 &&
-                                            allotments_hdr.ID == _allotments.ID &&
+                                            allotment.ID == _allotments.ID &&
                                             ors_uacs.uacs == _fsa.ExpenseTitle
 
                                               select new
@@ -370,11 +368,10 @@ namespace BUDGET.DataHelpers
 
                         var ors_disbursements = (from ors_uacs in db.ors_expense_codes
                                                  join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
-                                                 join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
-                                                 join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
+                                                 join allotment in db.allotments on ors.allotment equals allotment.ID
                                                  where ors.Date >= date1 && ors.Date <= date2 &&
                                                  ors.FundSource == _fsh.Code &&
-                                                 allotments_hdr.ID == _allotments.ID &&
+                                                 allotment.ID == _allotments.ID &&
                                                  ors_uacs.uacs == _fsa.ExpenseTitle
                                                  select new
                                                  {
@@ -655,8 +652,7 @@ namespace BUDGET.DataHelpers
 
                             var uacs_amounts = (from ors_uacs in db.ors_expense_codes
                                                 join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
-                                                join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
-                                                join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
+                                                join allotment in db.allotments on ors.allotment equals allotment.ID
                                                 where ors.Date >= date1 && ors.Date <= date2 &&
                                                 ors.FundSource == _fsh_saa.Code &&
                                                 ors_uacs.uacs == _saa_amt.ExpenseTitle
@@ -678,8 +674,7 @@ namespace BUDGET.DataHelpers
 
                             var total_utilized = (from ors_uacs in db.ors_expense_codes
                                                   join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
-                                                  join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
-                                                  join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
+                                                  join allotment in db.allotments on ors.allotment equals allotment.ID
                                                   where ors.FundSource == _fsh_saa.Code &&
                                                   ors_uacs.uacs == _saa_amt.ExpenseCode
                                                   select new
@@ -704,8 +699,7 @@ namespace BUDGET.DataHelpers
 
                             var sub_ors_disbursements = (from ors_uacs in db.ors_expense_codes
                                                          join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
-                                                         join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
-                                                         join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
+                                                         join allotment in db.allotments on ors.allotment equals allotment.ID
                                                          where ors.Date >= date1 && ors.Date <= date2 &&
                                                          ors.FundSource == _fsh_saa.Code &&
                                                          ors_uacs.uacs == _saa_amt.ExpenseCode
@@ -826,4 +820,5 @@ namespace BUDGET.DataHelpers
             doc.Close();
         }
     }
+   
 }

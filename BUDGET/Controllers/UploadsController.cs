@@ -137,7 +137,7 @@ namespace BUDGET.Controllers
                         try { ors.PAYEE = worksheet.Cells[i, 6].Value.ToString(); } catch { ors.PAYEE = ""; }
                         try { ors.Adress = worksheet.Cells[i, 7].Value.ToString(); } catch { ors.Adress = ""; }
                         try { ors.Particulars = worksheet.Cells[i, 8].Value.ToString(); } catch { ors.Particulars = ""; }
-                        ors.ors_id = 1003;
+                        ors.allotment = 1003;
                         ors.Date_Added = DateTime.Now.Date;
                         ors.dateadded = DateTime.Now.Date.ToString();
                         ors.FundSource = "PHM";

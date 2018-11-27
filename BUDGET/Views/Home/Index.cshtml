@@ -15,13 +15,12 @@
                 </div>
                 <!-- /input-group -->
             </li>
-            @foreach (ORSMaster ors in Model.orsmaster)
+            @foreach (Allotments allotment in Model.allotments)
             {
                 <li>
-                    <a href="@Url.Action("OrsItem","Ors",new { ID = ors.ID })"><i class="fa fa-tasks fa-fw"></i>ORS @ors.Title</a>
+                    <a href="@Url.Action("OrsItem","Ors",new { ID = allotment.ID })"><i class="fa fa-tasks fa-fw"></i>ORS @allotment.Code</a>
                 </li>
             }
-            
         </ul>
     </div>
     <!-- /.sidebar-collapse -->

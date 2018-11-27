@@ -14,10 +14,10 @@ namespace BUDGET.DataHelpers
     {
         private BudgetDB db = new BudgetDB();
         
-        public String GetOrsCode(String ors_id)
+        public String GetOrsCode(String ors_allotment)
         {
-            var orscode = (from list in db.orsmaster join allotment in db.allotments on list.allotments equals allotment.ID where list.ID.ToString() == ors_id select allotment.Code2).FirstOrDefault();
-            return orscode ?? "";
+            var allotment = db.allotments.Where(p => p.ID.ToString() == ors_allotment).FirstOrDefault();
+            return allotment.Code2 ?? "";
         }
     }
 }

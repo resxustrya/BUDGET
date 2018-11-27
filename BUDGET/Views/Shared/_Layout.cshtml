@@ -1,8 +1,7 @@
 ﻿@using Microsoft.AspNet.Identity
 @{
     BudgetDB db = new BudgetDB();
-    var allotments = (from list in db.allotments where list.year == GlobalData.Year select list).ToList();
-    var orslist = (from list in db.orsmaster where list.Year == GlobalData.Year && list.active == 1 select list ).ToList();
+    var allotments = (from list in db.allotments where list.year == GlobalData.Year && list.active == 1 select list).ToList();
 }
 
 <!DOCTYPE html>
@@ -81,11 +80,11 @@
                         <b>ORS <i class="fa fa-caret-down"></i></b>
                     </a>
                     <ul class="dropdown-menu dropdown-tasks">
-                        @if (orslist.Count > 0)
+                        @if (allotments.Count > 0)
                         {
-                            foreach (ORSMaster orsmaster in orslist)
+                            foreach (Allotments allotment in allotments)
                             {
-                                <li><a href="@Url.Action("OrsItem","Ors",new { ID = orsmaster.ID })"><span class="glyphicon glyphicon-share-alt"></span> @orsmaster.Title</a></li>
+                                <li><a href="@Url.Action("OrsItem","Ors",new { ID = allotment.ID })"><span class="glyphicon glyphicon-share-alt"></span> @allotment.Code</a></li>
                             }
                         }
                         else
