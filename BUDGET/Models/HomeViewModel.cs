@@ -7,7 +7,6 @@ namespace BUDGET
 {
     public class HomeViewModel
     {
-        public IEnumerable<ORSMaster> orsmaster { get; set; }
         public IEnumerable<Notifications> notifications { get; set; }
         public IEnumerable<Allotments> allotments { get; set; }
     }

@@ -24,7 +24,7 @@ namespace BUDGET
         public void Allotment(FormCollection collection)
         {
             db.Database.ExecuteSqlCommand("UPDATE Allotments SET active = '" + collection.Get("status") + "' WHERE ID = '" + collection.Get("allotment") +"'");
-            db.Database.ExecuteSqlCommand("UPDATE ORSMasters SET active = '" + collection.Get("status") + "' WHERE allotments ='" + collection.Get("allotment") + "'");
+           // db.Database.ExecuteSqlCommand("UPDATE ORSMasters SET active = '" + collection.Get("status") + "' WHERE allotments ='" + collection.Get("allotment") + "'");
             db.Database.ExecuteSqlCommand("UPDATE FundSourceHdrs SET active = '"+ collection.Get("status")  +"' WHERE allotment ='" + collection.Get("allotment") + "'");
             db.SaveChanges();
         }
@@ -63,6 +63,7 @@ namespace BUDGET
                 var remove_uacs = db.fsa.Where(p => p.fundsource == fsh.ID.ToString()).ToList();
                 db.fsa.RemoveRange(remove_uacs);
             }
+            
             db.fsh.RemoveRange(delete_fundsource);
             db.allotments.Remove(delete_allotment);
             db.SaveChanges();

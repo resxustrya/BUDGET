@@ -1,22 +1,23 @@
 ﻿
-<h3>Add new user logins</h3>
+
+<h3>Update new user logins</h3>
 <form action="@Url.Action("Add","UserAccount")" method="post">
     @Html.AntiForgeryToken()
     <div class="form-group">
         <label for="username">Username</label>
-        <input type="text" name="username" class="form-control" required />
+        <input type="text" name="username" class="form-control" required value="@Model.UserName" />
     </div>
     <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" name="password" class="form-control" required />
+        <input type="password" name="password" class="form-control"  required />
     </div>
     <div class="form-group">
         <label for="role">User Role</label>
         <select name="role" required class="form-control">
             <option value="" selected>-- Select User role --</option>
-            @foreach (var role in Model)
+            @foreach (var role in ViewBag.Roles)
             {
-                <option value="@role.Name">@role.Name</option>
+                <option value="@role.Name" @(ViewBag.UserRole == role.Name ? " selected" : "")>@role.Name</option>
             }
         </select>
     </div>

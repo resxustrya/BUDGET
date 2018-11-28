@@ -30,15 +30,15 @@ namespace BUDGET
             }
         }
 
-        public static String ors_id
+        public static String ors_allotment
         {
             get
             {
-                return HttpContext.Current.Application["ors_id"] as String;
+                return HttpContext.Current.Application["ors_allotment"] as String;
             }
             set
             {
-                HttpContext.Current.Application["ors_id"] = value;
+                HttpContext.Current.Application["ors_allotment"] = value;
             }
         }
         public static String allotment

@@ -3,11 +3,10 @@
     ViewBag.Title = "Users Management";
 }
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-
-            <div class="panel panel-info" style="margin-top:10px;">
+<div class="alert">
+    <div class="col-md-12">
+        <div class="alert alert-rex">
+            <div class="panel panel-default" style="margin-top:10px;">
                 <div class="panel-heading">
                     <i class="fa fa-bar-chart-o fa-fw"></i> User Management
                     <div class="pull-right">
@@ -21,16 +20,16 @@
                 <!-- /.panel-heading -->
                 <div class="panel-body">
                     <table class="table table-bordered">
-                        <tr>
-                            <th>User Logins</th>
-                            <th>Option</th>
+                        <tr style="background-color:#D5DBDB;">
+                            <th class="col-sm-10">User Logins</th>
+                            <th class="col-sm-2">Option</th>
                         </tr>
                         @foreach (var a in Model)
                         {
                             <tr>
-                                <td>@a.UserName</td>
+                                <td><span style="color:#071D47;font-weight:bold;">@a.UserName</span></td>
                                 <td>
-                                    <button class="btn btn-info">Update</button>
+                                    <button class="btn btn-info" data-url="@Url.Action("Update","UserAccount",new { userId = a.Id })" onclick="Update(this);">Update</button>
                                     <a class="btn btn-danger">Delete</a>
                                 </td>
                             </tr>
@@ -54,6 +53,17 @@
                 $(".loading").hide();
             });
         });
+        function Update(el)
+        {
+            $("#page_modal").modal('show');
+            $(".modal_body").html('');
+            $(".loading").show();
+            var url = $(el).data('url');
+            $.get(url, function (res) {
+                $(".modal_body").html(res);
+                $(".loading").hide();
+            });
+        }
     </script>   
 }
 

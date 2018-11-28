@@ -48,9 +48,7 @@
                 var allotment = $(this).data('allotment');
                 var url = $(this).data('url');
                 var status = $(this).val();
-                    
                 $.post(url, { status: status, allotment : allotment }, function () {
-
                 });
 
             });

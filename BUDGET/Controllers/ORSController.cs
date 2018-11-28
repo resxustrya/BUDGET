@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace BUDGET
 {
-
     [YearlyFilter]
     [NoCache]
     [OutputCache(NoStore = true, Duration = 0)]
@@ -34,18 +33,16 @@ namespace BUDGET
         }
 
         [CustomAuthorize(Roles = "Admin,Encoder,Cashier")]
-        public ActionResult OrsItem(String id)
+        public ActionResult OrsItem(String ID)
         {
             String query = Request.QueryString["q"] ?? "";
             Session["query"] = query;
-            Int32 ID = Convert.ToInt32(id);
-            var ors = (from list in db.orsmaster where list.ID == ID && list.Year == GlobalData.Year && list.active == 1 select list).FirstOrDefault();
-            GlobalData.ors_id = ors.ID.ToString();
-            ViewBag.Menu = ors.Year + " | " + ors.Title;
-            ViewBag.allotments = ors.allotments;
+            var allotment = db.allotments.Where(p => p.ID.ToString() == ID).FirstOrDefault();
+            GlobalData.ors_allotment = allotment.ID.ToString();
+            ViewBag.Menu = allotment.year + " | " + allotment.Code;
+            ViewBag.allotments = allotment.ID.ToString();
             return View();
         }
-
 
         [CustomAuthorize(Roles = "Admin,Encoder,Cashier")]
 
@@ -53,9 +50,9 @@ namespace BUDGET
         public JsonResult GetOrsPS()
         {
             String query = Session["query"].ToString().ToLower();
-            Int32 ors_id = Convert.ToInt32(GlobalData.ors_id);
+            Int32 ors_allotment = Convert.ToInt32(GlobalData.ors_allotment);
             var orsps = (from list in db.ors
-                         where list.ors_id == ors_id
+                         where list.allotment == ors_allotment
                          orderby list.Date_Added ascending
                          select new
                          {
@@ -158,7 +155,7 @@ namespace BUDGET
         {
             List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
             Int32 id = 0;
-            Int32 ors_id = Convert.ToInt32(GlobalData.ors_id);
+            Int32 ors_allotment = Convert.ToInt32(GlobalData.ors_allotment);
             Int32 rowCount = 0;
             String DateFormat = "yyyy-MM-dd HH:mm:ss";
             foreach (Object s in list)
@@ -167,12 +164,12 @@ namespace BUDGET
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     String fundsource = (String)sb.FundSource;
-                    var fundsource_exist = db.fsh.Where(p => p.allotment.ToString() == GlobalData.ors_id && p.Code == fundsource).ToList();
+                    var fundsource_exist = db.fsh.Where(p => p.allotment.ToString() == GlobalData.ors_allotment && p.Code == fundsource).ToList();
 
                     if(fundsource_exist.Count > 0)
                     {
                         id = Convert.ToInt32(sb.ID);
-                        var ors = db.ors.Where(p => p.ID == id).Where(p => p.ors_id == ors_id).FirstOrDefault();
+                        var ors = db.ors.Where(p => p.ID == id).Where(p => p.allotment == ors_allotment).FirstOrDefault();
                         Object date = sb.Date;
                         ors.Date1 = date.ToString();
                         DateTime datetime = Convert.ToDateTime(date.ToString());
@@ -200,14 +197,14 @@ namespace BUDGET
                     try
                     {
                         String fundsource = (String)sb.FundSource;
-                        var fundsource_exist = db.fsh.Where(p => p.allotment.ToString() == GlobalData.ors_id && p.Code == fundsource).ToList();
+                        var fundsource_exist = db.fsh.Where(p => p.allotment.ToString() == GlobalData.ors_allotment && p.Code == fundsource).ToList();
 
                         if(fundsource_exist.Count > 0)
                         {
                             if (sb.Date != null && sb.Particulars != null && sb.PAYEE != null)
                             {
                                 ORS ors = new ORS();
-                                ors.ors_id = Convert.ToInt32(GlobalData.ors_id);
+                                ors.allotment = Convert.ToInt32(GlobalData.ors_allotment);
                                 ors.Row = sb.Row;
                                 Object date = sb.Date;
                                 ors.Date1 = date.ToString();
@@ -233,7 +230,7 @@ namespace BUDGET
 
                                 try
                                 {
-                                    var ors_master = db.orsmaster.Where(p => p.ID.ToString() == GlobalData.ors_id).FirstOrDefault();
+                                    var ors_master = db.allotments.Where(p => p.ID.ToString() == GlobalData.ors_allotment).FirstOrDefault();
                                     Notifications notifications = new Notifications();
                                     notifications.Module = "ORS, " + ors_master.Title;
                                     notifications.User = User.Identity.GetUserName();
@@ -384,8 +381,7 @@ namespace BUDGET
                                     db.SaveChanges();
 
                                     var ors_allotments = (from ors in db.ors
-                                                          join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
-                                                          join allotments in db.allotments on ors_master.allotments equals allotments.ID
+                                                          join allotments in db.allotments on ors.allotment equals allotments.ID
                                                           where ors.ID == id
                                                           select new
                                                           {

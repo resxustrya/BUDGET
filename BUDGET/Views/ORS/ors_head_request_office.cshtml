@@ -5,16 +5,15 @@
     ViewBag.Title = "List of ORS Head Requesting Office / Authorized Representative";
 }
 
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
+<div class="alert">
+    <div class="col-md-12">
+        <div class="alert alert-rex">
             <h2>List of ORS Head Requesting Office /Authorized Representative </h2>
             <div class="panel panel-default">
                 <div class="panel-heading"><a data-add="@Url.Action("CreateOrsHeadRequest","ORS")" class="btn btn-success btn-sm" onclick="create(this);">Create New</a></div>
                 <div class="panel-body">
                     <table class="table table-bordered">
-                        <tr>
+                        <tr style="background-color:#D5DBDB;">
                             <th class="text-center">Head Name</th>
                             <th class="text-center">Position</th>
                             <th class="text-center">Actions</th>
@@ -22,8 +21,8 @@
                         @foreach (ors_head_request yb in Model)
                         {
                             <tr>
-                                <td>@yb.Name</td>
-                                <td>@yb.Position</td>
+                                <td><span style="color:#071D47;font-weight:bold;">@yb.Name</span></td>
+                                <td><span style="color:#071D47;font-weight:bold;">@yb.Position</span></td>
                                 <td>
                                     <a data-update="@Url.Action("UpdateOrsHeadRequest","ORS",new { ID = yb.ID })" onclick="update(this);" class="btn btn-info">UPDATE</a>
                                     <a href="@Url.Action("DeleteORSHeadRequest","ORS", new { ID = yb.ID })" onclick="return confirm('Are you sure you want to delete this entry ?');" class="btn btn-danger">CANCEL</a>
@@ -32,16 +31,17 @@
                         }
                     </table>
                     <div class="pagination">
-                       @if (Model.PageCount >= 10)
-                       {
-                           @Html.PagedListPager(Model, page => Url.Action("ors_head_request_office", new { page }))
-                       }
+                        @if (Model.PageCount >= 10)
+                        {
+                            @Html.PagedListPager(Model, page => Url.Action("ors_head_request_office", new { page }))
+                        }
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+    
 
 @section footer{
     @Html.Partial("footer")

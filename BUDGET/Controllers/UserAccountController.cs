@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-
 using Owin;
+using System.Web.Security;
 using BUDGET.Models;
 
 namespace BUDGET.Controllers
@@ -58,6 +57,16 @@ namespace BUDGET.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public ActionResult Update(String userId)
+        {
+            var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+            ViewBag.Roles = context.Roles.ToList();
+            var user = UserManager.FindById(userId);
+            ViewBag.UserRole = context.Roles.Find(user.Roles.SingleOrDefault().RoleId).Name;
+            return PartialView(user);
         }
     }
 }

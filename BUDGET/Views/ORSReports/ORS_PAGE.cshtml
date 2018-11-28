@@ -12,9 +12,9 @@
                         <td>
                             <select name="ors" class="form-control" onchange="getFS(this);" data-url="@Url.Action("getFS","ORSReports")">
                                 <option value="" selected disabled>Select Value</option>
-                                @foreach (ORSMaster orsmaster in Model)
+                                @foreach (Allotments allotment in Model)
                                 {
-                                    <option value="@orsmaster.allotments">@orsmaster.Title</option>
+                                    <option value="@allotment.ID">@allotment.Code</option>
                                 }
                             </select>
                         </td>
@@ -23,7 +23,6 @@
                         <td>Page</td>
                         <td><input type="text" name="page" required class="form-control" placeholder="Exp. 1-20" /></td>
                     </tr>
-                    
                     <tr>
                         <td></td>
                         <td><button type="submit" class="btn btn-success btn-lg"> <span class="glyphicon glyphicon-print"></span> Print</button></td>

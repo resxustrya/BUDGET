@@ -108,11 +108,10 @@ namespace BUDGET
 
                     var uacs_amounts = (from ors_uacs in db.ors_expense_codes
                                         join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
-                                        join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
-                                        join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
+                                        join allotment in db.allotments on ors.allotment equals allotment.ID
                                         where ors.Date <= DateTime.Now &&
                                         ors.FundSource == _fsh.Code &&
-                                        allotments_hdr.ID == ID &&
+                                        allotment.ID == ID &&
                                         ors_uacs.uacs == _fsa.ExpenseTitle
                                         select new
                                         {
@@ -136,11 +135,10 @@ namespace BUDGET
 
                     var total_utilized = (from ors_uacs in db.ors_expense_codes
                                           join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
-                                          join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
-                                          join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
+                                          join allotment in db.allotments on ors.allotment equals allotment.ID
                                           where ors.FundSource == _fsh.Code
                                           && ors.Date <= DateTime.Now &&
-                                          allotments_hdr.ID == ID &&
+                                          allotment.ID == ID &&
                                           ors_uacs.uacs == _fsa.ExpenseTitle
                                           select new
                                           {
@@ -169,10 +167,9 @@ namespace BUDGET
 
                     var ors_disbursements = (from ors_uacs in db.ors_expense_codes
                                              join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
-                                             join ors_master in db.orsmaster on ors.ors_id equals ors_master.ID
-                                             join allotments_hdr in db.allotments on ors_master.allotments equals allotments_hdr.ID
+                                             join allotment in db.allotments on ors.allotment equals allotment.ID
                                              where ors.FundSource == _fsh.Code &&
-                                             allotments_hdr.ID == ID &&
+                                             allotment.ID == ID &&
                                              ors_uacs.uacs == _fsa.ExpenseTitle
                                              select new
                                              {
