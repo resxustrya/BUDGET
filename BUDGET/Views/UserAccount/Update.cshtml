@@ -1,15 +1,11 @@
 ﻿
 
 <h3>Update new user logins</h3>
-<form action="@Url.Action("Add","UserAccount")" method="post">
+<form action="@Url.Action("Update","UserAccount")" method="post">
     @Html.AntiForgeryToken()
     <div class="form-group">
         <label for="username">Username</label>
         <input type="text" name="username" class="form-control" required value="@Model.UserName" />
-    </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" name="password" class="form-control"  required />
     </div>
     <div class="form-group">
         <label for="role">User Role</label>

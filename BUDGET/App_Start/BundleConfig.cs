@@ -36,7 +36,8 @@ namespace BUDGET
                       "~/Content/handson/handsontable.css",
                       "~/Content/scrollstyle.css",
                       "~/Content/Site.css",
-                      "~/Content/lobibox/lobibox.min.css"
+                      "~/Content/lobibox/lobibox.min.css",
+                      "~/Content/flip.card.css"
                       ));
 
             
@@ -48,7 +49,9 @@ namespace BUDGET
                       "~/Content/handson/pikaday.js",
                       "~/Content/handson/languages.js",
                       "~/Content/handson/handsontable.js",
-                      "~/Scripts/lobibox/lobibox.min.js"));
+                      "~/Scripts/lobibox/lobibox.min.js",
+                      "~/Scripts/flip.card.js"
+                      ));
 
         }
     }

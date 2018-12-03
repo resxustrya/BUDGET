@@ -17,7 +17,7 @@ namespace BUDGET
 
         private void createRolesandUsers()
         {
-            Models.ApplicationDbContext context = new Models.ApplicationDbContext();
+            Models.ApplicationDbContext context = new ApplicationDbContext();
 
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
@@ -54,14 +54,6 @@ namespace BUDGET
                 role.Name = "Cashier";
                 roleManager.Create(role);
             }
-
-            if (!roleManager.RoleExists("Encoder"))
-            {
-                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-                role.Name = "Encoder";
-                roleManager.Create(role);
-            }
-           
         }
     }
 }

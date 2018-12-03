@@ -14,16 +14,7 @@ namespace BUDGET.Migrations
 
         protected override void Seed(BudgetDB context)
         {
-            var db = new BudgetDB();
-            var excelfilenames = db.excelfilename.ToList();
-            if(excelfilenames.Count <= 0)
-            {
-                var excel = new ExcelFilename();
-                excel.Filename = "SAOB1.xlsx";
-                db.excelfilename.Add(excel);
-                db.SaveChanges();
-
-            }
+            
         }
     }
 }

@@ -32,9 +32,29 @@
                 </div>
             </div>
             <div class="row">
+                <!--
+                FOR THE FLIP CARD    
+               -->
                 <div class="col-md-12">
-                    <div id="table_uacs" style="width: 100%; height: 200px; overflow: hidden;" data-originalstyle="width: 90%; height: 200px; overflow: hidden"  data-save="@Url.Action("SaveOrsObligation","ORS")" data-get_fund_source_uacs="@Url.Action("GetFundSourceUACS","ORS",new { ID = ViewBag.ors_obligation })" data-get="@Url.Action("GetORSUacs","ORS", new { ID = ViewBag.ors_obligation })" data-ors_obligation="@ViewBag.ors_obligation" data-delete="@Url.Action("DeleteUacs","ORS")"></div>
-                </div>
+                    <div class="card-container manual-flip">
+                        <div class="card">
+                            <div class="front">
+                                <div class="col-md-12">
+                                    <div id="table_uacs" style="width: 100%; height:400px; overflow: hidden;margin-top:10px;" data-originalstyle="width: 90%; height: 200px; overflow: hidden" data-save="@Url.Action("SaveOrsObligation","ORS")" data-get_fund_source_uacs="@Url.Action("GetFundSourceUACS","ORS",new { ID = ViewBag.ors_obligation })" data-get="@Url.Action("GetORSUacs","ORS", new { ID = ViewBag.ors_obligation })" data-ors_obligation="@ViewBag.ors_obligation" data-delete="@Url.Action("DeleteUacs","ORS")"></div>
+                                </div>
+                            </div> <!-- end front panel -->
+                            <div class="back">
+                                <div class="col-md-12">
+                                   <h2>Back Panel</h2>
+                                </div>
+                            </div> <!-- end back panel -->
+                        </div> <!-- end card -->
+                    </div> <!-- end card-container -->
+                </div> <!-- end col sm 3 -->
+                <!--
+                //END OF FLIP CARD    
+                
+                -->
             </div>
             <div class="row">
                 <table class="table">
@@ -54,8 +74,6 @@
     </div>
 </div>
 
-
-
 <script>
     (function () {
         var fundsource_uacs = [];
@@ -72,7 +90,21 @@
             stretchH: 'all',
             colHeaders: true,
             filters: true,
-            contextMenu: ['row_above', 'row_below', 'remove_row', 'copy'],
+            //contextMenu: ['row_above', 'row_below', 'remove_row', 'copy'],
+            contextMenu : {
+                items : {
+                    "": {
+                        name: 'Ors Date Obligation',
+                        callback: function (key, options) {
+                            var selection = this.getSelectedRange();
+                            var fromRow = Math.min(selection.from.row, selection.to.row);
+                            var tempdata = this.getData();
+                            var uacs = tempdata[fromRow][1];
+                            rotateCard();
+                        }
+                    }, "row_below": {}, "remove_row": {}
+                }
+            },
             fillHandle: {
                 autoInsertRow: false,
             },

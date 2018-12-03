@@ -530,11 +530,14 @@
     <Compile Include="Migrations\201811270324576_remove_table1.Designer.cs">
       <DependentUpon>201811270324576_remove_table1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201811290254190_remove_table2.cs" />
+    <Compile Include="Migrations\201811290254190_remove_table2.Designer.cs">
+      <DependentUpon>201811290254190_remove_table2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
     <Compile Include="Models\BudgetDbContext.cs" />
-    <Compile Include="Models\ExcelFilename.cs" />
     <Compile Include="Models\FundSourceAmount.cs" />
     <Compile Include="Models\FundSourceHdr.cs" />
     <Compile Include="Models\FundSourceViewModel.cs" />
@@ -571,6 +574,7 @@
     <Content Include="Content\dist\css\sb-admin-2.min.css" />
     <Content Include="Content\dist\js\sb-admin-2.js" />
     <Content Include="Content\dist\js\sb-admin-2.min.js" />
+    <Content Include="Content\flip.card.css" />
     <Content Include="Content\handson\handsontable.css" />
     <Content Include="Content\handson\handsontable.js" />
     <Content Include="Content\handson\languages.js" />
@@ -751,6 +755,7 @@
     <Content Include="rpt_saob\saobsheet2.pdf" />
     <Content Include="rpt_ors\pages.pdf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\flip.card.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -858,6 +863,7 @@
     <Content Include="Views\Allotments\CreateFundSource.cshtml" />
     <Content Include="Views\BudgetSummary\Index.cshtml" />
     <Content Include="Views\UserAccount\Update.cshtml" />
+    <Content Include="Views\UserAccount\ResetPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1099,6 +1105,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811270324576_remove_table1.resx">
       <DependentUpon>201811270324576_remove_table1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811290254190_remove_table2.resx">
+      <DependentUpon>201811290254190_remove_table2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
