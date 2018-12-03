@@ -40,12 +40,12 @@
                         <div class="card">
                             <div class="front">
                                 <div class="col-md-12">
-                                    <div id="table_uacs" style="width: 100%; height:400px; overflow: hidden;margin-top:10px;" data-originalstyle="width: 90%; height: 200px; overflow: hidden" data-save="@Url.Action("SaveOrsObligation","ORS")" data-get_fund_source_uacs="@Url.Action("GetFundSourceUACS","ORS",new { ID = ViewBag.ors_obligation })" data-get="@Url.Action("GetORSUacs","ORS", new { ID = ViewBag.ors_obligation })" data-ors_obligation="@ViewBag.ors_obligation" data-delete="@Url.Action("DeleteUacs","ORS")"></div>
+                                    <div id="table_uacs" style="width: 100%; height:400px; overflow: hidden;margin-top:10px;" data-originalstyle="width: 90%; height: 200px; overflow: hidden" data-save="@Url.Action("SaveOrsObligation","ORS")" data-get_fund_source_uacs="@Url.Action("GetFundSourceUACS","ORS",new { ID = ViewBag.ors_obligation })" data-get="@Url.Action("GetORSUacs","ORS", new { ID = ViewBag.ors_obligation })" data-ors_obligation="@ViewBag.ors_obligation" data-delete="@Url.Action("DeleteUacs","ORS")" data-ors_date="@Url.Action("GetOrsDate","ORS")"></div>
                                 </div>
                             </div> <!-- end front panel -->
                             <div class="back">
-                                <div class="col-md-12">
-                                   <h2>Back Panel</h2>
+                                <div class="col-md-12" id="ors_date_obligation">
+                                    <div id="uacs_ors_date" style="width: 100%; height:400px; overflow: hidden;margin-top:10px;" data-originalstyle="width: 90%; height: 200px; overflow: hidden" data-save="@Url.Action("SaveOrsObligation","ORS")" data-get_fund_source_uacs="@Url.Action("GetFundSourceUACS","ORS",new { ID = ViewBag.ors_obligation })" data-get="@Url.Action("GetORSUacs","ORS", new { ID = ViewBag.ors_obligation })" data-ors_obligation="@ViewBag.ors_obligation" data-delete="@Url.Action("DeleteUacs","ORS")" ></div>
                                 </div>
                             </div> <!-- end back panel -->
                         </div> <!-- end card -->
@@ -84,9 +84,9 @@
         
         table_uacs = new Handsontable(container_uacs, {
             startRows: 50,
-            startCols: 7,
+            startCols: 8,
             rowHeaders: true,
-            colWidths: [1, 350, 200, 200,200,200,200],
+            colWidths: [1, 350,200,200, 200,200,200,200],
             stretchH: 'all',
             colHeaders: true,
             filters: true,
@@ -101,6 +101,9 @@
                             var tempdata = this.getData();
                             var uacs = tempdata[fromRow][1];
                             rotateCard();
+                            $.get($("#table_uacs").data('ors_date'), function (resdata) {
+
+                            });
                         }
                     }, "row_below": {}, "remove_row": {}
                 }
@@ -109,13 +112,13 @@
                 autoInsertRow: false,
             },
             viewportColumnRenderingOffset: 20,
-            colHeaders: ['ID', 'Expense Code','Amount','Disbursement','Net Amt.','Tax Amt.','Others'],
+            colHeaders: ['ID', 'Expense Title','Expense Code','Amount','Disbursement','Net Amt.','Tax Amt.','Others'],
             columns: [
-                {}, { type: 'autocomplete', source: fundsource_uacs, strick: true, allowInvalid: false }, {}, {}, {}, {}, {}
+                {}, { type: 'autocomplete', source: fundsource_uacs, strick: true, allowInvalid: false }, {},{}, {}, {}, {}, {}
             ],
             cells: function (r, c, prop) {
                 var cellProperties = {};
-                if (c === 0 || c === 3  @(User.IsInRole("Cashier") ? " || c === 0 || c === 1 || c === 2" : "") ) cellProperties.readOnly = true;
+                if (c === 0 || c == 1 || c === 4  @(User.IsInRole("Cashier") ? " || c === 0 || c === 1 || c === 2" : "") ) cellProperties.readOnly = true;
                 return cellProperties;
             },
 
@@ -156,7 +159,7 @@
                     var uacs_total = 0;
                     var uacs_disbursment = 0;
                     for (var i = 0; i < resdata.length; i++) {
-                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseTitle'], numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']), numberWithCommas(resdata[i]['NetAmount']), numberWithCommas(resdata[i]['TaxAmount']), numberWithCommas(resdata[i]['Others']));
+                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseTitle'],resdata[i]['ExpenseCode'],numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']), numberWithCommas(resdata[i]['NetAmount']), numberWithCommas(resdata[i]['TaxAmount']), numberWithCommas(resdata[i]['Others']));
                         uacs_total += resdata[i]['Amount'];
                         uacs_disbursment += resdata[i]['NetAmount'] + resdata[i]['TaxAmount'] + resdata[i]['Others'];
                     }
@@ -204,7 +207,7 @@
                         var uacs_total = 0;
                         var uacs_disbursment = 0;
                         for (var i = 0; i < resdata.length; i++) {
-                            tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseTitle'], numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']), numberWithCommas(resdata[i]['NetAmount']), numberWithCommas(resdata[i]['TaxAmount']), numberWithCommas(resdata[i]['Others']));
+                            tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseTitle'],resdata[i]['ExpenseCode'] ,numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']), numberWithCommas(resdata[i]['NetAmount']), numberWithCommas(resdata[i]['TaxAmount']), numberWithCommas(resdata[i]['Others']));
                             uacs_total += resdata[i]['Amount'];
                             uacs_disbursment += resdata[i]['NetAmount'] + resdata[i]['TaxAmount'] + resdata[i]['Others'];
                         }

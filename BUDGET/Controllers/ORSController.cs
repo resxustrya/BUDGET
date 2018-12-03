@@ -294,6 +294,7 @@ namespace BUDGET
                                 ExpenseTitle = list.uacs,
                                 Amount = list.amount,
                                 Disbursement = list.NetAmount + list.TaxAmount + list.Others,
+                                ExpenseCode = uacs.Code,
                                 NetAmount = list.NetAmount,
                                 TaxAmount = list.TaxAmount,
                                 Others = list.Others
@@ -476,6 +477,11 @@ namespace BUDGET
             db.ors_head_request.Remove(ors_head);
             db.SaveChanges();
             return RedirectToAction("ors_head_request_office");
+        }
+        [HttpGet]
+        public ActionResult GetOrsDate(String uacs)
+        {
+            return View();
         }
     }
 }
