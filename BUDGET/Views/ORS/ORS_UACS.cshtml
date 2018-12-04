@@ -1,4 +1,5 @@
 ﻿
+
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -32,6 +33,22 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-12">
+                    <table class="table">
+                        <tr>
+                            <td width="1%"><strong>Total Amount</strong></td>
+                            <td width="1%"><strong>:</strong></td>
+                            <td width="20%"><strong id="uacs_total"></strong></td>
+                        </tr>
+                        <tr>
+                            <td width="1%"><strong>Dibursements</strong></td>
+                            <td width="1%"><strong>:</strong></td>
+                            <td width="20%"><strong id="uacs_disbursment"></strong></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
                 <!--
                 FOR THE FLIP CARD    
                -->
@@ -39,13 +56,28 @@
                     <div class="card-container manual-flip">
                         <div class="card">
                             <div class="front">
-                                <div class="col-md-12">
-                                    <div id="table_uacs" style="width: 100%; height:400px; overflow: hidden;margin-top:10px;" data-originalstyle="width: 90%; height: 200px; overflow: hidden" data-save="@Url.Action("SaveOrsObligation","ORS")" data-get_fund_source_uacs="@Url.Action("GetFundSourceUACS","ORS",new { ID = ViewBag.ors_obligation })" data-get="@Url.Action("GetORSUacs","ORS", new { ID = ViewBag.ors_obligation })" data-ors_obligation="@ViewBag.ors_obligation" data-delete="@Url.Action("DeleteUacs","ORS")" data-ors_date="@Url.Action("GetOrsDate","ORS")"></div>
+                                <div class="content">
+                                    <div class="main">
+                                        <div id="table_uacs" style="width: 100%; height:250px; overflow: hidden;margin-top:10px;" data-originalstyle="width: 90%; height: 200px; overflow: hidden" data-save="@Url.Action("SaveOrsObligation","ORS")" data-get_fund_source_uacs="@Url.Action("GetFundSourceUACS","ORS",new { ID = ViewBag.ors_obligation })" data-get="@Url.Action("GetORSUacs","ORS", new { ID = ViewBag.ors_obligation })" data-ors_obligation="@ViewBag.ors_obligation" data-delete="@Url.Action("DeleteUacs","ORS")" data-ors_date="@Url.Action("GetOrsDateView","ORS")"></div>
+                                    </div>
+                                    <div class="card_footer">
+                                        <button type="button" class="btn btn-success btn-lg" id="submit_ors_save"> <i class="glyphicon glyphicon-save"></i> Save</button>
+                                        <button type="button" class="btn btn-default btn-lg" data-dismiss="modal" id="ors_uacs_close"><i class="glyphicon glyphicon-remove"></i> Close</button>
+                                    </div>
                                 </div>
                             </div> <!-- end front panel -->
                             <div class="back">
-                                <div class="col-md-12" id="ors_date_obligation">
-                                    <div id="uacs_ors_date" style="width: 100%; height:400px; overflow: hidden;margin-top:10px;" data-originalstyle="width: 90%; height: 200px; overflow: hidden" data-save="@Url.Action("SaveOrsObligation","ORS")" data-get_fund_source_uacs="@Url.Action("GetFundSourceUACS","ORS",new { ID = ViewBag.ors_obligation })" data-get="@Url.Action("GetORSUacs","ORS", new { ID = ViewBag.ors_obligation })" data-ors_obligation="@ViewBag.ors_obligation" data-delete="@Url.Action("DeleteUacs","ORS")" ></div>
+                                <div class="content">
+                                    <div class="main" id="ors_date_obligation">
+
+                                    </div>
+                                    <div class="card_footer">
+                                        <button type="button" class="btn btn-success btn-lg" id="submit_ors_save"> <i class="glyphicon glyphicon-save"></i> Save</button>
+                                        <button type="button" class="btn btn-default btn-lg" onclick="rotateCard();"><i class="glyphicon glyphicon-arrow-left"></i> Back</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12" >
+                                    
                                 </div>
                             </div> <!-- end back panel -->
                         </div> <!-- end card -->
@@ -53,27 +85,12 @@
                 </div> <!-- end col sm 3 -->
                 <!--
                 //END OF FLIP CARD    
-                
                 -->
             </div>
-            <div class="row">
-                <table class="table">
-                    <tr>
-                        <td width="1%"><p style="font-size:1.2em;margin-top:5px;">Total Amount</p></td>
-                        <td width="1%"><p style="font-size:1.2em;margin-top:5px;">:</p></td>
-                        <td width="20%"><p style="font-size:1.2em;margin-top:5px;" id="uacs_total"></p></td>
-                    </tr>
-                    <tr>
-                        <td width="1%"><p style="font-size:1.2em;margin-bottom:0px;">Dibursements</p></td>
-                        <td width="1%"><p style="font-size:1.2em;margin-bottom:0px;">:</p></td>
-                        <td width="20%"><p style="font-size:1.2em;margin-bottom:0px;" id="uacs_disbursment" ></p></td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </div>
+        </div>    
+    </div> 
 </div>
-
+    
 <script>
     (function () {
         var fundsource_uacs = [];
@@ -86,7 +103,7 @@
             startRows: 50,
             startCols: 8,
             rowHeaders: true,
-            colWidths: [1, 350,200,200, 200,200,200,200],
+            colWidths: [1, 350,100,200, 200,200,200,200],
             stretchH: 'all',
             colHeaders: true,
             filters: true,
@@ -100,9 +117,11 @@
                             var fromRow = Math.min(selection.from.row, selection.to.row);
                             var tempdata = this.getData();
                             var uacs = tempdata[fromRow][1];
+                            var ors_id = $("#table_uacs").data('ors_obligation');
+                            var code = tempdata[fromRow][2];
                             rotateCard();
-                            $.get($("#table_uacs").data('ors_date'), function (resdata) {
-
+                            $.get($("#table_uacs").data('ors_date') + "?uacs=" + uacs + "&ors_id=" + ors_id + "&code=" + code , function (resdata) {
+                                $("#ors_date_obligation").html(resdata);
                             });
                         }
                     }, "row_below": {}, "remove_row": {}
@@ -112,13 +131,13 @@
                 autoInsertRow: false,
             },
             viewportColumnRenderingOffset: 20,
-            colHeaders: ['ID', 'Expense Title','Expense Code','Amount','Disbursement','Net Amt.','Tax Amt.','Others'],
+            colHeaders: ['ID', 'Expense Title','Code','Amount','Disbursement','Net Amt.','Tax Amt.','Others'],
             columns: [
                 {}, { type: 'autocomplete', source: fundsource_uacs, strick: true, allowInvalid: false }, {},{}, {}, {}, {}, {}
             ],
             cells: function (r, c, prop) {
                 var cellProperties = {};
-                if (c === 0 || c == 1 || c === 4  @(User.IsInRole("Cashier") ? " || c === 0 || c === 1 || c === 2" : "") ) cellProperties.readOnly = true;
+                if (c === 0 || c == 2 || c === 4  @(User.IsInRole("Cashier") ? " || c === 0 || c === 1 || c === 2" : "") ) cellProperties.readOnly = true;
                 return cellProperties;
             },
 
@@ -127,7 +146,6 @@
                     var items = this.getData();
                     var row_item = items[index];
                     var url = $("#table_uacs").data('delete');
-
                     var data = {
                         "ID": row_item[0]
                     };
@@ -189,10 +207,11 @@
                     expense[i] = {
                         "ID": tabledata[i][0],
                         "expense_title": tabledata[i][1],
-                        "amount": tabledata[i][2],
-                        "NetAmount": tabledata[i][4],
-                        "TaxAmount": tabledata[i][5],
-                        "Others" : tabledata[i][6]
+                        "expense_code" : tabledata[i][2],
+                        "amount": tabledata[i][3],
+                        "NetAmount": tabledata[i][5],
+                        "TaxAmount": tabledata[i][6],
+                        "Others" : tabledata[i][7]
                     };
                 }
                 var data = {

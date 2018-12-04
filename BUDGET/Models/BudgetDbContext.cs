@@ -27,6 +27,7 @@ namespace BUDGET
         public DbSet<Notifications> notifications { get; set; }
         public DbSet<UACS_SubAllotment> uacs_suballotment { get; set; }
         public DbSet<UACS_SUB_CODES> uacs_sub_codes { get; set; }
+        public DbSet<OrsDateEntry> ors_date_entry { get; set; }
 
     }
 }

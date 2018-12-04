@@ -534,6 +534,10 @@
     <Compile Include="Migrations\201811290254190_remove_table2.Designer.cs">
       <DependentUpon>201811290254190_remove_table2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812040714306_add_new_table.cs" />
+    <Compile Include="Migrations\201812040714306_add_new_table.Designer.cs">
+      <DependentUpon>201812040714306_add_new_table.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -546,6 +550,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Notifications.cs" />
     <Compile Include="Models\ORS.cs" />
+    <Compile Include="Models\OrsDateEntry.cs" />
     <Compile Include="Models\ORS_EXPENSE_CODES.cs" />
     <Compile Include="Models\ors_head_request.cs" />
     <Compile Include="Models\PagingInfo.cs" />
@@ -864,6 +869,7 @@
     <Content Include="Views\BudgetSummary\Index.cshtml" />
     <Content Include="Views\UserAccount\Update.cshtml" />
     <Content Include="Views\UserAccount\ResetPassword.cshtml" />
+    <Content Include="Views\ORS\GetOrsDateView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1108,6 +1114,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811290254190_remove_table2.resx">
       <DependentUpon>201811290254190_remove_table2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812040714306_add_new_table.resx">
+      <DependentUpon>201812040714306_add_new_table.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

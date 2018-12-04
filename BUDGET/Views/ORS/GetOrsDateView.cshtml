@@ -1,0 +1,67 @@
+﻿
+
+<div id="uacs_ors_date" style="width: 100%; height:250px; overflow: hidden;margin-top:10px;" data-originalstyle="width: 90%; height: 200px; overflow: hidden" data-expense_title="@ViewBag.uacs" data-expense_code="@ViewBag.code" data-ors_id="@ViewBag.ors_id" data-get="@Url.Action("GetOrsDateJson","ORS")" data-delete="@Url.Action("DeleteOrsDate","ORS")"></div>
+<script>
+    (function () {
+        
+        var container_uacs = document.getElementById("uacs_ors_date");
+        var table_uacs;
+        var valid = true;
+
+        table_uacs = new Handsontable(container_uacs, {
+            startRows: 10,
+            startCols: 7,
+            rowHeaders: true,
+            colWidths: [1, 200,200,200, 200,200,200],
+            stretchH: 'all',
+            colHeaders: true,
+            filters: true,
+            contextMenu: ['row_above', 'row_below', 'remove_row', 'copy'],
+            fillHandle: {
+                autoInsertRow: false,
+            },
+            viewportColumnRenderingOffset: 20,
+            colHeaders: ['ID', 'Date','Amount','Disbursement','Net Amt.','Tax Amt.','Others'],
+            columns: [
+                {},
+                {
+                    type: 'date',
+                    dateFormat: 'MM/DD/YYYY',
+                    correctFormat: true,
+                    defaultDate: Date.now()
+                }, {}, {}, {}, {}, {}
+            ],
+            cells: function (r, c, prop) {
+                var cellProperties = {};
+                if (c === 0 || c === 4  @(User.IsInRole("Cashier") ? " || c === 0 || c === 1 || c === 2" : "") ) cellProperties.readOnly = true;
+                return cellProperties;
+            },
+
+            beforeRemoveRow: function (index, column) {
+                if (confirm("Are you sure you want to delete this item") == true) {
+                    var items = this.getData();
+                    var row_item = items[index];
+                    var url = $("#uacs_ors_date").data('delete');
+
+                    var data = {
+                        "ID": row_item[0]
+                    };
+
+                    $.post(url, data, function (resdata) {
+                    });
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+        $(document).ready(function () {
+            
+        });
+
+        $("#submit_ors_save").click(function () {
+            
+        });
+    })();
+
+</script>

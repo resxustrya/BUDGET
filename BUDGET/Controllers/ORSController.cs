@@ -479,9 +479,18 @@ namespace BUDGET
             return RedirectToAction("ors_head_request_office");
         }
         [HttpGet]
-        public ActionResult GetOrsDate(String uacs)
+        public ActionResult GetOrsDateView(String uacs, Int32 ors_id,String code)
         {
-            return View();
+            ViewBag.uacs = uacs;
+            ViewBag.ors_id = ors_id;
+            ViewBag.code = code;
+            return PartialView();
+        }
+        [HttpGet]
+        public JsonResult GetOrsDateJson(String uacs, Int32 ors_id, String code)
+        {
+            var ors_date_entry = (from list in db.ors_date_entry where list.ExpenseTitle == code && list.ors_id == ors_id && list.ExpenseCode == code select list).ToList();
+            return Json(ors_date_entry, JsonRequestBehavior.AllowGet);
         }
     }
 }
