@@ -492,5 +492,9 @@ namespace BUDGET
             var ors_date_entry = (from list in db.ors_date_entry where list.ExpenseTitle == code && list.ors_id == ors_id && list.ExpenseCode == code select list).ToList();
             return Json(ors_date_entry, JsonRequestBehavior.AllowGet);
         }
+        public String SaveOrsDAteJson(FormCollection collection)
+        {
+            return "";
+        }
     }
 }
