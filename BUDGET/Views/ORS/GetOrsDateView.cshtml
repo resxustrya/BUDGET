@@ -1,15 +1,18 @@
 ﻿
 
-<div id="uacs_ors_date" style="width: 100%; height:250px; overflow: hidden;margin-top:10px;" data-originalstyle="width: 90%; height: 200px; overflow: hidden" data-expense_title="@ViewBag.uacs" data-expense_code="@ViewBag.code" data-ors_id="@ViewBag.ors_id" data-get="@Url.Action("GetOrsDateJson","ORS")" data-delete="@Url.Action("DeleteOrsDate","ORS")"></div>
+<div id="uacs_ors_date" style="width: 100%; height:250px; overflow: hidden;margin-top:10px;" data-originalstyle="width: 90%; height: 200px; overflow: hidden" data-expense_title="@ViewBag.uacs" data-expense_code="@ViewBag.code" data-ors_id="@ViewBag.ors_id" data-get="@Url.Action("GetOrsDateJson","ORS")" data-delete="@Url.Action("DeleteOrsDate","ORS")" data-save="@Url.Action("SaveOrsDAteJson","ORS")"></div>
 <script>
     (function () {
-        
         var container_uacs = document.getElementById("uacs_ors_date");
         var table_uacs;
         var valid = true;
-        var 
+        var ors_id = $("#uacs_ors_date").data('ors_id');
+        var expense_title = $("#uacs_ors_date").data('expense_title');
+        var save_url = $("#uacs_ors_date").data('save');
+        var expense_code = $("#uacs_ors_date").data('expense_code');
+        var get_url = $("#uacs_ors_date").data('get');
         table_uacs = new Handsontable(container_uacs, {
-            startRows: 10,
+            startRows: 1,
             startCols: 7,
             rowHeaders: true,
             colWidths: [1, 200,200,200, 200,200,200],
@@ -33,7 +36,7 @@
             ],
             cells: function (r, c, prop) {
                 var cellProperties = {};
-                if (c === 0 || c === 4  @(User.IsInRole("Cashier") ? " || c === 0 || c === 1 || c === 2" : "") ) cellProperties.readOnly = true;
+                if (c === 0 || c === 3  @(User.IsInRole("Cashier") ? " || c === 0 || c === 1 || c === 2" : "") ) cellProperties.readOnly = true;
                 return cellProperties;
             },
 
@@ -42,7 +45,6 @@
                     var items = this.getData();
                     var row_item = items[index];
                     var url = $("#uacs_ors_date").data('delete');
-
                     var data = {
                         "ID": row_item[0]
                     };
@@ -56,11 +58,45 @@
             }
         });
         $(document).ready(function () {
-            
+            load_ors_date();
         });
 
-        $("#submit_ors_save").click(function () {
+        $("#ors_save_date").click(function () {
+            var tabledata = table_uacs.getData();
+            var data_ors = [];
+            for (var i = 0; i < tabledata.length; i++)
+            {
+                data_ors[i] = {
+                    "ID": tabledata[i][0],
+                    "Date": tabledata[i][1],
+                    "Amount": tabledata[i][2],
+                    "NetAmount": tabledata[i][4],
+                    "TaxAmount": tabledata[i][5],
+                    "Others": tabledata[i][6]
+                };
+                console.log(data_ors);
+            }
             
+            var post_data = {
+                data: JSON.stringify(data_ors),
+                ors_id: ors_id,
+                expense_code: expense_code,
+                expense_title: expense_title
+            };
+            $.post(save_url, post_data, function (res) {
+                load_ors_date();
+            });
         });
     })();
+    function load_ors_date()
+    {
+        var data = {
+            ors_id : ors_id,
+            expense_code : expense_code,
+            expense_title : expense_title
+        };
+        $.get(get_url, data, function (res) {
+
+        });
+    }
 </script>

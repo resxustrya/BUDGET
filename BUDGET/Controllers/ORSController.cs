@@ -489,12 +489,61 @@ namespace BUDGET
         [HttpGet]
         public JsonResult GetOrsDateJson(String uacs, Int32 ors_id, String code)
         {
-            var ors_date_entry = (from list in db.ors_date_entry where list.ExpenseTitle == code && list.ors_id == ors_id && list.ExpenseCode == code select list).ToList();
+            var ors_date_entry = (from list in db.ors_date_entry
+                                  where list.ExpenseTitle == code && list.ors_id == ors_id && list.ExpenseCode == code
+                                  select new 
+                                  {
+                                      ID = list.ID,
+                                      ExpeseCode = list.ExpenseCode,
+                                      ExpenseTitle = list.ExpenseTitle,
+                                      Amount = list.amount,
+                                      TaxAmount = list.TaxAmount,
+                                      NetAmount = list.NetAmount,
+                                      Others = list.Others,
+                                      Disbursement = list.TaxAmount + list.NetAmount + list.Others,
+                                  }).ToList();
             return Json(ors_date_entry, JsonRequestBehavior.AllowGet);
         }
-        public String SaveOrsDAteJson(FormCollection collection)
+        public void SaveOrsDAteJson(FormCollection collection)
         {
-            return "";
+            Int32 ors_id = Convert.ToInt32(collection.Get("ors_id"));
+            String expense_title = collection.Get("expense_title");
+            String expense_code = collection.Get("expense_code");
+            List<Object> list = JsonConvert.DeserializeObject<List<Object>>(collection.Get("data"));
+
+            foreach (Object s in list)
+            {
+                try
+                {
+                    dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
+                    Int32 id = Convert.ToInt32(sb.ID);
+                    var ors_date = db.ors_date_entry.Where(p => p.ID == id).FirstOrDefault();
+                    ors_date.Date = Convert.ToDateTime(sb.Date);
+                    try { ors_date.amount = Convert.ToDouble(sb.Amount); } catch { ors_date.amount = 0.00; }
+                    try { ors_date.NetAmount = Convert.ToDouble(sb.NetAmount); } catch { ors_date.NetAmount = 0.00; }
+                    try { ors_date.TaxAmount = Convert.ToDouble(sb.TaxAmount); } catch { ors_date.TaxAmount = 0.00; }
+                    try { ors_date.Others = Convert.ToDouble(sb.Others); } catch { ors_date.Others = 0.00; }
+                }
+                catch (Exception ex)
+                {
+                    dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
+                    try
+                    {
+                        OrsDateEntry ors_date = new OrsDateEntry();
+                        ors_date.ors_id = ors_id;
+                        ors_date.ExpenseCode = expense_code;
+                        ors_date.ExpenseTitle = expense_title;
+                        ors_date.Date = Convert.ToDateTime(sb.Date);
+                        try { ors_date.amount = Convert.ToDouble(sb.Amount); } catch { ors_date.amount = 0.00; }
+                        try { ors_date.NetAmount = Convert.ToDouble(sb.NetAmount); } catch { ors_date.NetAmount = 0.00; }
+                        try { ors_date.TaxAmount = Convert.ToDouble(sb.TaxAmount); } catch { ors_date.TaxAmount = 0.00; }
+                        try { ors_date.Others = Convert.ToDouble(sb.Others); } catch { ors_date.Others = 0.00; }
+                        db.ors_date_entry.Add(ors_date);
+                    }
+                    catch (Exception innerex) { }
+                }
+            }
+            db.SaveChanges();
         }
     }
 }
