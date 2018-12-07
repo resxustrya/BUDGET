@@ -538,6 +538,10 @@
     <Compile Include="Migrations\201812040714306_add_new_table.Designer.cs">
       <DependentUpon>201812040714306_add_new_table.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812070124425_added_column4.cs" />
+    <Compile Include="Migrations\201812070124425_added_column4.Designer.cs">
+      <DependentUpon>201812070124425_added_column4.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -1117,6 +1121,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812040714306_add_new_table.resx">
       <DependentUpon>201812040714306_add_new_table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812070124425_added_column4.resx">
+      <DependentUpon>201812070124425_added_column4.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

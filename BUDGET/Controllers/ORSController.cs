@@ -487,20 +487,19 @@ namespace BUDGET
             return PartialView();
         }
         [HttpGet]
-        public JsonResult GetOrsDateJson(String uacs, Int32 ors_id, String code)
+        public JsonResult GetOrsDateJson(Int32 ors_id, String expense_code, String expense_title)
         {
             var ors_date_entry = (from list in db.ors_date_entry
-                                  where list.ExpenseTitle == code && list.ors_id == ors_id && list.ExpenseCode == code
-                                  select new 
+                                  where list.ExpenseTitle == expense_title && list.ors_id == ors_id && list.ExpenseCode == expense_code
+                                  select new
                                   {
                                       ID = list.ID,
-                                      ExpeseCode = list.ExpenseCode,
-                                      ExpenseTitle = list.ExpenseTitle,
+                                      Date = list.StringDate,
                                       Amount = list.amount,
                                       TaxAmount = list.TaxAmount,
                                       NetAmount = list.NetAmount,
                                       Others = list.Others,
-                                      Disbursement = list.TaxAmount + list.NetAmount + list.Others,
+                                      Disbursement = list.TaxAmount + list.NetAmount + list.Others
                                   }).ToList();
             return Json(ors_date_entry, JsonRequestBehavior.AllowGet);
         }
@@ -519,6 +518,7 @@ namespace BUDGET
                     Int32 id = Convert.ToInt32(sb.ID);
                     var ors_date = db.ors_date_entry.Where(p => p.ID == id).FirstOrDefault();
                     ors_date.Date = Convert.ToDateTime(sb.Date);
+                    ors_date.StringDate = sb.Date;
                     try { ors_date.amount = Convert.ToDouble(sb.Amount); } catch { ors_date.amount = 0.00; }
                     try { ors_date.NetAmount = Convert.ToDouble(sb.NetAmount); } catch { ors_date.NetAmount = 0.00; }
                     try { ors_date.TaxAmount = Convert.ToDouble(sb.TaxAmount); } catch { ors_date.TaxAmount = 0.00; }
@@ -534,6 +534,7 @@ namespace BUDGET
                         ors_date.ExpenseCode = expense_code;
                         ors_date.ExpenseTitle = expense_title;
                         ors_date.Date = Convert.ToDateTime(sb.Date);
+                        ors_date.StringDate = sb.Date;
                         try { ors_date.amount = Convert.ToDouble(sb.Amount); } catch { ors_date.amount = 0.00; }
                         try { ors_date.NetAmount = Convert.ToDouble(sb.NetAmount); } catch { ors_date.NetAmount = 0.00; }
                         try { ors_date.TaxAmount = Convert.ToDouble(sb.TaxAmount); } catch { ors_date.TaxAmount = 0.00; }

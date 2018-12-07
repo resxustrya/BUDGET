@@ -87,16 +87,26 @@
                 load_ors_date();
             });
         });
+        function load_ors_date() {
+            var data = {
+                ors_id: ors_id,
+                expense_code: expense_code,
+                expense_title: expense_title
+            };
+            $.get(get_url, data, function (resdata) {
+                var tabledata = [];
+                if (resdata.length > 0) {
+                    for (var i = 0; i < resdata.length; i++) {
+                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Date'],numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']), numberWithCommas(resdata[i]['NetAmount']), numberWithCommas(resdata[i]['TaxAmount']), numberWithCommas(resdata[i]['Others']));
+                    }
+                } else {
+                    tabledata[0] = new Array(null,null,null,null,null,null,null);
+                }
+                
+                table_uacs.loadData(tabledata);
+            });
+        }
     })();
-    function load_ors_date()
-    {
-        var data = {
-            ors_id : ors_id,
-            expense_code : expense_code,
-            expense_title : expense_title
-        };
-        $.get(get_url, data, function (res) {
 
-        });
-    }
+    
 </script>

@@ -13,6 +13,7 @@ namespace BUDGET
         public String ExpenseCode { get; set; }
         public Int32 ors_id { get; set; }
         public DateTime Date { get; set; }
+        public String StringDate { get; set; }
         public Double amount { get; set; }
         public Double NetAmount { get; set; }
         public Double TaxAmount { get; set; }

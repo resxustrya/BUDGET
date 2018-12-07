@@ -8,6 +8,8 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using System.Globalization;
 using System.Threading;
+using System.Data.Entity;
+
 namespace BUDGET
 {
     public class MvcApplication : System.Web.HttpApplication
