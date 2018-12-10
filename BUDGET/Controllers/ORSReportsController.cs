@@ -169,15 +169,15 @@ namespace BUDGET.Controllers
                             {
                                 uacs = expensecodes.Code,
                                 amount = uacs_list.amount,
-                                net_amt = uacs_list.NetAmount,
-                                tax_amt = uacs_list.TaxAmount,
-                                others = uacs_list.Others
+                                ExpenseTitle = uacs_list.uacs,
+                                disbursement = uacs_list.NetAmount + uacs_list.TaxAmount + uacs_list.Others + (from ors_date in db.ors_date_entry where ors_date.ors_id == ors.ID && ors_date.ExpenseTitle == uacs_list.uacs select new { disbursements = ors_date.NetAmount + ors_date.TaxAmount + ors_date.Others }).FirstOrDefault().disbursements
                             }).ToList();
+
 
             var FundSourceDetails = (from details in db.ors
                                      join allotment in db.allotments on details.allotment equals allotment.ID
                                      join ors_fundsource in db.fsh on allotment.ID.ToString() equals ors_fundsource.allotment
-                                     where details.ID == ID &&
+                                     where details.ID == ID && 
                                      ors_fundsource.Code == ors.FundSource
                                      select new
                                      {
@@ -185,12 +185,13 @@ namespace BUDGET.Controllers
                                          ResponsibilityNumber = ors_fundsource.Responsibility_Number
                                      }).FirstOrDefault();
 
+
             foreach (var u in ors_uacs)
             {
                 uacs += u.uacs + "\n";
                 str_amt += u.amount.ToString("N", new CultureInfo("en-US")) + "\n";
                 total_amt += u.amount;
-                disbursements += u.net_amt + u.tax_amt + u.others;
+                disbursements += u.disbursement;
             }
 
             
