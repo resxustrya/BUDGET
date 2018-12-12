@@ -31,25 +31,14 @@ namespace BUDGET.Controllers
             String date_from = collection.Get("date_from");
             String date_to = collection.Get("date_to");
             FileStreamResult fsResult = null;
-            if (collection.Get("format") == "pdf")
-            {
-                rpt.generate_saob(date_from, date_to);
-                var fileStream = new FileStream(Server.MapPath("~/rpt_saob/saob.pdf"),
-                                         FileMode.Open,
-                                         FileAccess.Read
-                                       );
-
-                fsResult = new FileStreamResult(fileStream, "application/pdf");
-            }
-            else
-            {
-                var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                SaobExcel saobexcel = new SaobExcel();
-                //saobexcel.ExcelEPP();
-                saobexcel.CreateExcel(date_from,date_to);
-                var filesStream = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB2.xlsx"), FileMode.Open);
-                fsResult = new FileStreamResult(filesStream, contentType);
-            }
+            
+            var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            SaobExcel saobexcel = new SaobExcel();
+            //saobexcel.ExcelEPP();
+            saobexcel.CreateExcel(date_from,date_to);
+            var filesStream = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB2.xlsx"), FileMode.Open);
+            fsResult = new FileStreamResult(filesStream, contentType);
+            
             return fsResult;
         }
 

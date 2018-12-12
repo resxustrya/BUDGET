@@ -17,7 +17,7 @@ namespace BUDGET
         public ActionResult Index()
         {
             HomeViewModel model = new HomeViewModel();
-            model.notifications = db.notifications.ToList();
+            model.notifications = (from n in db.notifications where n.DateAdded <= DateTime.Now && n.Year == GlobalData.Year orderby n.DateAdded descending select n).ToList();
             model.allotments = db.allotments.Where(p => p.year == GlobalData.Year && p.active == 1).ToList();
             return View(model);
         }

@@ -40,11 +40,8 @@ namespace BUDGET
             db.allotments.Add(allotments);
             db.SaveChanges();
 
-            db.SaveChanges();
-            
             return RedirectToAction("Index");
         }
-
 
         public ActionResult EditBudget(String ID)
         {

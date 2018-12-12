@@ -542,6 +542,10 @@
     <Compile Include="Migrations\201812070124425_added_column4.Designer.cs">
       <DependentUpon>201812070124425_added_column4.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812120210017_add_year_to_notification.cs" />
+    <Compile Include="Migrations\201812120210017_add_year_to_notification.Designer.cs">
+      <DependentUpon>201812120210017_add_year_to_notification.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -1124,6 +1128,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812070124425_added_column4.resx">
       <DependentUpon>201812070124425_added_column4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812120210017_add_year_to_notification.resx">
+      <DependentUpon>201812120210017_add_year_to_notification.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

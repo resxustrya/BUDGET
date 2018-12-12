@@ -464,6 +464,7 @@ namespace BUDGET
 
                 }
 
+
                 allotment_received_grand_total += allotment_received_sub_total;
                 after_realignment_grand_total += after_realignment_sub_total;
                 current_month_grand_total += current_month_sub_total;

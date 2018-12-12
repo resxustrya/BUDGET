@@ -148,7 +148,6 @@ namespace BUDGET
             return Json(orsps, JsonRequestBehavior.AllowGet);
         }
 
-
         [Route("save/ors/ps",Name = "save_ors_ps")]
         [CustomAuthorize(Roles = "Admin,Encoder")]
         public JsonResult SaveORPS(String data)
@@ -156,7 +155,6 @@ namespace BUDGET
             List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
             Int32 id = 0;
             Int32 ors_allotment = Convert.ToInt32(GlobalData.ors_allotment);
-            Int32 rowCount = 0;
             String DateFormat = "yyyy-MM-dd HH:mm:ss";
             foreach (Object s in list)
             {
@@ -236,6 +234,7 @@ namespace BUDGET
                                     notifications.User = User.Identity.GetUserName();
                                     notifications.Action = " added a new ors obligation in";
                                     notifications.DateAdded = DateTime.Now;
+                                    notifications.Year = GlobalData.Year;
                                     db.notifications.Add(notifications);
                                     db.SaveChanges();
                                 }

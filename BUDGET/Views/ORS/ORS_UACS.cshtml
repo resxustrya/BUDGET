@@ -103,7 +103,7 @@
             startRows: 50,
             startCols: 8,
             rowHeaders: true,
-            colWidths: [1, 350,100,200, 200,200,200,200],
+            colWidths: [1, 350,100,1, 200,200,200,200],
             stretchH: 'all',
             colHeaders: true,
             filters: true,
@@ -137,7 +137,7 @@
             ],
             cells: function (r, c, prop) {
                 var cellProperties = {};
-                if (c === 0 || c == 2 || c === 4  @(User.IsInRole("Cashier") ? " || c === 0 || c === 1 || c === 2" : "") ) cellProperties.readOnly = true;
+                if (c === 0 || c == 2 || c === 3 || c === 4  @(User.IsInRole("Cashier") ? " || c === 0 || c === 1 || c === 2 || c === 3" : "") ) cellProperties.readOnly = true;
                 return cellProperties;
             },
 

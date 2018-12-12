@@ -161,7 +161,6 @@ namespace BUDGET.Controllers
             Double disbursements = 0.00;
 
 
-
             var ors_uacs = (from uacs_list in db.ors_expense_codes
                             join expensecodes in db.uacs on uacs_list.uacs equals expensecodes.Title
                             where uacs_list.ors_obligation == ors.ID
@@ -170,7 +169,7 @@ namespace BUDGET.Controllers
                                 uacs = expensecodes.Code,
                                 amount = uacs_list.amount,
                                 ExpenseTitle = uacs_list.uacs,
-                                disbursement = uacs_list.NetAmount + uacs_list.TaxAmount + uacs_list.Others + (from ors_date in db.ors_date_entry where ors_date.ors_id == ors.ID && ors_date.ExpenseTitle == uacs_list.uacs select new { disbursements = ors_date.NetAmount + ors_date.TaxAmount + ors_date.Others }).FirstOrDefault().disbursements
+                                disbursement = uacs_list.NetAmount + uacs_list.TaxAmount + uacs_list.Others + (from ors_date in db.ors_date_entry where ors_date.ors_id == ors.ID && ors_date.ExpenseTitle == uacs_list.uacs select ors_date.NetAmount + ors_date.TaxAmount + ors_date.Others ).DefaultIfEmpty(0).Sum(),
                             }).ToList();
 
 
@@ -189,13 +188,13 @@ namespace BUDGET.Controllers
             foreach (var u in ors_uacs)
             {
                 uacs += u.uacs + "\n";
-                str_amt += u.amount.ToString("N", new CultureInfo("en-US")) + "\n";
-                total_amt += u.amount;
+                str_amt += u.disbursement.ToString("N", new CultureInfo("en-US")) + "\n";
+                total_amt += u.disbursement;
                 disbursements += u.disbursement;
             }
 
             
-            table_row_6.AddCell(new PdfPCell(new Paragraph("\n" + FundSourceDetails.ResponsibilityNumber + "\n\n" + ors.FundSource , table_row_5_font)) { Border = 13, FixedHeight = 150f, HorizontalAlignment = Element.ALIGN_CENTER });
+            table_row_6.AddCell(new PdfPCell(new Paragraph("\n" + ors.FundSource  + "\n\n" + FundSourceDetails.ResponsibilityNumber, table_row_5_font)) { Border = 13, FixedHeight = 150f, HorizontalAlignment = Element.ALIGN_CENTER });
             table_row_6.AddCell(new PdfPCell(new Paragraph("\n" + ors.Particulars, table_row_5_font)) { Border = 13, FixedHeight = 150f, HorizontalAlignment = Element.ALIGN_LEFT });
             table_row_6.AddCell(new PdfPCell(new Paragraph("\n" + FundSourceDetails.PrexcCode, table_row_5_font)) { Border = 13, FixedHeight = 150f, HorizontalAlignment = Element.ALIGN_CENTER });
             table_row_6.AddCell(new PdfPCell(new Paragraph("\n" + uacs, table_row_5_font)) { Border = 13, FixedHeight = 150f, HorizontalAlignment = Element.ALIGN_CENTER, PaddingBottom = 15f });
@@ -356,6 +355,9 @@ namespace BUDGET.Controllers
             table_row_12.WidthPercentage = 100f;
             table_row_12.SetWidths(new float[] { 12, 20, 28, 15, 15, 10, 20 });
 
+            Double totals = 0.00;
+            totals = disbursements;
+
             table_row_12.AddCell(new PdfPCell(new Paragraph(ors.Date.ToShortDateString(), FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100, Border = 13 });
             table_row_12.AddCell(new PdfPCell(new Paragraph("Obligation", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100, Border = 13 });
             table_row_12.AddCell(new PdfPCell(new Paragraph(rpt_ors.GetOrsCode(ors.allotment.ToString()) + " - 01101101 - " + ors.Date.ToString("yyyy-MM") + " - " + ors.Row, FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100 });
@@ -370,7 +372,7 @@ namespace BUDGET.Controllers
             table_row_13.WidthPercentage = 100f;
             table_row_13.SetWidths(new float[] { 12, 20, 28, 15, 15, 10, 20 });
 
-
+            
             table_row_13.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, Border = 12 });
             table_row_13.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, Border = 12 });
             table_row_13.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
@@ -389,13 +391,12 @@ namespace BUDGET.Controllers
             table_row_14.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, Border = 14 });
             table_row_14.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, Border = 14 });
             table_row_14.AddCell(new PdfPCell(new Paragraph("Totals", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
-            table_row_14.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
+            table_row_14.AddCell(new PdfPCell(new Paragraph(totals > 0 ? totals.ToString("N", new CultureInfo("en-US")) : "", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
             table_row_14.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
             table_row_14.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
             table_row_14.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
 
             doc.Add(table_row_14);
-
 
             try
             {
@@ -785,6 +786,8 @@ namespace BUDGET.Controllers
                 table_row_12.WidthPercentage = 100f;
                 table_row_12.SetWidths(new float[] { 12, 20, 28, 15, 15, 10, 20 });
 
+                Double totals = 0.00;
+                totals = disbursements;
                 table_row_12.AddCell(new PdfPCell(new Paragraph(ors.Date.ToShortDateString(), FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100, Border = 13 });
                 table_row_12.AddCell(new PdfPCell(new Paragraph("Obligation", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100, Border = 13 });
                 table_row_12.AddCell(new PdfPCell(new Paragraph(rpt_ors.GetOrsCode(ors.allotment.ToString()) + " - 01101101 - " + ors.Date.ToString("yyyy-MM") + " - " + ors.Row, FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100 });
@@ -818,7 +821,7 @@ namespace BUDGET.Controllers
                 table_row_14.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, Border = 14 });
                 table_row_14.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, Border = 14 });
                 table_row_14.AddCell(new PdfPCell(new Paragraph("Totals", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
-                table_row_14.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
+                table_row_14.AddCell(new PdfPCell(new Paragraph("100,000.00", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
                 table_row_14.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
                 table_row_14.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
                 table_row_14.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
