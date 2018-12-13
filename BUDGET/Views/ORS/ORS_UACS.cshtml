@@ -92,154 +92,140 @@
 </div>
     
 <script>
-    (function () {
-        var fundsource_uacs = [];
-        var fundsource_uacs_url = $("#table_uacs").data('get_fund_source_uacs');
-        var container_uacs = document.getElementById("table_uacs");
-        var table_uacs;
-        var valid = true;
-        
-        table_uacs = new Handsontable(container_uacs, {
-            startRows: 50,
-            startCols: 8,
-            rowHeaders: true,
-            colWidths: [1, 350,100,1, 200,200,200,200],
-            stretchH: 'all',
-            colHeaders: true,
-            filters: true,
-            //contextMenu: ['row_above', 'row_below', 'remove_row', 'copy'],
-            contextMenu : {
-                items : {
-                    "": {
-                        name: 'Add Disbursement',
-                        callback: function (key, options) {
-                            var selection = this.getSelectedRange();
-                            var fromRow = Math.min(selection.from.row, selection.to.row);
-                            var tempdata = this.getData();
-                            var uacs = tempdata[fromRow][1];
-                            var ors_id = $("#table_uacs").data('ors_obligation');
-                            var code = tempdata[fromRow][2];
-                            rotateCard();
-                            $.get($("#table_uacs").data('ors_date') + "?uacs=" + uacs + "&ors_id=" + ors_id + "&code=" + code , function (resdata) {
-                                $("#ors_date_obligation").html(resdata);
-                            });
-                        }
-                    }, "row_below": {}, "remove_row": {}
-                }
-            },
-            fillHandle: {
-                autoInsertRow: false,
-            },
-            viewportColumnRenderingOffset: 20,
-            colHeaders: ['ID', 'Expense Title','Code','Amount','Disbursement','Net Amt.','Tax Amt.','Others'],
-            columns: [
-                {}, { type: 'autocomplete', source: fundsource_uacs, strick: true, allowInvalid: false }, {},{}, {}, {}, {}, {}
-            ],
-            cells: function (r, c, prop) {
-                var cellProperties = {};
-                if (c === 0 || c == 2 || c === 3 || c === 4  @(User.IsInRole("Cashier") ? " || c === 0 || c === 1 || c === 2 || c === 3" : "") ) cellProperties.readOnly = true;
-                return cellProperties;
-            },
-
-            beforeRemoveRow: function (index, column) {
-                if (confirm("Are you sure you want to delete this item") == true) {
-                    var items = this.getData();
-                    var row_item = items[index];
-                    var url = $("#table_uacs").data('delete');
-                    var data = {
-                        "ID": row_item[0]
-                    };
-
-                    $.post(url, data, function (resdata) {
-                    });
-                    return true;
-                } else {
-                    return false;
-                }
-            },
-            afterValidate: function (isValid, value, row, prop, source) {
-                if (!isValid) {
-                    valid = false;
-                    Lobibox.alert("warning", //AVAILABLE TYPES: "error", "info", "success", "warning"
-                    {
-                        msg: "There was an invalid data.", 
-                        title: "ORS UACS"
-                    });
-                } else { valid = true; }
-            },
-        });
-        $(document).ready(function () {
-            var url = $("#table_uacs").data('get');
-            $.get(url, function (resdata) {
-                if (resdata.length > 0) {
-                    var tabledata = [];
-                    var total;
-                    var uacs_total = 0;
-                    var uacs_disbursment = 0;
-                    for (var i = 0; i < resdata.length; i++) {
-                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseTitle'],resdata[i]['ExpenseCode'],numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']), numberWithCommas(resdata[i]['NetAmount']), numberWithCommas(resdata[i]['TaxAmount']), numberWithCommas(resdata[i]['Others']));
-                        uacs_total += resdata[i]['Amount'];
-                        uacs_disbursment += resdata[i]['NetAmount'] + resdata[i]['TaxAmount'] + resdata[i]['Others'];
+    
+    var fundsource_uacs = [];
+    var fundsource_uacs_url = $("#table_uacs").data('get_fund_source_uacs');
+    var container_uacs = document.getElementById("table_uacs");
+    var table_uacs;
+    var valid = true;
+    
+    table_uacs = new Handsontable(container_uacs, {
+        startRows: 50,
+        startCols: 8,
+        rowHeaders: true,
+        colWidths: [1, 350,100,200,200,200,200,200],
+        stretchH: 'all',
+        colHeaders: true,
+        filters: true,
+        //contextMenu: ['row_above', 'row_below', 'remove_row', 'copy'],
+        contextMenu : {
+            items : {
+                "": {
+                    name: 'Add Disbursement',
+                    callback: function (key, options) {
+                        var selection = this.getSelectedRange();
+                        var fromRow = Math.min(selection.from.row, selection.to.row);
+                        var tempdata = this.getData();
+                        var uacs = tempdata[fromRow][1];
+                        var ors_id = $("#table_uacs").data('ors_obligation');
+                        var code = tempdata[fromRow][2];
+                        rotateCard();
+                        $.get($("#table_uacs").data('ors_date') + "?uacs=" + uacs + "&ors_id=" + ors_id + "&code=" + code , function (resdata) {
+                            $("#ors_date_obligation").html(resdata);
+                        });
                     }
-                    table_uacs.loadData(tabledata);
-                    uacs_total = uacs_total > 0 ? numberWithCommas(uacs_total) : "0.00";
-                    uacs_disbursment = uacs_disbursment > 0 ? numberWithCommas(uacs_disbursment) : "0.00";
-                    $("#uacs_total").text(uacs_total);
-                    $("#uacs_disbursment").text(uacs_disbursment);
-                }
-            });
+                }, "row_below": {}, "remove_row": {}
+            }
+        },
+        fillHandle: {
+            autoInsertRow: false,
+        },
+        viewportColumnRenderingOffset: 20,
+        colHeaders: ['ID', 'Expense Title','Code','Amount','Total Disbursement','Net Amt.','Tax Amt.','Others'],
+        columns: [
+            {}, { type: 'autocomplete', source: fundsource_uacs, strick: true, allowInvalid: false }, {},{}, {}, {}, {}, {}
+        ],
+        cells: function (r, c, prop) {
+            var cellProperties = {};
+            if (c === 0 || c == 2 || c === 4  @(User.IsInRole("Cashier") ? " || c === 0 || c === 1 || c === 2 || c === 3" : "") ) cellProperties.readOnly = true;
+            return cellProperties;
+        },
 
-            $.get(fundsource_uacs_url, function (expense_res) {
-                if (expense_res.length > 0) {
-                    for (var i = 0; i < expense_res.length; i++) {
-                        fundsource_uacs[i] = expense_res[i]["Code"];
-                    }
-                }
-            });
-        });
-
-        $("#ors_save").click(function () {
-            var ors_obligation = $("#table_uacs").data('ors_obligation');
-            var tabledata = table_uacs.getData();
-            if (tabledata.length > 0) {
-                var expense = [];
-                for (var i = 0; i < tabledata.length; i++) {
-                    expense[i] = {
-                        "ID": tabledata[i][0],
-                        "expense_title": tabledata[i][1],
-                        "expense_code" : tabledata[i][2],
-                        "amount": tabledata[i][3],
-                        "NetAmount": tabledata[i][5],
-                        "TaxAmount": tabledata[i][6],
-                        "Others" : tabledata[i][7]
-                    };
-                }
+        beforeRemoveRow: function (index, column) {
+            if (confirm("Are you sure you want to delete this item") == true) {
+                var items = this.getData();
+                var row_item = items[index];
+                var url = $("#table_uacs").data('delete');
                 var data = {
-                    ID: ors_obligation,
-                    data: JSON.stringify(expense)
+                    "ID": row_item[0]
                 };
-                var url = $("#table_uacs").data('save');
+
                 $.post(url, data, function (resdata) {
-                    if (resdata.length > 0) {
-                        var tabledata = [];
-                        var total;
-                        var uacs_total = 0;
-                        var uacs_disbursment = 0;
-                        for (var i = 0; i < resdata.length; i++) {
-                            tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseTitle'],resdata[i]['ExpenseCode'] ,numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']), numberWithCommas(resdata[i]['NetAmount']), numberWithCommas(resdata[i]['TaxAmount']), numberWithCommas(resdata[i]['Others']));
-                            uacs_total += resdata[i]['Amount'];
-                            uacs_disbursment += resdata[i]['NetAmount'] + resdata[i]['TaxAmount'] + resdata[i]['Others'];
-                        }
-                        table_uacs.loadData(tabledata);
-                        uacs_total = uacs_total > 0 ? numberWithCommas(uacs_total) : "0.00";
-                        uacs_disbursment = uacs_disbursment > 0 ? numberWithCommas(uacs_disbursment) : "0.00";
-                        $("#uacs_total").text(uacs_total);
-                        $("#uacs_disbursment").text(uacs_disbursment);
-                    }
                 });
+                return true;
+            } else {
+                return false;
+            }
+        },
+        afterValidate: function (isValid, value, row, prop, source) {
+            if (!isValid) {
+                valid = false;
+                Lobibox.alert("warning", //AVAILABLE TYPES: "error", "info", "success", "warning"
+                {
+                    msg: "There was an invalid data.", 
+                    title: "ORS UACS"
+                });
+            } else { valid = true; }
+        },
+    });
+    $(document).ready(function () {
+        load_ors_uacs();
+        $.get(fundsource_uacs_url, function (expense_res) {
+            if (expense_res.length > 0) {
+                for (var i = 0; i < expense_res.length; i++) {
+                    fundsource_uacs[i] = expense_res[i]["Code"];
+                }
             }
         });
-    })();
+    });
+
+    $("#ors_save").click(function () {
+        var ors_obligation = $("#table_uacs").data('ors_obligation');
+        var tabledata = table_uacs.getData();
+        if (tabledata.length > 0) {
+            var expense = [];
+            for (var i = 0; i < tabledata.length; i++) {
+                expense[i] = {
+                    "ID": tabledata[i][0],
+                    "expense_title": tabledata[i][1],
+                    "expense_code" : tabledata[i][2],
+                    "amount": tabledata[i][3],
+                    "NetAmount": tabledata[i][5],
+                    "TaxAmount": tabledata[i][6],
+                    "Others" : tabledata[i][7]
+                };
+            }
+            var data = {
+                ID: ors_obligation,
+                data: JSON.stringify(expense)
+            };
+            var url = $("#table_uacs").data('save');
+            $.post(url, data, function (resdata) {
+                load_ors_uacs();
+            });
+        }
+    });
+    function load_ors_uacs() {
+        var url = $("#table_uacs").data('get');
+        $.get(url, function (resdata) {
+            if (resdata.length > 0) {
+                var tabledata = [];
+                var total;
+                var uacs_total = 0;
+                var uacs_disbursment = 0;
+                for (var i = 0; i < resdata.length; i++) {
+                    tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseTitle'], resdata[i]['ExpenseCode'], numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']), numberWithCommas(resdata[i]['NetAmount']), numberWithCommas(resdata[i]['TaxAmount']), numberWithCommas(resdata[i]['Others']));
+                    uacs_total += resdata[i]['Amount'];
+                    uacs_disbursment += resdata[i]['NetAmount'] + resdata[i]['TaxAmount'] + resdata[i]['Others'];
+                }
+                table_uacs.loadData(tabledata);
+                uacs_total = uacs_total > 0 ? numberWithCommas(uacs_total) : "0.00";
+                uacs_disbursment = uacs_disbursment > 0 ? numberWithCommas(uacs_disbursment) : "0.00";
+                $("#uacs_total").text(uacs_total);
+                $("#uacs_disbursment").text(uacs_disbursment);
+            }
+        });
+    }
     
 </script>
 

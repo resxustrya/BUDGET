@@ -292,11 +292,11 @@ namespace BUDGET
                                 ID = list.ID,
                                 ExpenseTitle = list.uacs,
                                 Amount = list.amount,
-                                Disbursement = list.NetAmount + list.TaxAmount + list.Others,
+                                Disbursement = (from ors_date in db.ors_date_entry where ors_date.ors_id == list.ors_obligation && ors_date.ExpenseTitle == list.uacs select ors_date.NetAmount + ors_date.TaxAmount + ors_date.Others).DefaultIfEmpty(0).Sum(),
                                 ExpenseCode = uacs.Code,
-                                NetAmount = list.NetAmount,
-                                TaxAmount = list.TaxAmount,
-                                Others = list.Others
+                                NetAmount = (from ors_date in db.ors_date_entry where ors_date.ors_id == list.ors_obligation && ors_date.ExpenseTitle == list.uacs select ors_date.NetAmount).DefaultIfEmpty(0).Sum(),
+                                TaxAmount = (from ors_date in db.ors_date_entry where ors_date.ors_id == list.ors_obligation && ors_date.ExpenseTitle == list.uacs select ors_date.TaxAmount).DefaultIfEmpty(0).Sum(),
+                                Others = (from ors_date in db.ors_date_entry where ors_date.ors_id == list.ors_obligation && ors_date.ExpenseTitle == list.uacs select ors_date.Others).DefaultIfEmpty(0).Sum()
                             }).ToList();
             return Json(ors_uacs, JsonRequestBehavior.AllowGet);
         }
