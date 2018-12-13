@@ -7,43 +7,39 @@
                 <div class="col-md-12">
                     <table class="table">
                         <tr>
-                            <td><strong>Particulars</strong></td>
-                            <td>@Model.Particulars</td>
+                            <td class="col-sm-1"><strong>Particulars</strong></td>
+                            <td class="col-sm-1"><strong>:</strong></td>
+                            <td class="col-sm-10">@Model.Particulars</td>
                         </tr>
                         <tr>
-                            <td><strong>Payee</strong></td>
-                            <td>@Model.PAYEE</td>
+                            <td class="col-sm-1"><strong>Payee</strong></td>
+                            <td class="col-sm-1"><strong>:</strong></td>
+                            <td class="col-sm-10">@Model.PAYEE</td>
                         </tr>
                         <tr>
-                            <td><strong>Address</strong></td>
-                            <td>@Model.Adress</td>
+                            <td class="col-sm-1"><strong>Address</strong></td>
+                            <td class="col-sm-1"><strong>:</strong></td>
+                            <td class="col-sm-10">@Model.Adress</td>
                         </tr>
                         <tr>
-                            <td><strong>Fund Source</strong></td>
-                            <td>@Model.FundSource</td>
-                        </tr>
-                        @if (Model.PR != null)
-                        {
-                            <tr>
-                                <td><strong>PR #</strong></td>
-                                <td>@Model.PR</td>
-                            </tr>
-                        }
-                    </table>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <table class="table">
-                        <tr>
-                            <td width="1%"><strong>Total Amount</strong></td>
-                            <td width="1%"><strong>:</strong></td>
-                            <td width="20%"><strong id="uacs_total"></strong></td>
+                            <td class="col-sm-1"><strong>Fund Source</strong></td>
+                            <td class="col-sm-1"><strong>:</strong></td>
+                            <td class="col-sm-10">@Model.FundSource</td>
                         </tr>
                         <tr>
-                            <td width="1%"><strong>Dibursements</strong></td>
-                            <td width="1%"><strong>:</strong></td>
-                            <td width="20%"><strong id="uacs_disbursment"></strong></td>
+                            <td class="col-sm-1"><strong>PR #</strong></td>
+                            <td class="col-sm-1"><strong>:</strong></td>
+                            <td class="col-sm-10">@Model.PR</td>
+                        </tr>
+                        <tr>
+                            <td class="col-sm-1"><strong>Total Amount</strong></td>
+                            <td class="col-sm-1"><strong>:</strong></td>
+                            <td class="col-sm-10"><strong id="uacs_total"></strong></td>
+                        </tr>
+                        <tr>
+                            <td class="col-sm-1"><strong>Dibursements</strong></td>
+                            <td class="col-sm-1"><strong>:</strong></td>
+                            <td class="col-sm-10"><strong id="uacs_disbursment"></strong></td>
                         </tr>
                     </table>
                 </div>
