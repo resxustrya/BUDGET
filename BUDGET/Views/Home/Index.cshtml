@@ -129,7 +129,24 @@
                                         </span>
                                         <div class="chat-body clearfix">
                                             <div class="header">
-                                                <strong class="primary-font">@n.User</strong>
+                                                <strong class="primary-font">
+                                                    
+                                                    @{
+                                                        switch (n.status)
+                                                        {
+                                                            case "delete":
+                                                                <span class="glyphicon glyphicon-trash"></span>
+                                                                break;
+                                                            case "add":
+                                                                <span class="glyphicon glyphicon-ok"></span>
+                                                                break;
+                                                            default:
+                                                                <span class="glyphicon glyphicon-star"></span>
+                                                                break;
+                                                        }
+                                                    }
+                                                    @n.User
+                                                </strong>
                                                 <small class="pull-right text-muted">
                                                     <i class="fa fa-clock-o fa-fw"></i> @n.DateAdded
                                                 </small>

@@ -233,6 +233,7 @@ namespace BUDGET
                                     notifications.Module = "ORS, " + ors_master.Title;
                                     notifications.User = User.Identity.GetUserName();
                                     notifications.Action = " added a new ors obligation in";
+                                    notifications.status = "add";
                                     notifications.DateAdded = DateTime.Now;
                                     notifications.Year = GlobalData.Year;
                                     db.notifications.Add(notifications);
@@ -261,7 +262,18 @@ namespace BUDGET
 
                 var ors_uacs = db.ors_expense_codes.Where(p => p.ors_obligation == del_ors.ID).ToList();
                 db.ors_expense_codes.RemoveRange(ors_uacs);
-                
+
+                var ors_master = db.allotments.Where(p => p.ID.ToString() == GlobalData.ors_allotment).FirstOrDefault();
+                Notifications notifications = new Notifications();
+                notifications.Module = "ORS, " + ors_master.Title;
+                notifications.User = User.Identity.GetUserName();
+                notifications.Action = " removed an ors obligation in";
+                notifications.status = "delete";
+                notifications.DateAdded = DateTime.Now;
+                notifications.Year = GlobalData.Year;
+                db.notifications.Add(notifications);
+
+
                 db.ors.Remove(del_ors);
                 db.SaveChanges();
             }

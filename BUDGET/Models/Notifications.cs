@@ -15,5 +15,6 @@ namespace BUDGET
         public String Message { get; set; }
         public DateTime DateAdded { get; set; }
         public String Year { get; set; }
+        public String status { get; set; }
     }
 }
