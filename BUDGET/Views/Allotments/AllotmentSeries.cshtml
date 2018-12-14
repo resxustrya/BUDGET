@@ -7,7 +7,7 @@
             <form action="@Url.Action("AllotmentSeries","Allotments")" method="post">
                 <table class="table">
                     <tr>
-                        <td class="col-sm-1">Number</td>
+                        <td class="col-sm-1">@Model.Code Number</td>
                         <td class="col-sm-1">: </td>
                         <td class="col-sm-10"><input type="text" value="@Model.Code2" class="form-control" name="number" required /></td>
                     </tr>

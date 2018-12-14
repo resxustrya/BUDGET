@@ -21,7 +21,7 @@ namespace BUDGET
         
         public ActionResult Index()
         {
-            var allotments = (from list in db.allotments where list.active == 1 && list.year == GlobalData.Year select list).ToList();
+            var allotments = (from list in db.allotments where list.active == 1 && list.year == GlobalData.Year orderby list.Code2 ascending select list).ToList();
             return View(allotments);
         }
 
