@@ -52,15 +52,17 @@
                                 <div class="row">
                                     <div class="col-xs-12 text-right">
                                         @{
+                                            DateTime datenow = DateTime.Now;
                                             Double after_realignment = 0.00;
                                             Double AsOfCurrentDate = 0.00;
                                             AllotmentBalance.AllotmentTotalRealignment(a.ID, out after_realignment, out AsOfCurrentDate);
-                                            
+
                                             Double percent = ((AsOfCurrentDate - after_realignment) / after_realignment) * 100;
                                             percent = Math.Round(Math.Abs(percent),2);
                                         }
+
                                         <div>After Realignment : @after_realignment.ToString("N", new CultureInfo("en-US")) </div>
-                                        <div>Disbursement as of  November : @AsOfCurrentDate.ToString("N", new CultureInfo("en-US")) </div>
+                                        <div>Disbursement as of  @datenow.ToString("MMMM") : @AsOfCurrentDate.ToString("N", new CultureInfo("en-US")) </div>
                                     </div>
                                 </div>
                             </div>

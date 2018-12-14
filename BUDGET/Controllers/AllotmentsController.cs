@@ -599,12 +599,21 @@ namespace BUDGET
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
-        public void AllotmentSeries(FormCollection collection)
+        public ActionResult AllotmentSeries(String allotment)
         {
-            Int32 ID = Convert.ToInt32(collection.Get("allotment"));
+            Int32 ID = Convert.ToInt32(allotment);
+            var all = db.allotments.Where(p => p.ID == ID).FirstOrDefault();
+            Session["edit_number"] = allotment;
+            return PartialView(all);
+        }
+        [HttpPost]
+        public ActionResult AllotmentSeries(FormCollection collection)
+        {
+            Int32 ID = Convert.ToInt32(Session["edit_number"].ToString());
             var allotment = db.allotments.Where(p => p.ID ==ID).FirstOrDefault();
             allotment.Code2 = collection.Get("number");
             db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }

@@ -882,6 +882,7 @@
     <Content Include="Views\UserAccount\Update.cshtml" />
     <Content Include="Views\UserAccount\ResetPassword.cshtml" />
     <Content Include="Views\ORS\GetOrsDateView.cshtml" />
+    <Content Include="Views\Allotments\AllotmentSeries.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
