@@ -103,8 +103,26 @@ namespace BUDGET.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ResetPassword(FormCollection collection)
         {
-            //UserManager.ChangePassword()
+            var user = UserManager.FindById(Session["reset_userid"].ToString());
+            UserManager.RemovePassword(user.Id);
+            var store = new UserStore<ApplicationUser>(context);
+            var new_password = UserManager.PasswordHasher.HashPassword(collection.Get("password"));
+            store.SetPasswordHashAsync(user, new_password);
+            context.SaveChanges();
             return RedirectToAction("Index");
         }
+        public ActionResult Delete(String userId)
+        {
+            //var user = UserManager.FindById(userId);
+            var user = context.Users.Where(p => p.Id == userId).FirstOrDefault();
+            if(user.UserName != "doh7budget")
+            {
+                context.Users.Remove(user);
+                context.SaveChanges();
+                
+            }
+            return RedirectToAction("Index");
+        }
+
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using BUDGET.Filters;
 using PagedList;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace BUDGET
 {
@@ -32,7 +33,7 @@ namespace BUDGET
             return View();
         }
 
-        [CustomAuthorize(Roles = "Admin,Encoder,Cashier")]
+        [CustomAuthorize(Roles = "Admin,Employee,Cashier")]
         public ActionResult OrsItem(String ID)
         {
             String query = Request.QueryString["q"] ?? "";
@@ -44,7 +45,7 @@ namespace BUDGET
             return View();
         }
 
-        [CustomAuthorize(Roles = "Admin,Encoder,Cashier")]
+        [CustomAuthorize(Roles = "Admin,Employee,Cashier")]
 
         [Route("get/ors/ps", Name = "get_ors_ps")]
         public JsonResult GetOrsPS()
@@ -149,7 +150,7 @@ namespace BUDGET
         }
 
         [Route("save/ors/ps",Name = "save_ors_ps")]
-        [CustomAuthorize(Roles = "Admin,Encoder")]
+        [CustomAuthorize(Roles = "Admin,Employee")]
         public JsonResult SaveORPS(String data)
         {
             List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
@@ -249,7 +250,7 @@ namespace BUDGET
             return GetOrsPS();
         }
 
-        [CustomAuthorize(Roles = "Admin,Encoder")]
+        [CustomAuthorize(Roles = "Admin,Employee")]
         [Route("delete/ors/ps",Name = "delete_ors_ps")]
         public ActionResult DeleteORSPS(String data)
         {
@@ -282,7 +283,7 @@ namespace BUDGET
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
-        [CustomAuthorize(Roles = "Admin,Encoder,Cashier")]
+        [CustomAuthorize(Roles = "Admin,Employee,Cashier")]
         public PartialViewResult  ORS_UACS(String ID)
         {
             Int32 id = Convert.ToInt32(ID);
@@ -291,7 +292,7 @@ namespace BUDGET
             return PartialView(ors);
         }
 
-        [CustomAuthorize(Roles = "Admin,Encoder,Cashier")]
+        [CustomAuthorize(Roles = "Admin,Employee,Cashier")]
         public JsonResult GetORSUacs(String ID)
         {
             Int32 id = Convert.ToInt32(ID);
@@ -327,7 +328,7 @@ namespace BUDGET
         }
 
 
-        [CustomAuthorize(Roles = "Admin,Encoder,Cashier")]
+        [CustomAuthorize(Roles = "Admin,Employee,Cashier")]
         public JsonResult SaveOrsObligation(FormCollection collection)
         {
             Int32 id = Convert.ToInt32(collection.Get("ID"));
@@ -347,7 +348,7 @@ namespace BUDGET
                         line_id = Convert.ToInt32(sb.ID);
                         var ors_uacs = db.ors_expense_codes.Where(p => p.ID == line_id).FirstOrDefault();
 
-                        if (User.IsInRole("Admin") || User.IsInRole("Encoder"))
+                        if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                         {
                             ors_uacs.uacs = sb.expense_title;
 
@@ -422,7 +423,7 @@ namespace BUDGET
             return GetORSUacs(id.ToString());
         }
         [HttpPost]
-        [CustomAuthorize(Roles = "Admin,Encoder")]
+        [CustomAuthorize(Roles = "Admin,Employee")]
         public JsonResult DeleteUacs(FormCollection collection)
         {
             String ID = collection.Get("ID");

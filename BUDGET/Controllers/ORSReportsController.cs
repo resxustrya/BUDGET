@@ -71,7 +71,7 @@ namespace BUDGET.Controllers
             var table2 = new PdfPTable(1);
             table2.DefaultCell.Border = 0;
             table2.AddCell(new PdfPCell(new Paragraph("Republic of Philippines", arial_font_10)) { Padding = 6f, Border = 0, HorizontalAlignment = Element.ALIGN_CENTER });
-            table2.AddCell(new PdfPCell(new Paragraph("Department Of Health", arial_font_10)) { Padding = 6f, Border = 0, HorizontalAlignment = Element.ALIGN_CENTER });
+            table2.AddCell(new PdfPCell(new Paragraph("CENTER for HEALTH DEVELOPMENT VII", arial_font_10)) { Padding = 6f, Border = 0, HorizontalAlignment = Element.ALIGN_CENTER });
             table2.AddCell(new PdfPCell(new Paragraph("Regional Office 7", arial_font_10)) { Padding = 6f, Border = 0, HorizontalAlignment = Element.ALIGN_CENTER });
             table2.AddCell(new PdfPCell(new Paragraph("Central Visayas, Osmeña Blvd. Cebu City", arial_font_10)) { Padding = 6f, Border = 0, HorizontalAlignment = Element.ALIGN_CENTER });
 
@@ -187,8 +187,8 @@ namespace BUDGET.Controllers
 
             foreach (var u in ors_uacs)
             {
-                uacs += u.uacs + "\n";
-                str_amt += u.disbursement.ToString("N", new CultureInfo("en-US")) + "\n";
+                uacs += u.uacs + "\n\n";
+                str_amt += u.disbursement > 0 ? u.disbursement.ToString("N", new CultureInfo("en-US")) + "\n\n" : "";
                 total_amt += u.disbursement;
                 disbursements += u.disbursement;
             }
@@ -237,7 +237,7 @@ namespace BUDGET.Controllers
             tbt_total_amt.SetWidths(tbt_total_amt_width);
 
             tbt_total_amt.AddCell(new PdfPCell(new Paragraph("\n", table_row_5_font)) { Border = 0, HorizontalAlignment = Element.ALIGN_CENTER });
-            tbt_total_amt.AddCell(new PdfPCell(new Paragraph(total_amt.ToString("N", new CultureInfo("en-US")), table_row_5_font)) { HorizontalAlignment = Element.ALIGN_RIGHT });
+            tbt_total_amt.AddCell(new PdfPCell(new Paragraph(total_amt > 0 ? total_amt.ToString("N", new CultureInfo("en-US")) : "", table_row_5_font)) { HorizontalAlignment = Element.ALIGN_RIGHT });
             table_row_7.AddCell(new PdfPCell(tbt_total_amt) { Border = 14 });
 
             doc.Add(table_row_7);
@@ -503,7 +503,7 @@ namespace BUDGET.Controllers
                 var table2 = new PdfPTable(1);
                 table2.DefaultCell.Border = 0;
                 table2.AddCell(new PdfPCell(new Paragraph("Republic of Philippines", arial_font_10)) { Padding = 6f, Border = 0, HorizontalAlignment = Element.ALIGN_CENTER });
-                table2.AddCell(new PdfPCell(new Paragraph("Department Of Health", arial_font_10)) { Padding = 6f, Border = 0, HorizontalAlignment = Element.ALIGN_CENTER });
+                table2.AddCell(new PdfPCell(new Paragraph("CENTER for HEALTH DEVELOPMENT VII", arial_font_10)) { Padding = 6f, Border = 0, HorizontalAlignment = Element.ALIGN_CENTER });
                 table2.AddCell(new PdfPCell(new Paragraph("Regional Office 7", arial_font_10)) { Padding = 6f, Border = 0, HorizontalAlignment = Element.ALIGN_CENTER });
                 table2.AddCell(new PdfPCell(new Paragraph("Central Visayas, Osmeña Blvd. Cebu City", arial_font_10)) { Padding = 6f, Border = 0, HorizontalAlignment = Element.ALIGN_CENTER });
 
@@ -526,7 +526,7 @@ namespace BUDGET.Controllers
                 table3.AddCell(new PdfPCell(new Paragraph(ors.Date.ToShortDateString(), column3_font)) { Border = 2, Padding = 6f, HorizontalAlignment = Element.ALIGN_CENTER, PaddingRight = 5 });
 
                 table3.AddCell(new PdfPCell(new Paragraph("Fund :", arial_font_10)) { Padding = 6f, Border = 0 });
-                table3.AddCell(new PdfPCell(new Paragraph("", column3_font)) { Padding = 6f, Border = 2, HorizontalAlignment = Element.ALIGN_CENTER, PaddingRight = 5 });
+                table3.AddCell(new PdfPCell(new Paragraph(rpt_ors.GetOrsCode(ors.allotment.ToString()) + "-01101101", column3_font)) { Padding = 6f, Border = 2, HorizontalAlignment = Element.ALIGN_CENTER, PaddingRight = 5 });
 
                 table3.AddCell(new PdfPCell(new Paragraph("", arial_font_10)) { Padding = 6f, Border = 0 });
                 table3.AddCell(new PdfPCell(new Paragraph("", column3_font)) { Padding = 6f, Border = 2, HorizontalAlignment = Element.ALIGN_CENTER, PaddingRight = 5, PaddingBottom = 4 });
@@ -600,10 +600,10 @@ namespace BUDGET.Controllers
                                 {
                                     uacs = expensecodes.Code,
                                     amount = uacs_list.amount,
-                                    net_amt = uacs_list.NetAmount,
-                                    tax_amt = uacs_list.TaxAmount,
-                                    others = uacs_list.Others
+                                    ExpenseTitle = uacs_list.uacs,
+                                    disbursement = uacs_list.NetAmount + uacs_list.TaxAmount + uacs_list.Others + (from ors_date in db.ors_date_entry where ors_date.ors_id == ors.ID && ors_date.ExpenseTitle == uacs_list.uacs select ors_date.NetAmount + ors_date.TaxAmount + ors_date.Others).DefaultIfEmpty(0).Sum(),
                                 }).ToList();
+
 
                 var FundSourceDetails = (from details in db.ors
                                          join allotment in db.allotments on details.allotment equals allotment.ID
@@ -616,16 +616,17 @@ namespace BUDGET.Controllers
                                              ResponsibilityNumber = ors_fundsource.Responsibility_Number
                                          }).FirstOrDefault();
 
+
                 foreach (var u in ors_uacs)
                 {
-                    uacs += u.uacs + "\n";
-                    str_amt += u.amount.ToString("N", new CultureInfo("en-US")) + "\n";
-                    total_amt += u.amount;
-                    disbursements += u.net_amt + u.tax_amt + u.others;
+                    uacs += u.uacs + "\n\n";
+                    str_amt += u.disbursement > 0 ? u.disbursement.ToString("N", new CultureInfo("en-US")) + "\n\n" : "";
+                    total_amt += u.disbursement;
+                    disbursements += u.disbursement;
                 }
 
 
-                table_row_6.AddCell(new PdfPCell(new Paragraph("\n" + FundSourceDetails.ResponsibilityNumber + "\n\n" + ors.FundSource, table_row_5_font)) { Border = 13, FixedHeight = 150f, HorizontalAlignment = Element.ALIGN_CENTER });
+                table_row_6.AddCell(new PdfPCell(new Paragraph("\n" + ors.FundSource + "\n\n" + FundSourceDetails.ResponsibilityNumber, table_row_5_font)) { Border = 13, FixedHeight = 150f, HorizontalAlignment = Element.ALIGN_CENTER });
                 table_row_6.AddCell(new PdfPCell(new Paragraph("\n" + ors.Particulars, table_row_5_font)) { Border = 13, FixedHeight = 150f, HorizontalAlignment = Element.ALIGN_LEFT });
                 table_row_6.AddCell(new PdfPCell(new Paragraph("\n" + FundSourceDetails.PrexcCode, table_row_5_font)) { Border = 13, FixedHeight = 150f, HorizontalAlignment = Element.ALIGN_CENTER });
                 table_row_6.AddCell(new PdfPCell(new Paragraph("\n" + uacs, table_row_5_font)) { Border = 13, FixedHeight = 150f, HorizontalAlignment = Element.ALIGN_CENTER, PaddingBottom = 15f });
@@ -668,7 +669,7 @@ namespace BUDGET.Controllers
                 tbt_total_amt.SetWidths(tbt_total_amt_width);
 
                 tbt_total_amt.AddCell(new PdfPCell(new Paragraph("\n", table_row_5_font)) { Border = 0, HorizontalAlignment = Element.ALIGN_CENTER });
-                tbt_total_amt.AddCell(new PdfPCell(new Paragraph(total_amt.ToString("N", new CultureInfo("en-US")), table_row_5_font)) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                tbt_total_amt.AddCell(new PdfPCell(new Paragraph(total_amt > 0 ? total_amt.ToString("N", new CultureInfo("en-US")) : "", table_row_5_font)) { HorizontalAlignment = Element.ALIGN_RIGHT });
                 table_row_7.AddCell(new PdfPCell(tbt_total_amt) { Border = 14 });
 
                 doc.Add(table_row_7);
@@ -788,6 +789,7 @@ namespace BUDGET.Controllers
 
                 Double totals = 0.00;
                 totals = disbursements;
+
                 table_row_12.AddCell(new PdfPCell(new Paragraph(ors.Date.ToShortDateString(), FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100, Border = 13 });
                 table_row_12.AddCell(new PdfPCell(new Paragraph("Obligation", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100, Border = 13 });
                 table_row_12.AddCell(new PdfPCell(new Paragraph(rpt_ors.GetOrsCode(ors.allotment.ToString()) + " - 01101101 - " + ors.Date.ToString("yyyy-MM") + " - " + ors.Row, FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 100 });
@@ -821,7 +823,7 @@ namespace BUDGET.Controllers
                 table_row_14.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, Border = 14 });
                 table_row_14.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, Border = 14 });
                 table_row_14.AddCell(new PdfPCell(new Paragraph("Totals", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
-                table_row_14.AddCell(new PdfPCell(new Paragraph("100,000.00", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
+                table_row_14.AddCell(new PdfPCell(new Paragraph(totals > 0 ? totals.ToString("N", new CultureInfo("en-US")) : "", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
                 table_row_14.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
                 table_row_14.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });
                 table_row_14.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 6, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER });

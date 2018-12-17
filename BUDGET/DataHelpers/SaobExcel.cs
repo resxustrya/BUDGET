@@ -91,8 +91,8 @@ namespace BUDGET
             worksheet.Cells[12,30].Value = "As of " +date2.ToString("MMMM");
 
             Double allotment_total = 0;
-            var allotments = db.allotments.Where(p => p.year == GlobalData.Year && p.active == 1).ToList();
-
+            //var allotments = db.allotments.Where(p => p.year == GlobalData.Year && p.active == 1).ToList();
+            var allotments = (from allotments_list in db.allotments where allotments_list.year == GlobalData.Year && allotments_list.active == 1 orderby allotments_list.Code2 ascending select allotments_list).ToList();
             /*
             var allotments = (from allotment in db.allotments
                               join fundsource in db.fsh on allotment.ID.ToString() equals fundsource.allotment
@@ -107,6 +107,7 @@ namespace BUDGET
                                   Title = allotment.Title
                               }).ToList();
             */
+
 
             foreach (var _allotments in allotments)
             {
@@ -139,7 +140,12 @@ namespace BUDGET
 
                 startRow++;
 
-                var fsh = db.fsh.Where(p => p.allotment == _allotments.ID.ToString() && p.type == "REG" && p.active == 1).ToList();
+
+                //var fsh = from fsh_list in db.fsh group fsh_list by fsh_list.prexc into p select p;
+                var fsh = db.fsh.Where(p => p.allotment == _allotments.ID.ToString() && p.type == "REG" && p.active == 1)
+                                .OrderBy(p => p.prexc)
+                                .ToList();
+                
 
                 foreach (FundSourceHdr _fsh in fsh)
                 {
@@ -342,6 +348,7 @@ namespace BUDGET
                                                  {
                                                      Disbursements = ors_uacs.TaxAmount + ors_uacs.NetAmount + ors_uacs.Others
                                                  }).ToList();
+
 
                         Double uacs_disbursement_total = 0.00;
                         if (ors_disbursements != null && ors_disbursements.Count > 0)
@@ -596,9 +603,10 @@ namespace BUDGET
                 /*
                  * SUB ALLOTMENT 
                  */
-                 
 
-                var _sub_allotments = db.fsh.Where(p => p.allotment == _allotments.ID.ToString() && p.type == "SUB" && p.active == 1 ).ToList();
+
+                var _sub_allotments = db.fsh.Where(p => p.allotment == _allotments.ID.ToString() && p.type == "SUB" && p.active == 1 ).OrderBy(p => p.prexc).ToList();
+                //var _sub_allotments = from fsh_list in db.fsh where fsh_list.allotment == _allotments.ID.ToString() && fsh_list.type == "SUB" && fsh_list.active == 1 group fsh_list by fsh_list.prexc;
                 if (_sub_allotments.Count > 0)
                 {
                     // SUB ALLOTMENT TITLE CODE ROW
@@ -658,7 +666,6 @@ namespace BUDGET
                                        }
                            ).ToList();
 
-                        
                         foreach (var _saa_amt in saa_amt)
                         {
                             Double _fsa_amount = _saa_amt.Amount;

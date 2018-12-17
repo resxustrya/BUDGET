@@ -99,10 +99,10 @@ namespace BUDGET
             
             FundSourceHdr fsh = new FundSourceHdr();
             fsh.prexc = collection.Get("prexcode");
-            fsh.SourceTitle = collection.Get("source_title");
-            fsh.desc = collection.Get("description");
-            fsh.Code = collection.Get("title_code");
-            fsh.Responsibility_Number = collection.Get("responsibility_number");
+            fsh.SourceTitle = collection.Get("source_title").TrimEnd();
+            fsh.desc = collection.Get("description").TrimEnd();
+            fsh.Code = collection.Get("title_code").TrimEnd();
+            fsh.Responsibility_Number = collection.Get("responsibility_number").TrimEnd();
             fsh.type = "REG";
             fsh.allotment = GlobalData.allotment;
             fsh.active = 1;
@@ -126,11 +126,11 @@ namespace BUDGET
         {
             Int32 id = Convert.ToInt32(collection.Get("ID"));
             var fsh = db.fsh.Where(p => p.ID == id).FirstOrDefault();
-            fsh.SourceTitle = collection.Get("source_title");
-            fsh.prexc = collection.Get("prexcode");
-            fsh.desc = collection.Get("description");
-            fsh.Code = collection.Get("title_code");
-            fsh.Responsibility_Number = collection.Get("responsibility_number");
+            fsh.SourceTitle = collection.Get("source_title").TrimEnd();
+            fsh.prexc = collection.Get("prexcode").TrimEnd();
+            fsh.desc = collection.Get("description").TrimEnd();
+            fsh.Code = collection.Get("title_code").TrimEnd();
+            fsh.Responsibility_Number = collection.Get("responsibility_number").TrimEnd();
             
             db.SaveChanges();
             String data = collection.Get("data");
@@ -262,12 +262,12 @@ namespace BUDGET
         public String CreateSubAllotment(FormCollection collection)
         {
             FundSourceHdr fsh = new FundSourceHdr();
-            fsh.prexc = collection.Get("prexcode");
+            fsh.prexc = collection.Get("prexcode").TrimEnd();
             fsh.allotment = Session["allotment"].ToString();
-            fsh.SourceTitle = collection.Get("source_title");
-            fsh.Code = collection.Get("title_code");
-            fsh.desc = collection.Get("description");
-            fsh.Responsibility_Number = collection.Get("responsibility_number");
+            fsh.SourceTitle = collection.Get("source_title").TrimEnd();
+            fsh.Code = collection.Get("title_code").TrimEnd();
+            fsh.desc = collection.Get("description").TrimEnd();
+            fsh.Responsibility_Number = collection.Get("responsibility_number").TrimEnd();
             fsh.type = "SUB";
             fsh.active = 1;
             db.fsh.Add(fsh);

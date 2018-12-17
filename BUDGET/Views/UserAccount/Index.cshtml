@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Users Management";
 }
 
@@ -31,7 +30,7 @@
                                 <td><span style="color:#071D47;font-weight:bold;">@a.UserName</span></td>
                                 <td>
                                     <button class="btn btn-warning" data-url="@Url.Action("Update","UserAccount",new { userId = a.Id })" onclick="Update(this);">Update</button>
-                                    <a class="btn btn-danger">Delete</a>
+                                    <a class="btn btn-danger" href="@Url.Action("Delete","UserAccount",new { userId = a.Id })" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
                                 </td>
                                 <td>
                                     <a class="btn btn-info" data-url="@Url.Action("ResetPassword","UserAccount",new { userid = a.Id })" onclick="Reset(this);">Reset Password</a>
@@ -79,6 +78,5 @@
                 $(".loading").hide();
             });
         }
-    </script>   
+    </script>
 }
-
