@@ -21,34 +21,7 @@
     
     @Styles.Render("~/font-awesome")
     <style>
-        body{
-            font-family: arial,sans-serif;
-        }
-        a { cursor: pointer; }
-        .htCore thead tr th{
-            color: white;
-            font-size: 15px;
-            font-family: arial,sans-serif;
-            background-color: #2ECC71;
-        }
-        .htCore tbody tr td{
-            font-size: 12px;
-            font-family: arial,sans-serif;
-            font-weight:bold;
-        }
-        .htMenu {
-            z-index:2000;
-        }
-        #ors_modal .modal-dialog {
-            width :70%;
-        }
-        .alert-rex {
-            background-color:#FAFCFE;
-        }
-        .table input.form-control, textarea.form-control, select.form-control {
-            font-family:sans-serif;
-            font-weight :bold;
-        }
+        .htCore tbody tr td,.htCore thead tr th,body{font-family:arial,sans-serif}a{cursor:pointer}.htCore thead tr th{color:#fff;font-size:15px;background-color:#2ECC71}.htCore tbody tr td{font-size:12px;font-weight:700}.htMenu{z-index:2000}#ors_modal .modal-dialog{width:70%}.alert-rex{background-color:#FAFCFE}.table input.form-control,select.form-control,textarea.form-control{font-family:sans-serif;font-weight:700}
     </style>
     <script>
         function numberWithCommas(x) {
@@ -133,7 +106,7 @@
                     </li>
                 }
                 <li>
-                    <a href="@Url.Action("Index","BudgetSummary")">
+                    <a href="@Url.RouteUrl("summary")">
                         <span class="glyphicon glyphicon-th-list"> </span>
                         <b>Budget Summary </b>
                     </a>
@@ -196,5 +169,6 @@
     @Scripts.Render("~/bundles/bootstrap")
     <!-- SB ADMIN SCRIPTS -->
     @RenderSection("scripts", required: false)
+    @RenderSection("css", required: false)
 </body>
 </html>

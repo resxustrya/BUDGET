@@ -1,7 +1,41 @@
-﻿
+﻿@model IEnumerable<Allotments>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Budget Summary";
 }
 
-<h2>Index</h2>
+<div class="alert">
+    <div class="col-md-12">
+        <div class="alert alert-rex">
+            <h4>STATEMENT OF ALLOTMENT, OBLIGATIONS AND BALANCES SUMMARY</h4>
+            <table class="table table-bordered" id="summary">
+                <tr class="text-center">
+                    <th>P/A/P/ ALLOTMENT CLASS/ OBJECT OF EXPENDITURE</th>
+                    <th>EXPENSE CODES</th>
+                    <th>ALLOTMENT RECEIVED</th>
+                    <th>REALIGNMENT</th>
+                    <th>TRANSFER TO</th>
+                    <th>TOTAL AFTER REALIGNMENT</th>
+                    <th>@DateTime.Now.ToString("MMMM")</th>
+                    <th>AS of @DateTime.Now.ToString("MMMM")</th>
+                    <th>UNOBLIGATED BALANCE OF ALLOTMENT</th>
+                    <th>DISBURSMENTS</th>
+                    <th>REMARKS</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section css {
+    <style>
+        #summary tr th {
+            font-size : smaller;
+            text-align:center;
+        }
+    </style>
+}
+
+@section footer{
+    @Html.Partial("footer")
+}
 

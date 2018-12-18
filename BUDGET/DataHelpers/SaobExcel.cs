@@ -312,7 +312,6 @@ namespace BUDGET
                                               }).ToList();
 
 
-
                         Double total_utilized_amount = 0;
                         foreach (var amount in total_utilized)
                         {
@@ -346,7 +345,7 @@ namespace BUDGET
                                                  ors_uacs.uacs == _fsa.ExpenseTitle
                                                  select new
                                                  {
-                                                     Disbursements = ors_uacs.TaxAmount + ors_uacs.NetAmount + ors_uacs.Others
+                                                     Disbursements = (from ors_date in db.ors_date_entry where ors_date.ors_id == ors.ID && ors_date.ExpenseTitle == _fsa.ExpenseTitle select ors_date.NetAmount + ors_date.TaxAmount + ors_date.Others).DefaultIfEmpty(0).Sum()
                                                  }).ToList();
 
 
@@ -605,8 +604,9 @@ namespace BUDGET
                  */
 
 
-                var _sub_allotments = db.fsh.Where(p => p.allotment == _allotments.ID.ToString() && p.type == "SUB" && p.active == 1 ).OrderBy(p => p.prexc).ToList();
-                //var _sub_allotments = from fsh_list in db.fsh where fsh_list.allotment == _allotments.ID.ToString() && fsh_list.type == "SUB" && fsh_list.active == 1 group fsh_list by fsh_list.prexc;
+                var _sub_allotments = db.fsh.Where(p => p.allotment == _allotments.ID.ToString() && p.type == "SUB" && p.active == 1 )
+                                            .OrderBy(p => p.prexc)
+                                            .ToList();
                 if (_sub_allotments.Count > 0)
                 {
                     // SUB ALLOTMENT TITLE CODE ROW
@@ -811,7 +811,7 @@ namespace BUDGET
                                                          ors_uacs.uacs == _saa_amt.ExpenseTitle
                                                          select new
                                                          {
-                                                             Disbursements = ors_uacs.TaxAmount + ors_uacs.NetAmount + ors_uacs.Others
+                                                             Disbursements = (from ors_date in db.ors_date_entry where ors_date.ors_id == ors.ID && ors_date.ExpenseTitle == _saa_amt.ExpenseTitle select ors_date.NetAmount + ors_date.TaxAmount + ors_date.Others).DefaultIfEmpty(0).Sum()
                                                          }).FirstOrDefault();
 
                             if (sub_ors_disbursements != null && sub_ors_disbursements.Disbursements > 0)
