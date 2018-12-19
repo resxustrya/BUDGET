@@ -67,8 +67,8 @@ namespace BUDGET
                              Adress = list.Adress,
                              Particulars = list.Particulars,
                              FundSource = list.FundSource,
-                             Gross = (from ors_uacs in db.ors_expense_codes where ors_uacs.ors_obligation == list.ID select ors_uacs.amount).DefaultIfEmpty(0).Sum(),
-                             Disbursement = (from ors_uacs in db.ors_expense_codes where ors_uacs.ors_obligation == list.ID select ors_uacs.TaxAmount + ors_uacs.NetAmount + ors_uacs.Others).DefaultIfEmpty(0).Sum(),
+                             Gross = (from ors_uacs in db.ors_expense_codes where ors_uacs.ors_obligation == list.ID select ors_uacs.amount).DefaultIfEmpty(0).ToList().Sum(),
+                             Disbursement = (from ors_date in db.ors_date_entry where ors_date.ors_id == list.ID select ors_date.NetAmount + ors_date.TaxAmount + ors_date.Others).DefaultIfEmpty(0).ToList().Sum(),
                              Created_By = list.Created_By,
                              DateReceived = list.DateReceived,
                              TimeReceived = list.TimeReceived,
@@ -233,7 +233,7 @@ namespace BUDGET
                                     Notifications notifications = new Notifications();
                                     notifications.Module = "ORS, " + ors_master.Title;
                                     notifications.User = User.Identity.GetUserName();
-                                    notifications.Action = " added a new ors obligation in";
+                                    notifications.Action = " added a new ors obligation to";
                                     notifications.status = "add";
                                     notifications.DateAdded = DateTime.Now;
                                     notifications.Year = GlobalData.Year;
@@ -268,7 +268,7 @@ namespace BUDGET
                 Notifications notifications = new Notifications();
                 notifications.Module = "ORS, " + ors_master.Title;
                 notifications.User = User.Identity.GetUserName();
-                notifications.Action = " removed an ors obligation in";
+                notifications.Action = " removed an ors obligation from";
                 notifications.status = "delete";
                 notifications.DateAdded = DateTime.Now;
                 notifications.Year = GlobalData.Year;

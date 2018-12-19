@@ -234,6 +234,7 @@
     <Compile Include="Controllers\BudgetAllotmentsController.cs" />
     <Compile Include="Controllers\BudgetsController.cs" />
     <Compile Include="Controllers\BudgetSummaryController.cs" />
+    <Compile Include="Controllers\CoinsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ExpenseCodesController.cs" />
     <Compile Include="Controllers\FormsController.cs" />
@@ -883,6 +884,7 @@
     <Content Include="Views\UserAccount\ResetPassword.cshtml" />
     <Content Include="Views\ORS\GetOrsDateView.cshtml" />
     <Content Include="Views\Allotments\AllotmentSeries.cshtml" />
+    <Content Include="Views\Coins\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

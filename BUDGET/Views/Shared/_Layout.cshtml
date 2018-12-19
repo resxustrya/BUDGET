@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNet.Identity
 @{
     BudgetDB db = new BudgetDB();
-    var allotments = (from list in db.allotments where list.year == GlobalData.Year && list.active == 1 select list).ToList();
+    var allotments = (from list in db.allotments where list.year == GlobalData.Year && list.active == 1 orderby list.Code2 ascending select list).ToList();
 }
 
 <!DOCTYPE html>
@@ -28,7 +28,7 @@
             if (x == 0 || x == null) {
                 return null;
             }
-            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return x.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
     </script>
 </head>

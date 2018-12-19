@@ -7,7 +7,7 @@ using BUDGET.Models;
 using BUDGET.Filters;
 using Newtonsoft.Json;
 using System.Threading;
-
+using Microsoft.AspNet.Identity;
 namespace BUDGET
 {
     [Authorize(Roles = "Admin")]
@@ -38,7 +38,20 @@ namespace BUDGET
             allotments.active = 1;
             allotments.year = GlobalData.Year;
             db.allotments.Add(allotments);
+
+            Notifications n = new Notifications();
+
+            n.Action = "added " + allotments.Code + " budget allotment to";
+            n.Module = "Budget Allocations";
+            n.User = User.Identity.GetUserName();
+            n.Year = GlobalData.Year;
+            n.DateAdded = DateTime.Now;
+            n.status = "add";
+            db.notifications.Add(n);
+
+
             db.SaveChanges();
+
 
             return RedirectToAction("Index");
         }
@@ -70,6 +83,17 @@ namespace BUDGET
                 del_allot.active = 0;
 
                 db.Database.ExecuteSqlCommand("UPDATE FundSourceHdrs SET active = 0 WHERE allotment ='" + ID.ToString() + "'");
+
+                Notifications n = new Notifications();
+
+                n.Action = "removed " + del_allot.Code + " allocation from";
+                n.Module = "Budget Allocations";
+                n.User = User.Identity.GetUserName();
+                n.Year = GlobalData.Year;
+                n.DateAdded = DateTime.Now;
+                n.status = "delete";
+                db.notifications.Add(n);
+
                 db.SaveChanges();
             }
             catch { }

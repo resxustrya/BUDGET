@@ -264,9 +264,9 @@
                     }
                     $("#loading").modal('hide');
                     table.loadData(tabledata);
-                    grand_total = grand_total > 0 ? numberWithCommas(grand_total.toFixed(2)) : "0.00";
+                    grand_total = grand_total > 0 ? numberWithCommas(grand_total) : "0.00";
                     $("#total_ors").text("TOTAL : " + grand_total);
-                    disbursements = disbursements > 0 ? numberWithCommas(disbursements.toFixed(2)) : "0.00";
+                    disbursements = disbursements > 0 ? numberWithCommas(disbursements) : "0.00";
                     $("#disbursement").text("DISBURSMENT : " + disbursements);
                 });
             }
