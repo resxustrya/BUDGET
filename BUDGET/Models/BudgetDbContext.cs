@@ -29,5 +29,19 @@ namespace BUDGET
         public DbSet<UACS_SUB_CODES> uacs_sub_codes { get; set; }
         public DbSet<OrsDateEntry> ors_date_entry { get; set; }
 
+        public void AddNotifications(String action, String module,String user,String year, DateTime DateAdded, String status)
+        {
+            Notifications n = new Notifications();
+            n.Action = action;
+            n.Module = module;
+            n.User = user;
+            n.Year = year;
+            n.DateAdded = DateAdded;
+            n.status = status;
+            this.notifications.Add(n);
+            this.SaveChanges();
+            
+        }
+
     }
 }

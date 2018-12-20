@@ -49,10 +49,7 @@ namespace BUDGET
             n.status = "add";
             db.notifications.Add(n);
 
-
             db.SaveChanges();
-
-
             return RedirectToAction("Index");
         }
 

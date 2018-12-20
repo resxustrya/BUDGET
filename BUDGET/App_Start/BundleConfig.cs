@@ -23,7 +23,8 @@ namespace BUDGET
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js",
                       "~/Scripts/page/scripts.js",
-                      "~/Scripts/toggle.js"));
+                      "~/Scripts/toggle.js"
+                      ));
 
 
             bundles.Add(new StyleBundle("~/login/css").Include(
@@ -38,6 +39,7 @@ namespace BUDGET
                       "~/Content/Site.css",
                       "~/Content/lobibox/lobibox.min.css",
                       "~/Content/flip.card.css"
+                      
                       ));
 
             

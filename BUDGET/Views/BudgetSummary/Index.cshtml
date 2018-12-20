@@ -7,21 +7,10 @@
     <div class="col-md-12">
         <div class="alert alert-rex">
             <h4>STATEMENT OF ALLOTMENT, OBLIGATIONS AND BALANCES SUMMARY</h4>
-            <table class="table table-bordered" id="summary">
-                <tr class="text-center">
-                    <th>P/A/P/ ALLOTMENT CLASS/ OBJECT OF EXPENDITURE</th>
-                    <th>EXPENSE CODES</th>
-                    <th>ALLOTMENT RECEIVED</th>
-                    <th>REALIGNMENT</th>
-                    <th>TRANSFER TO</th>
-                    <th>TOTAL AFTER REALIGNMENT</th>
-                    <th>@DateTime.Now.ToString("MMMM")</th>
-                    <th>AS of @DateTime.Now.ToString("MMMM")</th>
-                    <th>UNOBLIGATED BALANCE OF ALLOTMENT</th>
-                    <th>DISBURSMENTS</th>
-                    <th>REMARKS</th>
-                </tr>
-            </table>
+            <button class="btn btn-primary btn-sm pull-right"> <span class="glyphicon glyphicon-filter">Filter</span></button>
+            <div class="table-responsive summary" data-get="@Url.Action("GetSaob","BudgetSummary")">
+                
+            </div>
         </div>
     </div>
 </div>
@@ -29,10 +18,36 @@
 @section css {
     <style>
         #summary tr th {
-            font-size : smaller;
+            font-size : xx-small;
+            text-align:center;
+            font-weight:bold;
+        }
+        .summary{
             text-align:center;
         }
+        .summary img {
+            width :50px;
+            height :50px;
+        }
     </style>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $(".summary").html("<img src='@Url.Content("~/Content/img/spin.gif")' />");
+            var url = $(".summary").data('get');
+            var data = {
+                datefrom : '@DateTime.Now.ToShortDateString()',
+                dateto: '@DateTime.Now.ToShortDateString()'
+            };
+            setTimeout(function () {
+                $.get(url,data, function (res) {
+                    $('.summary').html(res);
+                });
+            }, 1000);
+            
+        });
+    </script>    
 }
 
 @section footer{

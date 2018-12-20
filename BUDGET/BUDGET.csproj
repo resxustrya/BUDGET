@@ -610,6 +610,7 @@
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\sb-admin2.css" />
     <Content Include="Content\scrollstyle.css" />
+    <Content Include="Content\spin.css" />
     <Content Include="Content\vendor\bootstrap-social\bootstrap-social.css" />
     <Content Include="Content\vendor\bootstrap\css\bootstrap.css" />
     <Content Include="Content\vendor\bootstrap\css\bootstrap.min.css" />
@@ -788,6 +789,7 @@
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\page\scripts.js" />
+    <Content Include="Scripts\spin.js" />
     <Content Include="Scripts\toggle.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -885,6 +887,7 @@
     <Content Include="Views\ORS\GetOrsDateView.cshtml" />
     <Content Include="Views\Allotments\AllotmentSeries.cshtml" />
     <Content Include="Views\Coins\Index.cshtml" />
+    <Content Include="Views\BudgetSummary\GetSaob.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
