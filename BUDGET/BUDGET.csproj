@@ -257,7 +257,8 @@
     <Compile Include="DataHelpers\rpt_saob.cs" />
     <Compile Include="DataHelpers\rpt_saobsheet2.cs" />
     <Compile Include="DataHelpers\SaobExcel.cs" />
-    <Compile Include="DataHelpers\SaobSheet2.cs" />
+    <Compile Include="DataHelpers\SaobExcelSheet1.cs" />
+    <Compile Include="DataHelpers\SaobExcelSheet2.cs" />
     <Compile Include="DataHelpers\UacsHelper.cs" />
     <Compile Include="Filters\CustomAuthorizeAttribute.cs" />
     <Compile Include="Filters\NoCache.cs" />
