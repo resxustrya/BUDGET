@@ -18,7 +18,6 @@ namespace BUDGET
     {
         BudgetDB db = new BudgetDB();
         // GET: Allotmentss
-        
         public ActionResult Index()
         {
             var allotments = (from list in db.allotments where list.active == 1 && list.year == GlobalData.Year orderby list.Code2 ascending select list).ToList();
@@ -635,6 +634,24 @@ namespace BUDGET
             allotment.Code2 = collection.Get("number");
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+        
+        [HttpPost]
+        public JsonResult Previous(FormCollection collection)
+        {
+            Int32 ID = Convert.ToInt32(collection.Get("allotment"));
+            var allotment = db.allotments.Where(p => p.ID == ID).FirstOrDefault();
+            if (collection.Get("checked") == "true")
+            {
+                allotment.previous = true;
+            }
+            else
+            {
+                allotment.previous = false;
+            }
+
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
 }

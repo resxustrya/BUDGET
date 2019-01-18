@@ -16,6 +16,7 @@
                     <th>For Fund Source</th>
                     <th>For Sub-Allotment</th>
                     <th class="text-center">*</th>
+                    <th>Previous Allotment ?</th>
                 </tr>
                 @foreach (Allotments data in Model)
                 {
@@ -32,6 +33,9 @@
                         <td>
                             <a href="@Url.Action("EditBudget","Allotments", new { id = data.ID })" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> <span class="text-info">Edit</span></a>
                             <a href="@Url.Action("Delete","Allotments",new { id = data.ID })" class="btn btn-default text-danger" onclick="return confirm('Do you want to delete this budget');"><span class="glyphicon glyphicon-trash"></span> <span class="text-danger">Delete</span></a>
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" value="true" name="previous" id="previous" @(data.previous == true ? "checked='true'" : "") data-url="@Url.Action("Previous","Allotments")" data-allotment="@data.ID" onchange="previous(this);" />
                         </td>
                     </tr>
                 }
@@ -58,7 +62,23 @@
                 $(".modal_body").html(res);
                 $(".loading").hide();
             });
-            
+        }
+        function previous(el)
+        {
+            var url = $(el).data('url');
+            var allotment = $(el).data('allotment');
+            var checked = false;
+            if ($(el).is(':checked')) {
+                checked = true;
+            } else {
+                checked = false;
+            }
+            var data = {
+                allotment: allotment,
+                checked : checked
+            };
+            $.post(url, data, function (res) {
+            });
         }
     </script>
 }

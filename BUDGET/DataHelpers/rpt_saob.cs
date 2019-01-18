@@ -63,7 +63,7 @@ namespace BUDGET.DataHelpers
 
             doc.Add(header_table);
 
-             doc.NewPage();
+            doc.NewPage();
 
             PdfPTable footer = new PdfPTable(3);
 

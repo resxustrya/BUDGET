@@ -16,5 +16,7 @@ namespace BUDGET
         public String year { get; set; }
         public Int32 active { get; set; }
         public String Code2 { get; set; }
+        public Boolean previous { get; set; }
+        
     }
 }
