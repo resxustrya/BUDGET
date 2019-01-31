@@ -16,8 +16,6 @@ namespace BUDGET
         {
             BudgetDB db = new BudgetDB();
             FileInfo excelFile = new FileInfo(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB_NEW.xlsx"));
-
-            
             try
             {
                 FileInfo tempExcel = new FileInfo(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB_NEW2.xlsx"));
@@ -32,9 +30,6 @@ namespace BUDGET
             FileInfo newFile = new FileInfo(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB_NEW2.xlsx"));
 
             new SaobExcelSheet1().CreateExcel(db,newFile,date_from,date_to);
-            new SaobExcelSheet2().CreateExcel(db, newFile, date_from, date_to);
-            
-
 
         }
     }

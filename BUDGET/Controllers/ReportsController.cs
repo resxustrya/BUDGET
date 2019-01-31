@@ -37,7 +37,6 @@ namespace BUDGET.Controllers
             saobexcel.CreateExcel(date_from,date_to);
             var filesStream = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/SAOB_NEW2.xlsx"), FileMode.Open);
             fsResult = new FileStreamResult(filesStream, contentType);
-            
             return fsResult;
         }
 

@@ -184,6 +184,7 @@ namespace BUDGET
                 */
             }
             pck.Save();
+            pck.Dispose();
         }
     }
 }
