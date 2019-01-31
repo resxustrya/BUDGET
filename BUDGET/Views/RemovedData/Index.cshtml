@@ -27,7 +27,7 @@
                             <a href="@Url.Action("SubAllotment","Allotments", new { allotment = data.ID })" class="btn btn-default text-primary"><span class="glyphicon glyphicon-plus"></span> Sub-Allotment</a>
                         </td>
                         <td>
-                            <select  id="status" class="form-control @(data.active == 1 ? " text-success" : " text-danger" )" data-allotment="@data.ID" data-url="@Url.Action("Allotment","RemovedData")">
+                            <select  id="status" class="form-control @(data.active == 1 ? " text-success" : " text-danger" )" onchange="status(this);" data-allotment="@data.ID" data-url="@Url.Action("Allotment","RemovedData")">
                                 <option @(data.active == 1 ? " selected" : "" ) value="1">Enabled</option>
                                 <option @(data.active == 0 ? " selected" : "" ) value="0">Disabled</option>
                             </select>
@@ -43,16 +43,14 @@
 </div>
 @section scripts{
     <script>
-        $(function () {
-            $('#status').change(function () {
-                var allotment = $(this).data('allotment');
-                var url = $(this).data('url');
-                var status = $(this).val();
-                $.post(url, { status: status, allotment : allotment }, function () {
-                });
-
+        function status(el)
+        {
+            var allotment = $(el).data('allotment');
+            var url = $(el).data('url');
+            var status = $(el).val();
+            $.post(url, { status: status, allotment: allotment }, function () {
             });
-        })
+        }
     </script>    
 }
 

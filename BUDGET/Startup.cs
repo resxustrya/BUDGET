@@ -54,6 +54,12 @@ namespace BUDGET
                 role.Name = "Cashier";
                 roleManager.Create(role);
             }
+            if(!roleManager.RoleExists("ORS"))
+            {
+                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+                role.Name = "ORS";
+                roleManager.Create(role);
+            }
         }
     }
 }

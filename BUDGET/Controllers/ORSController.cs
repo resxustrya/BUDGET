@@ -18,7 +18,7 @@ namespace BUDGET
     [OutputCache(NoStore = true, Duration = 0)]
     public class ORSController : Controller
     {
-        JsonGetter jg = new JsonGetter();
+       
         BudgetDB db = new BudgetDB();
         // GET: ORS
         public ActionResult Index()
@@ -54,7 +54,7 @@ namespace BUDGET
             Int32 ors_allotment = Convert.ToInt32(GlobalData.ors_allotment);
             var orsps = (from list in db.ors
                          where list.allotment == ors_allotment
-                         orderby list.Date_Added ascending
+                         orderby list.Date_Added descending
                          select new
                          {
                              ID = list.ID,
@@ -172,7 +172,6 @@ namespace BUDGET
                         Object date = sb.Date;
                         ors.Date1 = date.ToString();
                         DateTime datetime = Convert.ToDateTime(date.ToString());
-                        ors.Row = sb.Row;
                         ors.Date = datetime;
                         ors.DB = sb.DB;
                         ors.PO = sb.PO;
@@ -204,7 +203,6 @@ namespace BUDGET
                             {
                                 ORS ors = new ORS();
                                 ors.allotment = Convert.ToInt32(GlobalData.ors_allotment);
-                                ors.Row = sb.Row;
                                 Object date = sb.Date;
                                 ors.Date1 = date.ToString();
                                 DateTime datetime = Convert.ToDateTime(date.ToString());
@@ -381,7 +379,6 @@ namespace BUDGET
                                 var uacs_exist = (from exist in db.ors_expense_codes where exist.uacs == expenese_title && exist.ors_obligation == id select exist).ToList();
                                 if (uacs_exist.Count <= 0)
                                 {
-
                                     ORS_EXPENSE_CODES oec = new ORS_EXPENSE_CODES();
                                     oec.uacs = sb.expense_title;
                                     oec.ors_obligation = id;
@@ -390,9 +387,8 @@ namespace BUDGET
                                     try { oec.NetAmount = Convert.ToDouble(sb.NetAmount); } catch { oec.NetAmount = 0.00; }
                                     try { oec.Others = Convert.ToDouble(sb.Others); } catch { oec.Others = 0.00; }
                                     db.ors_expense_codes.Add(oec);
-
                                     db.SaveChanges();
-
+                                    ORSHelper.InsertORSNo(id);
                                     var ors_allotments = (from ors in db.ors
                                                           join allotments in db.allotments on ors.allotment equals allotments.ID
                                                           where ors.ID == id

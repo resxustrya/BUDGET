@@ -249,10 +249,8 @@
     <Compile Include="Controllers\UploadsController.cs" />
     <Compile Include="Controllers\UserAccountController.cs" />
     <Compile Include="DataHelpers\AllotmentBalance.cs" />
-    <Compile Include="DataHelpers\ExcelDataExport.cs" />
-    <Compile Include="DataHelpers\JsonGetter.cs" />
     <Compile Include="DataHelpers\ModelAllotments.cs" />
-    <Compile Include="DataHelpers\ORSReporting.cs" />
+    <Compile Include="DataHelpers\ORSHelper.cs" />
     <Compile Include="DataHelpers\PdfPtableEvents.cs" />
     <Compile Include="DataHelpers\rpt_saob.cs" />
     <Compile Include="DataHelpers\rpt_saobsheet2.cs" />
@@ -705,6 +703,8 @@
     <Content Include="Content\vendor\morrisjs\morris.min.js" />
     <Content Include="Content\vendor\raphael\raphael.js" />
     <Content Include="Content\vendor\raphael\raphael.min.js" />
+    <Content Include="excel_reports\SAOB.xlsx" />
+    <Content Include="excel_reports\SAOB_NEW.xlsx" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -768,7 +768,9 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
-    <Content Include="excel_reports\SAOB.xlsx" />
+    <Content Include="excel_reports\86720530" />
+    <Content Include="excel_reports\SAOB2.xlsx" />
+    <Content Include="excel_reports\SAOB_NEW2.xlsx" />
     <None Include="Properties\PublishProfiles\budget.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -22,7 +22,7 @@ namespace BUDGET.Controllers
     public class UploadsController : Controller
     {
         BudgetDB db = new BudgetDB();
-        JsonGetter jg = new JsonGetter();
+       
         // GET: Uploads
         public ActionResult Index()
         {
