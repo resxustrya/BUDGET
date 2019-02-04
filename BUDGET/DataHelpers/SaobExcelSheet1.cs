@@ -22,6 +22,10 @@ namespace BUDGET
             DateTime date1 = Convert.ToDateTime(date_from);
             DateTime date2 = Convert.ToDateTime(date_to);
 
+
+            String str_this_month = date2.ToString("MM") + "/01/" + date2.ToString("yyyy");
+            DateTime this_month = Convert.ToDateTime(str_this_month);
+
             Double total = 0.00;
             Double percent = 0.00;
 
@@ -75,6 +79,8 @@ namespace BUDGET
 
             worksheet.Cells[12, 17].Value = date2.ToString("MMMM");
             worksheet.Cells[12, 18].Value = "As of " + date2.ToString("MMMM");
+
+            worksheet.Cells[12,21].Value = "As of " + date2.ToString("MMMM");
 
             Double allotment_total = 0;
             //var allotments = db.allotments.Where(p => p.year == GlobalData.Year && p.active == 1).ToList();
@@ -191,7 +197,6 @@ namespace BUDGET
                             worksheet.Cells[startRow, 13].Value = null;
 
 
-
                         //realignments
                         var realignments_from = (from realignment in db.realignment
                                                  join _rel_fsh in db.fsh on realignment.fundsource equals _rel_fsh.ID.ToString()
@@ -203,7 +208,6 @@ namespace BUDGET
                                                  {
                                                      Amount = realignment.amount
                                                  }).ToList();
-
 
 
                         Double total_realignment = 0;
@@ -236,19 +240,21 @@ namespace BUDGET
                                                        Amount = realignment.amount
                                                    }).ToList();
 
-                            foreach (var amount in realignments_to)
+                            if(realignments_to.Count > 0)
                             {
-                                total_realignment += amount.Amount;
+                                foreach (var amount in realignments_to)
+                                {
+                                    total_realignment += amount.Amount;
+                                }
+                                _fsa_amount += total_realignment;
+                                worksheet.Cells[startRow, 14].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                                worksheet.Cells[startRow, 14].Style.Numberformat.Format = "#,##0.00";
+                                if (total_realignment > 0)
+                                    worksheet.Cells[startRow, 14].Value = total_realignment;
+                                else
+                                    worksheet.Cells[startRow, 14].Value = null;
                             }
-                            _fsa_amount += total_realignment;
-                            worksheet.Cells[startRow, 14].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                            worksheet.Cells[startRow, 14].Style.Numberformat.Format = "#,##0.00";
-                            if(total_realignment > 0)
-                                worksheet.Cells[startRow, 14].Value = total_realignment;
-                            else
-                                worksheet.Cells[startRow, 14].Value = null;
                         }
-
                         //realignment to
 
                         //total after realignment
@@ -269,8 +275,7 @@ namespace BUDGET
                         else
                             worksheet.Cells[startRow, 16].Value = null;
 
-                        String str_this_month = date2.ToString("MM") + "/01/" + date2.ToString("yyyy");
-                        DateTime this_month = Convert.ToDateTime(str_this_month);
+                        
 
                         //total for the month
                         var uacs_amounts = (from ors_uacs in db.ors_expense_codes
@@ -560,10 +565,11 @@ namespace BUDGET
 
                 //EXPENSE CODES
 
-                worksheet.Cells[startRow, 1].Style.Font.Name = "TAHOMA";
-                worksheet.Cells[startRow, 1].Style.Font.Size = 12;
-                worksheet.Cells[startRow, 1].Style.Font.Bold = true;
-                worksheet.Cells[startRow, 1].Value = "TOTAL " + _allotments.Code.ToUpper().ToString();
+                worksheet.Cells[startRow, 10].Style.Font.Name = "TAHOMA";
+                worksheet.Cells[startRow, 10].Style.Font.Size = 12;
+                worksheet.Cells[startRow, 10].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 10].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 10].Value = "TOTAL " + _allotments.Code.ToUpper().ToString();
 
 
                 allotment_received_grand_total = allotment_total;
@@ -585,31 +591,58 @@ namespace BUDGET
                 worksheet.Cells[startRow, 13].Style.Font.Name = "TAHOMA";
                 worksheet.Cells[startRow, 13].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 13].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 16].Style.Numberformat.Format = "#,##0.00";
                 worksheet.Cells[startRow, 13].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheet.Cells[startRow, 13].Value = allotment_total > 0 ? allotment_total : 0;
+                if (allotment_total > 0)
+                    worksheet.Cells[startRow, 13].Value = allotment_total;
+                else
+                    worksheet.Cells[startRow, 13].Value = null;
+
 
                 worksheet.Cells[startRow, 16].Style.Font.Name = "TAHOMA";
                 worksheet.Cells[startRow, 16].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 16].Style.Numberformat.Format = "#,##0.00";
                 worksheet.Cells[startRow, 16].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 16].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheet.Cells[startRow, 16].Value = after_realignment_sub_total > 0 ? after_realignment_sub_total : 0;
+                if(after_realignment_sub_total > 0)
+                    worksheet.Cells[startRow, 16].Value = after_realignment_sub_total;
+                else
+                    worksheet.Cells[startRow, 16].Value = null;
 
 
                 worksheet.Cells[startRow, 17].Style.Font.Name = "TAHOMA";
                 worksheet.Cells[startRow, 17].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 17].Style.Font.Size = 10;
-                worksheet.Cells[startRow, 17].Style.Numberformat.Format = "#,##0.00";
+                
                 worksheet.Cells[startRow, 17].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheet.Cells[startRow, 17].Value = current_month_sub_total > 0 ? current_month_sub_total : 0;
+                if(current_month_sub_total > 0)
+                {
+                    worksheet.Cells[startRow, 17].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells[startRow, 17].Value = current_month_sub_total;
+                } else if(current_month_sub_total < 0)
+                {
+                    worksheet.Cells[startRow, 17].Style.Numberformat.Format = "(#,##0.00)";
+                    worksheet.Cells[startRow, 17].Value = current_month_sub_total;
+                }
+                else
+                    worksheet.Cells[startRow, 17].Value = null;
 
 
                 worksheet.Cells[startRow, 18].Style.Font.Name = "TAHOMA";
                 worksheet.Cells[startRow, 18].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 18].Style.Font.Size = 10;
-                worksheet.Cells[startRow, 18].Style.Numberformat.Format = "#,##0.00";
                 worksheet.Cells[startRow, 18].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheet.Cells[startRow, 18].Value = as_of_month_sub_total > 0 ? as_of_month_sub_total : 0;
+
+                if (as_of_month_sub_total > 0)
+                {
+                    worksheet.Cells[startRow, 18].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells[startRow, 18].Value = as_of_month_sub_total;
+                } else if(as_of_month_sub_total < 0)
+                {
+                    worksheet.Cells[startRow, 18].Style.Numberformat.Format = "(#,##0.00)";
+                    worksheet.Cells[startRow, 18].Value = as_of_month_sub_total;
+                } else
+                    worksheet.Cells[startRow, 18].Value = null;
 
 
                 worksheet.Cells[startRow, 19].Style.Font.Name = "TAHOMA";
@@ -702,7 +735,7 @@ namespace BUDGET
 
                         // SUB-ALLOTMENT FUNDSOURCE TITLES
                         worksheet.Cells[startRow, 1].Style.Font.Name = "TAHOMA";
-                        worksheet.Cells[startRow, 1].Style.Font.Size = 11;
+                        worksheet.Cells[startRow, 1].Style.Font.Size = 10;
                         worksheet.Cells[startRow, 1].Style.Font.Bold = true;
                         worksheet.Cells[startRow, 1].Value = _fsh_saa.SourceTitle.ToUpper().ToString();
                         startRow++;
@@ -736,14 +769,20 @@ namespace BUDGET
                             // ALLOTMENT TITLE
                             worksheet.Cells[startRow, 3].Value = _saa_amt.Title.ToString().ToUpper();
                             // EXPENSE CODES
-                            worksheet.Cells[startRow, 11].Value = _saa_amt.ExpenseCode.ToString();
+                            worksheet.Cells[startRow, 11].Value = Convert.ToInt64(_saa_amt.ExpenseCode);
                             // ALLOTMENT AMOUNT
+
                             sub_allotment_received_sub_total += _saa_amt.Amount;
                             worksheet.Cells[startRow, 13].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                             worksheet.Cells[startRow, 13].Style.Numberformat.Format = "#,##0.00";
-                            worksheet.Cells[startRow, 13].Value = _saa_amt.Amount > 0 ? _saa_amt.Amount : 0;
+
+                            if (_saa_amt.Amount > 0)
+                                worksheet.Cells[startRow, 13].Value = _saa_amt.Amount;
+                            else
+                                worksheet.Cells[startRow, 13].Value = null;
 
 
+                            //REALIGNMENT TO
                             var realignments_from = (from realignment in db.realignment
                                                      join _rel_fsh in db.fsh on realignment.fundsource equals _rel_fsh.ID.ToString()
                                                      join _rel_allotment in db.allotments on _rel_fsh.allotment equals _rel_allotment.ID.ToString()
@@ -755,9 +794,7 @@ namespace BUDGET
                                                          Amount = realignment.amount
                                                      }).ToList();
 
-
                             Double total_realignment = 0;
-                            String total_realignment_str = "";
 
                             if (realignments_from.Count > 0)
                             {
@@ -766,7 +803,12 @@ namespace BUDGET
                                     total_realignment += amount.Amount;
                                 }
                                 _fsa_amount -= total_realignment;
-                                total_realignment_str = total_realignment > 0 ? "(" + total_realignment.ToString("N", new CultureInfo("en-US")) + ")" : "";
+                                //total_realignment_str = total_realignment > 0 ? "(" + total_realignment.ToString("N", new CultureInfo("en-US")) + ")" : "";
+                                worksheet.Cells[startRow, 14].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                                worksheet.Cells[startRow, 14].Style.Numberformat.Format = "(#,##0.00)";
+                                
+                                if(total_realignment > 0) worksheet.Cells[startRow, 14].Value = total_realignment;
+                                else worksheet.Cells[startRow, 14].Value = null;
                             }
                             else
                             {
@@ -788,28 +830,28 @@ namespace BUDGET
                                 }
 
                                 _fsa_amount += total_realignment;
-                                total_realignment_str = total_realignment > 0 ? total_realignment.ToString("N", new CultureInfo("en-US")) : "";
+                                worksheet.Cells[startRow, 14].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                                worksheet.Cells[startRow, 14].Style.Numberformat.Format = "#,##0.00";
+
+                                if(total_realignment > 0) worksheet.Cells[startRow, 14].Value = total_realignment;
+                                else worksheet.Cells[startRow, 14].Value = null;
                             }
 
-
                             // REALIGNMENTS
-                            //REALIGNMENT TO
-                            worksheet.Cells[startRow, 14].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                            worksheet.Cells[startRow, 14].Style.Numberformat.Format = "#,##0.00";
-                            worksheet.Cells[startRow, 14].Value = total_realignment;
 
                             //TOTAL AFTER REALIGNMENT
 
                             sub_allotment_total_after_realignment_sub_total += _fsa_amount;
                             worksheet.Cells[startRow, 16].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                             worksheet.Cells[startRow, 16].Style.Numberformat.Format = "#,##0.00";
-                            worksheet.Cells[startRow, 16].Value = _fsa_amount > 0 ? _fsa_amount : 0;
 
+                            if (_fsa_amount > 0) worksheet.Cells[startRow, 16].Value = _fsa_amount;
+                            else worksheet.Cells[startRow, 16].Value = null;
 
                             var uacs_amounts = (from ors_uacs in db.ors_expense_codes
                                                 join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
                                                 join allotment in db.allotments on ors.allotment equals allotment.ID
-                                                where ors.Date >= date1 && ors.Date <= date2 &&
+                                                where ors.Date >= this_month && ors.Date <= date2 &&
                                                 ors.FundSource == _fsh_saa.Code &&
                                                 ors_uacs.uacs == _saa_amt.ExpenseTitle
                                                 select new
@@ -825,10 +867,12 @@ namespace BUDGET
 
                             sub_current_month_sub_total += month_total;
                             // TOTAL CURRENT MONTH
-                            //_thead.AddCell(new PdfPCell(new Paragraph(month_total > 0 ? month_total.ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            worksheet.Cells[startRow, 19].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                            worksheet.Cells[startRow, 19].Style.Numberformat.Format = "#,##0.00";
-                            worksheet.Cells[startRow, 19].Value = month_total > 0 ? month_total : 0;
+                            worksheet.Cells[startRow, 17].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                            worksheet.Cells[startRow, 17].Style.Numberformat.Format = "#,##0.00";
+
+                            if(month_total > 0) worksheet.Cells[startRow, 17].Value = month_total;
+                            else worksheet.Cells[startRow, 17].Value = null;
+
 
                             var total_utilized = (from ors_uacs in db.ors_expense_codes
                                                   join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
@@ -848,17 +892,25 @@ namespace BUDGET
 
                             sub_as_of_month_sub_total += total_utilized_amount;
                             // TOTAL AS OF THIS MONTH
-                            //_thead.AddCell(new PdfPCell(new Paragraph(total_utilized_amount > 0 ? total_utilized_amount.ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            worksheet.Cells[startRow, 30].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                            worksheet.Cells[startRow, 30].Style.Numberformat.Format = "#,##0.00";
-                            worksheet.Cells[startRow, 30].Value = total_utilized_amount > 0 ? total_utilized_amount : 0;
-                            //TOTAL UNBLIGATED
+                            worksheet.Cells[startRow, 18].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                            worksheet.Cells[startRow, 18].Style.Numberformat.Format = "#,##0.00";
+                            if(total_utilized_amount > 0) worksheet.Cells[startRow, 18].Value = total_utilized_amount;
+                            else worksheet.Cells[startRow, 18].Value = null;
+                            //TOTAL UNOBLIGATED
                             sub_unobligated_sub_total += (_fsa_amount - total_utilized_amount);
+                            worksheet.Cells[startRow, 19].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                            Double unobligated = (_fsa_amount - total_utilized_amount);
+                            if(unobligated > 0)
+                            {
+                                worksheet.Cells[startRow, 19].Style.Numberformat.Format = "#,##0.00";
+                                worksheet.Cells[startRow, 19].Value = unobligated;
+                            } else if(unobligated < 0)
+                            {
+                                worksheet.Cells[startRow, 19].Style.Numberformat.Format = "(#,##0.00)";
+                                worksheet.Cells[startRow, 19].Value = unobligated;
+                            } else
+                                worksheet.Cells[startRow, 19].Value = null;
 
-                            //_thead.AddCell(new PdfPCell(new Paragraph((_fsa_amount - total_utilized_amount).ToString("N", new CultureInfo("en-US")), new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            worksheet.Cells[startRow, 31].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                            worksheet.Cells[startRow, 31].Style.Numberformat.Format = "#,##0.00";
-                            worksheet.Cells[startRow, 31].Value = (_fsa_amount - total_utilized_amount);
                             //DISBURSEMENTS
 
                             var sub_ors_disbursements = (from ors_uacs in db.ors_expense_codes
@@ -879,25 +931,31 @@ namespace BUDGET
                             }
                             sub_disbursement_sub_total += sub_disbursements;
 
-                            //_thead.AddCell(new PdfPCell(new Paragraph(sub_disbursements > 0 ? sub_disbursements.ToString("N", new CultureInfo("en-US")) : "", new Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL))) { HorizontalAlignment = Element.ALIGN_CENTER });
                             // DISPLAY DISBURSEMENTS
-                            worksheet.Cells[startRow, 32].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                            worksheet.Cells[startRow, 32].Style.Numberformat.Format = "#,##0.00";
-                            worksheet.Cells[startRow, 32].Value = sub_disbursements > 0 ? sub_disbursements : 0;
+                            worksheet.Cells[startRow, 21].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                            if(sub_disbursements > 0)
+                            {
+                                worksheet.Cells[startRow, 21].Style.Numberformat.Format = "#,##0.00";
+                                worksheet.Cells[startRow, 21].Value = sub_disbursements;
+                            } else  if(sub_disbursements < 0)
+                            {
+                                worksheet.Cells[startRow, 21].Style.Numberformat.Format = "(#,##0.00)";
+                                worksheet.Cells[startRow, 21].Value = sub_disbursements;
+                            } else
+                                worksheet.Cells[startRow, 21].Value = null;
 
                             //DISPLAY PERCENTAGE
                             // percent = ((sub_disbursements - _fsa_amount) / _fsa_amount) * 100;
                             // percent = Math.Round(Math.Abs(percent), 2);
                             percent = sub_disbursements / _fsa_amount;
-                            worksheet.Cells[startRow, 33].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                            worksheet.Cells[startRow, 33].Style.Numberformat.Format = "#0.00%";
-                            worksheet.Cells[startRow, 33].Value = percent;
+                            worksheet.Cells[startRow, 20].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                            worksheet.Cells[startRow, 20].Style.Numberformat.Format = "#0.00%";
+                            worksheet.Cells[startRow, 20].Value = percent;
 
                             startRow++;
 
                             total += _saa_amt.Amount;
                         }
-
 
                         sub_allotment_received_grand_total += sub_allotment_received_sub_total;
                         sub_allotment_total_after_realignment_grand_total += sub_allotment_total_after_realignment_sub_total;
@@ -911,7 +969,7 @@ namespace BUDGET
 
                         // SUB ALLOTMENT ALLOTMENT TITLE
                         worksheet.Cells[startRow, 1].Style.Font.Name = "TAHOMA";
-                        worksheet.Cells[startRow, 1].Style.Font.Size = 11;
+                        worksheet.Cells[startRow, 1].Style.Font.Size = 12;
                         worksheet.Cells[startRow, 1].Style.Font.Bold = true;
                         worksheet.Cells[startRow, 1].Value = "SUBTOTAL " + _fsh_saa.Code.ToString().ToUpper();
 
@@ -919,7 +977,7 @@ namespace BUDGET
                         // SUB ALLOTMENT RECEIVED SUB TOTAL
                         worksheet.Cells[startRow, 13].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                         worksheet.Cells[startRow, 13].Style.Numberformat.Format = "#,##0.00";
-                        worksheet.Cells[startRow, 13].Style.Font.Size = 11;
+                        worksheet.Cells[startRow, 13].Style.Font.Size = 10;
                         worksheet.Cells[startRow, 13].Style.Font.Bold = true;
                         worksheet.Cells[startRow, 13].Value = sub_allotment_received_sub_total > 0 ? sub_allotment_received_sub_total : 0;
 
@@ -929,7 +987,7 @@ namespace BUDGET
                         // SUB ALLOTMENT TOTAL AFTER REALIGNMENTS SUBTOTAL
                         worksheet.Cells[startRow, 16].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                         worksheet.Cells[startRow, 16].Style.Numberformat.Format = "#,##0.00";
-                        worksheet.Cells[startRow, 16].Style.Font.Size = 11;
+                        worksheet.Cells[startRow, 16].Style.Font.Size = 10;
                         worksheet.Cells[startRow, 16].Style.Font.Bold = true;
                         worksheet.Cells[startRow, 16].Value = sub_allotment_total_after_realignment_sub_total > 0 ? sub_allotment_total_after_realignment_sub_total : 0;
 
@@ -938,7 +996,7 @@ namespace BUDGET
                         // SUB ALLOTMENT AS OF THIS MONTH SUBTOTAL
                         worksheet.Cells[startRow, 19].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                         worksheet.Cells[startRow, 19].Style.Numberformat.Format = "#,##0.00";
-                        worksheet.Cells[startRow, 19].Style.Font.Size = 11;
+                        worksheet.Cells[startRow, 19].Style.Font.Size = 10;
                         worksheet.Cells[startRow, 19].Style.Font.Bold = true;
                         worksheet.Cells[startRow, 19].Value = sub_current_month_sub_total > 0 ? sub_current_month_sub_total : 0;
 
@@ -948,19 +1006,19 @@ namespace BUDGET
 
 
                         worksheet.Cells[startRow, 30].Style.Numberformat.Format = "#,##0.00";
-                        worksheet.Cells[startRow, 30].Style.Font.Size = 11;
+                        worksheet.Cells[startRow, 30].Style.Font.Size = 10;
                         worksheet.Cells[startRow, 30].Style.Font.Bold = true;
                         worksheet.Cells[startRow, 30].Value = sub_as_of_month_sub_total > 0 ? sub_as_of_month_sub_total : 0;
                         // SUB ALLOTMENT UNBLIGATED SUBTOTAL
                         worksheet.Cells[startRow, 31].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                         worksheet.Cells[startRow, 31].Style.Numberformat.Format = "#,##0.00";
-                        worksheet.Cells[startRow, 31].Style.Font.Size = 11;
+                        worksheet.Cells[startRow, 31].Style.Font.Size = 10;
                         worksheet.Cells[startRow, 31].Style.Font.Bold = true;
                         worksheet.Cells[startRow, 31].Value = sub_unobligated_sub_total > 0 ? sub_unobligated_sub_total : 0;
                         // SUB ALLOTMENT DISBURSEMENTS SUBTOTAL
                         worksheet.Cells[startRow, 32].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                         worksheet.Cells[startRow, 32].Style.Numberformat.Format = "#,##0.00";
-                        worksheet.Cells[startRow, 32].Style.Font.Size = 11;
+                        worksheet.Cells[startRow, 32].Style.Font.Size = 10;
                         worksheet.Cells[startRow, 32].Style.Font.Bold = true;
                         worksheet.Cells[startRow, 32].Value = sub_disbursement_sub_total > 0 ? sub_disbursement_sub_total : 0;
 
@@ -970,7 +1028,7 @@ namespace BUDGET
 
                         worksheet.Cells[startRow, 33].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                         worksheet.Cells[startRow, 33].Style.Numberformat.Format = "#0.00%";
-                        worksheet.Cells[startRow, 33].Style.Font.Size = 11;
+                        worksheet.Cells[startRow, 33].Style.Font.Size = 10;
                         worksheet.Cells[startRow, 33].Style.Font.Bold = true;
                         worksheet.Cells[startRow, 33].Value = percent;
 
@@ -999,60 +1057,60 @@ namespace BUDGET
             {
 
                 worksheet.Cells[startRow, 2].Style.Font.Name = "TAHOMA";
-                worksheet.Cells[startRow, 2].Style.Font.Size = 11;
+                worksheet.Cells[startRow, 2].Style.Font.Size = 9;
                 worksheet.Cells[startRow, 2].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 2].Value = "TOTAL " + d;
 
 
                 worksheet.Cells[startRow, 13].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheet.Cells[startRow, 13].Style.Font.Size = 11;
+                worksheet.Cells[startRow, 13].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 13].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 13].Style.Numberformat.Format = "#,##0.00";
                 worksheet.Cells[startRow, 13].Value = allotments_row_totals[d]["ALLOTMENT_RECEIVED"] > 0 ? allotments_row_totals[d]["ALLOTMENT_RECEIVED"].ToString("N", new CultureInfo("en-US")) : "";
 
                 worksheet.Cells[startRow, 16].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheet.Cells[startRow, 16].Style.Font.Size = 11;
+                worksheet.Cells[startRow, 16].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 16].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 16].Style.Numberformat.Format = "#,##0.00";
                 worksheet.Cells[startRow, 16].Value = allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"] > 0 ? allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"].ToString("N", new CultureInfo("en-US")) : "";
 
 
+                worksheet.Cells[startRow, 17].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 17].Style.Font.Size = 10;
+                worksheet.Cells[startRow, 17].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 17].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 17].Value = allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"] > 0 ? allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
+
+
+                worksheet.Cells[startRow, 18].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 18].Style.Font.Size = 10;
+                worksheet.Cells[startRow, 18].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 18].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 18].Value = allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"] > 0 ? allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
+
                 worksheet.Cells[startRow, 19].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheet.Cells[startRow, 19].Style.Font.Size = 11;
+                worksheet.Cells[startRow, 19].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 19].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 19].Style.Numberformat.Format = "#,##0.00";
-                worksheet.Cells[startRow, 19].Value = allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"] > 0 ? allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
+                worksheet.Cells[startRow, 19].Value = allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"] > 0 ? allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
 
 
-                worksheet.Cells[startRow, 30].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheet.Cells[startRow, 30].Style.Font.Size = 11;
-                worksheet.Cells[startRow, 30].Style.Font.Bold = true;
-                worksheet.Cells[startRow, 30].Style.Numberformat.Format = "#,##0.00";
-                worksheet.Cells[startRow, 30].Value = allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"] > 0 ? allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
-
-                worksheet.Cells[startRow, 31].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheet.Cells[startRow, 31].Style.Font.Size = 11;
-                worksheet.Cells[startRow, 31].Style.Font.Bold = true;
-                worksheet.Cells[startRow, 31].Style.Numberformat.Format = "#,##0.00";
-                worksheet.Cells[startRow, 31].Value = allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"] > 0 ? allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
-
-
-                worksheet.Cells[startRow, 32].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheet.Cells[startRow, 32].Style.Numberformat.Format = "#,##0.00";
-                worksheet.Cells[startRow, 32].Style.Font.Size = 11;
-                worksheet.Cells[startRow, 32].Style.Font.Bold = true;
-                worksheet.Cells[startRow, 32].Value = allotments_row_totals[d]["DISBURSEMENTS"] > 0 ? allotments_row_totals[d]["DISBURSEMENTS"].ToString("N", new CultureInfo("en-US")) : "";
+                worksheet.Cells[startRow, 21].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 21].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 21].Style.Font.Size = 10;
+                worksheet.Cells[startRow, 21].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 21].Value = allotments_row_totals[d]["DISBURSEMENTS"] > 0 ? allotments_row_totals[d]["DISBURSEMENTS"].ToString("N", new CultureInfo("en-US")) : "";
 
 
                 //percent = ((Convert.ToDouble(allotments_row_totals[d]["DISBURSEMENTS"]) - Convert.ToDouble(allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"])) / Convert.ToDouble(allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"])) * 100;
                 //percent = Math.Round(Math.Abs(percent), 2);
                 percent = Convert.ToDouble(allotments_row_totals[d]["DISBURSEMENTS"].ToString()) / Convert.ToDouble(allotments_row_totals[d]["ALLOTMENT_RECEIVED"].ToString());
 
-                worksheet.Cells[startRow, 33].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheet.Cells[startRow, 33].Style.Numberformat.Format = "#0.00%";
-                worksheet.Cells[startRow, 33].Style.Font.Size = 11;
-                worksheet.Cells[startRow, 33].Style.Font.Bold = true;
-                worksheet.Cells[startRow, 33].Value = percent;
+                worksheet.Cells[startRow, 20].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 20].Style.Numberformat.Format = "#0.00%";
+                worksheet.Cells[startRow, 20].Style.Font.Size = 10;
+                worksheet.Cells[startRow, 20].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 20].Value = percent;
 
                 startRow++;
             }
@@ -1061,49 +1119,49 @@ namespace BUDGET
             {
 
                 worksheet.Cells[startRow, 2].Style.Font.Name = "TAHOMA";
-                worksheet.Cells[startRow, 2].Style.Font.Size = 11;
+                worksheet.Cells[startRow, 2].Style.Font.Size = 9;
                 worksheet.Cells[startRow, 2].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 2].Value = "TOTAL SAA " + d;
 
 
                 worksheet.Cells[startRow, 13].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheet.Cells[startRow, 13].Style.Font.Size = 11;
+                worksheet.Cells[startRow, 13].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 13].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 13].Style.Numberformat.Format = "#,##0.00";
                 worksheet.Cells[startRow, 13].Value = sub_allotments_row_totals[d]["ALLOTMENT_RECEIVED"] > 0 ? sub_allotments_row_totals[d]["ALLOTMENT_RECEIVED"].ToString("N", new CultureInfo("en-US")) : "";
 
                 worksheet.Cells[startRow, 16].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheet.Cells[startRow, 16].Style.Font.Size = 11;
+                worksheet.Cells[startRow, 16].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 16].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 16].Style.Numberformat.Format = "#,##0.00";
                 worksheet.Cells[startRow, 16].Value = sub_allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"] > 0 ? sub_allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"].ToString("N", new CultureInfo("en-US")) : "";
 
 
+                worksheet.Cells[startRow, 17].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 17].Style.Font.Size = 10;
+                worksheet.Cells[startRow, 17].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 17].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 17].Value = sub_allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"] > 0 ? sub_allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
+
+
+                worksheet.Cells[startRow, 18].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 18].Style.Font.Size = 10;
+                worksheet.Cells[startRow, 18].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 18].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 18].Value = sub_allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"] > 0 ? sub_allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
+
                 worksheet.Cells[startRow, 19].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheet.Cells[startRow, 19].Style.Font.Size = 11;
+                worksheet.Cells[startRow, 19].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 19].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 19].Style.Numberformat.Format = "#,##0.00";
-                worksheet.Cells[startRow, 19].Value = sub_allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"] > 0 ? sub_allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
+                worksheet.Cells[startRow, 19].Value = sub_allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"] > 0 ? sub_allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
 
 
-                worksheet.Cells[startRow, 30].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheet.Cells[startRow, 30].Style.Font.Size = 11;
-                worksheet.Cells[startRow, 30].Style.Font.Bold = true;
-                worksheet.Cells[startRow, 30].Style.Numberformat.Format = "#,##0.00";
-                worksheet.Cells[startRow, 30].Value = sub_allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"] > 0 ? sub_allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
-
-                worksheet.Cells[startRow, 31].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheet.Cells[startRow, 31].Style.Font.Size = 11;
-                worksheet.Cells[startRow, 31].Style.Font.Bold = true;
-                worksheet.Cells[startRow, 31].Style.Numberformat.Format = "#,##0.00";
-                worksheet.Cells[startRow, 31].Value = sub_allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"] > 0 ? sub_allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
-
-
-                worksheet.Cells[startRow, 32].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheet.Cells[startRow, 32].Style.Numberformat.Format = "#,##0.00";
-                worksheet.Cells[startRow, 32].Style.Font.Size = 11;
-                worksheet.Cells[startRow, 32].Style.Font.Bold = true;
-                worksheet.Cells[startRow, 32].Value = sub_allotments_row_totals[d]["DISBURSEMENTS"] > 0 ? sub_allotments_row_totals[d]["DISBURSEMENTS"].ToString("N", new CultureInfo("en-US")) : "";
+                worksheet.Cells[startRow, 21].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 21].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 21].Style.Font.Size = 10;
+                worksheet.Cells[startRow, 21].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 21].Value = sub_allotments_row_totals[d]["DISBURSEMENTS"] > 0 ? sub_allotments_row_totals[d]["DISBURSEMENTS"].ToString("N", new CultureInfo("en-US")) : "";
 
 
                 //percent = ((Convert.ToDouble(sub_allotments_row_totals[d]["DISBURSEMENTS"]) - Convert.ToDouble(sub_allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"])) / Convert.ToDouble(sub_allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"])) * 100;
@@ -1111,11 +1169,11 @@ namespace BUDGET
 
                 percent = Convert.ToDouble(sub_allotments_row_totals[d]["DISBURSEMENTS"].ToString()) / Convert.ToDouble(sub_allotments_row_totals[d]["ALLOTMENT_RECEIVED"].ToString());
 
-                worksheet.Cells[startRow, 33].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheet.Cells[startRow, 33].Style.Numberformat.Format = "#,##0.00";
-                worksheet.Cells[startRow, 33].Style.Font.Size = 11;
-                worksheet.Cells[startRow, 33].Style.Font.Bold = true;
-                worksheet.Cells[startRow, 33].Value = percent > 0 ? percent + "%" : "";
+                worksheet.Cells[startRow, 20].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[startRow, 20].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells[startRow, 20].Style.Font.Size = 10;
+                worksheet.Cells[startRow, 20].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 20].Value = percent > 0 ? percent + "%" : "";
 
                 startRow++;
             }

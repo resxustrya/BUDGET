@@ -3,7 +3,11 @@
     BudgetDB db = new BudgetDB();
     var allotments = (from list in db.allotments where list.year == GlobalData.Year && list.active == 1 orderby list.Code2 ascending select list).ToList();
 }
+<!--
+CREATED BY : LOURENCE REX B. TRAYA
+             DEPARTMENT OF HEALTH REGIONAL OFFICE VII       
 
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +22,6 @@
     <!-- Bootstrap Core CSS -->
     @Scripts.Render("~/sb-admin-js")
     @Styles.Render("~/Content/css")
-    
     @Styles.Render("~/font-awesome")
     <style>
         .htCore tbody tr td,.htCore thead tr th,body{font-family:arial,sans-serif}a{cursor:pointer}.htCore thead tr th{color:#fff;font-size:15px;background-color:#2ECC71}.htCore tbody tr td{font-size:12px;font-weight:700}.htMenu{z-index:2000}#ors_modal .modal-dialog{width:70%}.alert-rex{background-color:#FAFCFE}.table input.form-control,select.form-control,textarea.form-control{font-family:sans-serif;font-weight:700}
@@ -98,8 +101,8 @@
                             <b>Budget Reports <i class="fa fa-caret-down"></i></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="javascript:void(0)" id="saob" data-url="@Url.Action("DownloadSaob","Reports")"><span class="glyphicon glyphicon-share-alt"></span> STATEMENT OF ALLOTMENT, OBLIGATIONS AND BALANCES (EXCEL SHEET 2) </a></li>
-                            <li><a href="javascript:void(0)" id="saobsheet2" data-url="@Url.Action("DownloadSaobSheet2","Reports")"><span class="glyphicon glyphicon-share-alt"></span> STATEMENT OF ALLOTMENT, OBLIGATIONS AND BALANCES (EXCEL SHEET 2)</a></li>
+                            <li><a href="javascript:void(0)" id="saob" data-url="@Url.Action("DownloadSaob","Reports")"><span class="glyphicon glyphicon-share-alt"></span> STATEMENT OF ALLOTMENT, OBLIGATIONS AND BALANCES</a></li>
+                            <!--<li><a href="javascript:void(0)" id="saobsheet2" data-url="@Url.Action("DownloadSaobSheet2","Reports")"><span class="glyphicon glyphicon-share-alt"></span> STATEMENT OF ALLOTMENT, OBLIGATIONS AND BALANCES (EXCEL SHEET 2)</a></li>-->
                             <li><a href="javascript:void(0)" id="ors_page" data-url="@Url.Action("ORS_PAGE","ORSReports")"><span class="glyphicon glyphicon-share-alt"></span> ORS Page Printing</a></li>
                         </ul>
                     </li>
