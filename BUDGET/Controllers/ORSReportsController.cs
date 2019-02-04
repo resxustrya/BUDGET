@@ -33,12 +33,12 @@ namespace BUDGET.Controllers
 
             try
             {
-                System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("~/ORSHelper/" + filename));
+                System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath("~/rpt_ors/" + filename));
             }
             catch
             { }
 
-            var output = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/ORSHelper/" + filename), FileMode.Create);
+            var output = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/rpt_ors/" + filename), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
             doc.Open();
 
@@ -420,7 +420,7 @@ namespace BUDGET.Controllers
             }
             
 
-            var fileStream = new FileStream(Server.MapPath("~/ORSHelper/" + filename),
+            var fileStream = new FileStream(Server.MapPath("~/rpt_ors/" + filename),
                                      FileMode.Open,
                                      FileAccess.Read
                                    );
@@ -479,7 +479,7 @@ namespace BUDGET.Controllers
             catch
             { }
 
-            var output = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/ORSHelper/" + filename), FileMode.Create);
+            var output = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/rpt_ors/" + filename), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
             doc.Open();
             foreach (ORS ors in ors_list)
@@ -858,7 +858,7 @@ namespace BUDGET.Controllers
                 writer = null;
             }
             
-            var fileStream = new FileStream(Server.MapPath("~/ORSHelper/" + filename),
+            var fileStream = new FileStream(Server.MapPath("~/rpt_ors/" + filename),
                                         FileMode.Open,
                                         FileAccess.Read
                                     );
