@@ -196,7 +196,6 @@ namespace BUDGET
                         else
                             worksheet.Cells[startRow, 13].Value = null;
 
-
                         //realignments
                         var realignments_from = (from realignment in db.realignment
                                                  join _rel_fsh in db.fsh on realignment.fundsource equals _rel_fsh.ID.ToString()
@@ -275,7 +274,6 @@ namespace BUDGET
                         else
                             worksheet.Cells[startRow, 16].Value = null;
 
-                        
 
                         //total for the month
                         var uacs_amounts = (from ors_uacs in db.ors_expense_codes
@@ -284,7 +282,8 @@ namespace BUDGET
                                             where ors.Date >= this_month && ors.Date <= date2 &&
                                             ors.FundSource == _fsh.Code &&
                                             allotment.ID == _allotments.ID &&
-                                            ors_uacs.uacs == _fsa.ExpenseTitle
+                                            ors_uacs.uacs == _fsa.ExpenseTitle &&
+                                            ors.deleted == false
                                             select new
                                             {
                                                 Amount = ors_uacs.amount
@@ -313,13 +312,12 @@ namespace BUDGET
                                               where ors.FundSource == _fsh.Code
                                               && ors.Date <= date2 &&
                                               allotment.ID == _allotments.ID &&
-                                              ors_uacs.uacs == _fsa.ExpenseTitle
-
+                                              ors_uacs.uacs == _fsa.ExpenseTitle &&
+                                              ors.deleted == false
                                               select new
                                               {
                                                   Amount = ors_uacs.amount
                                               }).ToList();
-
 
                         Double total_utilized_amount = 0;
                         foreach (var amount in total_utilized)
@@ -372,7 +370,8 @@ namespace BUDGET
                                                  where ors.Date <= date2 &&
                                                  ors.FundSource == _fsh.Code &&
                                                  allotment.ID == _allotments.ID &&
-                                                 ors_uacs.uacs == _fsa.ExpenseTitle
+                                                 ors_uacs.uacs == _fsa.ExpenseTitle &&
+                                                 ors.deleted == false
                                                  select new
                                                  {
                                                      Disbursements = (from ors_date in db.ors_date_entry where ors_date.ors_id == ors.ID && ors_date.ExpenseTitle == _fsa.ExpenseTitle select ors_date.NetAmount + ors_date.TaxAmount + ors_date.Others).DefaultIfEmpty(0).Sum()
@@ -853,7 +852,8 @@ namespace BUDGET
                                                 join allotment in db.allotments on ors.allotment equals allotment.ID
                                                 where ors.Date >= this_month && ors.Date <= date2 &&
                                                 ors.FundSource == _fsh_saa.Code &&
-                                                ors_uacs.uacs == _saa_amt.ExpenseTitle
+                                                ors_uacs.uacs == _saa_amt.ExpenseTitle &&
+                                                ors.deleted == false
                                                 select new
                                                 {
                                                     Amount = ors_uacs.amount
@@ -878,7 +878,8 @@ namespace BUDGET
                                                   join ors in db.ors on ors_uacs.ors_obligation equals ors.ID
                                                   join allotment in db.allotments on ors.allotment equals allotment.ID
                                                   where ors.FundSource == _fsh_saa.Code &&
-                                                  ors_uacs.uacs == _saa_amt.ExpenseTitle
+                                                  ors_uacs.uacs == _saa_amt.ExpenseTitle &&
+                                                  ors.deleted == false
                                                   select new
                                                   {
                                                       Amount = ors_uacs.amount
@@ -918,7 +919,8 @@ namespace BUDGET
                                                          join allotment in db.allotments on ors.allotment equals allotment.ID
                                                          where ors.Date >= date1 && ors.Date <= date2 &&
                                                          ors.FundSource == _fsh_saa.Code &&
-                                                         ors_uacs.uacs == _saa_amt.ExpenseTitle
+                                                         ors_uacs.uacs == _saa_amt.ExpenseTitle &&
+                                                         ors.deleted == false
                                                          select new
                                                          {
                                                              Disbursements = (from ors_date in db.ors_date_entry where ors_date.ors_id == ors.ID && ors_date.ExpenseTitle == _saa_amt.ExpenseTitle select ors_date.NetAmount + ors_date.TaxAmount + ors_date.Others).DefaultIfEmpty(0).Sum()

@@ -125,8 +125,6 @@ namespace BUDGET.Controllers
                     ORS ors = new ORS();
                     try
                     {
-                        ors.is_obligated = "OBLIGATED";
-
                         date = worksheet.Cells[i, 2].Value.ToString();
                         DateTime datetime = Convert.ToDateTime(date);
                         try { ors.Date = datetime; } catch { ors.Date = Convert.ToDateTime("01/01/1900"); }

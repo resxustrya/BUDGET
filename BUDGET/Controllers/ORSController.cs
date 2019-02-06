@@ -54,6 +54,7 @@ namespace BUDGET
             Int32 ors_allotment = Convert.ToInt32(GlobalData.ors_allotment);
             var orsps = (from list in db.ors
                          where list.allotment == ors_allotment
+                         && list.deleted == false
                          orderby list.Date_Added descending
                          select new
                          {
@@ -184,7 +185,6 @@ namespace BUDGET
                         ors.TimeReceived = sb.TimeReceived;
                         ors.DateReleased = sb.DateReleased;
                         ors.TimeReleased = sb.TimeReleased;
-                        ors.head_requesting_office = sb.head_requesting;
 
                         try { db.SaveChanges(); } catch { }
                     }
@@ -221,7 +221,6 @@ namespace BUDGET
                                 ors.TimeReleased = sb.TimeReleased;
                                 ors.Date_Added = DateTime.Now;
                                 ors.dateadded = DateTime.Now.ToString(DateFormat);
-                                ors.head_requesting_office = sb.head_requesting;
                                 db.ors.Add(ors);
                                 try { db.SaveChanges(); } catch { }
 
@@ -259,8 +258,8 @@ namespace BUDGET
 
                 var del_ors = db.ors.Where(p => p.ID == ID).FirstOrDefault();
 
-                var ors_uacs = db.ors_expense_codes.Where(p => p.ors_obligation == del_ors.ID).ToList();
-                db.ors_expense_codes.RemoveRange(ors_uacs);
+                //var ors_uacs = db.ors_expense_codes.Where(p => p.ors_obligation == del_ors.ID).ToList();
+                //db.ors_expense_codes.RemoveRange(ors_uacs);
 
                 var ors_master = db.allotments.Where(p => p.ID.ToString() == GlobalData.ors_allotment).FirstOrDefault();
                 Notifications notifications = new Notifications();
@@ -272,8 +271,7 @@ namespace BUDGET
                 notifications.Year = GlobalData.Year;
                 db.notifications.Add(notifications);
 
-
-                db.ors.Remove(del_ors);
+                del_ors.deleted = true;
                 db.SaveChanges();
             }
             catch (Exception ex)
