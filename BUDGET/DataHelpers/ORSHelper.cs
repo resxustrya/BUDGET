@@ -24,14 +24,19 @@ namespace BUDGET.DataHelpers
             try
             {
                 var this_ors = db.ors.Where(p => p.ID == id).FirstOrDefault();
-                if (db.ors.Where(p => p.allotment == this_ors.allotment).ToList().Count == 1)
-                    this_ors.Row = 1;
-                else
+                if(this_ors.Row == 0)
                 {
-                    var last_ors = db.ors.Where(p => p.allotment == this_ors.allotment && p.Row != 0).OrderByDescending(p => p.Row).FirstOrDefault();
-                    this_ors.Row = last_ors.Row++;
+                    var last_ors = db.ors.Where(p => p.allotment == this_ors.allotment && p.ID != this_ors.ID && p.Row != 0).OrderByDescending(p => p.ID).FirstOrDefault();
+                    if (last_ors == null)
+                        this_ors.Row = 1;
+                    else
+                    {
+                        Int32 lastRow = last_ors.Row;
+                        this_ors.Row = ++lastRow;
+                    }
+                        
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
             }
             catch { }
         }

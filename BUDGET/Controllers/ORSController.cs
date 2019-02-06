@@ -388,7 +388,9 @@ namespace BUDGET
                                     try { oec.Others = Convert.ToDouble(sb.Others); } catch { oec.Others = 0.00; }
                                     db.ors_expense_codes.Add(oec);
                                     db.SaveChanges();
+
                                     ORSHelper.InsertORSNo(id);
+
                                     var ors_allotments = (from ors in db.ors
                                                           join allotments in db.allotments on ors.allotment equals allotments.ID
                                                           where ors.ID == id
