@@ -4,10 +4,8 @@
     ViewBag.Title = "Home";
 }
 
-
 <div class="navbar-default sidebar" role="navigation" style="background-color:white;">
     <div class="sidebar-nav navbar-collapse">
-        
         <ul class="nav" id="side-menu">
             <li class="sidebar-search">
                 <div class="input-group custom-search-form">
@@ -38,19 +36,15 @@
             <div class="row">
                 @foreach (Allotments a in Model.allotments)
                 {
-                    <div class="col-lg-4 col-md-4">
+                    <div class="col-lg-12 col-md-12">
                         <div class="panel panel-green">
                             <div class="panel-heading">
                                 <div class="row">
-                                    <div class="col-xs-2">
+                                    <div class="col-xs-6">
                                         <i class="fa fa-eur fa-5x"></i>
                                     </div>
-                                    <div class="col-xs-8 text-right">
-                                        <div class="huge">@a.Code</div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-12 text-right">
+                                    <div class="col-xs-6 text-right">
+                                        <h3>@a.Code</h3>
                                         @{
                                             DateTime datenow = DateTime.Now;
                                             Double after_realignment = 0.00;

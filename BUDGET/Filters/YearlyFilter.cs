@@ -19,12 +19,12 @@ namespace BUDGET
             {
                 if (HttpContext.Current.Session["year"] == null)
                 {
-                    filterContext.Result = new RedirectToRouteResult(new System.Web.Routing.RouteValueDictionary { { "controller", "Budgets" }, { "action", "Index" } });
+                    filterContext.Result = new RedirectToRouteResult(new System.Web.Routing.RouteValueDictionary { { "controller", "Budgets" }, { "action", "Year" } });
                 }
             }
             catch
             {
-                filterContext.Result = new RedirectToRouteResult(new System.Web.Routing.RouteValueDictionary { { "controller", "Budgets" }, { "action", "Index" } });
+                filterContext.Result = new RedirectToRouteResult(new System.Web.Routing.RouteValueDictionary { { "controller", "Budgets" }, { "action", "Year" } });
             }
            
         }

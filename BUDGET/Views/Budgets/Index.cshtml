@@ -11,16 +11,17 @@
             <h2>Budget Year Reference</h2>
             <a href="@Url.Action("Create","Budgets")" class="btn btn-success pull-right" style="margin-bottom:10px;"><span class="glyphicon glyphicon-plus"></span> Add new</a>
             <table class="table">
+                <tr style="background-color:#D5DBDB;">
+                    <td>Year Referrence</td>
+                    <td></td>
+                </tr>
                 @foreach (YearBudget yb in Model)
                 {
                     <tr>
+                        <td style="color:#071D47;font-weight:bold;">
+                           @yb.Year Budget</td>
                         <td>
-                            <a href="@Url.Action("Year","Budgets",new { id = yb.ID })" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> @yb.Year Budget</a>
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <a href="@Url.Action("DeleteYear","Budgets",new { id = yb.ID })" class="btn btn-danger" onclick="return confirm('Do you want to delete this year?');">Delete</a>
-                            }
-
+                             <a href="@Url.Action("DeleteYear","Budgets",new { id = yb.ID })" class="btn btn-danger" onclick="return confirm('Do you want to delete this year?');">Delete</a>
                         </td>
                     </tr>
                 }

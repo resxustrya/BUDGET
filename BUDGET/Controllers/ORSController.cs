@@ -19,7 +19,6 @@ namespace BUDGET
     [OutputCache(NoStore = true, Duration = 0)]
     public class ORSController : Controller
     {
-       
         BudgetDB db = new BudgetDB();
         // GET: ORS
         public ActionResult Index()

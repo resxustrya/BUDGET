@@ -15,6 +15,7 @@ namespace BUDGET.Controllers
     {
         public BudgetDB db = new BudgetDB();
         // GET: Budgets
+        [CustomAuthorize(Roles = "Admin")]
         public ActionResult Index(int? page)
         {
             int pageSize = 10;
@@ -34,7 +35,7 @@ namespace BUDGET.Controllers
             try
             {
                 Int32 year = Convert.ToInt32(collection.Get("year"));
-                var yearBudget = db.yearbudget.Where(p => p.Year == year).FirstOrDefault();
+                var yearBudget = db.yearbudget.Where(p => p.Year == year && p.active == 1).FirstOrDefault();
                 if (yearBudget != null)
                 {
                     GlobalData.Year = yearBudget.Year.ToString();
@@ -46,26 +47,43 @@ namespace BUDGET.Controllers
             TempData["Error"] = "Input did match any records";
             return RedirectToAction("Year");
         }
-        [Authorize(Roles = "Admin")]
+        [CustomAuthorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
         }
-        [Authorize(Roles = "Admin")]
+        [CustomAuthorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
-            YearBudget yb = new YearBudget();
-            yb.Year = Convert.ToInt32(collection["year"].ToString());
-            yb.CreatedBy = User.Identity.GetUserName();
-            yb.active = 1;
-            db.yearbudget.Add(yb);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                Int32 year = Convert.ToInt32(collection.Get("year"));
+
+                var yearBudget = db.yearbudget.Where(p => p.Year == year && p.active == 1).FirstOrDefault();
+                if (yearBudget == null)
+                {
+                    YearBudget yb = new YearBudget();
+                    yb.Year = year;
+                    yb.CreatedBy = User.Identity.GetUserName();
+                    yb.active = 1;
+                    db.yearbudget.Add(yb);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            catch
+            {
+                TempData["Error"] = "Invalid Data";
+                return RedirectToAction("Create");
+            }
+            
+            TempData["Error"] = "Year referrence already exist";
+            return RedirectToAction("Create");
         }
 
-
-        [Authorize(Roles ="Admin")]
+        [CustomAuthorize(Roles = "Admin")]
         public ActionResult DeleteYear(String id)
         {
             Int32 ID = Convert.ToInt32(id);
