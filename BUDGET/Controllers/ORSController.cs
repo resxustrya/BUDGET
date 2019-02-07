@@ -10,6 +10,7 @@ using BUDGET.Filters;
 using PagedList;
 using System.Threading.Tasks;
 using System.Globalization;
+using System.Data.Entity.SqlServer;
 
 namespace BUDGET
 {
@@ -431,7 +432,7 @@ namespace BUDGET
         }
         public JsonResult GetFundSource(String ID)
         {
-            var ors_allotments = db.fsh.Where(p => p.allotment == ID).ToList();
+            var ors_allotments = db.fsh.Where(p => p.allotment == ID && p.active == 1).OrderBy(p => p.Code).ToList();
 
             return Json(ors_allotments, JsonRequestBehavior.AllowGet);
         }
@@ -499,16 +500,21 @@ namespace BUDGET
         {
             var ors_date_entry = (from list in db.ors_date_entry
                                   where list.ExpenseTitle == expense_title && list.ors_id == ors_id && list.ExpenseCode == expense_code
-                                  select new
-                                  {
-                                      ID = list.ID,
-                                      Date = list.StringDate,
-                                      Amount = list.amount,
-                                      TaxAmount = list.TaxAmount,
-                                      NetAmount = list.NetAmount,
-                                      Others = list.Others,
-                                      Disbursement = list.TaxAmount + list.NetAmount + list.Others
-                                  }).ToList();
+                                  select list)
+                                  .ToList()
+                                  .Select(p =>
+                                    new
+                                    {
+                                        ID = p.ID,
+                                        Date = p.Date != null ? p.Date.Value.ToString("MM/dd/yyyy") : null,
+                                        Amount = p.amount,
+                                        TaxAmount = p.TaxAmount,
+                                        NetAmount = p.NetAmount,
+                                        Others = p.Others,
+                                        chequeNo = p.chequeNo,
+                                        chequeDate = p.chequeDate != null ?  p.chequeDate.Value.ToString("MM/dd/yyyy") : null,
+                                        Disbursement = p.TaxAmount + p.NetAmount + p.Others
+                                    }).ToList();
             return Json(ors_date_entry, JsonRequestBehavior.AllowGet);
         }
         public void SaveOrsDAteJson(FormCollection collection)
@@ -518,6 +524,7 @@ namespace BUDGET
             String expense_code = collection.Get("expense_code");
             List<Object> list = JsonConvert.DeserializeObject<List<Object>>(collection.Get("data"));
 
+
             foreach (Object s in list)
             {
                 try
@@ -525,12 +532,13 @@ namespace BUDGET
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     Int32 id = Convert.ToInt32(sb.ID);
                     var ors_date = db.ors_date_entry.Where(p => p.ID == id).FirstOrDefault();
-                    ors_date.Date = Convert.ToDateTime(sb.Date);
-                    ors_date.StringDate = sb.Date;
+                    try { ors_date.Date = Convert.ToDateTime(sb.Date); } catch { }
                     try { ors_date.amount = Convert.ToDouble(sb.Amount); } catch { ors_date.amount = 0.00; }
                     try { ors_date.NetAmount = Convert.ToDouble(sb.NetAmount); } catch { ors_date.NetAmount = 0.00; }
                     try { ors_date.TaxAmount = Convert.ToDouble(sb.TaxAmount); } catch { ors_date.TaxAmount = 0.00; }
                     try { ors_date.Others = Convert.ToDouble(sb.Others); } catch { ors_date.Others = 0.00; }
+                    ors_date.chequeNo = sb.chequeNo;
+                    try { ors_date.chequeDate = Convert.ToDateTime(sb.chequeDate); } catch { }
                 }
                 catch (Exception ex)
                 {
@@ -541,12 +549,13 @@ namespace BUDGET
                         ors_date.ors_id = ors_id;
                         ors_date.ExpenseCode = expense_code;
                         ors_date.ExpenseTitle = expense_title;
-                        ors_date.Date = Convert.ToDateTime(sb.Date);
-                        ors_date.StringDate = sb.Date;
+                        try { ors_date.Date = Convert.ToDateTime(sb.Date); } catch { }
                         try { ors_date.amount = Convert.ToDouble(sb.Amount); } catch { ors_date.amount = 0.00; }
                         try { ors_date.NetAmount = Convert.ToDouble(sb.NetAmount); } catch { ors_date.NetAmount = 0.00; }
                         try { ors_date.TaxAmount = Convert.ToDouble(sb.TaxAmount); } catch { ors_date.TaxAmount = 0.00; }
                         try { ors_date.Others = Convert.ToDouble(sb.Others); } catch { ors_date.Others = 0.00; }
+                        ors_date.chequeNo = sb.chequeNo;
+                        try { ors_date.chequeDate = Convert.ToDateTime(sb.chequeDate); } catch { }
                         db.ors_date_entry.Add(ors_date);
                     }
                     catch (Exception innerex) { }

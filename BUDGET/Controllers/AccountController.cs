@@ -87,7 +87,7 @@ namespace BUDGET.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToAction("Index", "Budgets");
+                    return RedirectToAction("Year", "Budgets");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:

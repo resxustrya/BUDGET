@@ -25,10 +25,7 @@ namespace BUDGET
         public DbSet<ors_head_request> ors_head_request { get; set; }
         public DbSet<Realignment> realignment { get; set; }
         public DbSet<Notifications> notifications { get; set; }
-        public DbSet<UACS_SubAllotment> uacs_suballotment { get; set; }
-        public DbSet<UACS_SUB_CODES> uacs_sub_codes { get; set; }
         public DbSet<OrsDateEntry> ors_date_entry { get; set; }
-
         public void AddNotifications(String action, String module,String user,String year, DateTime DateAdded, String status)
         {
             Notifications n = new Notifications();

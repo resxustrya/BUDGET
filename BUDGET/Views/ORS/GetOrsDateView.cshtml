@@ -15,7 +15,7 @@
             startRows: 1,
             startCols: 7,
             rowHeaders: true,
-            colWidths: [1, 200,1,200, 200,200,200],
+            colWidths: [1, 200,1,200, 200,200,200,200,200],
             stretchH: 'all',
             colHeaders: true,
             filters: true,
@@ -24,7 +24,7 @@
                 autoInsertRow: false,
             },
             viewportColumnRenderingOffset: 20,
-            colHeaders: ['ID', 'Date','Amount','Total Disbursement','Net Amt.','Tax Amt.','Others'],
+            colHeaders: ['ID', 'Date','Amount','Total Disbursement','Net Amt.','Tax Amt.','Others','Cheque No.','Cheque Date'],
             columns: [
                 {},
                 {
@@ -32,7 +32,13 @@
                     dateFormat: 'MM/DD/YYYY',
                     correctFormat: true,
                     defaultDate: Date.now()
-                }, {}, {}, {}, {}, {}
+                }, {}, {}, {}, {}, {}, {},
+                {
+                    type: 'date',
+                    dateFormat: 'MM/DD/YYYY',
+                    correctFormat: true,
+                    defaultDate: Date.now()
+                }
             ],
             cells: function (r, c, prop) {
                 var cellProperties = {};
@@ -72,9 +78,10 @@
                     "Amount": tabledata[i][2],
                     "NetAmount": tabledata[i][4],
                     "TaxAmount": tabledata[i][5],
-                    "Others": tabledata[i][6]
+                    "Others": tabledata[i][6],
+                    "chequeNo": tabledata[i][7],
+                    "chequeDate" : tabledata[i][8]
                 };
-                console.log(data_ors);
             }
             
             var post_data = {
@@ -97,12 +104,11 @@
                 var tabledata = [];
                 if (resdata.length > 0) {
                     for (var i = 0; i < resdata.length; i++) {
-                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Date'],numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']), numberWithCommas(resdata[i]['NetAmount']), numberWithCommas(resdata[i]['TaxAmount']), numberWithCommas(resdata[i]['Others']));
+                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['Date'],numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']), numberWithCommas(resdata[i]['NetAmount']), numberWithCommas(resdata[i]['TaxAmount']), numberWithCommas(resdata[i]['Others']),resdata[i]['chequeNo'],resdata[i]['chequeDate']);
                     }
                 } else {
                     tabledata[0] = new Array(null,null,null,null,null,null,null);
                 }
-                
                 table_uacs.loadData(tabledata);
             });
         }

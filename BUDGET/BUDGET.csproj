@@ -231,10 +231,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AllotmentsController.cs" />
-    <Compile Include="Controllers\BudgetAllotmentsController.cs" />
     <Compile Include="Controllers\BudgetsController.cs" />
     <Compile Include="Controllers\BudgetSummaryController.cs" />
-    <Compile Include="Controllers\CoinsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ExpenseCodesController.cs" />
     <Compile Include="Controllers\FormsController.cs" />
@@ -558,13 +556,36 @@
     <Compile Include="Migrations\201902060459168_add_col1.Designer.cs">
       <DependentUpon>201902060459168_add_col1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902070156527_remove_table3.cs" />
+    <Compile Include="Migrations\201902070156527_remove_table3.Designer.cs">
+      <DependentUpon>201902070156527_remove_table3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902070159003_removeTable.cs" />
+    <Compile Include="Migrations\201902070159003_removeTable.Designer.cs">
+      <DependentUpon>201902070159003_removeTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902070211325_add_col2.cs" />
+    <Compile Include="Migrations\201902070211325_add_col2.Designer.cs">
+      <DependentUpon>201902070211325_add_col2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902070223418_change_col.cs" />
+    <Compile Include="Migrations\201902070223418_change_col.Designer.cs">
+      <DependentUpon>201902070223418_change_col.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902070237585_removed_col.cs" />
+    <Compile Include="Migrations\201902070237585_removed_col.Designer.cs">
+      <DependentUpon>201902070237585_removed_col.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902070315359_change_col1.cs" />
+    <Compile Include="Migrations\201902070315359_change_col1.Designer.cs">
+      <DependentUpon>201902070315359_change_col1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
     <Compile Include="Models\BudgetDbContext.cs" />
     <Compile Include="Models\FundSourceAmount.cs" />
     <Compile Include="Models\FundSourceHdr.cs" />
-    <Compile Include="Models\FundSourceViewModel.cs" />
     <Compile Include="Models\HomeViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -580,7 +601,6 @@
     <Compile Include="Models\Realignment.cs" />
     <Compile Include="Models\UACS.cs" />
     <Compile Include="Models\UACS_SubAllotment.cs" />
-    <Compile Include="Models\UACS_SUB_CODES.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\YearBudget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -846,7 +866,6 @@
     <Content Include="Views\Home\MOOE.cshtml" />
     <Content Include="Views\ORSReports\PrintOrs.cshtml" />
     <Content Include="Views\ExpenseCodes\ExpenseCodes.cshtml" />
-    <Content Include="Views\Budgets\Index.cshtml" />
     <Content Include="Views\Budgets\Create.cshtml" />
     <Content Include="Views\ExpenseCodes\Prexc.cshtml" />
     <Content Include="Views\Home\TEST.cshtml" />
@@ -895,6 +914,7 @@
     <Content Include="Views\Allotments\AllotmentSeries.cshtml" />
     <Content Include="Views\Coins\Index.cshtml" />
     <Content Include="Views\BudgetSummary\GetSaob.cshtml" />
+    <Content Include="Views\Budgets\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1157,6 +1177,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902060459168_add_col1.resx">
       <DependentUpon>201902060459168_add_col1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902070156527_remove_table3.resx">
+      <DependentUpon>201902070156527_remove_table3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902070159003_removeTable.resx">
+      <DependentUpon>201902070159003_removeTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902070211325_add_col2.resx">
+      <DependentUpon>201902070211325_add_col2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902070223418_change_col.resx">
+      <DependentUpon>201902070223418_change_col.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902070237585_removed_col.resx">
+      <DependentUpon>201902070237585_removed_col.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902070315359_change_col1.resx">
+      <DependentUpon>201902070315359_change_col1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

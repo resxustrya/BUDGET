@@ -23,6 +23,9 @@ namespace BUDGET
             DateTime date2 = Convert.ToDateTime(date_to);
 
 
+            worksheet.Cells[11, 1, 11, 10].Merge = true;
+            worksheet.Cells[12, 1, 12, 10].Merge = true;
+
             String str_this_month = date2.ToString("MM") + "/01/" + date2.ToString("yyyy");
             DateTime this_month = Convert.ToDateTime(str_this_month);
 

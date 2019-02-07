@@ -17,24 +17,35 @@ namespace BUDGET.Controllers
         // GET: Budgets
         public ActionResult Index(int? page)
         {
-            Session.Remove("year");
-            GlobalData.Year = null;
             int pageSize = 10;
             int pageIndex = 1;
             pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
             var yearlybudget = from yb in db.yearbudget where yb.active == 1 orderby yb.Year descending select yb;
             return View(yearlybudget.ToPagedList(pageIndex,pageSize));
         }
-        public ActionResult Year(String id)
+        public ActionResult Year()
         {
-            Int32 ID = Convert.ToInt32(id);
-            var year = db.yearbudget.Where(p => p.ID == ID).FirstOrDefault();
-            GlobalData.Year = year.Year.ToString();
-            Session["year"] = year.ID;
-            return PartialView();
-            
+            return View();
         }
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Year(FormCollection collection)
+        {
+            try
+            {
+                Int32 year = Convert.ToInt32(collection.Get("year"));
+                var yearBudget = db.yearbudget.Where(p => p.Year == year).FirstOrDefault();
+                if (yearBudget != null)
+                {
+                    GlobalData.Year = yearBudget.Year.ToString();
+                    Session["year"] = yearBudget.ID;
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            catch { }
+            TempData["Error"] = "Input did match any records";
+            return RedirectToAction("Year");
+        }
         [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {

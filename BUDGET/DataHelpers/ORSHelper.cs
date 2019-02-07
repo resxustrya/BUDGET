@@ -39,5 +39,11 @@ namespace BUDGET.DataHelpers
             }
             catch { }
         }
+        public static String FormatDate(DateTime date)
+        {
+            if (date != null)
+                return date.ToShortDateString();
+            return "";
+        }
     }
 }
