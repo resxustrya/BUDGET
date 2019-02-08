@@ -49,14 +49,13 @@
                                 } else if (selection.length == 1) {
                                     var index = 0;
                                     for (var i = selection[0][0]; i <= selection[0][2]; i++,index++) {
-                                        console.log(tempdata[i][0]);
                                         data[index] = {
                                             "ID" : tempdata[i][0]
                                         }
                                     }
                                 }
                                 
-                                /*
+                                
                                 if (id) {
                                     var url = $("#ors_table").data('print_ors') + "/" + id;
                                     window.location.href = url;
@@ -67,7 +66,7 @@
                                         title: "Print ORS"
                                     });
                                 }
-                                */
+                                
                             }
                         },
                         "": {
