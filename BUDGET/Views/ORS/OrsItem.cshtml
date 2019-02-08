@@ -38,8 +38,22 @@
                                 var selection = this.getSelected();
                                 var tempdata = this.getData();
                                 var data = [];
-                                for (var i = 0; i < selection.length; i++) {
-                                    var item = selection[i];
+                                var item;
+                                
+                                if (selection.length > 1) {
+                                    for (var i = 0; selection.length; i++) {
+                                        data[i] = {
+                                            "ID" : tempdata[selection[i][0]][0]
+                                        }
+                                    }
+                                } else if (selection.length == 1) {
+                                    var index = 0;
+                                    for (var i = selection[0][0]; i <= selection[0][2]; i++,index++) {
+                                        console.log(tempdata[i][0]);
+                                        data[index] = {
+                                            "ID" : tempdata[i][0]
+                                        }
+                                    }
                                 }
                                 
                                 /*
