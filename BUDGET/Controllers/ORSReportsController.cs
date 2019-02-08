@@ -370,6 +370,7 @@ namespace BUDGET.Controllers
 
 
             var ors_disbursemnts = (from ors_date in db.ors_date_entry where ors_date.ors_id == ors.ID orderby ors_date.Date ascending select ors_date).ToList();
+            Double totalPayment = 0;
             foreach (var p in ors_disbursemnts)
             {
                 table_row_12.AddCell(new PdfPCell(new Paragraph(p.Date != null ? p.Date.Value.ToShortDateString() : "" , FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 12, Border = 12 });
@@ -378,10 +379,12 @@ namespace BUDGET.Controllers
                 table_row_12.AddCell(new PdfPCell(new Paragraph("", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 12, Border =12 });
 
                 Double payment = p.NetAmount + p.TaxAmount + p.Others;
-                Double notYetDue = total_amt - payment;
+                totalPayment += payment;
+
+                Double notYetDue = total_amt - totalPayment;
 
                 table_row_12.AddCell(new PdfPCell(new Paragraph(payment > 0 ? payment.ToString("N", new CultureInfo("en-US")) : "", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 12 ,Border = 12});
-                table_row_12.AddCell(new PdfPCell(new Paragraph(notYetDue > 0 ? notYetDue.ToString("N", new CultureInfo("en-US")) : "", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 12, Border = 12 });
+                table_row_12.AddCell(new PdfPCell(new Paragraph(notYetDue > 0 ? notYetDue.ToString("N", new CultureInfo("en-US")) : "-", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 12, Border = 12 });
                 table_row_12.AddCell(new PdfPCell(new Paragraph("\n", FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 12, Border = 12 });
             }
 

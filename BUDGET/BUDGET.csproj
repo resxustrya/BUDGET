@@ -622,6 +622,8 @@
     <Content Include="Content\flip.card.css" />
     <Content Include="Content\handson\handsontable.css" />
     <Content Include="Content\handson\handsontable.js" />
+    <Content Include="Content\handson\handsontable_v6.css" />
+    <Content Include="Content\handson\handsontable_v6.js" />
     <Content Include="Content\handson\languages.js" />
     <Content Include="Content\handson\moment.js" />
     <Content Include="Content\handson\pikaday.css" />

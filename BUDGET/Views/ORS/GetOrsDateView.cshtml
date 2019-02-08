@@ -54,7 +54,6 @@
                     var data = {
                         "ID": row_item[0]
                     };
-
                     $.post(url, data, function (resdata) {
                     });
                     return true;
@@ -92,6 +91,11 @@
             };
             $.post(save_url, post_data, function (res) {
                 load_ors_date();
+                Lobibox.notify('success', {
+                    rounded: true,
+                    size: 'mini',
+                    msg: 'Changes saved.'
+                });
             });
         });
         function load_ors_date() {

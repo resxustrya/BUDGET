@@ -256,7 +256,14 @@ namespace BUDGET
                 dynamic ors = JsonConvert.DeserializeObject<dynamic>(data);
                 int ID = Convert.ToInt32(ors.ID);
 
-                var del_ors = db.ors.Where(p => p.ID == ID).FirstOrDefault();
+                var deleteOrs = db.ors.Where(p => p.ID == ID).FirstOrDefault();
+                deleteOrs.deleted = true;
+
+                var delOrsUacs = db.ors_expense_codes.Where(p => p.ors_obligation == deleteOrs.ID).ToList();
+                var delOrsDate = db.ors_date_entry.Where(p => p.ors_id == deleteOrs.ID).ToList();
+
+                db.ors_expense_codes.RemoveRange(delOrsUacs);
+                db.ors_date_entry.RemoveRange(delOrsDate);
 
                 //var ors_uacs = db.ors_expense_codes.Where(p => p.ors_obligation == del_ors.ID).ToList();
                 //db.ors_expense_codes.RemoveRange(ors_uacs);
@@ -271,7 +278,7 @@ namespace BUDGET
                 notifications.Year = GlobalData.Year;
                 db.notifications.Add(notifications);
 
-                del_ors.deleted = true;
+                
                 db.SaveChanges();
             }
             catch (Exception ex)
@@ -426,6 +433,10 @@ namespace BUDGET
             Int32 id = Convert.ToInt32(ID);
             var remove_uacs = db.ors_expense_codes.Where(p => p.ID == id).FirstOrDefault();
             db.ors_expense_codes.Remove(remove_uacs);
+
+            var removeOrsDate = db.ors_date_entry.Where(p => p.ors_id == remove_uacs.ors_obligation && p.ExpenseTitle == remove_uacs.uacs).ToList();
+            db.ors_date_entry.RemoveRange(removeOrsDate);
+
             db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
@@ -453,7 +464,6 @@ namespace BUDGET
         [ValidateAntiForgeryToken]
         public ActionResult CreateOrsHeadRequest(FormCollection collection)
         {
-
             ors_head_request ohr = new ors_head_request();
             ohr.Name = collection.Get("name");
             ohr.Position = collection.Get("position");
@@ -523,7 +533,6 @@ namespace BUDGET
             String expense_code = collection.Get("expense_code");
             List<Object> list = JsonConvert.DeserializeObject<List<Object>>(collection.Get("data"));
 
-
             foreach (Object s in list)
             {
                 try
@@ -561,6 +570,13 @@ namespace BUDGET
                 }
             }
             db.SaveChanges();
+        }
+
+        public void DeleteOrsDate(String ID)
+        {
+            Int32 id = Convert.ToInt32(ID);
+            var delOrsDate = db.ors_date_entry.Where(p => p.ID == id).FirstOrDefault();
+            db.ors_date_entry.Remove(delOrsDate);
         }
     }
 }

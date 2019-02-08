@@ -20,20 +20,29 @@
                 startRows: 1,
                 startCols: 17,
                 rowHeaders: true,
-                colWidths: [1, 1, 140, 200, 200, 200, 300, 300, 700, 100, 200, 200, 200, 200, 200, 200, 200],
+                colWidths: [100, 100, 140, 200, 200, 200, 300, 300, 700, 100, 200, 200, 200, 200, 200, 200, 200],
                 colHeaders: true,
                 filters: true,
                 stretchH: 'all',
                 dropdownMenu: true,
+                fillHandle: {
+                    autoInsertRow: false,
+                },
+                outsideClickDeselects: false,
+                selectionMode: 'multiple',
                 contextMenu: {
                     items: {
                         "make_bold": {
                             name: 'Print ORS',
                             callback: function (key, options) {
-                                var selection = this.getSelectedRange();
-                                var fromRow = Math.min(selection.from.row, selection.to.row);
+                                var selection = this.getSelected();
                                 var tempdata = this.getData();
-                                var id = tempdata[fromRow][0];
+                                var data = [];
+                                for (var i = 0; i < selection.length; i++) {
+                                    var item = selection[i];
+                                }
+                                
+                                /*
                                 if (id) {
                                     var url = $("#ors_table").data('print_ors') + "/" + id;
                                     window.location.href = url;
@@ -44,6 +53,7 @@
                                         title: "Print ORS"
                                     });
                                 }
+                                */
                             }
                         },
                         "": {
@@ -77,10 +87,29 @@
                         }, "row_below": {}, "remove_row": {}, "row_above": {}, "copy": {},
                     }
                 },
-                manualColumnMove: true,
-                fillHandle: {
-                    autoInsertRow: false,
+                beforeRemoveRow: function (index, column) {
+                    if (confirm("Are you sure you want to delete this item") == true) {
+                        alert(table.getSelected());
+                        var items = this.getData();
+                        var row_item = items[index];
+                        var url = $("#ors_table").data('delete');
+
+                        var ps = {
+                            "ID": row_item[0]
+                        };
+                        var data = {
+                            data: JSON.stringify(ps)
+                        };
+                        /*
+                        $.post(url, data, function (resdata) {
+                            load_data();
+                        });*/
+                        return true;
+                    } else {
+                        return false;
+                    }
                 },
+               
                 colHeaders: ['<b>ID</b>', '<b>ROW#</b>', '<b>DATE</b/>', '<b>DV</b>', '<b>PO#</b>', '<b>PR#</b>', '<b>PAYEE</b>', '<b>ADDRESS</b>', '<b>PARTICULARS</b>', '<b>ORS NO</b>', '<b>FUND SOURCE</b>', '<b>GROSS</b>', '<b>CREATED BY</b>', '<b>Date Received</b>', '<b>Time Received</b>', '<b>Date Released</b>', '<b>Time Released</b>', ''],
                 columns: [
                     {},
@@ -127,27 +156,7 @@
                     if (c === 0 || c === 1 || c == 9 || c == 11 || c == 12) cellProperties.readOnly = true;
                     return cellProperties;
                 },
-                beforeRemoveRow: function (index, column) {
-                    if (confirm("Are you sure you want to delete this item") == true) {
-                        var items = this.getData();
-                        var row_item = items[index];
-                        var url = $("#ors_table").data('delete');
-                            
-                        var ps = {
-                            "ID": row_item[0]
-                        };
-                        var data = {
-                            data: JSON.stringify(ps)
-                        };
-
-                        $.post(url, data, function (resdata) {
-                            load_data();
-                        });
-                        return true;
-                    } else {
-                        return false;
-                    }
-                },
+                
                 afterValidate: function (isValid, value, row, prop, source) {
                     if (!isValid) {
                         valid = false;
@@ -217,6 +226,11 @@
 
                                     $.post(url, data, function (resdata) {
                                         load_data();
+                                        Lobibox.notify('success', {
+                                            rounded: true,
+                                            size: 'mini',
+                                            msg: 'Changes saved.'
+                                        });
                                         document.body.style.cursor = 'default';
                                     });
                                 } else {
@@ -263,6 +277,7 @@
                 $("#total_ors").text("TOTAL : " + grand_total);
                 disbursements = disbursements > 0 ? numberWithCommas(disbursements) : "0.00";
                 $("#disbursement").text("DISBURSMENT : " + disbursements);
+                
             });
         }
 

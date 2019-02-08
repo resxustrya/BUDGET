@@ -198,6 +198,11 @@
             var url = $("#table_uacs").data('save');
             $.post(url, data, function (resdata) {
                 load_ors_uacs();
+                Lobibox.notify('success', {
+                    rounded: true,
+                    size: 'mini',
+                    msg: 'Changes saved.'
+                });
             });
         }
     });
