@@ -204,4 +204,5 @@ function deleteRows(url,data)
     };
     $.post(url, postData, function (resdata) {
     });
+    return true;
 }

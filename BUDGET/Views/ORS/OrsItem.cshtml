@@ -60,11 +60,14 @@
                         var data = [];
                         var url = $("#ors_table").data('delete');
                         data = selectedRows(selection, tempdata, 0);
-                        deleteRows(url, data);
-                        return true;
+                        if (deleteRows(url, data)) {
+                            load_data();
+                            return true;
+                        }
                     } else {
                         return false;
                     }
+                    
                 },
                 colHeaders: ['<b>ID</b>', '<b>ROW#</b>', '<b>DATE</b/>', '<b>DV</b>', '<b>PO#</b>', '<b>PR#</b>', '<b>PAYEE</b>', '<b>ADDRESS</b>', '<b>PARTICULARS</b>', '<b>ORS NO</b>', '<b>FUND SOURCE</b>', '<b>GROSS</b>', '<b>CREATED BY</b>', '<b>Date Received</b>', '<b>Time Received</b>', '<b>Date Released</b>', '<b>Time Released</b>', ''],
                 columns: [

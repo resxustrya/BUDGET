@@ -131,7 +131,6 @@ namespace BUDGET
                 worksheet.Cells[startRow, 1].Style.Font.Size = 12;
                 worksheet.Cells[startRow, 1].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 1].Value = _allotments.Title.ToUpper().ToString();
-
                 startRow++;
 
 

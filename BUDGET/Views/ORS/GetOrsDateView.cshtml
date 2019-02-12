@@ -55,7 +55,9 @@
                     var data = [];
                     var url = $("#uacs_ors_date").data('delete');
                     data = selectedRows(selection, tempdata, 0);
-                    deleteRows(url, data);
+                    if (deleteRows(url, data)) {
+                        load_ors_date();
+                    }
                     return true;
                 } else {
                     return false;
