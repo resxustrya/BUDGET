@@ -23,6 +23,8 @@
             fillHandle: {
                 autoInsertRow: false,
             },
+            outsideClickDeselects: false,
+            selectionMode: 'multiple',
             viewportColumnRenderingOffset: 20,
             colHeaders: ['ID', 'Date','Amount','Total Disbursement','Net Amt.','Tax Amt.','Others','Cheque No.','Cheque Date'],
             columns: [
@@ -48,14 +50,12 @@
 
             beforeRemoveRow: function (index, column) {
                 if (confirm("Are you sure you want to delete this item") == true) {
-                    var items = this.getData();
-                    var row_item = items[index];
+                    var selection = this.getSelected();
+                    var tempdata = this.getData();
+                    var data = [];
                     var url = $("#uacs_ors_date").data('delete');
-                    var data = {
-                        "ID": row_item[0]
-                    };
-                    $.post(url, data, function (resdata) {
-                    });
+                    data = selectedRows(selection, tempdata, 0);
+                    deleteRows(url, data);
                     return true;
                 } else {
                     return false;

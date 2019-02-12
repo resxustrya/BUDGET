@@ -46,7 +46,6 @@ namespace BUDGET
         }
 
         [CustomAuthorize(Roles = "Admin,Employee,Cashier")]
-
         [Route("get/ors/ps", Name = "get_ors_ps")]
         public JsonResult GetOrsPS()
         {
@@ -248,38 +247,41 @@ namespace BUDGET
         }
 
         [CustomAuthorize(Roles = "Admin,Employee")]
-        [Route("delete/ors/ps",Name = "delete_ors_ps")]
+        [HttpPost]
         public ActionResult DeleteORSPS(String data)
         {
             try
             {
-                dynamic ors = JsonConvert.DeserializeObject<dynamic>(data);
-                int ID = Convert.ToInt32(ors.ID);
+                List<Object> orsList = JsonConvert.DeserializeObject<List<Object>>(data);
+                foreach (Object ors in orsList)
+                {
+                    dynamic sb = JsonConvert.DeserializeObject<dynamic>(ors.ToString());
+                    Int32 ID = Convert.ToInt32(sb.ID);
 
-                var deleteOrs = db.ors.Where(p => p.ID == ID).FirstOrDefault();
-                deleteOrs.deleted = true;
+                    var deleteOrs = db.ors.Where(p => p.ID == ID).FirstOrDefault();
+                    deleteOrs.deleted = true;
 
-                var delOrsUacs = db.ors_expense_codes.Where(p => p.ors_obligation == deleteOrs.ID).ToList();
-                var delOrsDate = db.ors_date_entry.Where(p => p.ors_id == deleteOrs.ID).ToList();
+                    var delOrsUacs = db.ors_expense_codes.Where(p => p.ors_obligation == deleteOrs.ID).ToList();
+                    var delOrsDate = db.ors_date_entry.Where(p => p.ors_id == deleteOrs.ID).ToList();
 
-                db.ors_expense_codes.RemoveRange(delOrsUacs);
-                db.ors_date_entry.RemoveRange(delOrsDate);
+                    db.ors_expense_codes.RemoveRange(delOrsUacs);
+                    db.ors_date_entry.RemoveRange(delOrsDate);
 
-                //var ors_uacs = db.ors_expense_codes.Where(p => p.ors_obligation == del_ors.ID).ToList();
-                //db.ors_expense_codes.RemoveRange(ors_uacs);
+                    //var ors_uacs = db.ors_expense_codes.Where(p => p.ors_obligation == del_ors.ID).ToList();
+                    //db.ors_expense_codes.RemoveRange(ors_uacs);
 
-                var ors_master = db.allotments.Where(p => p.ID.ToString() == GlobalData.ors_allotment).FirstOrDefault();
-                Notifications notifications = new Notifications();
-                notifications.Module = "ORS, " + ors_master.Title;
-                notifications.User = User.Identity.GetUserName();
-                notifications.Action = " removed an ors obligation from";
-                notifications.status = "delete";
-                notifications.DateAdded = DateTime.Now;
-                notifications.Year = GlobalData.Year;
-                db.notifications.Add(notifications);
+                    var ors_master = db.allotments.Where(p => p.ID.ToString() == GlobalData.ors_allotment).FirstOrDefault();
+                    Notifications notifications = new Notifications();
+                    notifications.Module = "ORS, " + ors_master.Title;
+                    notifications.User = User.Identity.GetUserName();
+                    notifications.Action = " removed an ors obligation from";
+                    notifications.status = "delete";
+                    notifications.DateAdded = DateTime.Now;
+                    notifications.Year = GlobalData.Year;
+                    db.notifications.Add(notifications);
 
-                
-                db.SaveChanges();
+                    db.SaveChanges();
+                }
             }
             catch (Exception ex)
             {
@@ -427,15 +429,19 @@ namespace BUDGET
         }
         [HttpPost]
         [CustomAuthorize(Roles = "Admin,Employee")]
-        public JsonResult DeleteUacs(FormCollection collection)
+        public JsonResult DeleteUacs(String data)
         {
-            String ID = collection.Get("ID");
-            Int32 id = Convert.ToInt32(ID);
-            var remove_uacs = db.ors_expense_codes.Where(p => p.ID == id).FirstOrDefault();
-            db.ors_expense_codes.Remove(remove_uacs);
+            List<Object> uacsList = JsonConvert.DeserializeObject<List<Object>>(data);
+            foreach (Object uacs in uacsList)
+            {
+                dynamic sb = JsonConvert.DeserializeObject<dynamic>(uacs.ToString());
+                Int32 id = Convert.ToInt32(sb.ID);
+                var remove_uacs = db.ors_expense_codes.Where(p => p.ID == id).FirstOrDefault();
+                db.ors_expense_codes.Remove(remove_uacs);
 
-            var removeOrsDate = db.ors_date_entry.Where(p => p.ors_id == remove_uacs.ors_obligation && p.ExpenseTitle == remove_uacs.uacs).ToList();
-            db.ors_date_entry.RemoveRange(removeOrsDate);
+                var removeOrsDate = db.ors_date_entry.Where(p => p.ors_id == remove_uacs.ors_obligation && p.ExpenseTitle == remove_uacs.uacs).ToList();
+                db.ors_date_entry.RemoveRange(removeOrsDate);
+            }
 
             db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -571,12 +577,18 @@ namespace BUDGET
             }
             db.SaveChanges();
         }
-
-        public void DeleteOrsDate(String ID)
+        [HttpPost]
+        public void DeleteOrsDate(String data)
         {
-            Int32 id = Convert.ToInt32(ID);
-            var delOrsDate = db.ors_date_entry.Where(p => p.ID == id).FirstOrDefault();
-            db.ors_date_entry.Remove(delOrsDate);
+            List<Object> orsDateList = JsonConvert.DeserializeObject<List<Object>>(data);
+            foreach (Object orsDate in orsDateList)
+            {
+                dynamic sb = JsonConvert.DeserializeObject<dynamic>(orsDate.ToString());
+                Int32 id = Convert.ToInt32(sb.ID);
+                var delOrsDate = db.ors_date_entry.Where(p => p.ID == id).FirstOrDefault();
+                db.ors_date_entry.Remove(delOrsDate);
+            }
+            db.SaveChanges();
         }
     }
 }

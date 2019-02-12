@@ -103,20 +103,22 @@
         stretchH: 'all',
         colHeaders: true,
         filters: true,
+        outsideClickDeselects: false,
+        selectionMode: 'multiple',
         //contextMenu: ['row_above', 'row_below', 'remove_row', 'copy'],
         contextMenu : {
             items : {
                 "": {
                     name: 'Add Disbursement',
                     callback: function (key, options) {
-                        var selection = this.getSelectedRange();
-                        var fromRow = Math.min(selection.from.row, selection.to.row);
+                        var selection = this.getSelected();
                         var tempdata = this.getData();
-                        var uacs = tempdata[fromRow][1];
+                        var data = [];
+                        var expenseTitle = selectedRows(selection, tempdata, 1)[0];
+                        var expenseCode = selectedRows(selection, tempdata, 2)[0];
                         var ors_id = $("#table_uacs").data('ors_obligation');
-                        var code = tempdata[fromRow][2];
                         rotateCard();
-                        $.get($("#table_uacs").data('ors_date') + "?uacs=" + uacs + "&ors_id=" + ors_id + "&code=" + code , function (resdata) {
+                        $.get($("#table_uacs").data('ors_date') + "?uacs=" + expenseTitle + "&ors_id=" + ors_id + "&code=" + expenseCode , function (resdata) {
                             $("#ors_date_obligation").html(resdata);
                         });
                     }
@@ -136,18 +138,14 @@
             if (c === 0 || c == 2 || c === 4  @(User.IsInRole("Cashier") ? " || c === 0 || c === 1 || c === 2 || c === 3" : "") ) cellProperties.readOnly = true;
             return cellProperties;
         },
-
         beforeRemoveRow: function (index, column) {
             if (confirm("Are you sure you want to delete this item") == true) {
-                var items = this.getData();
-                var row_item = items[index];
+                var selection = this.getSelected();
+                var tempdata = this.getData();
+                var data = [];
                 var url = $("#table_uacs").data('delete');
-                var data = {
-                    "ID": row_item[0]
-                };
-
-                $.post(url, data, function (resdata) {
-                });
+                data = selectedRows(selection, tempdata, 0);
+                deleteRows(url, data);
                 return true;
             } else {
                 return false;

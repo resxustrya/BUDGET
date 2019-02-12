@@ -1,5 +1,4 @@
 ﻿$(document).ready(function () {
-
     $(document).on('focus', ':input', function () {
         $(this).attr('autocomplete', 'off');
     });
@@ -127,8 +126,6 @@ function resize() {
 
 
 function openWindowWithPost(url, data, allotmentID) {
-
-    
     var form = document.createElement("form");
     form.target = "_blank";
     form.method = "POST";
@@ -169,6 +166,7 @@ function selectedRows(selection, tempdata,col)
     }
     return data;
 }
+
 function orsUACS(id)
 {
     if (id) {
@@ -191,4 +189,19 @@ function orsUACS(id)
             title: "UACS Amount Entry / Disbmt"
         });
     }
+}
+
+function deleteRows(url,data)
+{
+    var rowID = [];
+    for (key in data) {
+        rowID[key] = {
+            "ID" : data[key]
+        }
+    }
+    var postData = {
+        data: JSON.stringify(rowID)
+    };
+    $.post(url, postData, function (resdata) {
+    });
 }

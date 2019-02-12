@@ -365,7 +365,6 @@ namespace BUDGET.Controllers
                     table_row_12.WidthPercentage = 100f;
                     table_row_12.SetWidths(new float[] { 12, 20, 28, 15, 15, 10, 20 });
 
-
                     table_row_12.AddCell(new PdfPCell(new Paragraph(ors.Date.ToShortDateString(), FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 12, Border = 13 });
                     table_row_12.AddCell(new PdfPCell(new Paragraph("Obligation", FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 12, Border = 13 });
                     table_row_12.AddCell(new PdfPCell(new Paragraph(ORSHelper.GetOrsCode(ors.allotment.ToString()) + " - 10" + (previous == true ? "2" : "") + "101 - " + ors.Date.ToString("yyyy-MM") + " - " + ors.Row, FontFactory.GetFont("Arial", 7, Font.BOLD, BaseColor.BLACK))) { HorizontalAlignment = Element.ALIGN_CENTER, FixedHeight = 12, Border = 12 });
@@ -434,7 +433,6 @@ namespace BUDGET.Controllers
                 Paragraph err = new Paragraph("Row(s) might not be saved or has no data.");
                 doc.Add(err);
             }
-
             try
             {
                 doc.Close();
