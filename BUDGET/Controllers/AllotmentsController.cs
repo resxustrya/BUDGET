@@ -89,7 +89,6 @@ namespace BUDGET
                 n.DateAdded = DateTime.Now;
                 n.status = "delete";
                 db.notifications.Add(n);
-
                 db.SaveChanges();
             }
             catch { }
@@ -201,7 +200,7 @@ namespace BUDGET
                         id = Convert.ToInt32(sb.ID);
                         var fsa = db.fsa.Where(p => p.ID == id && p.fundsource == fundsource).FirstOrDefault();
                         fsa.expense_title = sb.expense_title;
-                        fsa.amount = Convert.ToDouble(sb.amount);
+                        try { fsa.amount = Convert.ToDouble(sb.amount); } catch { fsa.amount = 0.00; }
                         try { db.SaveChanges(); } catch { }
                     }
                 }
@@ -237,18 +236,19 @@ namespace BUDGET
         [Route("delete/fundsource/amount",Name ="delete_fund_source_amount")]
         public JsonResult DeleteFundSourceAmount(String data)
         {
-            try
+            List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
+            foreach (Object s in list)
             {
-                dynamic ors = JsonConvert.DeserializeObject<dynamic>(data);
-                int ID = Convert.ToInt32(ors.ID);
-
-                var delete_fsa = db.fsa.Where(p => p.ID == ID).FirstOrDefault();
-                db.fsa.Remove(delete_fsa);
-                db.SaveChanges();
+                try
+                {
+                    dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
+                    int ID = Convert.ToInt32(sb.ID);
+                    var delete_fsa = db.fsa.Where(p => p.ID == ID).FirstOrDefault();
+                    db.fsa.Remove(delete_fsa);
+                }
+                catch { }
             }
-            catch (Exception ex)
-            {
-            }
+            db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
         
@@ -256,7 +256,6 @@ namespace BUDGET
         {
             return View();
         }
-        
 
         public ActionResult SubAllotment(String allotment)
         {
@@ -354,10 +353,9 @@ namespace BUDGET
                         id = Convert.ToInt32(sb.ID);
                         var fsa = db.fsa.Where(p => p.ID == id && p.fundsource == fsh).FirstOrDefault();
                         fsa.expense_title = sb.expense_title;
-                        fsa.amount = Convert.ToDouble(sb.amount);
+                        try { fsa.amount = Convert.ToDouble(sb.amount); } catch { fsa.amount = 0.00; }
                         try { db.SaveChanges(); } catch { }
                     }
-                    
                 }
                 catch (Exception ex)
                 {
@@ -390,18 +388,19 @@ namespace BUDGET
 
         public JsonResult DeleteSaaAmt(String data)
         {
-            try
+            List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
+            foreach (Object s in list)
             {
-                dynamic obj = JsonConvert.DeserializeObject<dynamic>(data);
-                int ID = Convert.ToInt32(obj.ID);
-                var saa_amt = db.fsa.Where(p => p.ID == ID).FirstOrDefault();
-                db.fsa.Remove(saa_amt);
-                db.SaveChanges();
+                try
+                {
+                    dynamic obj = JsonConvert.DeserializeObject<dynamic>(s.ToString());
+                    int ID = Convert.ToInt32(obj.ID);
+                    var saa_amt = db.fsa.Where(p => p.ID == ID).FirstOrDefault();
+                    db.fsa.Remove(saa_amt);
+                    db.SaveChanges();
 
-            }
-            catch (Exception ex)
-            {
-                return Json(true, JsonRequestBehavior.AllowGet);
+                }
+                catch { }
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }

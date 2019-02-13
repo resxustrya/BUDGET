@@ -114,13 +114,23 @@
                         var selection = this.getSelected();
                         var tempdata = this.getData();
                         var data = [];
-                        var expenseTitle = selectedRows(selection, tempdata, 1)[0];
-                        var expenseCode = selectedRows(selection, tempdata, 2)[0];
-                        var ors_id = $("#table_uacs").data('ors_obligation');
-                        rotateCard();
-                        $.get($("#table_uacs").data('ors_date') + "?uacs=" + expenseTitle + "&ors_id=" + ors_id + "&code=" + expenseCode , function (resdata) {
-                            $("#ors_date_obligation").html(resdata);
-                        });
+                        var rowID = selectedRows(selection, tempdata, 0)[0]
+                        if (rowID) {
+                            var expenseTitle = selectedRows(selection, tempdata, 1)[0];
+                            var expenseCode = selectedRows(selection, tempdata, 2)[0];
+                            var ors_id = $("#table_uacs").data('ors_obligation');
+                            rotateCard();
+                            $.get($("#table_uacs").data('ors_date') + "?uacs=" + expenseTitle + "&ors_id=" + ors_id + "&code=" + expenseCode, function (resdata) {
+                                $("#ors_date_obligation").html(resdata);
+                            });
+                        } else {
+                            Lobibox.alert("warning", //AVAILABLE TYPES: "error", "info", "success", "warning"
+                            {
+                                msg: "This row is not yet saved.",
+                                title: "ORS UACS"
+                            });
+                        }
+                        
                     }
                 }, "row_below": {}, "remove_row": {}
             }

@@ -94,11 +94,9 @@
     Session["saved"] = null;
 }
 
-
 @section footer{
     @Html.Partial("footer")
 }
-
 
 @section scripts {
     <script>
@@ -125,60 +123,7 @@
            ],
            contextMenu: {
                items: {
-                   "Allotment": {
-                       name: 'Sub-Allotment',
-                       callback: function (key, options) {
-                           var selection = this.getSelectedRange();
-                           var fromRow = Math.min(selection.from.row, selection.to.row);
-                           var tempdata = this.getData();
-                           var uacs = tempdata[fromRow][1];
-                           
-                           if (uacs) {
-                               var fundsource = $("#table").data('id');
-                               var url = $("#table").data('suballotment');
-                               $("#ors_modal").modal({
-                                   backdrop: 'static',
-                                   keyboard: false,
-                                   show: true
-                               });
-                               $(".ors_body").html('');
-                               $(".loading").show();
-                               $.get(url ,{ fundsource : fundsource, uacs : uacs }, function (res) {
-                                   $(".ors_body").html(res);
-                                   $(".loading").hide();
-                               });
-                           }
-                       }
-                   },
-                   "Realignment" : {
-                       name: 'Realignment',
-                       callback: function (key, options) {
-                           var selection = this.getSelectedRange();
-                           var fromRow = Math.min(selection.from.row, selection.to.row);
-                           var tempdata = this.getData();
-                           var uacs = tempdata[fromRow][1];
-                           if (uacs) {
-                               
-                               var url = $("#table").data('realignment');
-                               var fundsource = $("#table").data('id');
-
-                               $("#ors_modal").modal({
-                                   backdrop: 'static',
-                                   keyboard: false,
-                                   show: true
-                               });
-
-                               $(".ors_body").html('');
-                               $(".loading").show();
-                               $.get(url,  function (res) {
-                                   $(".ors_body").html(res);
-                                   $(".loading").hide();
-                               });
-                           }
-                       }
-                   },
                    "row_below": {}, "remove_row": {},
-
                }
            },
            cells: function (r, c, prop) {
@@ -187,24 +132,23 @@
                return cellProperties;
            },
            beforeRemoveRow: function (index, column) {
-               var items = this.getData();
-               var row_item = items[index];
-               var url = $("#table").data('delete');
-
-               var ps = {
-                   "ID": row_item[0]
-               };
-               var data = {
-                   data: JSON.stringify(ps)
-               };
-               $.post(url, data, function (resdata) {
-                   items = table.getData();
-                   if (items.length <= 0) {
-                       var tabledata = [];
-                       tabledata[0] = new Array(null, null, null, null);
-                       table.loadData(tabledata);
+               if (confirm("Are you sure you want to delete this item") == true) {
+                   var selection = this.getSelected();
+                   var tempdata = this.getData();
+                   var data = [];
+                   var url = $("#table").data('delete');
+                   data = selectedRows(selection, tempdata, 0);
+                   if (deleteRows(url, data)) {
+                       if (this.getData().length <= 0) {
+                           var tabledata = [];
+                           tabledata[0] = new Array(null, null, null, null);
+                           table.loadData(tabledata);
+                       }
+                       return true;
                    }
-               });
+               } else {
+                   return false;
+               }
            }
        });
 
