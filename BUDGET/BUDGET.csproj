@@ -249,6 +249,7 @@
     <Compile Include="DataHelpers\AllotmentBalance.cs" />
     <Compile Include="DataHelpers\ModelAllotments.cs" />
     <Compile Include="DataHelpers\ORSHelper.cs" />
+    <Compile Include="DataHelpers\OrsReportSummary.cs" />
     <Compile Include="DataHelpers\PdfPtableEvents.cs" />
     <Compile Include="DataHelpers\rpt_saob.cs" />
     <Compile Include="DataHelpers\rpt_saobsheet2.cs" />
@@ -580,6 +581,10 @@
     <Compile Include="Migrations\201902070315359_change_col1.Designer.cs">
       <DependentUpon>201902070315359_change_col1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902130423027_getFundSource.cs" />
+    <Compile Include="Migrations\201902130423027_getFundSource.Designer.cs">
+      <DependentUpon>201902130423027_getFundSource.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Allotments.cs" />
@@ -793,6 +798,7 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="excel_reports\ORSSUMMARY.xlsx" />
     <None Include="Properties\PublishProfiles\budget.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -917,6 +923,7 @@
     <Content Include="Views\Coins\Index.cshtml" />
     <Content Include="Views\BudgetSummary\GetSaob.cshtml" />
     <Content Include="Views\Budgets\Index.cshtml" />
+    <Content Include="Views\Reports\OrsSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -925,7 +932,6 @@
     <Folder Include="Content\less\" />
     <Folder Include="Content\upload\" />
     <Folder Include="Views\Json\" />
-    <Folder Include="Views\Opo\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -1197,6 +1203,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902070315359_change_col1.resx">
       <DependentUpon>201902070315359_change_col1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902130423027_getFundSource.resx">
+      <DependentUpon>201902130423027_getFundSource.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

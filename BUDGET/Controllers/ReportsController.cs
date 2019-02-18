@@ -59,10 +59,26 @@ namespace BUDGET.Controllers
             var fsResult = new FileStreamResult(fileStream, "application/pdf");
             return fsResult;
         }
-        public ActionResult OrsSummary()
+        public ActionResult OrsSummary(String allotment)
         {
-            return View();
+            Int32 ID = Convert.ToInt32(allotment);
+            var fundsource = db.fsh.Where(p => p.allotment == ID.ToString() && p.active == 1).OrderBy(p => p.Code).ToList();
+            return PartialView(fundsource);
         }
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult OrsSummary(FormCollection collection)
+        {
+            OrsReportSummary rpt = new OrsReportSummary();
+            DateTime dateFrom = Convert.ToDateTime(collection.Get("dateFrom"));
+            DateTime dateTo = Convert.ToDateTime(collection.Get("dateTo"));
+            String fundsource = collection.Get("fundsource");
+            Int32 allotmentID = Convert.ToInt32(Session["allotmentID"].ToString());
+            rpt.CreateExcel(allotmentID, fundsource,dateFrom, dateTo);
+            var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            var filesStream = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/ORSSUMMARY2.xlsx"), FileMode.Open);
+            FileStreamResult fsResult = new FileStreamResult(filesStream, contentType);
+            return fsResult;
+        }
     }
 }

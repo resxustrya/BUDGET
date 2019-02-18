@@ -1,0 +1,36 @@
+﻿
+<div class="row">
+    <div class="col-md-12">
+        <h3>ORS Reports Summary</h3>
+        <form role="form" action="@Url.Action("OrsSummary","Reports")" method="post">
+            @Html.AntiForgeryToken()
+            <table>
+                <tr>
+                    <td>Select Fundsource</td>
+                    <td>
+                        <select name="fundsource" class="form-control">
+                            <option value="" selected disabled>Select Value</option>
+                            @foreach (FundSourceHdr fsh in Model)
+                            {
+                                <option value="@fsh.Code">@fsh.Code</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Date From</td>
+                    <td><input type="date" name="dateFrom" required class="form-control" /></td>
+                </tr>
+                <tr>
+                    <td>Date To</td>
+                    <td><input type="date" name="dateTo" required class="form-control" /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button type="submit" class="btn btn-success btn-lg"> <span class="glyphicon glyphicon-arrow-down"></span> Download</button></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+

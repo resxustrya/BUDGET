@@ -206,3 +206,15 @@ function deleteRows(url,data)
     });
     return true;
 }
+
+$("#ors_summary").click(function () {
+    var url = $(this).data('url');
+    $("#page_modal").modal('show');
+    $(".modal_body").html('');
+    $(".loading").show();
+    $.get(url, function (res) {
+        $(".modal_body").html(res);
+        $(".loading").hide();
+    });
+});
+

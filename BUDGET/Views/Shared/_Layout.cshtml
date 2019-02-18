@@ -104,7 +104,10 @@ CREATED BY : LOURENCE REX B. TRAYA
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="javascript:void(0)" id="saob" data-url="@Url.Action("DownloadSaob","Reports")"><span class="glyphicon glyphicon-share-alt"></span> STATEMENT OF ALLOTMENT, OBLIGATIONS AND BALANCES</a></li>
-                            <li><a href="javascript:void(0)" id="ors_summary" data-url="@Url.Action("OrsSummary","Reports")"><span class="glyphicon glyphicon-share-alt"></span> Ors Summary</a></li>
+                            @if (Session["allotmentID"] != null)
+                            {
+                                <li><a href="javascript:void(0)"  id="ors_summary" data-url="@Url.Action("OrsSummary","Reports",new { allotment = Session["allotmentID"].ToString() })"><span class="glyphicon glyphicon-share-alt"></span> Ors Summary</a></li>
+                            }
                             <li><a href="javascript:void(0)" id="ors_page" data-url="@Url.Action("ORS_PAGE","ORSReports")"><span class="glyphicon glyphicon-share-alt"></span> ORS Page Printing</a></li>
                         </ul>
                     </li>

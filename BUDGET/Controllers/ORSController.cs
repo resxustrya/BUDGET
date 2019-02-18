@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using BUDGET.DataHelpers;
 using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
 using BUDGET.Filters;
 using PagedList;
-using System.Threading.Tasks;
-using System.Globalization;
-using System.Data.Entity.SqlServer;
+using System.Data.SqlClient;
 
 namespace BUDGET
 {
@@ -25,7 +22,6 @@ namespace BUDGET
         {
             return View();
         }
-
         [Route("ors/ps", Name = "ors_ps")]
         public ActionResult ORPS()
         {
@@ -39,7 +35,7 @@ namespace BUDGET
             String query = Request.QueryString["q"] ?? "";
             Session["query"] = query;
             var allotment = db.allotments.Where(p => p.ID.ToString() == ID).FirstOrDefault();
-            GlobalData.ors_allotment = allotment.ID.ToString();
+            Session["allotmentID"] = allotment.ID;
             ViewBag.Menu = allotment.year + " | " + allotment.Code;
             ViewBag.allotments = allotment.ID.ToString();
             return View();
@@ -50,9 +46,9 @@ namespace BUDGET
         public JsonResult GetOrsPS()
         {
             String query = Session["query"].ToString().ToLower();
-            Int32 ors_allotment = Convert.ToInt32(GlobalData.ors_allotment);
+            Int32 allotmentID = Convert.ToInt32(Session["allotmentID"].ToString());
             var orsps = (from list in db.ors
-                         where list.allotment == ors_allotment
+                         where list.allotment == allotmentID
                          && list.deleted == false
                          orderby list.Date_Added descending
                          select new
@@ -155,7 +151,7 @@ namespace BUDGET
         {
             List<Object> list = JsonConvert.DeserializeObject<List<Object>>(data);
             Int32 id = 0;
-            Int32 ors_allotment = Convert.ToInt32(GlobalData.ors_allotment);
+            Int32 allotmentId = Convert.ToInt32(Session["allotmentID"].ToString());
             String DateFormat = "yyyy-MM-dd HH:mm:ss";
             foreach (Object s in list)
             {
@@ -163,12 +159,12 @@ namespace BUDGET
                 {
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     String fundsource = (String)sb.FundSource;
-                    var fundsource_exist = db.fsh.Where(p => p.allotment.ToString() == GlobalData.ors_allotment && p.Code == fundsource).ToList();
+                    var fundsource_exist = db.fsh.Where(p => p.allotment.ToString() == allotmentId.ToString() && p.Code == fundsource).ToList();
 
                     if(fundsource_exist.Count > 0)
                     {
                         id = Convert.ToInt32(sb.ID);
-                        var ors = db.ors.Where(p => p.ID == id).Where(p => p.allotment == ors_allotment).FirstOrDefault();
+                        var ors = db.ors.Where(p => p.ID == id).Where(p => p.allotment == allotmentId).FirstOrDefault();
                         Object date = sb.Date;
                         ors.Date1 = date.ToString();
                         DateTime datetime = Convert.ToDateTime(date.ToString());
@@ -194,14 +190,14 @@ namespace BUDGET
                     try
                     {
                         String fundsource = (String)sb.FundSource;
-                        var fundsource_exist = db.fsh.Where(p => p.allotment.ToString() == GlobalData.ors_allotment && p.Code == fundsource).ToList();
+                        var fundsource_exist = db.fsh.Where(p => p.allotment == allotmentId.ToString() && p.Code == fundsource).ToList();
 
                         if(fundsource_exist.Count > 0)
                         {
                             if (sb.Date != null && sb.Particulars != null && sb.PAYEE != null)
                             {
                                 ORS ors = new ORS();
-                                ors.allotment = Convert.ToInt32(GlobalData.ors_allotment);
+                                ors.allotment = allotmentId;
                                 Object date = sb.Date;
                                 ors.Date1 = date.ToString();
                                 DateTime datetime = Convert.ToDateTime(date.ToString());
@@ -225,7 +221,7 @@ namespace BUDGET
 
                                 try
                                 {
-                                    var ors_master = db.allotments.Where(p => p.ID.ToString() == GlobalData.ors_allotment).FirstOrDefault();
+                                    var ors_master = db.allotments.Where(p => p.ID == allotmentId).FirstOrDefault();
                                     Notifications notifications = new Notifications();
                                     notifications.Module = "ORS, " + ors_master.Title;
                                     notifications.User = User.Identity.GetUserName();
@@ -250,6 +246,7 @@ namespace BUDGET
         [HttpPost]
         public ActionResult DeleteORSPS(String data)
         {
+            Int32 allotmentID = Convert.ToInt32(Session["allotmentID"].ToString());
             try
             {
                 List<Object> orsList = JsonConvert.DeserializeObject<List<Object>>(data);
@@ -270,7 +267,7 @@ namespace BUDGET
                     //var ors_uacs = db.ors_expense_codes.Where(p => p.ors_obligation == del_ors.ID).ToList();
                     //db.ors_expense_codes.RemoveRange(ors_uacs);
 
-                    var ors_master = db.allotments.Where(p => p.ID.ToString() == GlobalData.ors_allotment).FirstOrDefault();
+                    var ors_master = db.allotments.Where(p => p.ID == allotmentID).FirstOrDefault();
                     Notifications notifications = new Notifications();
                     notifications.Module = "ORS, " + ors_master.Title;
                     notifications.User = User.Identity.GetUserName();
@@ -589,6 +586,19 @@ namespace BUDGET
                 db.ors_date_entry.Remove(delOrsDate);
             }
             db.SaveChanges();
+        }
+
+        public ActionResult Procedure(String id)
+        {
+            Int32 ID = Convert.ToInt32(id);
+            var parameter = new SqlParameter {
+                ParameterName = "ID",
+                Value = ID
+            };
+
+            var fsh = db.fsh.SqlQuery("GERFUNDSOURCE @ID", parameter);
+                
+            return Json(fsh, JsonRequestBehavior.AllowGet);
         }
     }
 }
