@@ -588,7 +588,6 @@ namespace BUDGET
                 allotments_row_totals.Add(_allotments.Code, dic_allotment_received);
 
 
-
                 worksheet.Cells[startRow, 13].Style.Font.Name = "TAHOMA";
                 worksheet.Cells[startRow, 13].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 13].Style.Font.Bold = true;
@@ -1047,6 +1046,7 @@ namespace BUDGET
                     sub_dic_allotment_received.Add("AS_OF_MONTH_GRAND_TOTAL", sub_as_of_month_grand_total);
                     sub_dic_allotment_received.Add("UNOBLIGATED_GRAND_TOTAL", sub_unobligated_grand_total);
                     sub_dic_allotment_received.Add("DISBURSEMENTS", sub_disbursement_grand_total);
+
 
                     sub_allotments_row_totals.Add(_allotments.Code, sub_dic_allotment_received);
                 }

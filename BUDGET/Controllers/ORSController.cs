@@ -434,8 +434,17 @@ namespace BUDGET
                 dynamic sb = JsonConvert.DeserializeObject<dynamic>(uacs.ToString());
                 Int32 id = Convert.ToInt32(sb.ID);
                 var remove_uacs = db.ors_expense_codes.Where(p => p.ID == id).FirstOrDefault();
-                db.ors_expense_codes.Remove(remove_uacs);
 
+                Notifications notifications = new Notifications();
+                notifications.Module = "ORS";
+                notifications.User = User.Identity.GetUserName();
+                notifications.Action = " removed an expense code " + remove_uacs.uacs;
+                notifications.status = "delete";
+                notifications.DateAdded = DateTime.Now;
+                notifications.Year = GlobalData.Year;
+                db.notifications.Add(notifications);
+
+                db.ors_expense_codes.Remove(remove_uacs);
                 var removeOrsDate = db.ors_date_entry.Where(p => p.ors_id == remove_uacs.ors_obligation && p.ExpenseTitle == remove_uacs.uacs).ToList();
                 db.ors_date_entry.RemoveRange(removeOrsDate);
             }
@@ -543,23 +552,8 @@ namespace BUDGET
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     Int32 id = Convert.ToInt32(sb.ID);
                     var ors_date = db.ors_date_entry.Where(p => p.ID == id).FirstOrDefault();
-                    try { ors_date.Date = Convert.ToDateTime(sb.Date); } catch { }
-                    try { ors_date.amount = Convert.ToDouble(sb.Amount); } catch { ors_date.amount = 0.00; }
-                    try { ors_date.NetAmount = Convert.ToDouble(sb.NetAmount); } catch { ors_date.NetAmount = 0.00; }
-                    try { ors_date.TaxAmount = Convert.ToDouble(sb.TaxAmount); } catch { ors_date.TaxAmount = 0.00; }
-                    try { ors_date.Others = Convert.ToDouble(sb.Others); } catch { ors_date.Others = 0.00; }
-                    ors_date.chequeNo = sb.chequeNo;
-                    try { ors_date.chequeDate = Convert.ToDateTime(sb.chequeDate); } catch { }
-                }
-                catch (Exception ex)
-                {
-                    dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
-                    try
+                    if (!Object.ReferenceEquals(null, sb.Date) && (!Object.ReferenceEquals(null, sb.NetAmount) || !Object.ReferenceEquals(null, sb.TaxAmount) || !Object.ReferenceEquals(null, sb.Others)))
                     {
-                        OrsDateEntry ors_date = new OrsDateEntry();
-                        ors_date.ors_id = ors_id;
-                        ors_date.ExpenseCode = expense_code;
-                        ors_date.ExpenseTitle = expense_title;
                         try { ors_date.Date = Convert.ToDateTime(sb.Date); } catch { }
                         try { ors_date.amount = Convert.ToDouble(sb.Amount); } catch { ors_date.amount = 0.00; }
                         try { ors_date.NetAmount = Convert.ToDouble(sb.NetAmount); } catch { ors_date.NetAmount = 0.00; }
@@ -567,7 +561,29 @@ namespace BUDGET
                         try { ors_date.Others = Convert.ToDouble(sb.Others); } catch { ors_date.Others = 0.00; }
                         ors_date.chequeNo = sb.chequeNo;
                         try { ors_date.chequeDate = Convert.ToDateTime(sb.chequeDate); } catch { }
-                        db.ors_date_entry.Add(ors_date);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
+                    try
+                    {
+                        if(!Object.ReferenceEquals(null,sb.Date) && (!Object.ReferenceEquals(null,sb.NetAmount) || !Object.ReferenceEquals(null,sb.TaxAmount) || !Object.ReferenceEquals(null,sb.Others)))
+                        {
+                            OrsDateEntry ors_date = new OrsDateEntry();
+                            ors_date.ors_id = ors_id;
+                            ors_date.ExpenseCode = expense_code;
+                            ors_date.ExpenseTitle = expense_title;
+                            try { ors_date.Date = Convert.ToDateTime(sb.Date); } catch { }
+                            try { ors_date.amount = Convert.ToDouble(sb.Amount); } catch { ors_date.amount = 0.00; }
+                            try { ors_date.NetAmount = Convert.ToDouble(sb.NetAmount); } catch { ors_date.NetAmount = 0.00; }
+                            try { ors_date.TaxAmount = Convert.ToDouble(sb.TaxAmount); } catch { ors_date.TaxAmount = 0.00; }
+                            try { ors_date.Others = Convert.ToDouble(sb.Others); } catch { ors_date.Others = 0.00; }
+                            ors_date.chequeNo = sb.chequeNo;
+                            try { ors_date.chequeDate = Convert.ToDateTime(sb.chequeDate); } catch { }
+                            db.ors_date_entry.Add(ors_date);
+                        }
+                        
                     }
                     catch (Exception innerex) { }
                 }

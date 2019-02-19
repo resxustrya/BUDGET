@@ -44,6 +44,7 @@ namespace BUDGET
                 worksheet.Cells[startRow, 2].Value = ors.DB;
                 worksheet.Cells[startRow, 3].Value = ors.PAYEE;
                 worksheet.Cells[startRow, 4].Value = ors.Row;
+                worksheet.Cells[startRow, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells[startRow, 5].Value = ors.FundSource;
 
                 var orsUacs = (from _orsuacs in db.ors_expense_codes
