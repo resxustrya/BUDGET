@@ -67,14 +67,13 @@ namespace BUDGET.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult OrsSummary(FormCollection collection)
+        public ActionResult OrsSummary(FormCollection collection, String[] fundsource)
         {
             OrsReportSummary rpt = new OrsReportSummary();
             DateTime dateFrom = Convert.ToDateTime(collection.Get("dateFrom"));
             DateTime dateTo = Convert.ToDateTime(collection.Get("dateTo"));
-            String fundsource = collection.Get("fundsource");
             Int32 allotmentID = Convert.ToInt32(Session["allotmentID"].ToString());
-            rpt.CreateExcel(allotmentID, fundsource,dateFrom, dateTo);
+            rpt.CreateExcel(allotmentID,fundsource ,dateFrom, dateTo);
             var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             var filesStream = new FileStream(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/ORSSUMMARY2.xlsx"), FileMode.Open);
             FileStreamResult fsResult = new FileStreamResult(filesStream, contentType);

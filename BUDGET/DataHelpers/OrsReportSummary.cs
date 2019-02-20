@@ -10,9 +10,10 @@ namespace BUDGET
 {
     public class OrsReportSummary
     {
-        public void CreateExcel(Int32 allotmentID,String fundsource,DateTime dateFrom,DateTime dateTo)
+        public void CreateExcel(Int32 allotmentID,String[] fundsource,DateTime dateFrom,DateTime dateTo)
         {
             BudgetDB db = new BudgetDB();
+            IEnumerable<ORS> orsList;
             FileInfo excelFile = new FileInfo(System.Web.HttpContext.Current.Server.MapPath("~/excel_reports/ORSSUMMARY.xlsx"));
             try
             {
@@ -31,9 +32,11 @@ namespace BUDGET
             ExcelWorksheet worksheet = pck.Workbook.Worksheets[1];
 
             Int32 startRow = 2;
-            var orsList = db.ors.Where(p => p.allotment == allotmentID && p.FundSource == fundsource && p.deleted == false && p.Date >= dateFrom && p.Date <= dateTo).OrderBy(p => p.Date).ToList();
-
-
+            
+            if(fundsource != null)
+                orsList = (from ors in db.ors where ors.allotment == allotmentID && fundsource.Contains(ors.FundSource) && ors.deleted == false && ors.Date >= dateFrom && ors.Date <= dateTo orderby ors.FundSource, ors.Date select ors).ToList();
+            else
+                orsList = db.ors.Where(p => p.allotment == allotmentID && p.deleted == false && p.Date >= dateFrom && p.Date <= dateTo).OrderBy(p => p.FundSource).ToList();
             foreach (ORS ors in orsList)
             {
                 Int32 count = 1;

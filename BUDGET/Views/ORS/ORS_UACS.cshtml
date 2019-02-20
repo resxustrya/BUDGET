@@ -156,9 +156,10 @@
                 var url = $("#table_uacs").data('delete');
                 data = selectedRows(selection, tempdata, 0);
                 if (deleteRows(url, data)) {
+                    alert("Rows deleted");
                     load_ors_uacs();
+                    return true;
                 }
-                return true;
             } else {
                 return false;
             }
@@ -225,11 +226,17 @@
                 var total;
                 var uacs_total = 0;
                 var uacs_disbursment = 0;
-                for (var i = 0; i < resdata.length; i++) {
-                    tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseTitle'], resdata[i]['ExpenseCode'], numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']), numberWithCommas(resdata[i]['NetAmount']), numberWithCommas(resdata[i]['TaxAmount']), numberWithCommas(resdata[i]['Others']));
-                    uacs_total += resdata[i]['Amount'];
-                    uacs_disbursment += resdata[i]['NetAmount'] + resdata[i]['TaxAmount'] + resdata[i]['Others'];
+                if(resdata.length > 0)
+                {
+                    for (var i = 0; i < resdata.length; i++) {
+                        tabledata[i] = new Array(resdata[i]['ID'], resdata[i]['ExpenseTitle'], resdata[i]['ExpenseCode'], numberWithCommas(resdata[i]['Amount']), numberWithCommas(resdata[i]['Disbursement']), numberWithCommas(resdata[i]['NetAmount']), numberWithCommas(resdata[i]['TaxAmount']), numberWithCommas(resdata[i]['Others']));
+                        uacs_total += resdata[i]['Amount'];
+                        uacs_disbursment += resdata[i]['NetAmount'] + resdata[i]['TaxAmount'] + resdata[i]['Others'];
+                    }
+                } else {
+                    tabledata = new Array(null, null, null, null, null, null, null);
                 }
+                
                 table_uacs.loadData(tabledata);
                 uacs_total = uacs_total > 0 ? numberWithCommas(uacs_total) : "0.00";
                 uacs_disbursment = uacs_disbursment > 0 ? numberWithCommas(uacs_disbursment) : "0.00";

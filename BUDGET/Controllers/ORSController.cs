@@ -544,7 +544,6 @@ namespace BUDGET
             String expense_title = collection.Get("expense_title");
             String expense_code = collection.Get("expense_code");
             List<Object> list = JsonConvert.DeserializeObject<List<Object>>(collection.Get("data"));
-
             foreach (Object s in list)
             {
                 try
@@ -552,10 +551,9 @@ namespace BUDGET
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     Int32 id = Convert.ToInt32(sb.ID);
                     var ors_date = db.ors_date_entry.Where(p => p.ID == id).FirstOrDefault();
-                    if (!Object.ReferenceEquals(null, sb.Date) && (!Object.ReferenceEquals(null, sb.NetAmount) || !Object.ReferenceEquals(null, sb.TaxAmount) || !Object.ReferenceEquals(null, sb.Others)))
+                    if (sb.Date != "" && (sb.NetAmount > 0 || sb.TaxAmount > 0 || sb.Others > 0))
                     {
                         try { ors_date.Date = Convert.ToDateTime(sb.Date); } catch { }
-                        try { ors_date.amount = Convert.ToDouble(sb.Amount); } catch { ors_date.amount = 0.00; }
                         try { ors_date.NetAmount = Convert.ToDouble(sb.NetAmount); } catch { ors_date.NetAmount = 0.00; }
                         try { ors_date.TaxAmount = Convert.ToDouble(sb.TaxAmount); } catch { ors_date.TaxAmount = 0.00; }
                         try { ors_date.Others = Convert.ToDouble(sb.Others); } catch { ors_date.Others = 0.00; }
@@ -568,14 +566,13 @@ namespace BUDGET
                     dynamic sb = JsonConvert.DeserializeObject<dynamic>(s.ToString());
                     try
                     {
-                        if(!Object.ReferenceEquals(null,sb.Date) && (!Object.ReferenceEquals(null,sb.NetAmount) || !Object.ReferenceEquals(null,sb.TaxAmount) || !Object.ReferenceEquals(null,sb.Others)))
+                        if (sb.Date != "" && (sb.NetAmount > 0 || sb.TaxAmount > 0 || sb.Others > 0))
                         {
                             OrsDateEntry ors_date = new OrsDateEntry();
                             ors_date.ors_id = ors_id;
                             ors_date.ExpenseCode = expense_code;
                             ors_date.ExpenseTitle = expense_title;
                             try { ors_date.Date = Convert.ToDateTime(sb.Date); } catch { }
-                            try { ors_date.amount = Convert.ToDouble(sb.Amount); } catch { ors_date.amount = 0.00; }
                             try { ors_date.NetAmount = Convert.ToDouble(sb.NetAmount); } catch { ors_date.NetAmount = 0.00; }
                             try { ors_date.TaxAmount = Convert.ToDouble(sb.TaxAmount); } catch { ors_date.TaxAmount = 0.00; }
                             try { ors_date.Others = Convert.ToDouble(sb.Others); } catch { ors_date.Others = 0.00; }

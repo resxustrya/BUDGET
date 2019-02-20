@@ -55,8 +55,9 @@
                 if (deleteRows(url, data)) {
                     alert("Successfully deleted");
                     load_ors_date();
+                    return true;
                 }
-                return true;
+                
             } else {
                 return false;
             }

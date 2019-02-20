@@ -71,7 +71,7 @@ CREATED BY : LOURENCE REX B. TRAYA
                 </li>
                 if (User.IsInRole("Admin"))
                 {
-                    <!--
+                    
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <span class="glyphicon glyphicon-upload"> </span>
@@ -79,21 +79,14 @@ CREATED BY : LOURENCE REX B. TRAYA
                         </a>
                         <ul class="dropdown-menu dropdown-alerts">
                             <li>
-                                <a href="javascript:void(0);" id="upload_prex" data-url="@Url.Action("UploadPrexc", "Uploads")">
+                                <a href="javascript:void(0);" id="upload_orsmooe" data-url="@Url.Action("UploadORS","Uploads")">
                                     <span class="glyphicon glyphicon-share-alt"></span>
-                                    Upload PREXC
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" id="upload_orsmooe" data-url="@Url.Action("UploadORSMooe","Uploads")">
-                                    <span class="glyphicon glyphicon-share-alt"></span>
-                                    Upload ORS MOOE
+                                    ORS Upload
                                 </a>
                             </li>
                         </ul>
-                       
                     </li>
-                        -->
+                        
                 }
                 if (User.IsInRole("Admin") || User.IsInRole("Encoder"))
                 {

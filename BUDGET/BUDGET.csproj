@@ -256,6 +256,7 @@
     <Compile Include="DataHelpers\SaobExcel.cs" />
     <Compile Include="DataHelpers\SaobExcelSheet1.cs" />
     <Compile Include="DataHelpers\SaobExcelSheet2.cs" />
+    <Compile Include="DataHelpers\ThreadOrsUpload.cs" />
     <Compile Include="DataHelpers\UacsHelper.cs" />
     <Compile Include="Filters\CustomAuthorizeAttribute.cs" />
     <Compile Include="Filters\NoCache.cs" />
@@ -924,6 +925,7 @@
     <Content Include="Views\BudgetSummary\GetSaob.cshtml" />
     <Content Include="Views\Budgets\Index.cshtml" />
     <Content Include="Views\Reports\OrsSummary.cshtml" />
+    <Content Include="Views\Uploads\UploadORS.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
