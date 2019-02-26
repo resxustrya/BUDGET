@@ -431,7 +431,7 @@ namespace BUDGET
                     worksheet.Cells[startRow, 3].Style.Font.Bold = true;
                     worksheet.Cells[startRow, 3].Value = "SUBTOTAL " + _fsh.SourceTitle.ToUpper() + " - " + _allotments.Code.ToUpper();
 
-                    worksheet.Cells[startRow, 3, startRow, 10].Merge = true;
+                    //worksheet.Cells[startRow, 3, startRow, 10].Merge = true;
 
 
                     worksheet.Cells[startRow, 13].Style.Font.Name = "TAHOMA";
@@ -969,13 +969,10 @@ namespace BUDGET
 
 
 
-
                         // SUB ALLOTMENT ALLOTMENT TITLE
-                        worksheet.Cells[startRow, 1].Style.Font.Name = "TAHOMA";
-                        worksheet.Cells[startRow, 1].Style.Font.Size = 12;
-                        worksheet.Cells[startRow, 1].Style.Font.Bold = true;
-                        worksheet.Cells[startRow, 1].Value = "SUBTOTAL " + _fsh_saa.Code.ToString().ToUpper();
-
+                        worksheet.Cells[startRow, 3].Style.Font.Name = "TAHOMA";
+                        worksheet.Cells[startRow, 3].Style.Font.Bold = true;
+                        worksheet.Cells[startRow, 3].Value = "SUBTOTAL " + _fsh_saa.Code.ToString().ToUpper();
 
                         // SUB ALLOTMENT RECEIVED SUB TOTAL
                         worksheet.Cells[startRow, 13].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
@@ -1056,6 +1053,7 @@ namespace BUDGET
 
             // DISPLAY ALL ALLOTMENT GRAND TOTAL
 
+            Double allotmentReceivedGrandTotal = 0, totalAfterRealignmentGrandTotal = 0, currentMonthGrandTotal = 0, asOfMonthGrandTotal = 0, unobligatedGrandTotal = 0, disbursementsGrandTotal = 0, percentGrandTotal = 0;
 
             foreach (var d in allotments_row_totals.Keys)
             {
@@ -1070,41 +1068,50 @@ namespace BUDGET
                 worksheet.Cells[startRow, 13].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 13].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 13].Style.Numberformat.Format = "#,##0.00";
-                worksheet.Cells[startRow, 13].Value = allotments_row_totals[d]["ALLOTMENT_RECEIVED"] > 0 ? allotments_row_totals[d]["ALLOTMENT_RECEIVED"].ToString("N", new CultureInfo("en-US")) : "";
+                worksheet.Cells[startRow, 13].Value = allotments_row_totals[d]["ALLOTMENT_RECEIVED"] > 0 ? allotments_row_totals[d]["ALLOTMENT_RECEIVED"] : 0;
+
+                allotmentReceivedGrandTotal += allotments_row_totals[d]["ALLOTMENT_RECEIVED"];
+
 
                 worksheet.Cells[startRow, 16].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 worksheet.Cells[startRow, 16].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 16].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 16].Style.Numberformat.Format = "#,##0.00";
-                worksheet.Cells[startRow, 16].Value = allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"] > 0 ? allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"].ToString("N", new CultureInfo("en-US")) : "";
+                worksheet.Cells[startRow, 16].Value = allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"] > 0 ? allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"]: 0;
 
+                totalAfterRealignmentGrandTotal += allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"];
 
                 worksheet.Cells[startRow, 17].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 worksheet.Cells[startRow, 17].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 17].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 17].Style.Numberformat.Format = "#,##0.00";
-                worksheet.Cells[startRow, 17].Value = allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"] > 0 ? allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
+                worksheet.Cells[startRow, 17].Value = allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"] > 0 ? allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"] : 0;
 
+                currentMonthGrandTotal += allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"];
 
                 worksheet.Cells[startRow, 18].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 worksheet.Cells[startRow, 18].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 18].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 18].Style.Numberformat.Format = "#,##0.00";
-                worksheet.Cells[startRow, 18].Value = allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"] > 0 ? allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
+                worksheet.Cells[startRow, 18].Value = allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"] > 0 ? allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"] : 0;
+
+                asOfMonthGrandTotal += allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"];
 
                 worksheet.Cells[startRow, 19].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 worksheet.Cells[startRow, 19].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 19].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 19].Style.Numberformat.Format = "#,##0.00";
-                worksheet.Cells[startRow, 19].Value = allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"] > 0 ? allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
+                worksheet.Cells[startRow, 19].Value = allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"] > 0 ? allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"] : 0;
 
+                unobligatedGrandTotal += allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"];
 
                 worksheet.Cells[startRow, 21].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 worksheet.Cells[startRow, 21].Style.Numberformat.Format = "#,##0.00";
                 worksheet.Cells[startRow, 21].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 21].Style.Font.Bold = true;
-                worksheet.Cells[startRow, 21].Value = allotments_row_totals[d]["DISBURSEMENTS"] > 0 ? allotments_row_totals[d]["DISBURSEMENTS"].ToString("N", new CultureInfo("en-US")) : "";
+                worksheet.Cells[startRow, 21].Value = allotments_row_totals[d]["DISBURSEMENTS"] > 0 ? allotments_row_totals[d]["DISBURSEMENTS"] : 0;
 
+                disbursementsGrandTotal += allotments_row_totals[d]["DISBURSEMENTS"];
 
                 //percent = ((Convert.ToDouble(allotments_row_totals[d]["DISBURSEMENTS"]) - Convert.ToDouble(allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"])) / Convert.ToDouble(allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"])) * 100;
                 //percent = Math.Round(Math.Abs(percent), 2);
@@ -1115,6 +1122,8 @@ namespace BUDGET
                 worksheet.Cells[startRow, 20].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 20].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 20].Value = percent;
+
+                percentGrandTotal += percent;
 
                 startRow++;
             }
@@ -1132,41 +1141,50 @@ namespace BUDGET
                 worksheet.Cells[startRow, 13].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 13].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 13].Style.Numberformat.Format = "#,##0.00";
-                worksheet.Cells[startRow, 13].Value = sub_allotments_row_totals[d]["ALLOTMENT_RECEIVED"] > 0 ? sub_allotments_row_totals[d]["ALLOTMENT_RECEIVED"].ToString("N", new CultureInfo("en-US")) : "";
+                worksheet.Cells[startRow, 13].Value = sub_allotments_row_totals[d]["ALLOTMENT_RECEIVED"] > 0 ? sub_allotments_row_totals[d]["ALLOTMENT_RECEIVED"]: 0;
+
+                allotmentReceivedGrandTotal += sub_allotments_row_totals[d]["ALLOTMENT_RECEIVED"];
+
 
                 worksheet.Cells[startRow, 16].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 worksheet.Cells[startRow, 16].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 16].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 16].Style.Numberformat.Format = "#,##0.00";
-                worksheet.Cells[startRow, 16].Value = sub_allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"] > 0 ? sub_allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"].ToString("N", new CultureInfo("en-US")) : "";
+                worksheet.Cells[startRow, 16].Value = sub_allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"] > 0 ? sub_allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"] : 0;
 
+                totalAfterRealignmentGrandTotal += sub_allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"];
 
                 worksheet.Cells[startRow, 17].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 worksheet.Cells[startRow, 17].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 17].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 17].Style.Numberformat.Format = "#,##0.00";
-                worksheet.Cells[startRow, 17].Value = sub_allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"] > 0 ? sub_allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
+                worksheet.Cells[startRow, 17].Value = sub_allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"] > 0 ? sub_allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"] : 0;
 
+                currentMonthGrandTotal += sub_allotments_row_totals[d]["CURRENT_MONTH_GRAND_TOTAL"];
 
                 worksheet.Cells[startRow, 18].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 worksheet.Cells[startRow, 18].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 18].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 18].Style.Numberformat.Format = "#,##0.00";
-                worksheet.Cells[startRow, 18].Value = sub_allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"] > 0 ? sub_allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
+                worksheet.Cells[startRow, 18].Value = sub_allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"] > 0 ? sub_allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"] : 0;
+
+                asOfMonthGrandTotal += sub_allotments_row_totals[d]["AS_OF_MONTH_GRAND_TOTAL"];
 
                 worksheet.Cells[startRow, 19].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 worksheet.Cells[startRow, 19].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 19].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 19].Style.Numberformat.Format = "#,##0.00";
-                worksheet.Cells[startRow, 19].Value = sub_allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"] > 0 ? sub_allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"].ToString("N", new CultureInfo("en-US")) : "";
+                worksheet.Cells[startRow, 19].Value = sub_allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"] > 0 ? sub_allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"] : 0;
 
+                unobligatedGrandTotal += sub_allotments_row_totals[d]["UNOBLIGATED_GRAND_TOTAL"];
 
                 worksheet.Cells[startRow, 21].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 worksheet.Cells[startRow, 21].Style.Numberformat.Format = "#,##0.00";
                 worksheet.Cells[startRow, 21].Style.Font.Size = 10;
                 worksheet.Cells[startRow, 21].Style.Font.Bold = true;
-                worksheet.Cells[startRow, 21].Value = sub_allotments_row_totals[d]["DISBURSEMENTS"] > 0 ? sub_allotments_row_totals[d]["DISBURSEMENTS"].ToString("N", new CultureInfo("en-US")) : "";
+                worksheet.Cells[startRow, 21].Value = sub_allotments_row_totals[d]["DISBURSEMENTS"] > 0 ? sub_allotments_row_totals[d]["DISBURSEMENTS"] : 0;
 
+                disbursementsGrandTotal += sub_allotments_row_totals[d]["DISBURSEMENTS"];
 
                 //percent = ((Convert.ToDouble(sub_allotments_row_totals[d]["DISBURSEMENTS"]) - Convert.ToDouble(sub_allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"])) / Convert.ToDouble(sub_allotments_row_totals[d]["TOTAL_AFTER_REALIGNMENT"])) * 100;
                 //percent = Math.Round(Math.Abs(percent), 2);
@@ -1179,8 +1197,54 @@ namespace BUDGET
                 worksheet.Cells[startRow, 20].Style.Font.Bold = true;
                 worksheet.Cells[startRow, 20].Value = percent > 0 ? percent + "%" : "";
 
+                percentGrandTotal += percent;
                 startRow++;
             }
+
+            startRow++;
+
+            worksheet.Cells[startRow, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+            worksheet.Cells[startRow, 1].Style.Font.Size = 11;
+            worksheet.Cells[startRow, 1].Style.Font.Bold = true;
+            worksheet.Cells[startRow, 1].Value = "GRAND TOTAL";
+
+            worksheet.Cells[startRow, 13].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+            worksheet.Cells[startRow, 13].Style.Numberformat.Format = "#,##0.00";
+            worksheet.Cells[startRow, 13].Style.Font.Size = 10;
+            worksheet.Cells[startRow, 13].Style.Font.Bold = true;
+            worksheet.Cells[startRow, 13].Value = allotmentReceivedGrandTotal;
+
+            worksheet.Cells[startRow, 16].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+            worksheet.Cells[startRow, 16].Style.Font.Size = 10;
+            worksheet.Cells[startRow, 16].Style.Font.Bold = true;
+            worksheet.Cells[startRow, 16].Style.Numberformat.Format = "#,##0.00";
+            worksheet.Cells[startRow, 16].Value = totalAfterRealignmentGrandTotal;
+
+            worksheet.Cells[startRow, 17].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+            worksheet.Cells[startRow, 17].Style.Font.Size = 10;
+            worksheet.Cells[startRow, 17].Style.Font.Bold = true;
+            worksheet.Cells[startRow, 17].Style.Numberformat.Format = "#,##0.00";
+            worksheet.Cells[startRow, 17].Value = currentMonthGrandTotal;
+
+            worksheet.Cells[startRow, 18].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+            worksheet.Cells[startRow, 18].Style.Font.Size = 10;
+            worksheet.Cells[startRow, 18].Style.Font.Bold = true;
+            worksheet.Cells[startRow, 18].Style.Numberformat.Format = "#,##0.00";
+            worksheet.Cells[startRow, 18].Value = asOfMonthGrandTotal;
+
+            worksheet.Cells[startRow, 19].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+            worksheet.Cells[startRow, 19].Style.Font.Size = 10;
+            worksheet.Cells[startRow, 19].Style.Font.Bold = true;
+            worksheet.Cells[startRow, 19].Style.Numberformat.Format = "#,##0.00";
+            worksheet.Cells[startRow, 19].Value = disbursementsGrandTotal;
+
+
+            worksheet.Cells[startRow, 20].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+            worksheet.Cells[startRow, 20].Style.Numberformat.Format = "#,##0.00";
+            worksheet.Cells[startRow, 20].Style.Font.Size = 10;
+            worksheet.Cells[startRow, 20].Style.Font.Bold = true;
+            worksheet.Cells[startRow, 20].Value = percentGrandTotal > 0 ? percentGrandTotal + "%" : "";
+
 
             pck.Save();
         }

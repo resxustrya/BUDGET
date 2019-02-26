@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col-md-12">
         <h3>ORS Reports Summary</h3>
-        <form role="form" action="@Url.Action("OrsSummary","Reports")" method="post">
+        <form role="form" id="form-filter" action="@Url.Action("OrsSummary","Reports")" method="post" data-excel="@Url.Action("OrsSummary","Reports")">
             @Html.AntiForgeryToken()
             <table>
                 <tr>
@@ -33,9 +33,9 @@
                     <td>Display Mode</td>
                     <td>
                         <label for="displayMode">Excel</label>
-                        <input type="radio" name="displayMode" value="excel" />
+                        <input type="radio" name="displayMode" value="true" required />
                         <label for="displayMode">Web Page</label>
-                        <input type="radio" name="displayMode" value="web"  />
+                        <input type="radio" name="displayMode" value="false" required />
                     </td>
                 </tr>
                 <tr>
@@ -46,4 +46,19 @@
         </form>
     </div>
 </div>
-
+<script>
+    $(document).ready(function () {
+        $("input[name='displayMode']").change(function () {
+            var val = $(this).val();
+            if (val == "true") {
+                var url = $("#form-filter").data('excel');
+                $("#form-filter").attr('action', url);
+                $("#form-filter").attr('method', 'POST');
+            } else {
+                $("#form-filter").attr('action', null);
+                $("#form-filter").attr('method', 'GET');
+            }
+        });
+    });
+    
+</script>

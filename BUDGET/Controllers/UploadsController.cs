@@ -115,8 +115,7 @@ namespace BUDGET.Controllers
                 long date = 0;
                 
                 Int32 row = 0;
-                /*
-                 //2019 PS
+                
                 for (int i = 3; i <= noOfRow; i++)
                 {
                     row = 0;
@@ -125,6 +124,8 @@ namespace BUDGET.Controllers
                     {
                         row = Convert.ToInt32(worksheet.Cells[i, 10].Value.ToString());
                         var exist = db.ors.Where(p => p.Row == row && p.allotment == 2026).FirstOrDefault();
+
+                        
 
                         if(exist == null)
                         {
@@ -148,11 +149,15 @@ namespace BUDGET.Controllers
                             ors.Created_By = "doh7budget";
                             db.ors.Add(ors);
                             db.SaveChanges();
+                            InsertToOrsUacs(worksheet,ors,i);
+                        } else
+                        {
+                            InsertToOrsUacs(worksheet,exist,i);
                         }
                     }
                     catch { }
                 }
-                */
+                
                 // 2019 MOOE
                 worksheet = package.Workbook.Worksheets[7];
                 noOfCol = worksheet.Dimension.End.Column;
@@ -188,11 +193,17 @@ namespace BUDGET.Controllers
                             ors.Created_By = "doh7budget";
                             db.ors.Add(ors);
                             db.SaveChanges();
+
+                            InsertToOrsUacs(worksheet, ors,i);
+                        }
+                        else
+                        {
+                            InsertToOrsUacs(worksheet, exist,i);
                         }
                     }
                     catch(Exception ex)
                     {
-                        errorlog += "Error at line i: " + i + "-Row: " + row + " Stack trace : " + ex.Message;
+                        errorlog += "Error at line i: " + i + "-Row: " + row + " Stack trace : " + ex.Message + "\n";
                     }
                 }
 
@@ -231,6 +242,11 @@ namespace BUDGET.Controllers
                             ors.Created_By = "doh7budget";
                             db.ors.Add(ors);
                             db.SaveChanges();
+                            InsertToOrsUacs(worksheet, ors,i);
+                        }
+                        else
+                        {
+                            InsertToOrsUacs(worksheet, exist,i);
                         }
                     }
                     catch { }
@@ -270,6 +286,11 @@ namespace BUDGET.Controllers
                             ors.Created_By = "doh7budget";
                             db.ors.Add(ors);
                             db.SaveChanges();
+                            InsertToOrsUacs(worksheet, ors,i);
+                        }
+                        else
+                        {
+                            InsertToOrsUacs(worksheet, exist,i);
                         }
                     }
                     catch { }
@@ -277,6 +298,39 @@ namespace BUDGET.Controllers
             }
 
             return errorlog;
+        }
+
+        public void InsertToOrsUacs(ExcelWorksheet workshet, ORS ors, Int32 row)
+        {
+            Int32 uacsStart = 13;
+            Int32 uacsAmountStart = 14;
+            String uacsCode = "";
+            
+            do
+            {
+                try
+                {
+                    uacsCode = workshet.Cells[row, uacsStart].Value.ToString();
+                    if (uacsCode.Trim() != null)
+                    {
+                        String expenseTitle = db.uacs.Where(p => p.Code == uacsCode).FirstOrDefault().Title;
+
+                        var existingObr = db.ors_expense_codes.Where(p => p.uacs == expenseTitle && p.ors_obligation == ors.ID).FirstOrDefault();
+                        if(existingObr == null)
+                        {
+                            ORS_EXPENSE_CODES oec = new ORS_EXPENSE_CODES();
+                            oec.ors_obligation = ors.ID;
+                            oec.uacs = expenseTitle;
+                            oec.amount = Convert.ToDouble(workshet.Cells[row, uacsAmountStart].Value.ToString());
+                            db.ors_expense_codes.Add(oec);
+                            uacsStart += 2;
+                            uacsAmountStart += 2;
+                        }
+                    }
+                }
+                catch { }
+            } while (workshet.Cells[row, uacsStart].Value != null);
+            db.SaveChanges();
         }
     }
 }
