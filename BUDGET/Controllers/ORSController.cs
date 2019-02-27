@@ -30,10 +30,13 @@ namespace BUDGET
         }
 
         [CustomAuthorize(Roles = "Admin,Employee,Cashier")]
-        public ActionResult OrsItem(String ID)
+        public ActionResult OrsItem(String ID, String q = "",String[] fundsource = null,String dateFrom = "", String dateTo="")
         {
-            String query = Request.QueryString["q"] ?? "";
-            Session["query"] = query;
+            TempData["query"] = q != null ? q : "";
+            TempData["fundsource"] = fundsource != null ? fundsource : null;
+            TempData["dateFrom"] = dateFrom != null ? dateFrom : "";
+            TempData["dateTo"] = dateTo != null ? dateTo : "";
+
             var allotment = db.allotments.Where(p => p.ID.ToString() == ID).FirstOrDefault();
             Session["allotmentID"] = allotment.ID;
             ViewBag.Menu = allotment.year + " | " + allotment.Code;
@@ -45,7 +48,11 @@ namespace BUDGET
         [Route("get/ors/ps", Name = "get_ors_ps")]
         public JsonResult GetOrsPS()
         {
-            String query = Session["query"].ToString().ToLower();
+            String query = TempData["query"] != null ? TempData["query"].ToString().ToLower() : "";
+            String[] fundsource = TempData["fundsource"] != null ? (String[])TempData["fundsource"] : null;
+            String dateFrom = TempData["dateFrom"] != null ? TempData["dateFrom"].ToString() : "";
+            String dateTo = TempData["dateTo"] != null ? TempData["dateTo"].ToString() : ""; 
+
             Int32 allotmentID = Convert.ToInt32(Session["allotmentID"].ToString());
             var orsps = (from list in db.ors
                          where list.allotment == allotmentID
