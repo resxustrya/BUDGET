@@ -36,9 +36,10 @@ namespace BUDGET
             TempData["fundsource"] = fundsource != null ? fundsource : null;
             TempData["dateFrom"] = dateFrom != null ? dateFrom : "";
             TempData["dateTo"] = dateTo != null ? dateTo : "";
-
+            TempData["ALLOTMENTID"] = ID;
             var allotment = db.allotments.Where(p => p.ID.ToString() == ID).FirstOrDefault();
             Session["allotmentID"] = allotment.ID;
+
             ViewBag.Menu = allotment.year + " | " + allotment.Code;
             ViewBag.allotments = allotment.ID.ToString();
             return View();
@@ -48,38 +49,63 @@ namespace BUDGET
         [Route("get/ors/ps", Name = "get_ors_ps")]
         public JsonResult GetOrsPS()
         {
+            DateTime? dateFrom = null;
+            DateTime? dateTo = null;
             String query = TempData["query"] != null ? TempData["query"].ToString().ToLower() : "";
             String[] fundsource = TempData["fundsource"] != null ? (String[])TempData["fundsource"] : null;
-            String dateFrom = TempData["dateFrom"] != null ? TempData["dateFrom"].ToString() : "";
-            String dateTo = TempData["dateTo"] != null ? TempData["dateTo"].ToString() : ""; 
-
-            Int32 allotmentID = Convert.ToInt32(Session["allotmentID"].ToString());
-            var orsps = (from list in db.ors
-                         where list.allotment == allotmentID
-                         && list.deleted == false
-                         orderby list.Date_Added descending
-                         select new
-                         {
-                             ID = list.ID,
-                             Row = list.Row,
-                             Date = list.Date1,
-                             DB = list.DB,
-                             PO = list.PO,
-                             PR = list.PR,
-                             PAYEE = list.PAYEE,
-                             Adress = list.Adress,
-                             Particulars = list.Particulars,
-                             FundSource = list.FundSource,
-                             Gross = (from ors_uacs in db.ors_expense_codes where ors_uacs.ors_obligation == list.ID select ors_uacs.amount).DefaultIfEmpty(0).ToList().Sum(),
-                             Disbursement = (from ors_date in db.ors_date_entry where ors_date.ors_id == list.ID select ors_date.NetAmount + ors_date.TaxAmount + ors_date.Others).DefaultIfEmpty(0).ToList().Sum(),
-                             Created_By = list.Created_By,
-                             DateReceived = list.DateReceived,
-                             TimeReceived = list.TimeReceived,
-                             DateReleased = list.DateReleased,
-                             TimeReleased = list.TimeReleased,
-                         }).ToList();
-
+            String where = "";
+            try
+            {
+                if (TempData["dateFrom"].ToString().Trim() != "" && TempData["dateTo"].ToString().Trim() != "")
+                {
+                    dateFrom = Convert.ToDateTime(TempData["dateFrom"].ToString());
+                    dateTo = Convert.ToDateTime(TempData["dateTo"].ToString());
+                    where = " AND Date BETWEEN '" + dateFrom.ToString() + "'" + " AND '" + dateTo.ToString() + "'";
+                }
+            }
+            catch { }
             
+            if(fundsource != null)
+            {
+                where += " AND FundSource IN (";
+                if(fundsource.Count() == 1)
+                    where += "'" + fundsource[0].ToString().Trim() + "'";
+                else
+                {
+                    for(int i = 1; i <= fundsource.Count(); i++)
+                    {
+                        if(i == fundsource.Count())
+                            where += "'" + fundsource[i-1].ToString().Trim() + "'";
+                        else
+                            where += "'" + fundsource[i-1].ToString().Trim() + "',";
+                    }
+                }
+                
+                where += ") ";
+            }
+            Int32 allotmentID = Convert.ToInt32(Session["allotmentID"].ToString());
+            var orsps = db.ors.SqlQuery("SELECT * FROM [dbo].[ORS] WHERE deleted = 0 AND allotment = " + allotmentID + where + " ORDER BY Date ASC").ToList()
+                                .Select(list => new
+                                {
+                                    ID = list.ID,
+                                    Row = list.Row,
+                                    Date = list.Date1,
+                                    DB = list.DB,
+                                    PO = list.PO,
+                                    PR = list.PR,
+                                    PAYEE = list.PAYEE,
+                                    Adress = list.Adress,
+                                    Particulars = list.Particulars,
+                                    FundSource = list.FundSource,
+                                    Gross = (from ors_uacs in db.ors_expense_codes where ors_uacs.ors_obligation == list.ID select ors_uacs.amount).DefaultIfEmpty(0).ToList().Sum(),
+                                    Disbursement = (from ors_date in db.ors_date_entry where ors_date.ors_id == list.ID select ors_date.NetAmount + ors_date.TaxAmount + ors_date.Others).DefaultIfEmpty(0).ToList().Sum(),
+                                    Created_By = list.Created_By,
+                                    DateReceived = list.DateReceived,
+                                    TimeReceived = list.TimeReceived,
+                                    DateReleased = list.DateReleased,
+                                    TimeReleased = list.TimeReleased,
+                                }).ToList();
+
             if (query.Length > 0)
             {
                 try

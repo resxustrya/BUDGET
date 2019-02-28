@@ -3,7 +3,6 @@
     <div class="col-md-12">
         <h3>ORS Reports Summary</h3>
         <form role="form" id="form-filter" action="@Url.Action("OrsSummary","Reports")" method="post" data-excel="@Url.Action("OrsSummary","Reports")">
-            @Html.AntiForgeryToken()
             <table>
                 <tr>
                     <td>Select Fundsource</td>
@@ -40,7 +39,7 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td><button type="submit" class="btn btn-success btn-lg"> <span class="glyphicon glyphicon-arrow-down"></span> Download</button></td>
+                    <td><button type="submit" class="btn btn-success btn-lg"> <span class="glyphicon glyphicon-arrow-down"></span> <span class="btnTxt">Download</span></button></td>
                 </tr>
             </table>
         </form>
@@ -54,9 +53,11 @@
                 var url = $("#form-filter").data('excel');
                 $("#form-filter").attr('action', url);
                 $("#form-filter").attr('method', 'POST');
+                $(".btnTxt").text('Download');
             } else {
                 $("#form-filter").attr('action', null);
                 $("#form-filter").attr('method', 'GET');
+                $(".btnTxt").text('Display');
             }
         });
     });
