@@ -310,7 +310,7 @@ namespace BUDGET.Controllers
             {
                 try
                 {
-                    uacsCode = workshet.Cells[row, uacsStart].Value.ToString();
+                    try { uacsCode = workshet.Cells[row, uacsStart].Value.ToString(); } catch { return; }
                     if (uacsCode.Trim() != null)
                     {
                         String expenseTitle = db.uacs.Where(p => p.Code == uacsCode).FirstOrDefault().Title;
@@ -321,7 +321,7 @@ namespace BUDGET.Controllers
                             ORS_EXPENSE_CODES oec = new ORS_EXPENSE_CODES();
                             oec.ors_obligation = ors.ID;
                             oec.uacs = expenseTitle;
-                            oec.amount = Convert.ToDouble(workshet.Cells[row, uacsAmountStart].Value.ToString());
+                            try { oec.amount = Convert.ToDouble(workshet.Cells[row, uacsAmountStart].Value.ToString()); } catch { return; }
                             db.ors_expense_codes.Add(oec);
                             uacsStart += 2;
                             uacsAmountStart += 2;

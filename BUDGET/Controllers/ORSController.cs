@@ -13,7 +13,7 @@ namespace BUDGET
 {
     [YearlyFilter]
     [NoCache]
-    [OutputCache(NoStore = true, Duration = 0)]
+    [OutputCache(NoStore = true, Duration = 0, Location = System.Web.UI.OutputCacheLocation.None)]
     public class ORSController : Controller
     {
         BudgetDB db = new BudgetDB();
@@ -84,7 +84,7 @@ namespace BUDGET
                 where += ") ";
             }
             Int32 allotmentID = Convert.ToInt32(Session["allotmentID"].ToString());
-            var orsps = db.ors.SqlQuery("SELECT * FROM [dbo].[ORS] WHERE deleted = 0 AND allotment = " + allotmentID + where + " ORDER BY Date ASC").ToList()
+            var orsps = db.ors.SqlQuery("SELECT * FROM [dbo].[ORS] WHERE deleted = 0 AND allotment = " + allotmentID + where + " ORDER BY Row DESC").ToList()
                                 .Select(list => new
                                 {
                                     ID = list.ID,

@@ -12,7 +12,7 @@ namespace BUDGET.Controllers
 
     [CustomAuthorize(Roles = "Admin,Encoder")]
     [NoCache]
-    [OutputCache(NoStore = true, Duration = 0)]
+    [OutputCache(NoStore = true, Duration = 0,Location = System.Web.UI.OutputCacheLocation.None)]
     public class ReportsController : Controller
     {
         BudgetDB db = new BudgetDB();
